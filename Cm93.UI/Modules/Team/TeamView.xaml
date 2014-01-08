@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="Cm93.UI.Modules.Team.TeamView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+			 xmlns:helpers="clr-namespace:Cm93.UI.Helpers"
+			 xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="5*" />
+			<ColumnDefinition Width="4*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="6*"/>
+			<RowDefinition Height="4*"/>
+		</Grid.RowDefinitions>
+
+		<DataGrid Grid.Row="0" Grid.Column="0" ItemsSource="{Binding TeamGrid, Mode=OneWay}" SelectedItem="{Binding SelectedPlayer}" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" MouseMove="UIElement_OnMouseMove" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" AutoGenerateColumns="False">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Player" Binding="{Binding Path=Name}" Width="6*" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn Header="Number" Binding="{Binding Path=Number}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<DataGrid VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding PlayerGrid, Mode=OneWay}" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" AutoGenerateColumns="False">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Positions" Binding="{Binding Path=Positions}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn Header="Age" Binding="{Binding Path=Age}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn Header="Rating" Binding="{Binding Path=Rating}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn Header="Goals" Binding="{Binding Path=Goals}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<Grid Grid.RowSpan="2" Grid.Column="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="1*" />
+			</Grid.RowDefinitions>
+
+			<TextBlock Grid.Row="0" FontSize="24" HorizontalAlignment="Center" FontWeight="ExtraBold" Foreground="White" Text="{Binding Teamname}" />
+
+			<Viewbox Grid.Row="1">
+				<Canvas Name="Pitch" Height="{Binding PitchHeight}" Width="{Binding PitchWidth}" Background="LimeGreen" Drop="UIElement_OnDrop" AllowDrop="True" Margin="10">
+					<Path Data="M 0, 0 L 300,0 L300,400 L0,400 Z M0,200 L300,200" Fill="Transparent" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" HorizontalAlignment="Left" />
+					<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="100" Margin="100,150,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="100"/>
+					<Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="60" Width="120" Margin="91,341,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" />
+					<Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="20" Width="60" Margin="121,381,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" />
+					<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="4" Margin="149,363,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="4"/>
+					<ed:Arc ArcThickness="1" EndAngle="70" Fill="Transparent" HorizontalAlignment="Left" Height="52" Margin="124,323,0,0" Stretch="None" Stroke="White" StrokeThickness="2" StartAngle="-70" VerticalAlignment="Top" Width="54"/>
+					<Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="60" Width="120" Margin="91,-1,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" />
+					<Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="20" Width="60" Margin="121,-1,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" />
+					<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="4" Margin="149,37,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="4"/>
+					<ed:Arc ArcThickness="1" EndAngle="-110" Fill="Transparent" HorizontalAlignment="Left" Height="52" Margin="124,24,0,0" Stretch="None" Stroke="White" StrokeThickness="2" StartAngle="110" VerticalAlignment="Top" Width="54"/>
+
+					<Viewbox x:Name="Player1" Width="50" Height="60" Canvas.Top="{Binding Player1Top, Mode=TwoWay}" Canvas.Left="{Binding Player1Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(0)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player1Shirt}" />
+					</Viewbox>
+
+					<Viewbox x:Name="Player2" Width="50" Height="60" Canvas.Top="{Binding Player2Top, Mode=TwoWay}" Canvas.Left="{Binding Player2Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(1)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player2Shirt}" />
+					</Viewbox>
+
+					<Viewbox x:Name="Player3" Visibility="Collapsed" Width="50" Height="60" Canvas.Top="{Binding Player3Top, Mode=TwoWay}" Canvas.Left="{Binding Player3Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(2)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player3Shirt}" />
+					</Viewbox>
+				</Canvas>
+			</Viewbox>
+		</Grid>
+	</Grid>
+</UserControl>

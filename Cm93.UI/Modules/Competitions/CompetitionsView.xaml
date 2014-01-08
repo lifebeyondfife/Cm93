@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Cm93.UI.Modules.Competitions.CompetitionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		
+		<TextBlock Grid.Row="0" FontSize="24" FontWeight="ExtraBold" Foreground="White" Text="{Binding CompetitionName}" />
+
+		<DataGrid Grid.Row="1" IsHitTestVisible="False" AutoGenerateColumns="False" ItemsSource="{Binding TableGrid, Mode=OneWay}" Background="Transparent" RowBackground="Transparent" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserResizeRows="False" HeadersVisibility="Column" IsReadOnly="True">
+			<DataGrid.Columns>
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderStyleLeft}" Binding="{Binding Path=Position}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderStyleLeft}" Header="Team" Binding="{Binding Path=Team}" Width="6*" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderStyleCentre}" Header="W" Binding="{Binding Path=Wins}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderStyleCentre}" Header="D" Binding="{Binding Path=Draws}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderStyleCentre}" Header="L" Binding="{Binding Path=Losses}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderStyleCentre}" Header="F" Binding="{Binding Path=For}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderStyleCentre}" Header="A" Binding="{Binding Path=Against}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderStyleCentre}" Header="GD" Binding="{Binding Path=GoalDifference}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderStyleCentre}" Header="Pts" Binding="{Binding Path=Points}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
+</UserControl>
