@@ -30,7 +30,7 @@ namespace Cm93.Model
 		public static IDictionary<string, Team> Teams = new Dictionary<string, Team>
 			{
 				{ "Sothbury Wanderers FC", new Team { Balance = 10032412, PrimaryColour = Colors.Gray, SecondaryColour = Colors.Gold, TeamName = "Sothbury Wanderers FC" } },
-				{ "Bicester Royals FC", new Team { Balance = 2734794, PrimaryColour = Colors.GreenYellow, SecondaryColour = Colors.LightCyan, TeamName = "Bicester Royals FC" } },
+				{ "Bicester Royals FC", new Team { Balance = 2734794, PrimaryColour = Colors.BlueViolet, SecondaryColour = Colors.DeepSkyBlue, TeamName = "Bicester Royals FC" } },
 				{ "Caddington City FC", new Team { Balance = 33462412, PrimaryColour = Colors.CadetBlue, SecondaryColour = Colors.Aqua, TeamName = "Caddington City FC" } },
 				{ "Uthmalton Town FC", new Team { Balance = 1439622, PrimaryColour = Colors.DeepPink, SecondaryColour = Colors.Black, TeamName = "Uthmalton Town FC" } },
 			};
@@ -105,6 +105,7 @@ namespace Cm93.Model
 			return new Dictionary<ModuleType, IModule>
 				{
 					{ ModuleType.Team, teamModule },
+					{ ModuleType.SelectTeam, teamModule },
 					{ ModuleType.Fixtures, fixturesModule},
 					{ ModuleType.Competitions, competitionModule},
 					{ ModuleType.Match, matchModule}

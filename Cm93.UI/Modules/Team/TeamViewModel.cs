@@ -33,24 +33,24 @@ using Cm93.UI.Events;
 namespace Cm93.UI.Modules.Team
 {
 	[Export(typeof(ModuleViewModelBase))]
-	public class TeamViewModel : ModuleViewModelBase, IHandle<ModuleSelectedEvent>
+	public class TeamViewModel : ModuleViewModelBase, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>
 	{
 		private readonly IEventAggregator eventAggregator;
 		private ITeamModule TeamModule { get; set; }
 		private Cm93.Model.Structures.Team Team { get; set; }
 
-		private string teamname;
-		public string Teamname
+		private string teamName;
+		public string TeamName
 		{
-			get { return this.teamname; }
+			get { return this.teamName; }
 			set
 			{
-				if (this.teamname == value)
+				if (this.teamName == value)
 					return;
 
-				this.teamname = value;
+				this.teamName = value;
 
-				NotifyOfPropertyChange(() => Teamname);
+				NotifyOfPropertyChange(() => TeamName);
 			}
 		}
 
@@ -302,7 +302,12 @@ namespace Cm93.UI.Modules.Team
 		public override void SetModel(IModule model)
 		{
 			this.TeamModule = (ITeamModule) model;
-			this.teamname = Configuration.PlayerTeamName;
+			this.teamName = Configuration.PlayerTeamName;
+		}
+
+		public void Handle(TeamSetEvent message)
+		{
+			TeamName = message.TeamName;
 		}
 
 		public void Handle(ModuleSelectedEvent message)
@@ -312,7 +317,7 @@ namespace Cm93.UI.Modules.Team
 
 			PlayerGrid.Clear();
 
-			Team = this.TeamModule.Teams[Teamname];
+			Team = this.TeamModule.Teams[TeamName];
 
 			SetPlayerNames();
 			SetPlayerLocations();

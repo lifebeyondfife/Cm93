@@ -17,9 +17,9 @@ This file is part of Cm93.
 */
 namespace Cm93.UI.Modules
 {
-	public partial class HomeView
+	public partial class SelectTeamView
 	{
-		public HomeView()
+		public SelectTeamView()
 		{
 			InitializeComponent();
 		}

@@ -40,17 +40,17 @@
 				<RowDefinition Height="1*" />
 			</Grid.RowDefinitions>
 
-			<TextBlock Grid.Row="0" FontSize="24" HorizontalAlignment="Center" FontWeight="ExtraBold" Foreground="White" Text="{Binding Teamname}" />
+			<TextBlock Grid.Row="0" FontSize="24" HorizontalAlignment="Center" FontWeight="ExtraBold" Foreground="White" Text="{Binding TeamName}" />
 
 			<Viewbox Grid.Row="1">
 				<Canvas Name="Pitch" Height="{Binding PitchHeight}" Width="{Binding PitchWidth}" Background="LimeGreen" Drop="UIElement_OnDrop" AllowDrop="True" Margin="10">
 					<Path Data="M 0, 0 L 300,0 L300,400 L0,400 Z M0,200 L300,200" Fill="Transparent" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" HorizontalAlignment="Left" />
 					<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="100" Margin="100,150,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="100"/>
-					<Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="60" Width="120" Margin="91,341,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" />
+					<Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="60" Width="130" Margin="86,341,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" />
 					<Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="20" Width="60" Margin="121,381,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" />
 					<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="4" Margin="149,363,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="4"/>
 					<ed:Arc ArcThickness="1" EndAngle="70" Fill="Transparent" HorizontalAlignment="Left" Height="52" Margin="124,323,0,0" Stretch="None" Stroke="White" StrokeThickness="2" StartAngle="-70" VerticalAlignment="Top" Width="54"/>
-					<Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="60" Width="120" Margin="91,-1,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" />
+					<Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="60" Width="130" Margin="86,-1,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" />
 					<Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="20" Width="60" Margin="121,-1,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" />
 					<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="4" Margin="149,37,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="4"/>
 					<ed:Arc ArcThickness="1" EndAngle="-110" Fill="Transparent" HorizontalAlignment="Left" Height="52" Margin="124,24,0,0" Stretch="None" Stroke="White" StrokeThickness="2" StartAngle="110" VerticalAlignment="Top" Width="54"/>

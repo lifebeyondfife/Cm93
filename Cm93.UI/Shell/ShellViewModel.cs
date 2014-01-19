@@ -26,13 +26,24 @@ using Cm93.UI.Modules;
 namespace Cm93.UI.Shell
 {
 	[Export(typeof(ShellViewModel))]
-	public class ShellViewModel : Conductor<ModuleViewModelBase>.Collection.OneActive, IHandle<ModuleSelectedEvent>
+	public class ShellViewModel : Conductor<ModuleViewModelBase>.Collection.OneActive, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>
 	{
 		private readonly IEventAggregator eventAggregator;
 		private readonly IDictionary<ModuleType, ModuleViewModelBase> children;
-			
+
+		private bool teamSelected = false;
+		public bool TeamSelected
+		{
+			get { return teamSelected; }
+			set
+			{
+				teamSelected = value;
+				NotifyOfPropertyChange(() => TeamSelected);
+			}
+		}
+
 		[ImportingConstructor]
-        public ShellViewModel(IEventAggregator eventAggregator,
+		public ShellViewModel(IEventAggregator eventAggregator,
 			[ImportMany(typeof(ModuleViewModelBase))] IEnumerable<ModuleViewModelBase> children, ICreateModel model)
 		{
 			this.eventAggregator = eventAggregator;
@@ -47,27 +58,60 @@ namespace Cm93.UI.Shell
 			{
 				modelViewModel.ViewModel.SetModel(modelViewModel.Model);
 			}
-			
-			this.ActiveItem = this.children[ModuleType.Main];
+
+			this.ActiveItem = this.children[ModuleType.SelectTeam];
 
 			this.eventAggregator.Subscribe(this);
-		}
-
-		public bool VisibleHome
-		{
-			get { return this.ActiveItem != this.children[ModuleType.Main]; }
-		}
-
-		public void Home()
-		{
-			this.ActiveItem = this.children[ModuleType.Main];
-			NotifyOfPropertyChange(() => VisibleHome);
 		}
 
 		public void Handle(ModuleSelectedEvent message)
 		{
 			this.ActiveItem = this.children[message.Module];
-			NotifyOfPropertyChange(() => VisibleHome);
+		}
+
+		public bool CanTeam()
+		{
+			return true;
+		}
+
+		public void Team()
+		{
+			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Team));
+		}
+
+		public bool CanFixtures()
+		{
+			return true;
+		}
+
+		public void Fixtures()
+		{
+			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Fixtures));
+		}
+
+		public bool CanMatch()
+		{
+			return true;
+		}
+
+		public void Match()
+		{
+			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Match));
+		}
+
+		public bool CanCompetitions()
+		{
+			return true;
+		}
+
+		public void Competitions()
+		{
+			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Competitions));
+		}
+
+		public void Handle(TeamSetEvent message)
+		{
+			TeamSelected = !string.IsNullOrEmpty(message.TeamName);
 		}
 	}
 }

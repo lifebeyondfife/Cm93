@@ -14,14 +14,19 @@
 			<RowDefinition Height="1*"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="1*"/>
-			<ColumnDefinition Width="6*"/>
+			<ColumnDefinition Width="2*"/>
+			<ColumnDefinition Width="15"/>
+			<ColumnDefinition Width="10*"/>
 			<ColumnDefinition Width="1*"/>
 		</Grid.ColumnDefinitions>
 
-		<ContentControl Grid.Row="1" Grid.Column="1" cal:View.Model="{Binding ActiveItem}" />
+		<StackPanel Visibility="{Binding TeamSelected, Converter={StaticResource BoolVisible}}" Grid.Column="0" Grid.Row="1">
+			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Fixtures" Content="Fixtures" />
+			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Team" Content="Team" />
+			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Competitions" Content="Competitions" />
+			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Match" Content="Match" />
+		</StackPanel>
 		
-		<Button Grid.Row="2" Grid.Column="0" Visibility="{Binding VisibleHome, Converter={StaticResource BoolVisible}}" Margin="5" Content="Home" x:Name="Home" />
-
+		<ContentControl Grid.Row="1" Grid.Column="2" cal:View.Model="{Binding ActiveItem}" />
 	</Grid>
 </Window>

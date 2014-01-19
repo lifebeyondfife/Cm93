@@ -39,6 +39,11 @@ namespace Cm93.Model.Interfaces
 		IDictionary<string, Team> Teams { get; set; }
 	}
 
+	public interface ISelectTeamModule : IModule
+	{
+		IDictionary<string, Team> Teams { get; set; } 
+	}
+
 	public interface IMatchModule : IModule
 	{
 		IList<ICompetition> Competitions { get; set; }

@@ -37,7 +37,7 @@ namespace Cm93.UI
 		
 		public CreateModel()
 		{
-			Configuration.PlayerTeamName = "Sothbury Wanderers FC";
+			//Configuration.PlayerTeamName = "Sothbury Wanderers FC";
 			//Configuration.PlayerTeamName = "Bicester Royals FC";
 			//Configuration.PlayerTeamName = "Caddington City FC";
 			//Configuration.PlayerTeamName = "Uthmalton Town FC";
