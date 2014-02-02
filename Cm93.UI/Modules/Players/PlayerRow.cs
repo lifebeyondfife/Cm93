@@ -15,14 +15,25 @@ This file is part of Cm93.
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
-
-namespace Cm93.Model.Config
+namespace Cm93.UI.Modules.Players
 {
-	public static class Configuration
+	public enum PlayerFilter
 	{
-		public const int AsideSize = 2;
+		Positions,
+		Age,
+		Rating,
+		Team,
+		Goals
+	}
 
-		public static Func<double> GlobalWeek { get; set; }
+	public class PlayerRow
+	{
+		public int Number { get; internal set; }
+		public string Name { get; internal set; }
+		public string Team { get; internal set; }
+		public string Positions { get; internal set; }
+		public int Age { get; internal set; }
+		public double Rating { get; internal set; }
+		public int Goals { get; internal set; }
 	}
 }

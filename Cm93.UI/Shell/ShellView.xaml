@@ -23,6 +23,7 @@
 		<StackPanel Visibility="{Binding TeamSelected, Converter={StaticResource BoolVisible}}" Grid.Column="0" Grid.Row="1">
 			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Fixtures" Content="Fixtures" />
 			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Team" Content="Team" />
+			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Players" Content="Players" />
 			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Competitions" Content="Competitions" />
 			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Match" Content="Match" />
 		</StackPanel>

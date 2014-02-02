@@ -8,7 +8,7 @@ Plan
 
 Cm93 isn't quite playable (well, enjoyable) at present, but a fairly well thrashed out beginning. Enough to get on GitHub certainly. The remainder of this README.md details what I'd like to have done before I can consider it a launchable game. Mainly adding functionality at the moment but in the long term would look to work with a WPF Blend expert to make something that looks nice too.
 
-- Redo UI to side level menu bar buttons instead of quadrants
+* Redo UI to side level menu bar buttons instead of quadrants
 
 - Create a player module for looking at detailed stats (team filter like the results page).
 	- Also allows bids for players (for first 4 weeks of season and midpoint)
@@ -38,6 +38,8 @@ Cm93 isn't quite playable (well, enjoyable) at present, but a fairly well thrash
 	- Complex game simultator implementation
 
 - Finishing touches
-	- Add concept of Manager name / team selection screen
+	- Highlight player's team in league table
+	- Add concept of Manager name
+	- Show extra info on team selection screen (shirt, ground name + capacity, budget)
 	- Add ability to have multiple save games
 	- Nicer shirt icons and pitch graphic

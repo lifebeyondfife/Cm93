@@ -15,14 +15,14 @@ This file is part of Cm93.
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
+using System.Collections.Generic;
+using Cm93.Model.Interfaces;
+using Cm93.Model.Structures;
 
-namespace Cm93.Model.Config
+namespace Cm93.Model.Modules
 {
-	public static class Configuration
+	public class PlayersModule : IPlayersModule
 	{
-		public const int AsideSize = 2;
-
-		public static Func<double> GlobalWeek { get; set; }
+		public IList<Player> Players { get; set; } 
 	}
 }

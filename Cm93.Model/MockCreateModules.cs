@@ -88,6 +88,7 @@ namespace Cm93.Model
 			Cmcl.Fixtures = SplFixtures;
 			Cmcl.Places = SplPlaces;
 
+			var playersModule = new PlayersModule { Players = Players };
 			var teamModule = new TeamModule { Teams = Teams };
 			var competitionModule = new CompetitionsModule { Competitions = new[] { Cmcl } };
 			var fixturesModule = new FixturesModule
@@ -106,9 +107,10 @@ namespace Cm93.Model
 				{
 					{ ModuleType.Team, teamModule },
 					{ ModuleType.SelectTeam, teamModule },
-					{ ModuleType.Fixtures, fixturesModule},
-					{ ModuleType.Competitions, competitionModule},
-					{ ModuleType.Match, matchModule}
+					{ ModuleType.Fixtures, fixturesModule },
+					{ ModuleType.Competitions, competitionModule },
+					{ ModuleType.Match, matchModule },
+					{ ModuleType.Players, playersModule }
 				};
 		}
 	}

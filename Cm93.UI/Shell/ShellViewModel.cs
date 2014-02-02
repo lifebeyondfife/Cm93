@@ -79,6 +79,16 @@ namespace Cm93.UI.Shell
 			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Team));
 		}
 
+		public bool CanPlayers()
+		{
+			return true;
+		}
+
+		public void Players()
+		{
+			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Players));
+		}
+
 		public bool CanFixtures()
 		{
 			return true;

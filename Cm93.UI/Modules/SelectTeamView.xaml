@@ -19,13 +19,13 @@
 				<RowDefinition Height="1*"/>
 			</Grid.RowDefinitions>
 
-			<TextBlock Grid.Row="0" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="ExtraBold" Foreground="White" Text="Select your team" />
-			<ComboBox Grid.Row="1" FontSize="18"  Margin="15" Height="40" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="ExtraBold" Foreground="White" ItemsSource="{Binding AvailableTeams}" SelectedItem="{Binding SelectedTeam}" />
-			<Button Grid.Row="2" Margin="10" Height="40" Width="65" Content="Start" VerticalAlignment="Bottom" HorizontalAlignment="Right" cal:Message.Attach="Start" />
+			<TextBlock Grid.Row="0" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="ExtraBold" Foreground="White" Text="Select your team" />
+			<ListBox Grid.Row="1" FontSize="18"  Margin="15" Background="Transparent" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Stretch" FontWeight="ExtraBold" ItemsSource="{Binding AvailableTeams}" SelectedItem="{Binding SelectedTeam}" />
+			<Button Grid.Row="2" Margin="10" Height="40" Width="65" Content="Start" VerticalAlignment="Top" HorizontalAlignment="Right" cal:Message.Attach="Start" />
 		</Grid>
 
 		<Grid Grid.Column="1">
-			
+			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Put the team info here.</TextBlock>
 		</Grid>
 	</Grid>
 </UserControl>

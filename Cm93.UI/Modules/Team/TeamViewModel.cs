@@ -23,7 +23,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Media;
 using Caliburn.Micro;
-using Cm93.Model.Config;
 using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
@@ -225,7 +224,6 @@ namespace Cm93.UI.Modules.Team
 				this.teamGrid.Add(new TeamRow
 				{
 					Name = string.Format(CultureInfo.CurrentCulture, "{0}, {1}", player.LastName, player.FirstName),
-					Skill = player.Rating,
 					Number = player.Number
 				});
 
@@ -302,7 +300,6 @@ namespace Cm93.UI.Modules.Team
 		public override void SetModel(IModule model)
 		{
 			this.TeamModule = (ITeamModule) model;
-			this.teamName = Configuration.PlayerTeamName;
 		}
 
 		public void Handle(TeamSetEvent message)
@@ -312,7 +309,7 @@ namespace Cm93.UI.Modules.Team
 
 		public void Handle(ModuleSelectedEvent message)
 		{
-			if (message.Module != ModuleType.Team)
+			if (message.Module != ModuleType.Team || PlayerGrid.Any())
 				return;
 
 			PlayerGrid.Clear();

@@ -19,9 +19,9 @@ namespace Cm93.UI.Modules.Team
 {
 	public class PlayerRow
 	{
-		public string Positions { get; set; }
-		public int Age { get; set; }
-		public double Rating { get; set; }
-		public int Goals { get; set; }
+		public string Positions { get; internal set; }
+		public int Age { get; internal set; }
+		public double Rating { get; internal set; }
+		public int Goals { get; internal set; }
 	}
 }

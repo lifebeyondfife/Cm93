@@ -137,6 +137,18 @@
 			<Setter Property="FontSize" Value="20" />
 		</Style>
 
+		<Style TargetType="{x:Type Expander}">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontWeight" Value="ExtraBold" />
+			<Setter Property="FontSize" Value="20" />
+		</Style>
+
+		<Style TargetType="{x:Type Label}">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontWeight" Value="ExtraBold" />
+			<Setter Property="FontSize" Value="20" />
+		</Style>
+
 		<Style TargetType="{x:Type DataGrid}">
 			<Setter Property="Background" Value="{StaticResource GreyToBlackDiagonal}" />
 			<Setter Property="BorderBrush" Value="Transparent"/>

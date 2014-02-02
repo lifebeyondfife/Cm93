@@ -30,14 +30,20 @@ using Cm93.UI.Events;
 namespace Cm93.UI.Modules.Fixtures
 {
 	[Export(typeof(ModuleViewModelBase))]
-	public class FixturesViewModel : ModuleViewModelBase, IHandle<ModuleSelectedEvent>
+	public class FixturesViewModel : ModuleViewModelBase, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>
 	{
 		private readonly IEventAggregator eventAggregator;
 		private IFixturesModule FixturesModule { get; set; }
 
+		private string teamName = string.Empty;
 		public string TeamName
 		{
-			get { return Configuration.PlayerTeamName; }
+			get { return teamName; }
+			set
+			{
+				teamName = value;
+				NotifyOfPropertyChange(() => TeamName);
+			}
 		}
 
 		private bool IsTeamFixtures { get; set; }
@@ -61,7 +67,7 @@ namespace Cm93.UI.Modules.Fixtures
 
 		public void FlipFixtures()
 		{
-			this.FixturesLabel = this.IsTeamFixtures ? Configuration.PlayerTeamName : "All Fixtures"; 
+			this.FixturesLabel = this.IsTeamFixtures ? TeamName : "All Fixtures"; 
 			this.IsTeamFixtures = !this.IsTeamFixtures;
 
 			SetFixtures();
@@ -115,8 +121,8 @@ namespace Cm93.UI.Modules.Fixtures
 		public override void SetModel(IModule model)
 		{
 			this.FixturesModule = (IFixturesModule) model;
-			this.fixturesLabel = Configuration.PlayerTeamName;
-			this.IsTeamFixtures = false;
+			this.fixturesLabel = "All Fixtures";
+			this.IsTeamFixtures = true;
 
 			NotifyOfPropertyChange(() => FixturesGrid);
 		}
@@ -127,6 +133,11 @@ namespace Cm93.UI.Modules.Fixtures
 				return;
 
 			SetFixtures();
+		}
+
+		public void Handle(TeamSetEvent message)
+		{
+			TeamName = message.TeamName;
 		}
 	}
 }

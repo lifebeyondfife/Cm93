@@ -18,7 +18,6 @@ This file is part of Cm93.
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using Cm93.Model;
-using Cm93.Model.Config;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Simulator.Basic;
@@ -37,11 +36,6 @@ namespace Cm93.UI
 		
 		public CreateModel()
 		{
-			//Configuration.PlayerTeamName = "Sothbury Wanderers FC";
-			//Configuration.PlayerTeamName = "Bicester Royals FC";
-			//Configuration.PlayerTeamName = "Caddington City FC";
-			//Configuration.PlayerTeamName = "Uthmalton Town FC";
-			
 			new BasicAttachSimulator().AttachSimulator();
 
 			this.Modules = new MockCreateModules().CreateModules();

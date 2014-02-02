@@ -20,9 +20,6 @@ namespace Cm93.UI.Modules.Team
 	public class TeamRow
 	{
 		public string Name { get; internal set; }
-		public string Position { get; internal set; }
-
-		public double Skill { get; internal set; }
 		public int Number { get; internal set; }
 	}
 }

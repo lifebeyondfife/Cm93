@@ -21,6 +21,7 @@ namespace Cm93.Model.Modules
 	{
 		Competitions,
 		Fixtures,
+		Players,
 		Match,
 		SelectTeam,
 		Team

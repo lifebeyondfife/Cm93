@@ -96,6 +96,11 @@
       <DependentUpon>FixturesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\Fixtures\FixturesViewModel.cs" />
+    <Compile Include="Modules\Players\PlayerRow.cs" />
+    <Compile Include="Modules\Players\PlayersView.xaml.cs">
+      <DependentUpon>PlayersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Players\PlayersViewModel.cs" />
     <Compile Include="Modules\SelectTeamView.xaml.cs">
       <DependentUpon>SelectTeamView.xaml</DependentUpon>
     </Compile>
@@ -117,6 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Modules\Fixtures\FixturesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\Players\PlayersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
