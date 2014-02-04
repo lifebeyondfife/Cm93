@@ -15,32 +15,53 @@ This file is part of Cm93.
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace Cm93.UI.Modules.Players
 {
 	public partial class PlayersView
 	{
+		private IDictionary<PlayerFilter, DataGridTextColumn> VisibleColumns { get; set; }
+
 		public PlayersView()
 		{
 			InitializeComponent();
+
+			VisibleColumns = new Dictionary<PlayerFilter, DataGridTextColumn>
+				{
+					{ PlayerFilter.Age, ColumnAge },
+					{ PlayerFilter.Goals, ColumnGoals },
+					{ PlayerFilter.Positions, ColumnPositions },
+					{ PlayerFilter.Rating, ColumnRating },
+					{ PlayerFilter.Team, ColumnTeam }
+				};
+
+			foreach (var column in VisibleColumns.Values)
+				column.Visibility = Visibility.Collapsed;
 		}
 
 		//	I really hate code-behind hacks but...
 		//	Filters for visibility on individual columns are hard to do because the binding is done on
 		//	individual rows and not on the DataContext i.e. ViewModel.
 		//	Solutions I've found are inelegant and obtuse. This requires maintenance for changes to the
-		//	PlayerFilter enumeration, but at least it's simple and contained to this method.
+		//	PlayerFilter enumeration, but at least it's simple and contained to this class.
+		//	...
+		//	Thinking about it, it's a pure UI thing (no model persistence) so it's not even a proper violation.
 		private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			var selected = (PlayerFilter) e.AddedItems[0];
+			var makeVisible = e.AddedItems.Cast<PlayerFilter>().First();
 
-			ColumnAge.Visibility = selected == PlayerFilter.Age ? Visibility.Visible : Visibility.Collapsed;
-			ColumnGoals.Visibility = selected == PlayerFilter.Goals ? Visibility.Visible : Visibility.Collapsed;
-			ColumnPositions.Visibility = selected == PlayerFilter.Positions ? Visibility.Visible : Visibility.Collapsed;
-			ColumnRating.Visibility = selected == PlayerFilter.Rating ? Visibility.Visible : Visibility.Collapsed;
-			ColumnTeam.Visibility = selected == PlayerFilter.Team ? Visibility.Visible : Visibility.Collapsed;
+			VisibleColumns[makeVisible].Visibility = Visibility.Visible;
+
+			var removedItems = e.RemovedItems.Cast<PlayerFilter>();
+
+			if (removedItems.Any())
+			{
+				VisibleColumns[removedItems.First()].Visibility = Visibility.Collapsed;
+			}
 		}
 	}
 }

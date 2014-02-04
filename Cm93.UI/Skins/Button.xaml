@@ -1,0 +1,102 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
+		<ControlTemplate.Resources>
+			<Storyboard x:Key="GlowShine">
+				<DoubleAnimationUsingKeyFrames Storyboard.TargetName="GlowBlue" Storyboard.TargetProperty="Opacity">
+					<SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+				</DoubleAnimationUsingKeyFrames>
+			</Storyboard>
+			<Storyboard x:Key="GlowFade">
+				<DoubleAnimationUsingKeyFrames Storyboard.TargetName="GlowBlue" Storyboard.TargetProperty="Opacity">
+					<SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+				</DoubleAnimationUsingKeyFrames>
+			</Storyboard>
+		</ControlTemplate.Resources>
+		<Border Background="#7F000000" CornerRadius="4,4,4,4" BorderThickness="1,1,1,1" BorderBrush="Black" SnapsToDevicePixels="True">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="0.5*"/>
+					<RowDefinition Height="0.5*"/>
+				</Grid.RowDefinitions>
+				<Border Margin="0,0,0,0" Grid.RowSpan="2" CornerRadius="4,4,4,4" x:Name="GlowBlue" Opacity="0">
+					<Border.OpacityMask>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+							<GradientStop Color="#FF000000" Offset="0"/>
+							<GradientStop Color="Gray" Offset="1"/>
+						</LinearGradientBrush>
+					</Border.OpacityMask>
+					<Border.Background>
+						<RadialGradientBrush>
+							<RadialGradientBrush.RelativeTransform>
+								<TransformGroup>
+									<ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.3" ScaleY="1"/>
+									<SkewTransform AngleX="0" AngleY="0" CenterX="0.5" CenterY="0.5"/>
+									<RotateTransform Angle="0" CenterX="0.5" CenterY="0.5"/>
+									<TranslateTransform X="-0.01" Y="0.5"/>
+								</TransformGroup>
+							</RadialGradientBrush.RelativeTransform>
+							<GradientStop Color="#BB70C0FF" Offset="0"/>
+							<GradientStop Color="#4470C0FF" Offset="1"/>
+						</RadialGradientBrush>
+					</Border.Background>
+				</Border>
+				<Border Margin="0,0,0,0" Grid.RowSpan="2" CornerRadius="4,4,4,4" x:Name="GlowRed" Opacity="0">
+					<Border.OpacityMask>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+							<GradientStop Color="#FF000000" Offset="0"/>
+							<GradientStop Color="Gray" Offset="1"/>
+						</LinearGradientBrush>
+					</Border.OpacityMask>
+					<Border.Background>
+						<RadialGradientBrush>
+							<RadialGradientBrush.RelativeTransform>
+								<TransformGroup>
+									<ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.3" ScaleY="1"/>
+									<SkewTransform AngleX="0" AngleY="0" CenterX="0.5" CenterY="0.5"/>
+									<RotateTransform Angle="0" CenterX="0.5" CenterY="0.5"/>
+									<TranslateTransform X="-0.01" Y="0.5"/>
+								</TransformGroup>
+							</RadialGradientBrush.RelativeTransform>
+							<GradientStop Color="#BBFF6050" Offset="0"/>
+							<GradientStop Color="#44FF6050" Offset="1"/>
+						</RadialGradientBrush>
+					</Border.Background>
+				</Border>
+				<ContentPresenter HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" Grid.RowSpan="2"/>
+				<Border HorizontalAlignment="Stretch" Margin="0,0,0,0" CornerRadius="4,4,0,0" x:Name="Shine">
+					<Border.Background>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+							<GradientStop Color="#AAFFFFFF" Offset="0"/>
+							<GradientStop Color="#44FFFFFF" Offset="1"/>
+						</LinearGradientBrush>
+					</Border.Background>
+				</Border>
+			</Grid>
+		</Border>
+		<ControlTemplate.Triggers>
+			<Trigger Property="IsPressed" Value="True">
+				<Setter Property="Visibility" TargetName="GlowBlue" Value="Hidden"/>
+				<Setter Property="Visibility" TargetName="GlowRed" Value="Visible"/>
+				<Setter Property="Opacity" TargetName="GlowRed" Value="1"/>
+			</Trigger>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Trigger.EnterActions>
+					<BeginStoryboard Storyboard="{StaticResource GlowShine}"/>
+				</Trigger.EnterActions>
+				<Trigger.ExitActions>
+					<BeginStoryboard Storyboard="{StaticResource GlowFade}"/>
+				</Trigger.ExitActions>
+			</Trigger>
+		</ControlTemplate.Triggers>
+	</ControlTemplate>
+
+	<Style TargetType="{x:Type Button}">
+		<Setter Property="Template" Value="{DynamicResource GlassButton}" />
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="FontWeight" Value="ExtraBold" />
+		<Setter Property="FontSize" Value="20" />
+	</Style>
+
+</ResourceDictionary>

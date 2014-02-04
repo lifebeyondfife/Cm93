@@ -39,7 +39,7 @@
 
 			<StackPanel Orientation="Horizontal" Grid.Row="2">
 				<Button Margin="0,5,5,5" Height="37" Width="120" Content="My Team" />
-				<ComboBox ItemsSource="{Binding PlayerFilters}" SelectedItem="{Binding SelectedFilter}" Margin="5" SelectionChanged="Selector_OnSelectionChanged" />
+				<ComboBox Style="{StaticResource Dropdown}" Width="120" ItemsSource="{Binding PlayerFilters}" SelectedItem="{Binding SelectedFilter}" Margin="5" SelectionChanged="Selector_OnSelectionChanged" />
 			</StackPanel>
 		</Grid>
 
