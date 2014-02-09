@@ -67,7 +67,7 @@ namespace Cm93.UI.Modules.Fixtures
 
 		public void FlipFixtures()
 		{
-			this.FixturesLabel = this.IsTeamFixtures ? TeamName : "All Fixtures"; 
+			this.FixturesLabel = this.IsTeamFixtures ? "All Fixtures" : TeamName; 
 			this.IsTeamFixtures = !this.IsTeamFixtures;
 
 			SetFixtures();
@@ -121,7 +121,7 @@ namespace Cm93.UI.Modules.Fixtures
 		public override void SetModel(IModule model)
 		{
 			this.FixturesModule = (IFixturesModule) model;
-			this.fixturesLabel = "All Fixtures";
+			this.FixturesLabel = TeamName;
 			this.IsTeamFixtures = true;
 
 			NotifyOfPropertyChange(() => FixturesGrid);
@@ -137,7 +137,11 @@ namespace Cm93.UI.Modules.Fixtures
 
 		public void Handle(TeamSetEvent message)
 		{
-			TeamName = message.TeamName;
+			this.TeamName = message.TeamName;
+			this.FixturesLabel = TeamName;
+			this.IsTeamFixtures = true;
+
+			NotifyOfPropertyChange(() => FixturesGrid);
 		}
 	}
 }

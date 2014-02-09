@@ -20,7 +20,7 @@
 					<RowDefinition Height="0.5*"/>
 					<RowDefinition Height="0.5*"/>
 				</Grid.RowDefinitions>
-				<Border Margin="0,0,0,0" Grid.RowSpan="2" CornerRadius="4,4,4,4" x:Name="GlowBlue" Opacity="0">
+				<Border Margin="0" Grid.RowSpan="2" CornerRadius="4" x:Name="GlowBlue" Opacity="0">
 					<Border.OpacityMask>
 						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 							<GradientStop Color="#FF000000" Offset="0"/>
@@ -42,7 +42,7 @@
 						</RadialGradientBrush>
 					</Border.Background>
 				</Border>
-				<Border Margin="0,0,0,0" Grid.RowSpan="2" CornerRadius="4,4,4,4" x:Name="GlowRed" Opacity="0">
+				<Border Margin="0" Grid.RowSpan="2" CornerRadius="4" x:Name="GlowRed" Opacity="0">
 					<Border.OpacityMask>
 						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 							<GradientStop Color="#FF000000" Offset="0"/>
@@ -64,8 +64,8 @@
 						</RadialGradientBrush>
 					</Border.Background>
 				</Border>
-				<ContentPresenter HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" Grid.RowSpan="2"/>
-				<Border HorizontalAlignment="Stretch" Margin="0,0,0,0" CornerRadius="4,4,0,0" x:Name="Shine">
+				<ContentPresenter HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.RowSpan="2"/>
+				<Border HorizontalAlignment="Stretch" Margin="0" CornerRadius="4,4,0,0">
 					<Border.Background>
 						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 							<GradientStop Color="#AAFFFFFF" Offset="0"/>

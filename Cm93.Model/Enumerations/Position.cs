@@ -19,6 +19,7 @@ namespace Cm93.Model.Enumerations
 {
     public enum Position
     {
+		All,
         GoalKeeper,
         CentreBack,
         LeftFullBack,

@@ -11,9 +11,9 @@
 		</Grid.Resources>
 
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="6*"/>
+			<ColumnDefinition Width="8*"/>
 			<ColumnDefinition Width="4*"/>
-			<ColumnDefinition Width="5*"/>
+			<ColumnDefinition Width="6*"/>
 		</Grid.ColumnDefinitions>
 
 		<Grid Grid.Column="0">
@@ -23,12 +23,12 @@
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
-			<Label Grid.Row="0">Players</Label>
+			<Button Grid.Row="0" Margin="0,0,5,5" Height="37" HorizontalAlignment="Stretch" Content="{Binding TeamsLabel}" x:Name="ToggleTeams" />
 
 			<DataGrid Grid.Row="1" ItemsSource="{Binding PlayerGrid, Mode=OneWay}" SelectedItem="{Binding SelectedPlayer}" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" AutoGenerateColumns="False">
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="Number" Binding="{Binding Path=Number}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
-					<DataGridTextColumn Header="Player" Binding="{Binding Path=Name}" Width="6*" CanUserSort="False" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
+					<DataGridTextColumn Header="Player" Binding="{Binding Path=Name}" Width="5*" CanUserSort="False" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
 					<DataGridTextColumn x:Name="ColumnTeam" Header="Team" Binding="{Binding Path=Team}" Width="4*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
 					<DataGridTextColumn x:Name="ColumnPositions" Header="Positions" Binding="{Binding Path=Positions}" Width="4*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
 					<DataGridTextColumn x:Name="ColumnAge" Header="Age" Binding="{Binding Path=Age}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
@@ -38,8 +38,8 @@
 			</DataGrid>
 
 			<StackPanel Orientation="Horizontal" Grid.Row="2">
-				<Button Margin="0,5,5,5" Height="37" Width="120" Content="My Team" />
-				<ComboBox Style="{StaticResource Dropdown}" Width="120" ItemsSource="{Binding PlayerFilters}" SelectedItem="{Binding SelectedFilter}" Margin="5" SelectionChanged="Selector_OnSelectionChanged" />
+				<ComboBox Style="{StaticResource Dropdown}" Height="37" Width="120" ItemsSource="{Binding PlayerFilters}" SelectedItem="{Binding SelectedPlayerFilter}" Margin="5" SelectionChanged="Selector_OnSelectionChanged" />
+				<ComboBox Style="{StaticResource Dropdown}" Height="37" Width="180" ItemsSource="{Binding PositionFilters}" SelectedItem="{Binding SelectedPositionFilter}" Margin="5" />
 			</StackPanel>
 		</Grid>
 
@@ -57,7 +57,7 @@
 						<RowDefinition Height="1*"/>
 					</Grid.RowDefinitions>
 
-					<Button Grid.Row="0" Content="Player A" Margin="5" Height="37" />
+					<Button Grid.Row="0" Content="Player A" Margin="5,0,5,5" Height="45" />
 
 					<Canvas Grid.Row="1" />
 				</Grid>
@@ -86,14 +86,7 @@
 			</Expander>
 		</Grid>
 
-		<Grid Grid.Column="2">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="1*"/>
-			</Grid.RowDefinitions>
+		<DataGrid Grid.Column="2"/>
 
-			<Label Grid.Row="0">Player Details</Label>
-			<DataGrid Grid.Row="1"/>
-		</Grid>
 	</Grid>
 </UserControl>

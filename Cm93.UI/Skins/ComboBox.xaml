@@ -25,17 +25,72 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type ToggleButton}">
-					<themes:ButtonChrome x:Name="Chrome" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" RenderMouseOver="{TemplateBinding IsMouseOver}" RenderPressed="{TemplateBinding IsPressed}" SnapsToDevicePixels="true">
-						<Grid HorizontalAlignment="Right" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
-							<Path x:Name="Arrow" Data="{StaticResource DownArrowGeometry}" Fill="Black" HorizontalAlignment="Center" Margin="3,1,0,0" VerticalAlignment="Center"/>
+					<ControlTemplate.Resources>
+						<Storyboard x:Key="GlowShine">
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetName="GlowBlue" Storyboard.TargetProperty="Opacity">
+								<SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+						<Storyboard x:Key="GlowFade">
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetName="GlowBlue" Storyboard.TargetProperty="Opacity">
+								<SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+					</ControlTemplate.Resources>
+					<themes:ButtonChrome x:Name="Chrome" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" RenderPressed="{TemplateBinding IsPressed}" SnapsToDevicePixels="true">
+						<Grid >
+							<Grid.RowDefinitions>
+								<RowDefinition Height="0.5*"/>
+								<RowDefinition Height="0.5*"/>
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="1*"/>
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
+							<Border HorizontalAlignment="Stretch" Grid.ColumnSpan="2" Margin="0" CornerRadius="1,1,0,0">
+								<Border.Background>
+									<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+										<GradientStop Color="#AAFFFFFF" Offset="0"/>
+										<GradientStop Color="#44FFFFFF" Offset="1"/>
+									</LinearGradientBrush>
+								</Border.Background>
+							</Border>
+							<Border Margin="0" Grid.RowSpan="2" Grid.ColumnSpan="2" CornerRadius="4" x:Name="GlowBlue" Opacity="0">
+								<Border.OpacityMask>
+									<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+										<GradientStop Color="#FF000000" Offset="0"/>
+										<GradientStop Color="Gray" Offset="1"/>
+									</LinearGradientBrush>
+								</Border.OpacityMask>
+								<Border.Background>
+									<RadialGradientBrush>
+										<RadialGradientBrush.RelativeTransform>
+											<TransformGroup>
+												<ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.3" ScaleY="1"/>
+												<SkewTransform AngleX="0" AngleY="0" CenterX="0.5" CenterY="0.5"/>
+												<RotateTransform Angle="0" CenterX="0.5" CenterY="0.5"/>
+												<TranslateTransform X="-0.01" Y="0.5"/>
+											</TransformGroup>
+										</RadialGradientBrush.RelativeTransform>
+										<GradientStop Color="#BB70C0FF" Offset="0"/>
+										<GradientStop Color="#4470C0FF" Offset="1"/>
+									</RadialGradientBrush>
+								</Border.Background>
+							</Border>
+							<Path x:Name="Arrow" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Grid.RowSpan="2" Grid.Column="1" Data="{StaticResource DownArrowGeometry}" Fill="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Grid>
 					</themes:ButtonChrome>
 					<ControlTemplate.Triggers>
-						<Trigger Property="IsChecked" Value="true">
-							<Setter Property="RenderPressed" TargetName="Chrome" Value="true"/>
-						</Trigger>
 						<Trigger Property="IsEnabled" Value="false">
 							<Setter Property="Fill" TargetName="Arrow" Value="#AFAFAF"/>
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Trigger.EnterActions>
+								<BeginStoryboard Storyboard="{StaticResource GlowShine}"/>
+							</Trigger.EnterActions>
+							<Trigger.ExitActions>
+								<BeginStoryboard Storyboard="{StaticResource GlowFade}"/>
+							</Trigger.ExitActions>
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -68,26 +123,16 @@
 		<Setter Property="IsTabStop" Value="false"/>
 		<Setter Property="Focusable" Value="false"/>
 		<Setter Property="ClickMode" Value="Press"/>
-		<Setter Property="Background">
-			<Setter.Value>
-				<RadialGradientBrush>
-					<RadialGradientBrush.RelativeTransform>
-						<TransformGroup>
-							<ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.3" ScaleY="1"/>
-							<SkewTransform AngleX="0" AngleY="0" CenterX="0.5" CenterY="0.5"/>
-							<RotateTransform Angle="0" CenterX="0.5" CenterY="0.5"/>
-							<TranslateTransform X="-0.01" Y="0.5"/>
-						</TransformGroup>
-					</RadialGradientBrush.RelativeTransform>
-					<GradientStop Color="#BB70C0FF" Offset="0"/>
-					<GradientStop Color="#4470C0FF" Offset="1"/>
-				</RadialGradientBrush>
-			</Setter.Value>
-		</Setter>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type ToggleButton}">
-					<themes:ButtonChrome x:Name="Chrome" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" RenderMouseOver="{TemplateBinding IsMouseOver}" RenderPressed="{TemplateBinding IsPressed}" RoundCorners="false" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
+					<themes:ButtonChrome x:Name="Chrome" RenderMouseOver="{TemplateBinding IsMouseOver}" RenderPressed="{TemplateBinding IsPressed}" RoundCorners="True" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
+						<themes:ButtonChrome.Background>
+							<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+								<GradientStop Color="#AAFFFFFF" Offset="0"/>
+								<GradientStop Color="#44FFFFFF" Offset="1"/>
+							</LinearGradientBrush>
+						</themes:ButtonChrome.Background>
 						<Path x:Name="Arrow" Data="{StaticResource DownArrowGeometry}" Fill="Black" HorizontalAlignment="Center" Margin="0,1,0,0" VerticalAlignment="Center"/>
 					</themes:ButtonChrome>
 					<ControlTemplate.Triggers>
@@ -110,7 +155,7 @@
 			</Grid.ColumnDefinitions>
 			<Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
 				<themes:SystemDropShadowChrome x:Name="Shdw" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=Placement}">
-					<Border x:Name="DropDownBorder" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+					<Border x:Name="DropDownBorder" HorizontalAlignment="Stretch" Margin="0" CornerRadius="4,4,0,0" BorderThickness="1">
 						<ScrollViewer x:Name="DropDownScrollViewer">
 							<Grid RenderOptions.ClearTypeHint="Enabled">
 								<Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
@@ -119,6 +164,12 @@
 								<ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
 							</Grid>
 						</ScrollViewer>
+						<Border.Background>
+							<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+								<GradientStop Color="#AAFFFFFF" Offset="0"/>
+								<GradientStop Color="#44FFFFFF" Offset="1"/>
+							</LinearGradientBrush>
+						</Border.Background>
 					</Border>
 				</themes:SystemDropShadowChrome>
 			</Popup>
@@ -162,7 +213,7 @@
 		<Setter Property="Foreground" Value="White"/>
 		<Setter Property="FontWeight" Value="ExtraBold" />
 		<Setter Property="FontSize" Value="20" />
-		<Setter Property="Background">
+		<Setter Property="OpacityMask">
 			<Setter.Value>
 				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 					<GradientStop Color="#FF000000" Offset="0"/>
@@ -170,7 +221,8 @@
 				</LinearGradientBrush>
 			</Setter.Value>
 		</Setter>
-		<Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}"/>
+		<Setter Property="Background" Value="#7F000000"/>
+		<Setter Property="BorderBrush" Value="Black"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
 		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
@@ -188,7 +240,7 @@
 						</Grid.ColumnDefinitions>
 						<Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
 							<themes:SystemDropShadowChrome x:Name="Shdw" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=MainGrid}">
-								<Border x:Name="DropDownBorder" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1">
+								<Border x:Name="DropDownBorder" BorderThickness="1" BorderBrush="Black">
 									<Border.Background>
 										<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 											<GradientStop Color="#FF000000" Offset="0"/>
