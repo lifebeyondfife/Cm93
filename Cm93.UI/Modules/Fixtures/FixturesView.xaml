@@ -8,11 +8,13 @@
              d:DesignHeight="300" d:DesignWidth="300">
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition />
 			<RowDefinition Height="Auto"/>
+			<RowDefinition />
 		</Grid.RowDefinitions>
 
-		<DataGrid Grid.Row="0" IsHitTestVisible="False" AutoGenerateColumns="False" ItemsSource="{Binding FixturesGrid, Mode=OneWay}" Background="Transparent" RowBackground="Transparent" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserResizeRows="False" HeadersVisibility="None" IsReadOnly="True">
+		<Button Grid.Row="0" Height="45" Content="{Binding FixturesLabel, Mode=OneWay}" x:Name="FlipFixtures" Margin="0,0,0,5" />
+
+		<DataGrid Grid.Row="1" IsHitTestVisible="False" AutoGenerateColumns="False" ItemsSource="{Binding FixturesGrid, Mode=OneWay}" Background="Transparent" RowBackground="Transparent" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserResizeRows="False" HeadersVisibility="None" IsReadOnly="True">
 			<DataGrid.Columns>
 				<DataGridTextColumn Binding="{Binding Path=TeamHome}" Width="5*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
 				<DataGridTextColumn Binding="{Binding Path=GoalsHome}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
@@ -20,8 +22,6 @@
 				<DataGridTextColumn Binding="{Binding Path=TeamAway}" Width="5*" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
 			</DataGrid.Columns>
 		</DataGrid>
-
-		<Button Grid.Row="1" Content="{Binding FixturesLabel, Mode=OneWay}" x:Name="FlipFixtures" Margin="0,5" />
 
 	</Grid>
 </UserControl>

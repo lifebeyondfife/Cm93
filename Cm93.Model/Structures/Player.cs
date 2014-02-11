@@ -17,6 +17,7 @@ This file is part of Cm93.
 */
 using System.Collections.Generic;
 using System.Globalization;
+using Cm93.Model.Attributes;
 using Cm93.Model.Enumerations;
 
 namespace Cm93.Model.Structures
@@ -25,6 +26,8 @@ namespace Cm93.Model.Structures
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
+
+		[PlayerMetric(Order = 2)]
 		public string FullName
 		{
 			get
@@ -33,14 +36,19 @@ namespace Cm93.Model.Structures
 			}
 		}
 
+		[PlayerMetric(Order = 3)]
 		public int Age { get; set; }
 
+		[PlayerMetric(Order = 5)]
 		public int Goals { get; set; }
 
+		[PlayerMetric(Order = 4)]
 		public double Rating { get; set; }
 		public Team Team { get; set; }
 
+		[PlayerMetric(Order = 6)]
 		public IList<Position> Positions { get; set; }
+		[PlayerMetric(Order = 1)]
 		public int Number { get; set; }
 
 		public Coordinate Location { get; set; }

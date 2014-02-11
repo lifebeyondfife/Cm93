@@ -6,13 +6,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
 	<Grid>
-		<Grid.Resources>
-			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-		</Grid.Resources>
-
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="8*"/>
-			<ColumnDefinition Width="4*"/>
+			<ColumnDefinition Width="10*"/>
+			<ColumnDefinition Width="5*"/>
 			<ColumnDefinition Width="6*"/>
 		</Grid.ColumnDefinitions>
 
@@ -23,13 +19,13 @@
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
-			<Button Grid.Row="0" Margin="0,0,5,5" Height="37" HorizontalAlignment="Stretch" Content="{Binding TeamsLabel}" x:Name="ToggleTeams" />
+			<Button Grid.Row="0" Margin="0,0,0,5" Height="45" HorizontalAlignment="Stretch" Content="{Binding TeamsLabel}" x:Name="ToggleTeams" />
 
-			<DataGrid Grid.Row="1" ItemsSource="{Binding PlayerGrid, Mode=OneWay}" SelectedItem="{Binding SelectedPlayer}" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" AutoGenerateColumns="False">
+			<DataGrid Grid.Row="1" ItemsSource="{Binding PlayerGrid, Mode=OneWay}" SelectionMode="Single" SelectedItem="{Binding SelectedPlayer}" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" AutoGenerateColumns="False">
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="Number" Binding="{Binding Path=Number}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
-					<DataGridTextColumn Header="Player" Binding="{Binding Path=Name}" Width="5*" CanUserSort="False" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
-					<DataGridTextColumn x:Name="ColumnTeam" Header="Team" Binding="{Binding Path=Team}" Width="4*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
+					<DataGridTextColumn Header="Player" Binding="{Binding Path=Name}" Width="6*" CanUserSort="False" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
+					<DataGridTextColumn x:Name="ColumnTeam" Header="Team" Binding="{Binding Path=Team}" Width="5*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
 					<DataGridTextColumn x:Name="ColumnPositions" Header="Positions" Binding="{Binding Path=Positions}" Width="4*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
 					<DataGridTextColumn x:Name="ColumnAge" Header="Age" Binding="{Binding Path=Age}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
 					<DataGridTextColumn x:Name="ColumnRating" Header="Rating" Binding="{Binding Path=Rating}" Width="2*" SortDirection="Ascending" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
@@ -38,8 +34,8 @@
 			</DataGrid>
 
 			<StackPanel Orientation="Horizontal" Grid.Row="2">
-				<ComboBox Style="{StaticResource Dropdown}" Height="37" Width="120" ItemsSource="{Binding PlayerFilters}" SelectedItem="{Binding SelectedPlayerFilter}" Margin="5" SelectionChanged="Selector_OnSelectionChanged" />
-				<ComboBox Style="{StaticResource Dropdown}" Height="37" Width="180" ItemsSource="{Binding PositionFilters}" SelectedItem="{Binding SelectedPositionFilter}" Margin="5" />
+				<ComboBox Style="{StaticResource Dropdown}" Height="37" Width="120" ItemsSource="{Binding PlayerFilters}" SelectedItem="{Binding SelectedPlayerFilter}" Margin="0,5,5,0" SelectionChanged="Selector_OnSelectionChanged" />
+				<ComboBox Style="{StaticResource Dropdown}" Height="37" Width="180" ItemsSource="{Binding PositionFilters}" SelectedItem="{Binding SelectedPositionFilter}" Margin="0,5,5,0" />
 			</StackPanel>
 		</Grid>
 
@@ -64,7 +60,6 @@
 			</Grid>
 			<Expander VerticalContentAlignment="Bottom" Grid.Row="1" Header="Contract">
 				<Grid>
-
 					<Grid.RowDefinitions>
 						<RowDefinition Height="1*"/>
 						<RowDefinition Height="Auto"/>
@@ -80,13 +75,18 @@
 						<TextBox Grid.Column="2" HorizontalAlignment="Right" Margin="5" Width="35" />
 					</StackPanel>
 
-					<Button Grid.Row="2" Margin="5" Height="37" Content="Bid"/>
+					<Button Grid.Row="2" Margin="5,5,5,0" Height="37" Content="Bid"/>
 
 				</Grid>
 			</Expander>
 		</Grid>
 
-		<DataGrid Grid.Column="2"/>
+		<DataGrid Grid.Column="2" ItemsSource="{Binding PlayerMetricGrid, Mode=OneWay}" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" IsHitTestVisible="False" AutoGenerateColumns="False">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Attribute" Binding="{Binding Path=Attribute}" Width="7*" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn Header="Value" Binding="{Binding Path=Value}" Width="12*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
+			</DataGrid.Columns>
+		</DataGrid>
 
 	</Grid>
 </UserControl>

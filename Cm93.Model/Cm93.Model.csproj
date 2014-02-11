@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\PlayerMetricAttribute.cs" />
     <Compile Include="Config\Config.cs" />
     <Compile Include="Enumerations\Instruction.cs" />
     <Compile Include="Enumerations\Position.cs" />

@@ -16,14 +16,19 @@ This file is part of Cm93.
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using Caliburn.Micro;
+using Cm93.Model.Attributes;
 using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
+using Cm93.Model.Structures;
 using Cm93.UI.Events;
 
 namespace Cm93.UI.Modules.Players
@@ -124,6 +129,8 @@ namespace Cm93.UI.Modules.Players
 			set
 			{
 				this.selectedPlayer = value;
+
+				UpdatePlayerMetricGrid();
 				NotifyOfPropertyChange(() => SelectedPlayer);
 			}
 		}
@@ -136,6 +143,17 @@ namespace Cm93.UI.Modules.Players
 			{
 				this.playerGrid = value;
 				NotifyOfPropertyChange(() => PlayerGrid);
+			}
+		}
+
+		private ObservableCollection<PlayerMetricRow> playerMetricGrid = new ObservableCollection<PlayerMetricRow>();
+		public ObservableCollection<PlayerMetricRow> PlayerMetricGrid
+		{
+			get { return this.playerMetricGrid; }
+			set
+			{
+				this.playerMetricGrid = value;
+				NotifyOfPropertyChange(() => PlayerMetricGrid);
 			}
 		}
 
@@ -177,17 +195,61 @@ namespace Cm93.UI.Modules.Players
 					(SelectedPositionFilter == Position.All || p.Positions.Contains(SelectedPositionFilter)) &&
 					(!ShowOnlyMyTeam || p.Team.TeamName == TeamName)))
 				this.playerGrid.Add(new PlayerRow
-				{
-					Name = string.Format(CultureInfo.CurrentCulture, "{0}, {1}", player.LastName, player.FirstName),
-					Number = player.Number,
-					Age = player.Age,
-					Goals = player.Goals,
-					Positions = string.Join("\n", player.Positions),
-					Rating = player.Rating,
-					Team = player.Team.TeamName
-				});
+					{
+						Name = string.Format(CultureInfo.CurrentCulture, "{0}, {1}", player.LastName, player.FirstName),
+						Number = player.Number,
+						Age = player.Age,
+						Goals = player.Goals,
+						Positions = string.Join("\n", player.Positions),
+						Rating = player.Rating,
+						Team = player.Team.TeamName
+					});
 
 			NotifyOfPropertyChange(() => PlayerGrid);
+		}
+
+		private void UpdatePlayerMetricGrid()
+		{
+			this.playerMetricGrid.Clear();
+
+			if (SelectedPlayer == null)
+				return;
+
+			//	This line below will become unworkable when the model has a large number of players
+			//	PlayersModel.Players needs to become, say, a Dictionary<{name, number}-tuple, Player> collection
+			var player = PlayersModel.Players.Single
+				(p => p.Number == SelectedPlayer.Number && p.Team.TeamName == SelectedPlayer.Team);
+			var properties = player.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+			var playerMetricRows = new List<PlayerMetricRow>();
+
+			foreach (var propertyDefinition in properties)
+			{
+				if (!propertyDefinition.IsDefined(typeof(PlayerMetricAttribute), true))
+					continue;
+
+				var propertyValue = propertyDefinition.GetValue(player, null);
+				var attribute = propertyDefinition.GetAttributes<PlayerMetricAttribute>(false).Single();
+
+				var propertyString = propertyValue is ICollection ?
+					string.Join("\n", ((ICollection) propertyValue).
+						Cast<object>().
+						Select(o => o.ToString()).
+						OrderBy(s => s)) :
+					propertyValue.ToString();
+
+				playerMetricRows.Add(new PlayerMetricRow
+					{
+						Order = attribute.Order,
+						Attribute = propertyDefinition.Name,
+						Value = propertyString
+					});
+			}
+
+			foreach (var playerMetricRow in playerMetricRows.OrderBy(r => r.Order))
+				this.playerMetricGrid.Add(playerMetricRow);
+
+			NotifyOfPropertyChange(() => PlayerMetricGrid);
 		}
 
 		public void Handle(TeamSetEvent message)
