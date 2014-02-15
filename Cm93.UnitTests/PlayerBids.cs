@@ -15,17 +15,19 @@ This file is part of Cm93.
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cm93.Model;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
+using Cm93.Model.Structures;
 using Cm93.Simulator.Basic;
 using NUnit.Framework;
 
 namespace Cm93.UnitTests
 {
-	public class Structures
+	public class PlayerBids
 	{
 		private IDictionary<ModuleType, IModule> Modules { get; set; }
 
@@ -37,12 +39,49 @@ namespace Cm93.UnitTests
 		}
 
 		[Test]
-		public void PlaySeason()
+		public void CompleteBidSuccessful()
 		{
-			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
+			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams;
 
-			while (cmcl.MatchesLeft > 0)
-				cmcl.PlayNextRound();
+			var player = teams["Sothbury Wanderers FC"].Players.First();
+
+			var bid = new Bid
+				{
+					BidAmount = 40000000,
+					Player = player,
+					PlayerNumber = 99,
+					PurchasingTeam = teams["Caddington City FC"]
+				};
+		
+			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
+			
+			Competition.Simulator.SubmitBid(bid);
+
+			cmcl.PlayNextRound();
+
+			Assert.AreEqual("Caddington City FC", player.Team.TeamName);
+			Assert.AreEqual(99, player.Number);
+
+			Assert.AreEqual(3462412d, teams["Caddington City FC"].Balance);
+			Assert.AreEqual(50032412d, teams["Sothbury Wanderers FC"].Balance);
+		}
+
+		[Test]
+		public void CompleteBidUnsuccessful()
+		{
+			throw new NotImplementedException();
+		}
+
+		[Test]
+		public void CompleteMultipleBidSuccessful()
+		{
+			throw new NotImplementedException();
+		}
+
+		[Test]
+		public void IgnoreMultipleBidsFromOneTeam()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -17,12 +17,13 @@ This file is part of Cm93.
 */
 using Cm93.Model.Structures;
 
-namespace Cm93.Model.Interfaces
+namespace Cm93.Simulator.Basic
 {
-	public interface ISimulator
+	public class AttachBasicSimulator : IAttachSimulator
 	{
-		void Play(Fixture fixture);
-		void SubmitBid(Bid bid);
-		void ProcessTransfers();
+		public void AttachSimulator()
+		{
+			Competition.Simulator = new BasicSimulator();
+		}
 	}
 }

@@ -15,15 +15,20 @@ This file is part of Cm93.
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using Cm93.Model.Structures;
-
-namespace Cm93.Simulator.Basic
+namespace Cm93.Model.Structures
 {
-	public class BasicAttachSimulator : IAttachSimulator
+	public struct PlayerIndex
 	{
-		public void AttachSimulator()
+		private readonly int number;
+		private readonly string teamName;
+
+		public int Number { get { return this.number; } }
+		public string TeamName { get { return this.teamName; } }
+
+		public PlayerIndex(int number, string teamName)
 		{
-			Competition.Simulator = new BasicMatchSimulator();
+			this.number = number;
+			this.teamName = teamName;
 		}
 	}
 }

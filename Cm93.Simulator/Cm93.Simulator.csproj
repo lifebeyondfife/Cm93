@@ -39,8 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Basic\BasicAttachSimulator.cs" />
-    <Compile Include="Basic\BasicMatchSimulator.cs" />
+    <Compile Include="Basic\AttachBasicSimulator.cs" />
+    <Compile Include="Basic\BasicSimulator.cs" />
     <Compile Include="IAttachSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

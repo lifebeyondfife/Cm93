@@ -28,7 +28,6 @@ using Cm93.Model.Attributes;
 using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
-using Cm93.Model.Structures;
 using Cm93.UI.Events;
 
 namespace Cm93.UI.Modules.Players

@@ -23,5 +23,7 @@ namespace Cm93.Model.Attributes
 	public class PlayerMetricAttribute : Attribute
 	{
 		public int Order { get; set; }
+
+		public object Formatter { get; set; }
 	}
 }

@@ -15,14 +15,13 @@ This file is part of Cm93.
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using Cm93.Model.Structures;
-
-namespace Cm93.Model.Interfaces
+namespace Cm93.Model.Structures
 {
-	public interface ISimulator
+	public class Bid
 	{
-		void Play(Fixture fixture);
-		void SubmitBid(Bid bid);
-		void ProcessTransfers();
+		public Team PurchasingTeam { get; set; }
+		public Player Player { get; set; }
+		public int PlayerNumber { get; set; }
+		public int BidAmount { get; set; }
 	}
 }

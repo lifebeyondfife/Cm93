@@ -16,14 +16,22 @@ This file is part of Cm93.
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 
 namespace Cm93.Simulator.Basic
 {
-	public class BasicMatchSimulator : ISimulator
+	public class BasicSimulator : ISimulator
 	{
+		private IDictionary<PlayerIndex, IList<Bid>> Bids { get; set; }
+
+		public BasicSimulator()
+		{
+			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
+		}
+
 		public void Play(Fixture fixture)
 		{
 			var random = new Random();
@@ -52,6 +60,38 @@ namespace Cm93.Simulator.Basic
 						First().Index].Goals;
 				}
 			}
+		}
+
+		public void SubmitBid(Bid bid)
+		{
+			if (!Bids.ContainsKey(bid.Player.Index))
+				Bids[bid.Player.Index] = new List<Bid>();
+
+			if (Bids[bid.Player.Index].Any(b => b.PurchasingTeam == bid.PurchasingTeam))
+				return;	// already put in one bid, ignore subsequent for this week
+
+			Bids[bid.Player.Index].Add(bid);
+		}
+
+		public void ProcessTransfers()
+		{
+			foreach (var playerBidList in Bids.Values)
+			{
+				var highestBid = playerBidList.OrderByDescending(b => b.BidAmount).Single();
+				var player = highestBid.Player;
+
+				if (highestBid.BidAmount < player.ReleaseValue)
+					continue;	//	Winning bid isn't high enough
+
+				highestBid.PurchasingTeam.Balance -= highestBid.BidAmount;
+				player.Team.Balance += highestBid.BidAmount;
+
+				player.Team = highestBid.PurchasingTeam;
+				player.Number = highestBid.PlayerNumber;
+				player.ResetPlayerIndex();
+			}
+
+			Bids.Clear();
 		}
 	}
 }

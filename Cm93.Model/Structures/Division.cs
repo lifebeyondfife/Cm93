@@ -66,6 +66,8 @@ namespace Cm93.Model.Structures
 			}
 
 			UpdatePositions();
+
+			Simulator.ProcessTransfers();
 		}
 
 		private void UpdatePointsAndGoals(Fixture fixture)

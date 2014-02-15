@@ -15,6 +15,7 @@ This file is part of Cm93.
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Cm93.Model.Attributes;
@@ -24,6 +25,20 @@ namespace Cm93.Model.Structures
 {
 	public class Player
 	{
+		private Lazy<PlayerIndex> lazyPlayerIndex;
+		
+		public Player()
+		{
+			ResetPlayerIndex();
+		}
+
+		public void ResetPlayerIndex()
+		{
+			lazyPlayerIndex = new Lazy<PlayerIndex>(() => new PlayerIndex(Number, Team.TeamName));
+		}
+
+		public PlayerIndex Index { get { return lazyPlayerIndex.Value; } }
+
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 
@@ -54,5 +69,17 @@ namespace Cm93.Model.Structures
 		public Coordinate Location { get; set; }
 
 		public Instruction Instruction { get; set; }
+
+		[PlayerMetric(Order = 7)]
+		public string Value
+		{
+			get { return string.Format(CultureInfo.CurrentCulture, "{0:c0}", NumericValue); }
+		}
+
+		public int NumericValue { get; set; }
+
+		//	This is a very important field to keep secret. At some point change to internal
+		//	and alter assembly attributes to allow the UI project access.
+		public int ReleaseValue { get; set; }
 	}
 }
