@@ -77,7 +77,7 @@ namespace Cm93.Simulator.Basic
 		{
 			foreach (var playerBidList in Bids.Values)
 			{
-				var highestBid = playerBidList.OrderByDescending(b => b.BidAmount).Single();
+				var highestBid = playerBidList.OrderByDescending(b => b.BidAmount).First();
 				var player = highestBid.Player;
 
 				if (highestBid.BidAmount < player.ReleaseValue)
