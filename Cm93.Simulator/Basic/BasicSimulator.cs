@@ -18,6 +18,7 @@ This file is part of Cm93.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cm93.Model.Config;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 
@@ -26,7 +27,11 @@ namespace Cm93.Simulator.Basic
 	public class BasicSimulator : ISimulator
 	{
 		private IDictionary<PlayerIndex, IList<Bid>> Bids { get; set; }
-
+		public ILookup<Team, Bid> TeamBids
+		{
+			get { return Bids.SelectMany(kvp => kvp.Value).ToLookup(b => b.PurchasingTeam); }
+		}
+		
 		public BasicSimulator()
 		{
 			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
@@ -64,11 +69,20 @@ namespace Cm93.Simulator.Basic
 
 		public void SubmitBid(Bid bid)
 		{
+			if (bid.BidAmount > bid.PurchasingTeam.Balance - TeamBids[bid.PurchasingTeam].Sum(b => b.BidAmount))
+				return;	//	Team can't afford it (including existing potentially successful bids)
+
+			if (bid.PurchasingTeam.Players.Any(p => p.Number == bid.PlayerNumber))
+				return;	//	That number is already taken
+
+			if (TeamBids[bid.PurchasingTeam].Any(b => b.PlayerNumber == bid.PlayerNumber))
+				return;	//	One team putting in two bids for the same team number
+
 			if (!Bids.ContainsKey(bid.Player.Index))
 				Bids[bid.Player.Index] = new List<Bid>();
 
 			if (Bids[bid.Player.Index].Any(b => b.PurchasingTeam == bid.PurchasingTeam))
-				return;	// already put in one bid, ignore subsequent for this week
+				return;	//	Already put in one bid, ignore subsequent bids for this week
 
 			Bids[bid.Player.Index].Add(bid);
 		}
@@ -77,7 +91,11 @@ namespace Cm93.Simulator.Basic
 		{
 			foreach (var playerBidList in Bids.Values)
 			{
-				var highestBid = playerBidList.OrderByDescending(b => b.BidAmount).First();
+				var highestBid = playerBidList.
+					Where(b => b.PurchasingTeam.Players.Count < Configuration.MaxSquadSize).
+					OrderByDescending(b => b.BidAmount).
+					First();
+
 				var player = highestBid.Player;
 
 				if (highestBid.BidAmount < player.ReleaseValue)
@@ -85,6 +103,9 @@ namespace Cm93.Simulator.Basic
 
 				highestBid.PurchasingTeam.Balance -= highestBid.BidAmount;
 				player.Team.Balance += highestBid.BidAmount;
+
+				player.Team.Players.Remove(player);
+				highestBid.PurchasingTeam.Players.Add(player);
 
 				player.Team = highestBid.PurchasingTeam;
 				player.Number = highestBid.PlayerNumber;

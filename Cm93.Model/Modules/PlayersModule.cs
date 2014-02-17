@@ -16,6 +16,7 @@ This file is part of Cm93.
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System.Collections.Generic;
+using System.Linq;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 
@@ -23,6 +24,18 @@ namespace Cm93.Model.Modules
 {
 	public class PlayersModule : IPlayersModule
 	{
-		public IList<Player> Players { get; set; } 
+		public IList<Player> Players { get; private set; }
+		private ISimulator Simulator { get; set; }
+
+		public ILookup<Team, Bid> TeamBids
+		{
+			get { return Simulator.TeamBids; }
+		}
+
+		public PlayersModule(ISimulator simulator, IList<Player> players)
+		{
+			Simulator = simulator;
+			Players = players;
+		}
 	}
 }

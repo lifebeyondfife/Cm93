@@ -37,7 +37,6 @@ namespace Cm93.UI
 		public CreateModel()
 		{
 			new AttachBasicSimulator().AttachSimulator();
-
 			this.Modules = new MockCreateModules().CreateModules();
 		}
 	}

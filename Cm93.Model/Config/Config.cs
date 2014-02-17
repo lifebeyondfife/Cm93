@@ -22,6 +22,7 @@ namespace Cm93.Model.Config
 	public static class Configuration
 	{
 		public const int AsideSize = 2;
+		public const int MaxSquadSize = 22;
 
 		public static Func<double> GlobalWeek { get; set; }
 	}

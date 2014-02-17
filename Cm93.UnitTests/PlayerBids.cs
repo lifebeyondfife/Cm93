@@ -15,6 +15,7 @@ This file is part of Cm93.
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cm93.Model;
@@ -33,8 +34,8 @@ namespace Cm93.UnitTests
 		[SetUp]
 		public void SetupCmcl()
 		{
-			Modules = new MockCreateModules().CreateModules();
 			new AttachBasicSimulator().AttachSimulator();
+			Modules = new MockCreateModules().CreateModules();
 		}
 
 		[Test]
@@ -89,8 +90,8 @@ namespace Cm93.UnitTests
 			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
 			Assert.AreEqual(9, player.Number);
 
-			Assert.AreEqual(43462412, teams["Caddington City FC"].Balance);
-			Assert.AreEqual(10032412, teams["Sothbury Wanderers FC"].Balance);
+			Assert.AreEqual(43462412d, teams["Caddington City FC"].Balance);
+			Assert.AreEqual(10032412d, teams["Sothbury Wanderers FC"].Balance);
 		}
 
 		[Test]
@@ -172,8 +173,43 @@ namespace Cm93.UnitTests
 			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
 			Assert.AreEqual(9, player.Number);
 
-			Assert.AreEqual(43462412, teams["Caddington City FC"].Balance);
-			Assert.AreEqual(10032412, teams["Sothbury Wanderers FC"].Balance);
+			Assert.AreEqual(43462412d, teams["Caddington City FC"].Balance);
+			Assert.AreEqual(10032412d, teams["Sothbury Wanderers FC"].Balance);
+		}
+
+		[Test]
+		public void IgnoreBidIfTeamShortOfCash()
+		{
+			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams;
+
+			var player = teams["Sothbury Wanderers FC"].Players.First();
+
+			var bid = new Bid
+			{
+				BidAmount = 40000000,
+				Player = player,
+				PlayerNumber = 19,
+				PurchasingTeam = teams["Bicester Royals FC"]
+			};
+
+			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
+
+			Competition.Simulator.SubmitBid(bid);
+
+			cmcl.PlayNextRound();
+
+			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
+			Assert.AreEqual(9, player.Number);
+
+			Assert.AreEqual(12734794d, teams["Bicester Royals FC"].Balance);
+			Assert.AreEqual(10032412d, teams["Sothbury Wanderers FC"].Balance);
+		}
+
+		[Ignore]
+		[Test]
+		public void IgnoreBidIfTeamAtMaximumSquadSize()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

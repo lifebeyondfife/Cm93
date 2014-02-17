@@ -23,6 +23,11 @@ namespace Cm93.Model.Modules
 {
 	public class CompetitionsModule : ICompetitionsModule
 	{
-		public IList<Competition> Competitions { get; set; }
+		public IList<Competition> Competitions { get; private set; }
+
+		public CompetitionsModule(IList<Competition> competitions)
+		{
+			Competitions = competitions;
+		}
 	}
 }

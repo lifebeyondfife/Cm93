@@ -27,11 +27,11 @@ namespace Cm93.Model
 {
 	public class MockCreateModules : ICreateModules
 	{
-		public IDictionary<string, Team> Teams { get; set; }
-		public IList<Player> Players { get; set; }
-		public Division Cmcl { get; set; }
-		public IList<Fixture> SplFixtures { get; set; }
-		public IDictionary<Team, Place> SplPlaces { get; set; }
+		private IDictionary<string, Team> Teams { get; set; }
+		private IList<Player> Players { get; set; }
+		private Division Cmcl { get; set; }
+		private IList<Fixture> SplFixtures { get; set; }
+		private IDictionary<Team, Place> SplPlaces { get; set; }
 
 		public MockCreateModules()
 		{
@@ -97,9 +97,9 @@ namespace Cm93.Model
 			Cmcl.Fixtures = SplFixtures;
 			Cmcl.Places = SplPlaces;
 
-			var playersModule = new PlayersModule { Players = Players };
-			var teamModule = new TeamModule { Teams = Teams };
-			var competitionModule = new CompetitionsModule { Competitions = new[] { Cmcl } };
+			var playersModule = new PlayersModule(Competition.Simulator, Players);
+			var teamModule = new TeamModule(Teams);
+			var competitionModule = new CompetitionsModule(new[] { Cmcl });
 			var fixturesModule = new FixturesModule
 				{
 					Fixtures = competitionModule.Competitions.
@@ -108,7 +108,7 @@ namespace Cm93.Model
 						SelectMany(f => f).
 						ToList()
 				};
-			var matchModule = new MatchModule { Competitions = new[] { Cmcl } };
+			var matchModule = new MatchModule(new [] { Cmcl });
 
 			Config.Configuration.GlobalWeek = () => Competition.GlobalWeek(new[] { Cmcl });
 

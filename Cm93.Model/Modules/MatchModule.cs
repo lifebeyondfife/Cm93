@@ -22,7 +22,12 @@ namespace Cm93.Model.Modules
 {
 	public class MatchModule : IMatchModule
 	{
-		public IList<ICompetition> Competitions { get; set; }
+		public IList<ICompetition> Competitions { get; private set; }
+
+		public MatchModule(IList<ICompetition> competitions)
+		{
+			Competitions = competitions;
+		}
 
 		public void Play()
 		{

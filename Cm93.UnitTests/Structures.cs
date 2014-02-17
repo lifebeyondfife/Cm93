@@ -32,8 +32,8 @@ namespace Cm93.UnitTests
 		[SetUp]
 		public void SetupCmcl()
 		{
-			Modules = new MockCreateModules().CreateModules();
 			new AttachBasicSimulator().AttachSimulator();
+			Modules = new MockCreateModules().CreateModules();
 		}
 
 		[Test]

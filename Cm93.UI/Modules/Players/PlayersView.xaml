@@ -75,7 +75,7 @@
 						<TextBox Grid.Column="2" HorizontalAlignment="Right" Margin="5" Width="35" />
 					</StackPanel>
 
-					<Button Grid.Row="2" Margin="5,5,5,0" Height="37" Content="Bid"/>
+					<Button Grid.Row="2" Margin="5,5,5,0" Height="37" Content="{Binding ContractButtonLabel}" IsEnabled="{Binding ContractButtonEnabled}"/>
 
 				</Grid>
 			</Expander>
