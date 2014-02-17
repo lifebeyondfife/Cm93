@@ -137,7 +137,7 @@ namespace Cm93.UI.Modules.Fixtures
 
 		public void Handle(TeamSetEvent message)
 		{
-			this.TeamName = message.TeamName;
+			this.TeamName = message.Team.TeamName;
 			this.FixturesLabel = TeamName;
 			this.IsTeamFixtures = true;
 

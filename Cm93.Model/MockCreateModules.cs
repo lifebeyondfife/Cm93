@@ -56,7 +56,7 @@ namespace Cm93.Model
 					new Player { Age = 33, ReleaseValue = 500000, NumericValue = 850000, FirstName = "Terrence", LastName = "Nottingham", Rating = 26.5, Number = 1, Positions = new List<Position> { Position.Forward, Position.Striker }, Team = Teams["Caddington City FC"], Location = new Coordinate { X = 0.54d, Y = 0.7d } },
 					new Player { Age = 36, ReleaseValue = 15000000, NumericValue = 11000000, FirstName = "Bastion", LastName = "Rockton", Rating = 86.9, Number = 5, Positions = new List<Position> { Position.CentreMid }, Team = Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.2d, Y = 0.4d } },
 					new Player { Age = 19, ReleaseValue = 3000000, NumericValue = 2000000, FirstName = "Huppert", LastName = "Strafer", Rating = 47.7, Number = 6, Positions = new List<Position> { Position.CentreBack }, Team = Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.5d } },
-					new Player { Age = 17, ReleaseValue = 30000000, NumericValue = 2500000, FirstName = "Fergus", LastName = "Mystic", Rating = 56.3, Number = 2, Positions = new List<Position> { Position.LeftWingback }, Team = Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.75d } },
+					new Player { Age = 17, ReleaseValue = 3000000, NumericValue = 2500000, FirstName = "Fergus", LastName = "Mystic", Rating = 56.3, Number = 2, Positions = new List<Position> { Position.LeftWingback }, Team = Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.75d } },
 				};
 
 			Cmcl = new Division
@@ -97,7 +97,8 @@ namespace Cm93.Model
 			Cmcl.Fixtures = SplFixtures;
 			Cmcl.Places = SplPlaces;
 
-			var playersModule = new PlayersModule(Competition.Simulator, Players);
+			//var playersModule = new PlayersModule(Competition.Simulator, Players);
+			var playersModule = new PlayersModule(Competition.Simulator, Players.ToDictionary(p => p.Index));
 			var teamModule = new TeamModule(Teams);
 			var competitionModule = new CompetitionsModule(new[] { Cmcl });
 			var fixturesModule = new FixturesModule

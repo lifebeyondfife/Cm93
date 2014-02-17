@@ -304,7 +304,7 @@ namespace Cm93.UI.Modules.Team
 
 		public void Handle(TeamSetEvent message)
 		{
-			TeamName = message.TeamName;
+			TeamName = message.Team.TeamName;
 		}
 
 		public void Handle(ModuleSelectedEvent message)

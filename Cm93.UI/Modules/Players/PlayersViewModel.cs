@@ -28,6 +28,7 @@ using Cm93.Model.Attributes;
 using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
+using Cm93.Model.Structures;
 using Cm93.UI.Events;
 
 namespace Cm93.UI.Modules.Players
@@ -37,6 +38,7 @@ namespace Cm93.UI.Modules.Players
 	{
 		private readonly IEventAggregator eventAggregator;
 		private IPlayersModule PlayersModel { get; set; }
+		private Cm93.Model.Structures.Team Team { get; set; }
 
 		private string teamsLabel = string.Empty;
 		public string TeamsLabel
@@ -106,21 +108,6 @@ namespace Cm93.UI.Modules.Players
 			}
 		}
 
-		private string teamName;
-		public string TeamName
-		{
-			get { return this.teamName; }
-			set
-			{
-				if (this.teamName == value)
-					return;
-
-				this.teamName = value;
-
-				NotifyOfPropertyChange(() => TeamName);
-			}
-		}
-
 		private PlayerRow selectedPlayer = default(PlayerRow);
 		public PlayerRow SelectedPlayer
 		{
@@ -129,7 +116,7 @@ namespace Cm93.UI.Modules.Players
 			{
 				this.selectedPlayer = value;
 
-				UpdatePlayerMetricGrid();
+				UpdatePlayerSelected();
 				NotifyOfPropertyChange(() => SelectedPlayer);
 			}
 		}
@@ -156,6 +143,49 @@ namespace Cm93.UI.Modules.Players
 			}
 		}
 
+		#region Bids
+
+		private double bid = default(double);
+		public double Bid
+		{
+			get { return this.bid; }
+			set
+			{
+				this.bid = value;
+				NotifyOfPropertyChange(() => Bid);
+				NotifyOfPropertyChange(() => BidString);
+			}
+		}
+
+		private double maxBidValue = default(double);
+		public double MaxBidValue
+		{
+			get { return this.maxBidValue; }
+			set
+			{
+				this.maxBidValue = value;
+				NotifyOfPropertyChange(() => MaxBidValue);
+			}
+		}
+
+		public string BidString
+		{
+			get { return string.Format(CultureInfo.CurrentCulture, "{0:c0}", Bid); }
+		}
+
+		public string Balance
+		{
+			get { return string.Format(CultureInfo.CurrentCulture, "{0:c0}", Team.Balance); }
+		}
+
+		public string Available
+		{
+			get { return string.Format(CultureInfo.CurrentCulture, "{0:c0}",
+				this.Team.Balance - PlayersModel.TeamBids[this.Team].Sum(b => b.BidAmount)); }
+		}
+
+		#endregion
+
 		[ImportingConstructor]
 		public PlayersViewModel(IEventAggregator eventAggregator)
 		{
@@ -174,8 +204,6 @@ namespace Cm93.UI.Modules.Players
 		public override void SetModel(IModule model)
 		{
 			PlayersModel = (IPlayersModule) model;
-
-			UpdatePlayerGrid();
 		}
 
 		public void Handle(ModuleSelectedEvent message)
@@ -190,9 +218,9 @@ namespace Cm93.UI.Modules.Players
 		{
 			this.playerGrid.Clear();
 
-			foreach (var player in PlayersModel.Players.Where(p =>
+			foreach (var player in PlayersModel.Players.Values.Where(p =>
 					(SelectedPositionFilter == Position.All || p.Positions.Contains(SelectedPositionFilter)) &&
-					(!ShowOnlyMyTeam || p.Team.TeamName == TeamName)))
+					(!ShowOnlyMyTeam || p.Team.TeamName == Team.TeamName)))
 				this.playerGrid.Add(new PlayerRow
 					{
 						Name = string.Format(CultureInfo.CurrentCulture, "{0}, {1}", player.LastName, player.FirstName),
@@ -207,17 +235,14 @@ namespace Cm93.UI.Modules.Players
 			NotifyOfPropertyChange(() => PlayerGrid);
 		}
 
-		private void UpdatePlayerMetricGrid()
+		private void UpdatePlayerSelected()
 		{
 			this.playerMetricGrid.Clear();
 
 			if (SelectedPlayer == null)
 				return;
 
-			//	This line below will become unworkable when the model has a large number of players
-			//	PlayersModel.Players needs to become, say, a Dictionary<{name, number}-tuple, Player> collection
-			var player = PlayersModel.Players.Single
-				(p => p.Number == SelectedPlayer.Number && p.Team.TeamName == SelectedPlayer.Team);
+			var player = PlayersModel.Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
 			var properties = player.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
 			var playerMetricRows = new List<PlayerMetricRow>();
@@ -245,6 +270,9 @@ namespace Cm93.UI.Modules.Players
 					});
 			}
 
+			MaxBidValue = player.Team == Team ? player.NumericValue * 3 : Math.Min(player.NumericValue * 2, Team.Balance);
+			Bid = player.Team == Team ? player.ReleaseValue : Math.Min(player.NumericValue, Team.Balance);
+
 			foreach (var playerMetricRow in playerMetricRows.OrderBy(r => r.Order))
 				this.playerMetricGrid.Add(playerMetricRow);
 
@@ -253,8 +281,8 @@ namespace Cm93.UI.Modules.Players
 
 		public void Handle(TeamSetEvent message)
 		{
-			TeamName = message.TeamName;
-			TeamsLabel = TeamName;
+			Team = message.Team;
+			TeamsLabel = Team.TeamName;
 			ShowOnlyMyTeam = true;
 
 			UpdatePlayerGrid();
@@ -267,7 +295,7 @@ namespace Cm93.UI.Modules.Players
 
 		public void ToggleTeams()
 		{
-			TeamsLabel = ShowOnlyMyTeam ? "All Teams" : TeamName;
+			TeamsLabel = ShowOnlyMyTeam ? "All Teams" : Team.TeamName;
 			ShowOnlyMyTeam = !ShowOnlyMyTeam;
 
 			UpdatePlayerGrid();

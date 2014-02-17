@@ -76,9 +76,7 @@ namespace Cm93.UI.Modules
 			if (string.IsNullOrEmpty(SelectedTeam))
 				return;
 
-			//Configuration.PlayerTeamName = SelectedTeam;
-
-			this.eventAggregator.Publish(new TeamSetEvent(SelectedTeam));
+			this.eventAggregator.Publish(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam]));
 			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Team));
 		}
 	}

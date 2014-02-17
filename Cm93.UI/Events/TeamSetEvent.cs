@@ -1,12 +1,14 @@
-﻿namespace Cm93.UI.Events
+﻿using Cm93.Model.Structures;
+
+namespace Cm93.UI.Events
 {
 	public class TeamSetEvent
 	{
-		public string TeamName { get; set; }
+		public Team Team { get; set; }
 
-		public TeamSetEvent(string teamName)
+		public TeamSetEvent(Team team)
 		{
-			this.TeamName = teamName;
+			Team = team;
 		}
 	}
 }

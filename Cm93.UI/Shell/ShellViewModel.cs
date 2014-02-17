@@ -121,7 +121,7 @@ namespace Cm93.UI.Shell
 
 		public void Handle(TeamSetEvent message)
 		{
-			TeamSelected = !string.IsNullOrEmpty(message.TeamName);
+			TeamSelected = !string.IsNullOrEmpty(message.Team.TeamName);
 		}
 	}
 }

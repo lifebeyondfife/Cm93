@@ -42,7 +42,7 @@ namespace Cm93.Model.Interfaces
 
 	public interface IPlayersModule : IModule
 	{
-		IList<Player> Players { get; }
+		IDictionary<PlayerIndex, Player> Players { get; }
 
 		ILookup<Team, Bid> TeamBids { get; }
 	}
