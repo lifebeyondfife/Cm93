@@ -6,6 +6,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
 	<Grid>
+		<Grid.Resources>
+			<BooleanToVisibilityConverter x:Key="BoolVisible" />
+		</Grid.Resources>
+		
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="10*"/>
 			<ColumnDefinition Width="5*"/>
@@ -58,7 +62,7 @@
 					<Canvas Grid.Row="1" />
 				</Grid>
 			</Grid>
-			<Expander VerticalContentAlignment="Bottom" Grid.Row="1" Header="Contract">
+			<Expander VerticalContentAlignment="Bottom" Grid.Row="1" Header="Contract" Visibility="{Binding IsPlayerSelected, Converter={StaticResource BoolVisible}}">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
@@ -91,7 +95,7 @@
 						<Label Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Content="{Binding Available}" />
 					</Grid>
 
-					<Grid Grid.Row="4">
+					<Grid Grid.Row="4" Visibility="{Binding ShirtNumberVisible, Converter={StaticResource BoolVisible}}">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition/>
@@ -100,7 +104,7 @@
 						<TextBox Grid.Column="1" HorizontalAlignment="Right" Margin="5" Width="35" />
 					</Grid>
 
-					<Button Grid.Row="5" Margin="5,5,5,0" Height="37" Content="{Binding ContractButtonLabel}" IsEnabled="{Binding ContractButtonEnabled}"/>
+					<Button x:Name="ContractBidRelease" Grid.Row="5" Margin="5,5,5,0" Height="37" Content="{Binding ContractButtonLabel}" />
 				</Grid>
 			</Expander>
 		</Grid>

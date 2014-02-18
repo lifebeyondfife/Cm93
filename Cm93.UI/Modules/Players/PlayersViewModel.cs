@@ -118,7 +118,13 @@ namespace Cm93.UI.Modules.Players
 
 				UpdatePlayerSelected();
 				NotifyOfPropertyChange(() => SelectedPlayer);
+				NotifyOfPropertyChange(() => IsPlayerSelected);
 			}
+		}
+
+		public bool IsPlayerSelected
+		{
+			get { return SelectedPlayer != null; }
 		}
 
 		private ObservableCollection<PlayerRow> playerGrid = new ObservableCollection<PlayerRow>();
@@ -182,6 +188,28 @@ namespace Cm93.UI.Modules.Players
 		{
 			get { return string.Format(CultureInfo.CurrentCulture, "{0:c0}",
 				this.Team.Balance - PlayersModel.TeamBids[this.Team].Sum(b => b.BidAmount)); }
+		}
+
+		private string contractButtonLabel = string.Empty;
+		public string ContractButtonLabel
+		{
+			get { return this.contractButtonLabel; }
+			set
+			{
+				this.contractButtonLabel = value;
+				NotifyOfPropertyChange(() => ContractButtonLabel);
+			}
+		}
+
+		private bool shirtNumberVisible = default(bool);
+		public bool ShirtNumberVisible
+		{
+			get { return this.shirtNumberVisible; }
+			set
+			{
+				this.shirtNumberVisible = value;
+				NotifyOfPropertyChange(() => ShirtNumberVisible);
+			}
 		}
 
 		#endregion
@@ -273,6 +301,23 @@ namespace Cm93.UI.Modules.Players
 			MaxBidValue = player.Team == Team ? player.NumericValue * 3 : Math.Min(player.NumericValue * 2, Team.Balance);
 			Bid = player.Team == Team ? player.ReleaseValue : Math.Min(player.NumericValue, Team.Balance);
 
+			if (player.Team == Team)
+			{
+				ShirtNumberVisible = false;
+				ContractButtonLabel = "Release";
+				playerMetricRows.Add(new PlayerMetricRow
+					{
+						Order = playerMetricRows.Max(r => r.Order) + 1,
+						Attribute = "Release",
+						Value = string.Format(CultureInfo.CurrentCulture, "{0:c0}", player.ReleaseValue)
+					});
+			}
+			else
+			{
+				ShirtNumberVisible = true;
+				ContractButtonLabel = "Bid";
+			}
+
 			foreach (var playerMetricRow in playerMetricRows.OrderBy(r => r.Order))
 				this.playerMetricGrid.Add(playerMetricRow);
 
@@ -299,6 +344,33 @@ namespace Cm93.UI.Modules.Players
 			ShowOnlyMyTeam = !ShowOnlyMyTeam;
 
 			UpdatePlayerGrid();
+		}
+
+		public void ContractBidRelease()
+		{
+			var player = PlayersModel.Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
+
+			if (player.Team == Team)
+			{
+				player.ReleaseValue = (int) Bid;
+				return;
+			}
+
+			var bid = new Bid { BidAmount = (int) Bid, Player = player, PlayerNumber = 1, PurchasingTeam = Team };
+
+			//	Need to validate PlayerNumber (and get it from the text box on the View)
+			//	Need to submit the bid to the simulator...
+			//	Need to NotifyPropertyChange(() => ) to ContractBidRelease button when SelectedPlayer changes...
+		}
+
+		public bool CanContractBidRelease()
+		{
+			if (SelectedPlayer == null)
+				return false;
+
+			var player = PlayersModel.Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
+
+			return player.Team == Team || PlayersModel.TeamBids[Team].All(b => b.Player != player);
 		}
 	}
 }
