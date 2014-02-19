@@ -24,15 +24,10 @@ namespace Cm93.Model.Modules
 {
 	public class PlayersModule : IPlayersModule
 	{
-		public IDictionary<PlayerIndex, Player> Players { get; private set; }
-		private ISimulator Simulator { get; set; }
+		public IList<Player> Players { get; private set; }
+		public ISimulator Simulator { get; private set; }
 
-		public ILookup<Team, Bid> TeamBids
-		{
-			get { return Simulator.TeamBids; }
-		}
-
-		public PlayersModule(ISimulator simulator, IDictionary<PlayerIndex, Player> players)
+		public PlayersModule(ISimulator simulator, IList<Player> players)
 		{
 			Simulator = simulator;
 			Players = players;

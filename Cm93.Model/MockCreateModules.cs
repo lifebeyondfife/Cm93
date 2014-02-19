@@ -98,7 +98,7 @@ namespace Cm93.Model
 			Cmcl.Places = SplPlaces;
 
 			//var playersModule = new PlayersModule(Competition.Simulator, Players);
-			var playersModule = new PlayersModule(Competition.Simulator, Players.ToDictionary(p => p.Index));
+			var playersModule = new PlayersModule(Competition.Simulator, Players);
 			var teamModule = new TeamModule(Teams);
 			var competitionModule = new CompetitionsModule(new[] { Cmcl });
 			var fixturesModule = new FixturesModule

@@ -81,6 +81,9 @@
 				<Setter Property="Visibility" TargetName="GlowRed" Value="Visible"/>
 				<Setter Property="Opacity" TargetName="GlowRed" Value="1"/>
 			</Trigger>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="#A0A0A0"/>
+			</Trigger>
 			<Trigger Property="IsMouseOver" Value="True">
 				<Trigger.EnterActions>
 					<BeginStoryboard Storyboard="{StaticResource GlowShine}"/>

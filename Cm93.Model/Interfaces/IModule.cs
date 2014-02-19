@@ -42,9 +42,8 @@ namespace Cm93.Model.Interfaces
 
 	public interface IPlayersModule : IModule
 	{
-		IDictionary<PlayerIndex, Player> Players { get; }
-
-		ILookup<Team, Bid> TeamBids { get; }
+		IList<Player> Players { get; }
+		ISimulator Simulator { get; }
 	}
 
 	public interface ISelectTeamModule : IModule
