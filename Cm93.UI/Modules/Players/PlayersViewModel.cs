@@ -268,7 +268,7 @@ namespace Cm93.UI.Modules.Players
 		{
 			this.playerGrid.Clear();
 
-			foreach (var player in Players.Values.Where(p =>
+			foreach (var player in PlayersModel.Players.Where(p =>
 				(SelectedPositionFilter == Position.All ||
 				p.Positions.Contains(SelectedPositionFilter)) &&
 				(!ShowOnlyMyTeam || p.Team.TeamName == Team.TeamName)))
@@ -307,7 +307,7 @@ namespace Cm93.UI.Modules.Players
 
 		private void UpdateBidRelease(Player player, ICollection<PlayerMetricRow> playerMetricRows)
 		{
-			MaxBidValue = player.Team == Team ? player.NumericValue*3 : Math.Min(player.NumericValue*2, Team.Balance);
+			MaxBidValue = player.Team == Team ? player.NumericValue * 3 : Math.Min(player.NumericValue * 2, Team.Balance);
 			Bid = player.Team == Team ? player.ReleaseValue : Math.Min(player.NumericValue, Team.Balance);
 
 			if (player.Team == Team)
@@ -336,7 +336,7 @@ namespace Cm93.UI.Modules.Players
 			}
 		}
 
-		private void PopulateMetricGrid(Player player, out IList<PlayerMetricRow> playerMetricRows)
+		private static void PopulateMetricGrid(Player player, out IList<PlayerMetricRow> playerMetricRows)
 		{
 			var properties = player.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 

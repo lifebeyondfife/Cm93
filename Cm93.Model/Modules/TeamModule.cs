@@ -23,9 +23,9 @@ namespace Cm93.Model.Modules
 {
 	public class TeamModule : ITeamModule
 	{
-		public IDictionary<string, Team> Teams { get; private set; }
+		public IList<Team> Teams { get; private set; }
 
-		public TeamModule(IDictionary<string, Team> teams)
+		public TeamModule(IList<Team> teams)
 		{
 			Teams = teams;
 		}

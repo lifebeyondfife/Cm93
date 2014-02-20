@@ -16,7 +16,6 @@ This file is part of Cm93.
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System.Collections.Generic;
-using System.Linq;
 using Cm93.Model.Structures;
 
 namespace Cm93.Model.Interfaces
@@ -37,7 +36,7 @@ namespace Cm93.Model.Interfaces
 
 	public interface ITeamModule : IModule
 	{
-		IDictionary<string, Team> Teams { get; }
+		IList<Team> Teams { get; }
 	}
 
 	public interface IPlayersModule : IModule
@@ -54,7 +53,6 @@ namespace Cm93.Model.Interfaces
 	public interface IMatchModule : IModule
 	{
 		IList<ICompetition> Competitions { get; }
-
 		void Play();
 	}
 }

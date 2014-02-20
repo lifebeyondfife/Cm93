@@ -309,12 +309,12 @@ namespace Cm93.UI.Modules.Team
 
 		public void Handle(ModuleSelectedEvent message)
 		{
-			if (message.Module != ModuleType.Team || PlayerGrid.Any())
+			if (message.Module != ModuleType.Team)
 				return;
 
 			PlayerGrid.Clear();
 
-			Team = this.TeamModule.Teams[TeamName];
+			Team = this.TeamModule.Teams.Single(t => t.TeamName == TeamName);
 
 			SetPlayerNames();
 			SetPlayerLocations();

@@ -20,7 +20,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using Caliburn.Micro;
-using Cm93.Model.Config;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.UI.Events;
@@ -67,8 +66,8 @@ namespace Cm93.UI.Modules
 		{
 			SelectPlayerModel = (ITeamModule) model;
 
-			foreach (var team in SelectPlayerModel.Teams.Keys.OrderBy(k => k))
-				AvailableTeams.Add(team);
+			foreach (var team in SelectPlayerModel.Teams.OrderBy(t => t.TeamName))
+				AvailableTeams.Add(team.TeamName);
 		}
 
 		public void Start()
@@ -76,7 +75,7 @@ namespace Cm93.UI.Modules
 			if (string.IsNullOrEmpty(SelectedTeam))
 				return;
 
-			this.eventAggregator.Publish(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam]));
+			this.eventAggregator.Publish(new TeamSetEvent(SelectPlayerModel.Teams.Single(t => t.TeamName == SelectedTeam)));
 			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Team));
 		}
 	}
