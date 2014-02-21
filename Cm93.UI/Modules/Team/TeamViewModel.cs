@@ -314,7 +314,7 @@ namespace Cm93.UI.Modules.Team
 
 			PlayerGrid.Clear();
 
-			Team = this.TeamModule.Teams.Single(t => t.TeamName == TeamName);
+			Team = this.TeamModule.Teams[TeamName];
 
 			SetPlayerNames();
 			SetPlayerLocations();

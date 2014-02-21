@@ -66,8 +66,8 @@ namespace Cm93.UI.Modules
 		{
 			SelectPlayerModel = (ITeamModule) model;
 
-			foreach (var team in SelectPlayerModel.Teams.OrderBy(t => t.TeamName))
-				AvailableTeams.Add(team.TeamName);
+			foreach (var teamName in SelectPlayerModel.Teams.Keys.OrderBy(k => k))
+				AvailableTeams.Add(teamName);
 		}
 
 		public void Start()
@@ -75,7 +75,7 @@ namespace Cm93.UI.Modules
 			if (string.IsNullOrEmpty(SelectedTeam))
 				return;
 
-			this.eventAggregator.Publish(new TeamSetEvent(SelectPlayerModel.Teams.Single(t => t.TeamName == SelectedTeam)));
+			this.eventAggregator.Publish(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam]));
 			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Team));
 		}
 	}

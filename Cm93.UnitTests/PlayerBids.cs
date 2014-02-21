@@ -41,7 +41,7 @@ namespace Cm93.UnitTests
 		[Test]
 		public void CompleteBidSuccessful()
 		{
-			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams.ToDictionary(t => t.TeamName);
+			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams;
 
 			var player = teams["Sothbury Wanderers FC"].Players.First();
 
@@ -69,7 +69,7 @@ namespace Cm93.UnitTests
 		[Test]
 		public void CompleteBidUnsuccessful()
 		{
-			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams.ToDictionary(t => t.TeamName);
+			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams;
 
 			var player = teams["Sothbury Wanderers FC"].Players.First();
 
@@ -97,7 +97,7 @@ namespace Cm93.UnitTests
 		[Test]
 		public void CompleteMultipleBidSuccessful()
 		{
-			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams.ToDictionary(t => t.TeamName);
+			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams;
 
 			var player = teams["Sothbury Wanderers FC"].Players.Skip(1).First();
 
@@ -143,7 +143,7 @@ namespace Cm93.UnitTests
 		[Test]
 		public void IgnoreSubsequentBidsFromOneTeam()
 		{
-			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams.ToDictionary(t => t.TeamName);
+			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams;
 
 			var player = teams["Sothbury Wanderers FC"].Players.First();
 
@@ -180,7 +180,7 @@ namespace Cm93.UnitTests
 		[Test]
 		public void IgnoreBidIfTeamShortOfCash()
 		{
-			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams.ToDictionary(t => t.TeamName);
+			var teams = ((ITeamModule) Modules[ModuleType.Team]).Teams;
 
 			var player = teams["Sothbury Wanderers FC"].Players.First();
 

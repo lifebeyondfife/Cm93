@@ -39,6 +39,15 @@
       <HintPath>..\packages\Caliburn.Micro.1.5.1\lib\net45\Caliburn.Micro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="OxyPlot">
+      <HintPath>..\packages\OxyPlot.Core.2014.1.231.1\lib\portable-net4+sl4+wp71+win8\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Wpf">
+      <HintPath>..\packages\OxyPlot.Wpf.2014.1.231.1\lib\NET45\OxyPlot.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Xps">
+      <HintPath>..\packages\OxyPlot.Wpf.2014.1.231.1\lib\NET45\OxyPlot.Xps.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
@@ -86,7 +95,9 @@
     <Compile Include="CreateModel.cs" />
     <Compile Include="Events\ModuleSelectedEvent.cs" />
     <Compile Include="Events\TeamSetEvent.cs" />
+    <Compile Include="Helpers\PlayerNumberValidationRule.cs" />
     <Compile Include="Helpers\PlayerShirtProperties.cs" />
+    <Compile Include="Helpers\TeamDependencyProperty.cs" />
     <Compile Include="Modules\Competitions\CompetitionsView.xaml.cs">
       <DependentUpon>CompetitionsView.xaml</DependentUpon>
     </Compile>

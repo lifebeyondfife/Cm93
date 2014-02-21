@@ -36,7 +36,7 @@ namespace Cm93.Model.Interfaces
 
 	public interface ITeamModule : IModule
 	{
-		IList<Team> Teams { get; }
+		IDictionary<string, Team> Teams { get; }
 	}
 
 	public interface IPlayersModule : IModule

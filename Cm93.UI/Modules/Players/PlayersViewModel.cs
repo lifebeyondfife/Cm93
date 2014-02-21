@@ -38,11 +38,20 @@ namespace Cm93.UI.Modules.Players
 	{
 		private readonly IEventAggregator eventAggregator;
 		private IPlayersModule PlayersModel { get; set; }
-		private Cm93.Model.Structures.Team Team { get; set; }
 		private IDictionary<PlayerIndex, Player> Players { get; set; }
 
-		private string teamsLabel = string.Empty;
+		private Cm93.Model.Structures.Team team = default(Cm93.Model.Structures.Team);
+		public Cm93.Model.Structures.Team Team
+		{
+			get { return this.team; }
+			set
+			{
+				this.team = value;
+				NotifyOfPropertyChange(() => Team);
+			}
+		}
 
+		private string teamsLabel = string.Empty;
 		public string TeamsLabel
 		{
 			get { return this.teamsLabel; }
@@ -54,7 +63,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private bool showOnlyMyTeam = true;
-
 		public bool ShowOnlyMyTeam
 		{
 			get { return this.showOnlyMyTeam; }
@@ -66,7 +74,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private ObservableCollection<PlayerFilter> playerFilters = new ObservableCollection<PlayerFilter>();
-
 		public ObservableCollection<PlayerFilter> PlayerFilters
 		{
 			get { return this.playerFilters; }
@@ -78,7 +85,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private PlayerFilter selectedPlayerFilter = default(PlayerFilter);
-
 		public PlayerFilter SelectedPlayerFilter
 		{
 			get { return this.selectedPlayerFilter; }
@@ -90,7 +96,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private ObservableCollection<Position> positionFilters = new ObservableCollection<Position>();
-
 		public ObservableCollection<Position> PositionFilters
 		{
 			get { return this.positionFilters; }
@@ -102,7 +107,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private Position selectedPositionFilter = Position.All;
-
 		public Position SelectedPositionFilter
 		{
 			get { return this.selectedPositionFilter; }
@@ -116,7 +120,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private PlayerRow selectedPlayer = default(PlayerRow);
-
 		public PlayerRow SelectedPlayer
 		{
 			get { return this.selectedPlayer; }
@@ -137,7 +140,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private ObservableCollection<PlayerRow> playerGrid = new ObservableCollection<PlayerRow>();
-
 		public ObservableCollection<PlayerRow> PlayerGrid
 		{
 			get { return this.playerGrid; }
@@ -149,7 +151,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private ObservableCollection<PlayerMetricRow> playerMetricGrid = new ObservableCollection<PlayerMetricRow>();
-
 		public ObservableCollection<PlayerMetricRow> PlayerMetricGrid
 		{
 			get { return this.playerMetricGrid; }
@@ -160,10 +161,20 @@ namespace Cm93.UI.Modules.Players
 			}
 		}
 
+		private int playerNumber = default(int);
+		public int PlayerNumber
+		{
+			get { return this.playerNumber; }
+			set
+			{
+				this.playerNumber = value;
+				NotifyOfPropertyChange(() => PlayerNumber);
+			}
+		}
+
 		#region Bids
 
 		private double bid = default(double);
-
 		public double Bid
 		{
 			get { return this.bid; }
@@ -176,7 +187,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private double maxBidValue = default(double);
-
 		public double MaxBidValue
 		{
 			get { return this.maxBidValue; }
@@ -207,7 +217,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private string contractButtonLabel = string.Empty;
-
 		public string ContractButtonLabel
 		{
 			get { return this.contractButtonLabel; }
@@ -219,7 +228,6 @@ namespace Cm93.UI.Modules.Players
 		}
 
 		private bool shirtNumberVisible = default(bool);
-
 		public bool ShirtNumberVisible
 		{
 			get { return this.shirtNumberVisible; }
@@ -262,6 +270,7 @@ namespace Cm93.UI.Modules.Players
 			UpdatePlayerGrid();
 			NotifyOfPropertyChange(() => Balance);
 			NotifyOfPropertyChange(() => Available);
+			NotifyOfPropertyChange(() => Team);
 		}
 
 		private void UpdatePlayerGrid()
@@ -400,7 +409,7 @@ namespace Cm93.UI.Modules.Players
 			}
 
 			//	Need to validate PlayerNumber (and get it from the text box on the View)
-			var playerBid = new Bid {BidAmount = (int) Bid, Player = player, PlayerNumber = 1, PurchasingTeam = Team};
+			var playerBid = new Bid {BidAmount = (int) Bid, Player = player, PlayerNumber = PlayerNumber, PurchasingTeam = Team};
 
 			PlayersModel.Simulator.SubmitBid(playerBid);
 

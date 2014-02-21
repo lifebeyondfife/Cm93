@@ -27,7 +27,7 @@ namespace Cm93.Model.Structures
 
 		public string CompetitionName { get; set; }
 		public int CurrentWeek { get; set; }
-		public IList<Team> Teams { get; set; }
+		public IDictionary<string, Team> Teams { get; set; }
 
 		public abstract void PlayNextRound();
 		public abstract int MatchesLeft { get; }

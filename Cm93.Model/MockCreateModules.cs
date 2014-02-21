@@ -27,7 +27,7 @@ namespace Cm93.Model
 {
 	public class MockCreateModules : ICreateModules
 	{
-		private IList<Team> Teams { get; set; }
+		private IDictionary<string, Team> Teams { get; set; }
 		private IList<Player> Players { get; set; }
 		private Division Cmcl { get; set; }
 		private IList<Fixture> SplFixtures { get; set; }
@@ -35,30 +35,28 @@ namespace Cm93.Model
 
 		public MockCreateModules()
 		{
-			Teams = new List<Team>
+			Teams = new Dictionary<string, Team>
 				{
-					new Team { Balance = 10032412d, PrimaryColour = Colors.Gray, SecondaryColour = Colors.Gold, TeamName = "Sothbury Wanderers FC" },
-					new Team { Balance = 12734794d, PrimaryColour = Colors.BlueViolet, SecondaryColour = Colors.DeepSkyBlue, TeamName = "Bicester Royals FC" },
-					new Team { Balance = 43462412d, PrimaryColour = Colors.CadetBlue, SecondaryColour = Colors.Aqua, TeamName = "Caddington City FC" },
-					new Team { Balance = 1439622d, PrimaryColour = Colors.DeepPink, SecondaryColour = Colors.Black, TeamName = "Uthmalton Town FC" },
+					{ "Sothbury Wanderers FC", new Team { Balance = 10032412d, PrimaryColour = Colors.Gray, SecondaryColour = Colors.Gold, TeamName = "Sothbury Wanderers FC" } },
+					{ "Bicester Royals FC", new Team { Balance = 12734794d, PrimaryColour = Colors.BlueViolet, SecondaryColour = Colors.DeepSkyBlue, TeamName = "Bicester Royals FC" } },
+					{ "Caddington City FC", new Team { Balance = 43462412d, PrimaryColour = Colors.CadetBlue, SecondaryColour = Colors.Aqua, TeamName = "Caddington City FC" } },
+					{ "Uthmalton Town FC", new Team { Balance = 1439622d, PrimaryColour = Colors.DeepPink, SecondaryColour = Colors.Black, TeamName = "Uthmalton Town FC" } },
 				};
-
-			var teamDictionary = Teams.ToDictionary(t => t.TeamName);
 
 			Players = new List<Player>
 				{
-					new Player { Age = 21, ReleaseValue = 40000000, NumericValue = 23000000, FirstName = "John", LastName = "McMasterson", Rating = 92.4, Number = 9, Positions = new List<Position> { Position.CentreBack }, Team = teamDictionary["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.13d, Y = 0.2d } },
-					new Player { Age = 24, ReleaseValue = 4000000, NumericValue = 6000000, FirstName = "Ted", LastName = "Eddington", Rating = 60.3, Number = 3, Positions = new List<Position> { Position.CentreMid, Position.Roaming, Position.Forward }, Team = teamDictionary["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.5d, Y = 0.4d } },
-					new Player { Age = 27, ReleaseValue = 15000000, NumericValue = 13000000, FirstName = "Bill", LastName = "Formica", Rating = 79.3, Number = 1, Positions = new List<Position> { Position.LeftWinger, Position.LeftWingback }, Team = teamDictionary["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.7d, Y = 0.7d } },
-					new Player { Age = 22, ReleaseValue = 20000000, NumericValue = 19000000, FirstName = "Sam", LastName = "Cosmic", Rating = 83.5, Number = 10, Positions = new List<Position> { Position.RightWinger, Position.RightFullBack }, Team = teamDictionary["Bicester Royals FC"], Location = new Coordinate { X = 0.2d, Y = 0.3d } },
-					new Player { Age = 28, ReleaseValue = 2000000, NumericValue = 3000000, FirstName = "Tarquin", LastName = "Frederick", Rating = 41.2, Number = 8, Positions = new List<Position> { Position.Striker }, Team = teamDictionary["Bicester Royals FC"], Location = new Coordinate { X = 0.8d, Y = 0.3d } },
-					new Player { Age = 27, ReleaseValue = 750000, NumericValue = 1000000, FirstName = "Philip", LastName = "Thomas", Rating = 28.5, Number = 2, Positions = new List<Position> { Position.RightFullBack, Position.LeftFullBack }, Team = teamDictionary["Bicester Royals FC"], Location = new Coordinate { X = 0.5, Y = 0.6d } },
-					new Player { Age = 24, ReleaseValue = 2000000, NumericValue = 2500000, FirstName = "Elliot", LastName = "Cloud", Rating = 55.7, Number = 23, Positions = new List<Position> { Position.Roaming }, Team = teamDictionary["Caddington City FC"], Location = new Coordinate { X = 0.13d, Y = 0.2d } },
-					new Player { Age = 20, ReleaseValue = 5000000, NumericValue = 4500000, FirstName = "Bob", LastName = "Spire", Rating = 66.4, Number = 4, Positions = new List<Position> { Position.GoalKeeper }, Team = teamDictionary["Caddington City FC"], Location = new Coordinate { X = 0.34d, Y = 0.4d } },
-					new Player { Age = 33, ReleaseValue = 500000, NumericValue = 850000, FirstName = "Terrence", LastName = "Nottingham", Rating = 26.5, Number = 1, Positions = new List<Position> { Position.Forward, Position.Striker }, Team = teamDictionary["Caddington City FC"], Location = new Coordinate { X = 0.54d, Y = 0.7d } },
-					new Player { Age = 36, ReleaseValue = 15000000, NumericValue = 11000000, FirstName = "Bastion", LastName = "Rockton", Rating = 86.9, Number = 5, Positions = new List<Position> { Position.CentreMid }, Team = teamDictionary["Uthmalton Town FC"], Location = new Coordinate { X = 0.2d, Y = 0.4d } },
-					new Player { Age = 19, ReleaseValue = 3000000, NumericValue = 2000000, FirstName = "Huppert", LastName = "Strafer", Rating = 47.7, Number = 6, Positions = new List<Position> { Position.CentreBack }, Team = teamDictionary["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.5d } },
-					new Player { Age = 17, ReleaseValue = 3000000, NumericValue = 2500000, FirstName = "Fergus", LastName = "Mystic", Rating = 56.3, Number = 2, Positions = new List<Position> { Position.LeftWingback }, Team = teamDictionary["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.75d } },
+					new Player { Age = 21, ReleaseValue = 40000000, NumericValue = 23000000, FirstName = "John", LastName = "McMasterson", Rating = 92.4, Number = 9, Positions = new List<Position> { Position.CentreBack }, Team = Teams["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.13d, Y = 0.2d } },
+					new Player { Age = 24, ReleaseValue = 4000000, NumericValue = 6000000, FirstName = "Ted", LastName = "Eddington", Rating = 60.3, Number = 3, Positions = new List<Position> { Position.CentreMid, Position.Roaming, Position.Forward }, Team = Teams["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.5d, Y = 0.4d } },
+					new Player { Age = 27, ReleaseValue = 15000000, NumericValue = 13000000, FirstName = "Bill", LastName = "Formica", Rating = 79.3, Number = 1, Positions = new List<Position> { Position.LeftWinger, Position.LeftWingback }, Team = Teams["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.7d, Y = 0.7d } },
+					new Player { Age = 22, ReleaseValue = 20000000, NumericValue = 19000000, FirstName = "Sam", LastName = "Cosmic", Rating = 83.5, Number = 10, Positions = new List<Position> { Position.RightWinger, Position.RightFullBack }, Team = Teams["Bicester Royals FC"], Location = new Coordinate { X = 0.2d, Y = 0.3d } },
+					new Player { Age = 28, ReleaseValue = 2000000, NumericValue = 3000000, FirstName = "Tarquin", LastName = "Frederick", Rating = 41.2, Number = 8, Positions = new List<Position> { Position.Striker }, Team = Teams["Bicester Royals FC"], Location = new Coordinate { X = 0.8d, Y = 0.3d } },
+					new Player { Age = 27, ReleaseValue = 750000, NumericValue = 1000000, FirstName = "Philip", LastName = "Thomas", Rating = 28.5, Number = 2, Positions = new List<Position> { Position.RightFullBack, Position.LeftFullBack }, Team = Teams["Bicester Royals FC"], Location = new Coordinate { X = 0.5, Y = 0.6d } },
+					new Player { Age = 24, ReleaseValue = 2000000, NumericValue = 2500000, FirstName = "Elliot", LastName = "Cloud", Rating = 55.7, Number = 23, Positions = new List<Position> { Position.Roaming }, Team = Teams["Caddington City FC"], Location = new Coordinate { X = 0.13d, Y = 0.2d } },
+					new Player { Age = 20, ReleaseValue = 5000000, NumericValue = 4500000, FirstName = "Bob", LastName = "Spire", Rating = 66.4, Number = 4, Positions = new List<Position> { Position.GoalKeeper }, Team = Teams["Caddington City FC"], Location = new Coordinate { X = 0.34d, Y = 0.4d } },
+					new Player { Age = 33, ReleaseValue = 500000, NumericValue = 850000, FirstName = "Terrence", LastName = "Nottingham", Rating = 26.5, Number = 1, Positions = new List<Position> { Position.Forward, Position.Striker }, Team = Teams["Caddington City FC"], Location = new Coordinate { X = 0.54d, Y = 0.7d } },
+					new Player { Age = 36, ReleaseValue = 15000000, NumericValue = 11000000, FirstName = "Bastion", LastName = "Rockton", Rating = 86.9, Number = 5, Positions = new List<Position> { Position.CentreMid }, Team = Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.2d, Y = 0.4d } },
+					new Player { Age = 19, ReleaseValue = 3000000, NumericValue = 2000000, FirstName = "Huppert", LastName = "Strafer", Rating = 47.7, Number = 6, Positions = new List<Position> { Position.CentreBack }, Team = Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.5d } },
+					new Player { Age = 17, ReleaseValue = 3000000, NumericValue = 2500000, FirstName = "Fergus", LastName = "Mystic", Rating = 56.3, Number = 2, Positions = new List<Position> { Position.LeftWingback }, Team = Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.75d } },
 				};
 
 			Cmcl = new Division
@@ -70,20 +68,20 @@ namespace Cm93.Model
 
 			SplFixtures = new List<Fixture>
 				{
-					new Fixture { TeamHome = teamDictionary["Sothbury Wanderers FC"], TeamAway = teamDictionary["Bicester Royals FC"], Week = 1, Competition = Cmcl },
-					new Fixture { TeamHome = teamDictionary["Caddington City FC"], TeamAway = teamDictionary["Uthmalton Town FC"], Week = 1, Competition = Cmcl },
-					new Fixture { TeamHome = teamDictionary["Sothbury Wanderers FC"], TeamAway = teamDictionary["Caddington City FC"], Week = 2, Competition = Cmcl },
-					new Fixture { TeamHome = teamDictionary["Uthmalton Town FC"], TeamAway = teamDictionary["Bicester Royals FC"], Week = 2, Competition = Cmcl },
-					new Fixture { TeamHome = teamDictionary["Bicester Royals FC"], TeamAway = teamDictionary["Caddington City FC"], Week = 3, Competition = Cmcl },
-					new Fixture { TeamHome = teamDictionary["Uthmalton Town FC"], TeamAway = teamDictionary["Sothbury Wanderers FC"], Week = 3, Competition = Cmcl },
+					new Fixture { TeamHome = Teams["Sothbury Wanderers FC"], TeamAway = Teams["Bicester Royals FC"], Week = 1, Competition = Cmcl },
+					new Fixture { TeamHome = Teams["Caddington City FC"], TeamAway = Teams["Uthmalton Town FC"], Week = 1, Competition = Cmcl },
+					new Fixture { TeamHome = Teams["Sothbury Wanderers FC"], TeamAway = Teams["Caddington City FC"], Week = 2, Competition = Cmcl },
+					new Fixture { TeamHome = Teams["Uthmalton Town FC"], TeamAway = Teams["Bicester Royals FC"], Week = 2, Competition = Cmcl },
+					new Fixture { TeamHome = Teams["Bicester Royals FC"], TeamAway = Teams["Caddington City FC"], Week = 3, Competition = Cmcl },
+					new Fixture { TeamHome = Teams["Uthmalton Town FC"], TeamAway = Teams["Sothbury Wanderers FC"], Week = 3, Competition = Cmcl },
 				};
 
 			SplPlaces = new Dictionary<Team, Place>
 				{
-					{ teamDictionary["Sothbury Wanderers FC"], new Place { Team = teamDictionary["Sothbury Wanderers FC"] } },
-					{ teamDictionary["Bicester Royals FC"], new Place { Team = teamDictionary["Bicester Royals FC"] } },
-					{ teamDictionary["Caddington City FC"], new Place { Team = teamDictionary["Caddington City FC"] } },
-					{ teamDictionary["Uthmalton Town FC"], new Place { Team = teamDictionary["Uthmalton Town FC"] } }
+					{ Teams["Sothbury Wanderers FC"], new Place { Team = Teams["Sothbury Wanderers FC"] } },
+					{ Teams["Bicester Royals FC"], new Place { Team = Teams["Bicester Royals FC"] } },
+					{ Teams["Caddington City FC"], new Place { Team = Teams["Caddington City FC"] } },
+					{ Teams["Uthmalton Town FC"], new Place { Team = Teams["Uthmalton Town FC"] } }
 				};
 		}
 
@@ -95,7 +93,7 @@ namespace Cm93.Model
 			var playersModule = new PlayersModule(Competition.Simulator, Players);
 			
 			//	Need to create just a Teams list object. Selecting the Teams Module has to refresh the potentially changed team.
-			foreach (var team in Teams)
+			foreach (var team in Teams.Values)
 			{
 				team.Players = new List<Player>(Players.Where(p => p.Team == team));
 				team.Formation[0] = team.Players[0];
