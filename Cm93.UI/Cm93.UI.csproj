@@ -95,9 +95,7 @@
     <Compile Include="CreateModel.cs" />
     <Compile Include="Events\ModuleSelectedEvent.cs" />
     <Compile Include="Events\TeamSetEvent.cs" />
-    <Compile Include="Helpers\PlayerNumberValidationRule.cs" />
     <Compile Include="Helpers\PlayerShirtProperties.cs" />
-    <Compile Include="Helpers\TeamDependencyProperty.cs" />
     <Compile Include="Modules\Competitions\CompetitionsView.xaml.cs">
       <DependentUpon>CompetitionsView.xaml</DependentUpon>
     </Compile>

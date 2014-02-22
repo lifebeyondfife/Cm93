@@ -386,9 +386,9 @@ namespace Cm93.UI.Modules.Players
 			UpdatePlayerGrid();
 		}
 
-		public bool CanToggleTeams()
+		public bool CanToggleTeams
 		{
-			return true;
+			get { return true; }
 		}
 
 		public void ToggleTeams()
@@ -397,6 +397,19 @@ namespace Cm93.UI.Modules.Players
 			ShowOnlyMyTeam = !ShowOnlyMyTeam;
 
 			UpdatePlayerGrid();
+		}
+
+		public bool CanContractBidRelease
+		{
+			get
+			{
+				if (SelectedPlayer == null)
+					return false;
+
+				var player = Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
+
+				return player.Team == Team || PlayersModel.Simulator.TeamBids[Team].All(b => b.Player != player);
+			}
 		}
 
 		public void ContractBidRelease()
@@ -417,17 +430,42 @@ namespace Cm93.UI.Modules.Players
 			NotifyOfPropertyChange(() => Available);
 		}
 
-		public bool CanContractBidRelease
+		public bool CanUpPlayerNumber
 		{
-			get
-			{
-				if (SelectedPlayer == null)
-					return false;
+			get { return true; }
+		}
 
-				var player = Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
+		public void UpPlayerNumber()
+		{
+			if (PlayerNumber >= 49)
+				return;
 
-				return player.Team == Team || PlayersModel.Simulator.TeamBids[Team].All(b => b.Player != player);
-			}
+			var raisedPlayerNumber = PlayerNumber + 1;
+
+			while (Team.Players.Any(p => p.Number == raisedPlayerNumber) && raisedPlayerNumber < 50)
+				++raisedPlayerNumber;
+
+			if (raisedPlayerNumber < 50)
+				PlayerNumber = raisedPlayerNumber;
+		}
+
+		public bool CanDownPlayerNumber
+		{
+			get { return true; }
+		}
+
+		public void DownPlayerNumber()
+		{
+			if (PlayerNumber <= 1)
+				return;
+
+			var raisedPlayerNumber = PlayerNumber - 1;
+
+			while (Team.Players.Any(p => p.Number == raisedPlayerNumber) && raisedPlayerNumber > 0)
+				--raisedPlayerNumber;
+
+			if (raisedPlayerNumber > 0)
+				PlayerNumber = raisedPlayerNumber;
 		}
 	}
 }

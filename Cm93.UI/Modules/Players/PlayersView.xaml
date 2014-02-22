@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:oxy="http://oxyplot.codeplex.com"
-             xmlns:helpers="clr-namespace:Cm93.UI.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
 	<Grid>
@@ -102,13 +101,21 @@
 							<ColumnDefinition/>
 						</Grid.ColumnDefinitions>
 						<Label Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Content="Shirt Number:" />
-						<TextBox Grid.Column="1" HorizontalAlignment="Right" Margin="5" Width="35">
-							<Binding Path="PlayerNumber" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-								<Binding.ValidationRules>
-									<helpers:PlayerNumberValidationRule />
-								</Binding.ValidationRules>
-							</Binding>
-						</TextBox>
+
+						<Grid Grid.Column="1" Margin="5">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="2*"/>
+								<ColumnDefinition/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition />
+								<RowDefinition/>
+							</Grid.RowDefinitions>
+
+							<TextBox Grid.RowSpan="2" Width="40"  Grid.Column="0" Text="{Binding PlayerNumber}" IsHitTestVisible="False" HorizontalAlignment="Right" />
+							<Button Grid.Row="0" Grid.Column="1" Content="▲" FontSize="12" x:Name="UpPlayerNumber" />
+							<Button Grid.Row="1" Grid.Column="1" Content="▼" FontSize="12" x:Name="DownPlayerNumber" />
+						</Grid>
 					</Grid>
 
 					<Button x:Name="ContractBidRelease" Grid.Row="5" Margin="5,5,5,0" Height="37" Content="{Binding ContractButtonLabel}" />

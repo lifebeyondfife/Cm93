@@ -1,5 +1,4 @@
 ﻿using Cm93.Model.Structures;
-using Cm93.UI.Helpers;
 
 namespace Cm93.UI.Events
 {
@@ -10,7 +9,6 @@ namespace Cm93.UI.Events
 		public TeamSetEvent(Team team)
 		{
 			Team = team;
-			PlayerNumberValidationRule.Team = team;
 		}
 	}
 }
