@@ -334,7 +334,9 @@ namespace Cm93.UI.Modules.Players
 			{
 				ShirtNumberVisible = true;
 				ContractButtonLabel = "Bid";
-
+				var smallestExistingPlayerNumber = Team.Players.Min(p => p.Number);
+				PlayerNumber = Enumerable.Range(1, 99).First(e => e != smallestExistingPlayerNumber);
+				
 				var previousBid = PlayersModel.Simulator.TeamBids[Team].SingleOrDefault(b => b.Player == player);
 
 				if (previousBid != null)
@@ -408,7 +410,6 @@ namespace Cm93.UI.Modules.Players
 				return;
 			}
 
-			//	Need to validate PlayerNumber (and get it from the text box on the View)
 			var playerBid = new Bid {BidAmount = (int) Bid, Player = player, PlayerNumber = PlayerNumber, PurchasingTeam = Team};
 
 			PlayersModel.Simulator.SubmitBid(playerBid);
