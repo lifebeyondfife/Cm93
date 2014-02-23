@@ -23,6 +23,7 @@ using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Media;
 using Caliburn.Micro;
 using Cm93.Model.Attributes;
 using Cm93.Model.Enumerations;
@@ -39,6 +40,73 @@ namespace Cm93.UI.Modules.Players
 		private readonly IEventAggregator eventAggregator;
 		private IPlayersModule PlayersModel { get; set; }
 		private IDictionary<PlayerIndex, Player> Players { get; set; }
+		private IDictionary<string, Player> PlayerAb { get; set; }
+
+		private ObservableCollection<PlayerMetric> playerAbItems = new ObservableCollection<PlayerMetric>();
+		public ObservableCollection<PlayerMetric> PlayerAbItems
+		{
+			get { return this.playerAbItems; }
+			set
+			{
+				this.playerAbItems = value;
+				NotifyOfPropertyChange(() => PlayerAbItems);
+			}
+		}
+
+		private string playerAbString = "Player A";
+		public string PlayerAbString
+		{
+			get { return this.playerAbString; }
+			set
+			{
+				this.playerAbString = value;
+				NotifyOfPropertyChange(() => PlayerAbString);
+			}
+		}
+
+		private Color playerAColour = default(Color);
+		public Color PlayerAColour
+		{
+			get { return this.playerAColour; }
+			set
+			{
+				this.playerAColour = value;
+				NotifyOfPropertyChange(() => PlayerAColour);
+			}
+		}
+
+		private Color playerBColour = default(Color);
+		public Color PlayerBColour
+		{
+			get { return this.playerBColour; }
+			set
+			{
+				this.playerBColour = value;
+				NotifyOfPropertyChange(() => PlayerBColour);
+			}
+		}
+
+		private string aTitle = string.Empty;
+		public string ATitle
+		{
+			get { return this.aTitle; }
+			set
+			{
+				this.aTitle = value;
+				NotifyOfPropertyChange(() => ATitle);
+			}
+		}
+
+		private string bTitle = string.Empty;
+		public string BTitle
+		{
+			get { return this.bTitle; }
+			set
+			{
+				this.bTitle = value;
+				NotifyOfPropertyChange(() => BTitle);
+			}
+		}
 
 		private Cm93.Model.Structures.Team team = default(Cm93.Model.Structures.Team);
 		public Cm93.Model.Structures.Team Team
@@ -207,12 +275,16 @@ namespace Cm93.UI.Modules.Players
 			get { return string.Format(CultureInfo.CurrentCulture, "{0:c0}", Team.Balance); }
 		}
 
+		public double NumericAvailable
+		{
+			get { return this.Team.Balance - PlayersModel.Simulator.TeamBids[this.Team].Sum(b => b.BidAmount); }
+		}
+
 		public string Available
 		{
 			get
 			{
-				return string.Format(CultureInfo.CurrentCulture, "{0:c0}",
-					this.Team.Balance - PlayersModel.Simulator.TeamBids[this.Team].Sum(b => b.BidAmount));
+				return string.Format(CultureInfo.CurrentCulture, "{0:c0}", NumericAvailable);
 			}
 		}
 
@@ -245,6 +317,7 @@ namespace Cm93.UI.Modules.Players
 		{
 			this.eventAggregator = eventAggregator;
 			this.ModuleType = ModuleType.Players;
+			this.PlayerAb = new Dictionary<string, Player>();
 
 			foreach (var filter in Enum.GetValues(typeof(PlayerFilter)).Cast<PlayerFilter>())
 				this.PlayerFilters.Add(filter);
@@ -303,10 +376,10 @@ namespace Cm93.UI.Modules.Players
 				return;
 
 			var player = Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
-			IList<PlayerMetricRow> playerMetricRows;
 
-			PopulateMetricGrid(player, out playerMetricRows);
+			var playerMetricRows = PopulateMetricGrid(player);
 			UpdateBidRelease(player, playerMetricRows);
+			UpdateChart(player);
 
 			foreach (var playerMetricRow in playerMetricRows.OrderBy(r => r.Order))
 				this.playerMetricGrid.Add(playerMetricRow);
@@ -314,10 +387,76 @@ namespace Cm93.UI.Modules.Players
 			NotifyOfPropertyChange(() => PlayerMetricGrid);
 		}
 
+		private void UpdateChart(Player player)
+		{
+			this.playerAbItems.Clear();
+
+			PlayerAb[PlayerAbString] = player;
+
+			if (PlayerAb.Count != 2)
+			{
+				InitialiseChart(player);
+				return;
+			}
+
+			ATitle = PlayerAb["Player A"].LastName;
+			BTitle = PlayerAb["Player B"].LastName;
+
+			PlayerAColour = PlayerAb["Player A"].Team.PrimaryColour;
+			PlayerBColour = PlayerAb["Player B"].Team.PrimaryColour;
+
+			var playerAMetrics = PopulateMetricGrid(PlayerAb["Player A"]);
+			var playerBMetrics = PopulateMetricGrid(PlayerAb["Player B"]);
+
+			PlayerAbItems = new ObservableCollection<PlayerMetric>();
+
+			foreach (var metrics in playerAMetrics.Zip(playerBMetrics, (a, b) => new { A = a, B = b }))
+			{
+				if (metrics.A.Attribute == "Number")
+					continue;
+
+				double aVal, bVal;
+
+				if (!Double.TryParse(metrics.A.Value, out aVal) || !Double.TryParse(metrics.B.Value, out bVal))
+					continue;
+
+				this.playerAbItems.Add(new PlayerMetric { Label = metrics.A.Attribute, PlayerA = aVal, PlayerB = bVal });
+			}
+
+			NotifyOfPropertyChange(() => PlayerAbItems);
+		}
+
+		private void InitialiseChart(Player player)
+		{
+			if (PlayerAbString == "Player A")
+				ATitle = player.LastName;
+			else
+				BTitle = player.LastName;
+
+			var playerMetrics = PopulateMetricGrid(player);
+
+			PlayerAbItems = new ObservableCollection<PlayerMetric>();
+
+			foreach (var metrics in playerMetrics)
+			{
+				if (metrics.Attribute == "Number")
+					continue;
+
+				double val;
+
+				if (!Double.TryParse(metrics.Value, out val))
+					continue;
+
+				this.playerAbItems.Add(new PlayerMetric { Label = metrics.Attribute });
+			}
+
+			NotifyOfPropertyChange(() => PlayerAbItems);
+		}
+
 		private void UpdateBidRelease(Player player, ICollection<PlayerMetricRow> playerMetricRows)
 		{
-			MaxBidValue = player.Team == Team ? player.NumericValue * 3 : Math.Min(player.NumericValue * 2, Team.Balance);
-			Bid = player.Team == Team ? player.ReleaseValue : Math.Min(player.NumericValue, Team.Balance);
+			MaxBidValue = player.Team == Team ? player.NumericValue * 3 : Math.Min(player.NumericValue * 2, NumericAvailable);
+			Bid = player.Team == Team ? player.ReleaseValue : Math.Min(player.NumericValue, NumericAvailable);
 
 			if (player.Team == Team)
 			{
@@ -334,9 +473,12 @@ namespace Cm93.UI.Modules.Players
 			{
 				ShirtNumberVisible = true;
 				ContractButtonLabel = "Bid";
-				var smallestExistingPlayerNumber = Team.Players.Min(p => p.Number);
-				PlayerNumber = Enumerable.Range(1, 99).First(e => e != smallestExistingPlayerNumber);
-				
+				var smallestFreeNumber = 1;
+				while (Team.Players.Any(p => p.Number == smallestFreeNumber) ||
+					PlayersModel.Simulator.TeamBids[Team].Any(b => b.PlayerNumber == smallestFreeNumber))
+					++smallestFreeNumber;
+				PlayerNumber = smallestFreeNumber;
+
 				var previousBid = PlayersModel.Simulator.TeamBids[Team].SingleOrDefault(b => b.Player == player);
 
 				if (previousBid != null)
@@ -347,11 +489,11 @@ namespace Cm93.UI.Modules.Players
 			}
 		}
 
-		private static void PopulateMetricGrid(Player player, out IList<PlayerMetricRow> playerMetricRows)
+		private static IList<PlayerMetricRow> PopulateMetricGrid(Player player)
 		{
 			var properties = player.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-			playerMetricRows = new List<PlayerMetricRow>();
+			var playerMetricRows = new List<PlayerMetricRow>();
 
 			foreach (var propertyDefinition in properties)
 			{
@@ -375,6 +517,8 @@ namespace Cm93.UI.Modules.Players
 						Value = propertyString
 					});
 			}
+
+			return playerMetricRows;
 		}
 
 		public void Handle(TeamSetEvent message)
@@ -403,7 +547,7 @@ namespace Cm93.UI.Modules.Players
 		{
 			get
 			{
-				if (SelectedPlayer == null)
+				if (SelectedPlayer == null || Bid == 0)
 					return false;
 
 				var player = Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
@@ -423,10 +567,11 @@ namespace Cm93.UI.Modules.Players
 				return;
 			}
 
-			var playerBid = new Bid {BidAmount = (int) Bid, Player = player, PlayerNumber = PlayerNumber, PurchasingTeam = Team};
+			var playerBid = new Bid { BidAmount = (int) Bid, Player = player, PlayerNumber = PlayerNumber, PurchasingTeam = Team };
 
 			PlayersModel.Simulator.SubmitBid(playerBid);
 
+			NotifyOfPropertyChange(() => CanContractBidRelease);
 			NotifyOfPropertyChange(() => Available);
 		}
 
@@ -442,7 +587,9 @@ namespace Cm93.UI.Modules.Players
 
 			var raisedPlayerNumber = PlayerNumber + 1;
 
-			while (Team.Players.Any(p => p.Number == raisedPlayerNumber) && raisedPlayerNumber < 50)
+			while ((Team.Players.Any(p => p.Number == raisedPlayerNumber) ||
+				PlayersModel.Simulator.TeamBids[Team].Any(b => b.PlayerNumber == raisedPlayerNumber)) &&
+				raisedPlayerNumber < 50)
 				++raisedPlayerNumber;
 
 			if (raisedPlayerNumber < 50)
@@ -459,13 +606,25 @@ namespace Cm93.UI.Modules.Players
 			if (PlayerNumber <= 1)
 				return;
 
-			var raisedPlayerNumber = PlayerNumber - 1;
+			var loweredPlayerNumber = PlayerNumber - 1;
 
-			while (Team.Players.Any(p => p.Number == raisedPlayerNumber) && raisedPlayerNumber > 0)
-				--raisedPlayerNumber;
+			while ((Team.Players.Any(p => p.Number == loweredPlayerNumber) ||
+				PlayersModel.Simulator.TeamBids[Team].Any(b => b.PlayerNumber == loweredPlayerNumber)) &&
+				loweredPlayerNumber > 0)
+				--loweredPlayerNumber;
 
-			if (raisedPlayerNumber > 0)
-				PlayerNumber = raisedPlayerNumber;
+			if (loweredPlayerNumber > 0)
+				PlayerNumber = loweredPlayerNumber;
+		}
+
+		public bool CanFlipAb
+		{
+			get { return true; }
+		}
+
+		public void FlipAb()
+		{
+			PlayerAbString = PlayerAbString == "Player A" ? "Player B" : "Player A";
 		}
 	}
 }
