@@ -18,7 +18,7 @@
 			<RowDefinition Height="4*"/>
 		</Grid.RowDefinitions>
 
-		<DataGrid Grid.Row="0" Grid.Column="0" ItemsSource="{Binding TeamGrid, Mode=OneWay}" SelectedItem="{Binding SelectedPlayer}" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" MouseMove="UIElement_OnMouseMove" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" AutoGenerateColumns="False">
+		<DataGrid Grid.Row="0" Grid.Column="0" ItemsSource="{Binding TeamGrid, Mode=OneWay}" SelectedItem="{Binding SelectedPlayer}" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" MouseMove="UIElement_OnMouseMove" GiveFeedback="UIElement_OnGiveFeedback"  CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" AutoGenerateColumns="False">
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="Player" Binding="{Binding Path=Name}" Width="6*" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
 				<DataGridTextColumn Header="Number" Binding="{Binding Path=Number}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>

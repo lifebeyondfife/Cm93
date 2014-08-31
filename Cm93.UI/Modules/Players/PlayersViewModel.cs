@@ -37,6 +37,9 @@ namespace Cm93.UI.Modules.Players
 	[Export(typeof(ModuleViewModelBase))]
 	public class PlayersViewModel : ModuleViewModelBase, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>
 	{
+		const string PlayerA = "Player A";
+		const string PlayerB = "Player B";
+
 		private readonly IEventAggregator eventAggregator;
 		private IPlayersModule PlayersModel { get; set; }
 		private IDictionary<PlayerIndex, Player> Players { get; set; }
@@ -53,7 +56,7 @@ namespace Cm93.UI.Modules.Players
 			}
 		}
 
-		private string playerAbString = "Player A";
+		private string playerAbString = PlayerA;
 		public string PlayerAbString
 		{
 			get { return this.playerAbString; }
@@ -399,14 +402,14 @@ namespace Cm93.UI.Modules.Players
 				return;
 			}
 
-			ATitle = PlayerAb["Player A"].LastName;
-			BTitle = PlayerAb["Player B"].LastName;
+			ATitle = PlayerAb[PlayerA].LastName;
+			BTitle = PlayerAb[PlayerB].LastName;
 
-			PlayerAColour = PlayerAb["Player A"].Team.PrimaryColour;
-			PlayerBColour = PlayerAb["Player B"].Team.PrimaryColour;
+			PlayerAColour = PlayerAb[PlayerA].Team.PrimaryColour;
+			PlayerBColour = PlayerAb[PlayerB].Team.PrimaryColour;
 
-			var playerAMetrics = PopulateMetricGrid(PlayerAb["Player A"]);
-			var playerBMetrics = PopulateMetricGrid(PlayerAb["Player B"]);
+			var playerAMetrics = PopulateMetricGrid(PlayerAb[PlayerA]);
+			var playerBMetrics = PopulateMetricGrid(PlayerAb[PlayerB]);
 
 			PlayerAbItems = new ObservableCollection<PlayerMetric>();
 
@@ -426,9 +429,11 @@ namespace Cm93.UI.Modules.Players
 			NotifyOfPropertyChange(() => PlayerAbItems);
 		}
 
+		//	The OxyPlot library doesn't render the chart correctly first time. By populating the Attribute
+		//	names before there are two proper data points, the error is bypassed.
 		private void InitialiseChart(Player player)
 		{
-			if (PlayerAbString == "Player A")
+			if (PlayerAbString == PlayerA)
 				ATitle = player.LastName;
 			else
 				BTitle = player.LastName;
@@ -624,7 +629,7 @@ namespace Cm93.UI.Modules.Players
 
 		public void FlipAb()
 		{
-			PlayerAbString = PlayerAbString == "Player A" ? "Player B" : "Player A";
+			PlayerAbString = PlayerAbString == PlayerA ? PlayerB : PlayerA;
 		}
 	}
 }

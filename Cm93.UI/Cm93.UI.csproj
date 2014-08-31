@@ -95,6 +95,7 @@
     <Compile Include="CreateModel.cs" />
     <Compile Include="Events\ModuleSelectedEvent.cs" />
     <Compile Include="Events\TeamSetEvent.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\PlayerShirtProperties.cs" />
     <Compile Include="Modules\Competitions\CompetitionsView.xaml.cs">
       <DependentUpon>CompetitionsView.xaml</DependentUpon>
@@ -212,6 +213,9 @@
       <Project>{4e196610-7bba-4c9d-b546-51d174516799}</Project>
       <Name>Cm93.Simulator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Shirt.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
