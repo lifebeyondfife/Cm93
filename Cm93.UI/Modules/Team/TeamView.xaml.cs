@@ -16,6 +16,7 @@ This file is part of Cm93.
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,7 +28,8 @@ namespace Cm93.UI.Modules.Team
 	public partial class TeamView
 	{
 		private static int depthCounter = 1;
-
+		private readonly Cursor customCursor = new Cursor(new FileStream("..\\..\\Images\\Shirt.cur", FileMode.Open));
+		
 		public TeamView()
 		{
 			InitializeComponent();
@@ -72,20 +74,28 @@ namespace Cm93.UI.Modules.Team
 			if (dependency == null)
 				return;
 
-			DragDrop.DoDragDrop(dependency, ((TextBlock) ((DataGridCell) dependency).Content).Text, DragDropEffects.All);
+			DragDrop.DoDragDrop(dependency, ((TextBlock) ((DataGridCell) dependency).Content).Text, DragDropEffects.Copy);
+		}
+
+		private void UIElement_OnGiveFeedback(object sender, GiveFeedbackEventArgs eventArgs)
+		{
+			eventArgs.UseDefaultCursors = false;
+			Mouse.SetCursor(customCursor);
+
+			eventArgs.Handled = true;
 		}
 
 		private void UIElement_OnDrop(object sender, DragEventArgs eventArgs)
 		{
 			var text = (string) eventArgs.Data.GetData(typeof(string));
-			
+
 			var canvas = sender as Canvas;
 
 			if (canvas == null)
 				return;
 
 			var element = canvas.InputHitTest(eventArgs.GetPosition(canvas)) as FrameworkElement;
-			
+
 			if (element == null)
 				return;
 
