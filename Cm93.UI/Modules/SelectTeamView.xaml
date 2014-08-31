@@ -15,13 +15,13 @@
 		<Grid Grid.Column="0">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
+				<!--<RowDefinition Height="Auto"/>-->
 				<RowDefinition Height="1*"/>
 			</Grid.RowDefinitions>
 
 			<TextBlock Grid.Row="0" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="ExtraBold" Foreground="White" Text="Select your team" />
-			<ListBox Grid.Row="1" FontSize="18"  Margin="15" Background="Transparent" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Stretch" FontWeight="ExtraBold" ItemsSource="{Binding AvailableTeams}" SelectedItem="{Binding SelectedTeam}" />
-			<Button Grid.Row="2" Margin="10" Height="40" Width="65" Content="Start" VerticalAlignment="Top" HorizontalAlignment="Right" cal:Message.Attach="Start" />
+			<ListBox Grid.Row="1" FontSize="18"  Margin="15" Background="Transparent" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Stretch" FontWeight="ExtraBold" ItemsSource="{Binding AvailableTeams}" SelectedItem="{Binding SelectedTeam}" cal:Message.Attach="[Event MouseDoubleClick] = [Action Start]" />
+			<!--<Button Grid.Row="2" Margin="10" Height="40" Width="65" Content="Start" VerticalAlignment="Top" HorizontalAlignment="Right" cal:Message.Attach="Start" />-->
 		</Grid>
 
 		<Grid Grid.Column="1">
