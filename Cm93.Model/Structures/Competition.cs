@@ -1,6 +1,6 @@
 ﻿/*
-Copyright © Iain McDonald 2013-2014
-This file is part of Cm93.
+        Copyright © Iain McDonald 2013-2014
+        This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -26,15 +26,16 @@ namespace Cm93.Model.Structures
 		public static ISimulator Simulator { get; set; }
 
 		public string CompetitionName { get; set; }
-		public int CurrentWeek { get; set; }
+		public int Week { get; set; }
 		public IDictionary<string, Team> Teams { get; set; }
 
-		public abstract void PlayNextRound();
+		public abstract Fixture PlayFixtures(string playerTeamName = "");
+		public abstract void CompleteRound();
 		public abstract int MatchesLeft { get; }
 	
 		public static int GlobalWeek(IEnumerable<Competition> competitions)
 		{
-			return competitions.Max(c => c.CurrentWeek);
+			return competitions.Max(c => c.Week);
 		}
 	}
 }

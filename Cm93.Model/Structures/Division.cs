@@ -1,6 +1,6 @@
 ﻿/*
-Copyright © Iain McDonald 2013-2014
-This file is part of Cm93.
+        Copyright © Iain McDonald 2013-2014
+        This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -52,18 +52,33 @@ namespace Cm93.Model.Structures
 
 		public override int MatchesLeft
 		{
-			get { return Fixtures.Max(f => f.Week) - CurrentWeek; }
+			get { return Fixtures.Max(f => f.Week) - Week; }
 		}
 
-		public override void PlayNextRound()
+		public override Fixture PlayFixtures(string playerTeamName = "")
 		{
-			++CurrentWeek;
+			++Week;
 
-			foreach (var fixture in Fixtures.Where(f => f.Week == CurrentWeek))
+			Fixture playerFixture = null;
+			foreach (var fixture in Fixtures.Where(f => f.Week == Week))
 			{
+				if (!string.IsNullOrEmpty(playerTeamName) &&
+					(fixture.TeamHome.TeamName == playerTeamName || fixture.TeamAway.TeamName == playerTeamName))
+				{
+					playerFixture = fixture;
+					continue;
+				}
+
 				Simulator.Play(fixture);
-				UpdatePointsAndGoals(fixture);
 			}
+
+			return playerFixture;
+		}
+
+		public override void CompleteRound()
+		{
+			foreach (var fixture in Fixtures.Where(f => f.Week == Week))
+				UpdatePointsAndGoals(fixture);	
 
 			UpdatePositions();
 

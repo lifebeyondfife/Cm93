@@ -1,6 +1,6 @@
 ﻿/*
-Copyright © Iain McDonald 2013-2014
-This file is part of Cm93.
+        Copyright © Iain McDonald 2013-2014
+        This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by

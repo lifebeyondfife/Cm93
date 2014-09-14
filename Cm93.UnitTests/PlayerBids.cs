@@ -1,6 +1,6 @@
 ﻿/*
-Copyright © Iain McDonald 2013-2014
-This file is part of Cm93.
+        Copyright © Iain McDonald 2013-2014
+        This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -52,12 +52,13 @@ namespace Cm93.UnitTests
 					PlayerNumber = 99,
 					PurchasingTeam = teams["Caddington City FC"]
 				};
-		
+
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
-			
+
 			Competition.Simulator.SubmitBid(bid);
 
-			cmcl.PlayNextRound();
+			cmcl.PlayFixtures();
+			cmcl.CompleteRound();
 
 			Assert.AreEqual("Caddington City FC", player.Team.TeamName);
 			Assert.AreEqual(99, player.Number);
@@ -85,7 +86,8 @@ namespace Cm93.UnitTests
 
 			Competition.Simulator.SubmitBid(bid);
 
-			cmcl.PlayNextRound();
+			cmcl.PlayFixtures();
+			cmcl.CompleteRound();
 
 			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
 			Assert.AreEqual(9, player.Number);
@@ -131,7 +133,8 @@ namespace Cm93.UnitTests
 			Competition.Simulator.SubmitBid(bid2);
 			Competition.Simulator.SubmitBid(bid3);
 
-			cmcl.PlayNextRound();
+			cmcl.PlayFixtures();
+			cmcl.CompleteRound();
 
 			Assert.AreEqual("Bicester Royals FC", player.Team.TeamName);
 			Assert.AreEqual(44, player.Number);
@@ -168,7 +171,8 @@ namespace Cm93.UnitTests
 			Competition.Simulator.SubmitBid(bidUnder);
 			Competition.Simulator.SubmitBid(bidOver);
 
-			cmcl.PlayNextRound();
+			cmcl.PlayFixtures();
+			cmcl.CompleteRound();
 
 			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
 			Assert.AreEqual(9, player.Number);
@@ -196,7 +200,8 @@ namespace Cm93.UnitTests
 
 			Competition.Simulator.SubmitBid(bid);
 
-			cmcl.PlayNextRound();
+			cmcl.PlayFixtures();
+			cmcl.CompleteRound();
 
 			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
 			Assert.AreEqual(9, player.Number);

@@ -1,6 +1,6 @@
 ﻿/*
-Copyright © Iain McDonald 2013-2014
-This file is part of Cm93.
+        Copyright © Iain McDonald 2013-2014
+        This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -19,7 +19,12 @@ namespace Cm93.Model.Structures
 {
 	class Cup : Competition
 	{
-		public override void PlayNextRound()
+		public override Fixture PlayFixtures(string playerTeamName)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public override void CompleteRound()
 		{
 			throw new System.NotImplementedException();
 		}

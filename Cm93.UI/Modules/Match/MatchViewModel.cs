@@ -1,6 +1,6 @@
 ﻿/*
-Copyright © Iain McDonald 2013-2014
-This file is part of Cm93.
+        Copyright © Iain McDonald 2013-2014
+        This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -26,10 +26,11 @@ using Cm93.UI.Events;
 namespace Cm93.UI.Modules.Match
 {
 	[Export(typeof(ModuleViewModelBase))]
-	public class MatchViewModel : ModuleViewModelBase, IHandle<ModuleSelectedEvent>
+	public class MatchViewModel : ModuleViewModelBase, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>
 	{
 		private readonly IEventAggregator eventAggregator;
 		private IMatchModule MatchModule { get; set; }
+		private Cm93.Model.Structures.Team Team { get; set; }
 
 		private string fixtures;
 		public string Fixtures
@@ -37,12 +38,52 @@ namespace Cm93.UI.Modules.Match
 			get { return this.fixtures; }
 			set
 			{
-				if (this.fixtures == value)
-					return;
-
 				this.fixtures = value;
-
 				NotifyOfPropertyChange(() => Fixtures);
+			}
+		}
+
+		private string teamHomeName;
+		public string TeamHomeName
+		{
+			get { return this.teamHomeName; }
+			set
+			{
+				this.teamHomeName = value;
+				NotifyOfPropertyChange(() => TeamHomeName);
+			}
+		}
+
+		private string teamAwayName;
+		public string TeamAwayName
+		{
+			get { return this.teamAwayName; }
+			set
+			{
+				this.teamAwayName = value;
+				NotifyOfPropertyChange(() => TeamAwayName);
+			}
+		}
+
+		private int pitchHeight;
+		public int PitchHeight
+		{
+			get { return this.pitchHeight; }
+			set
+			{
+				this.pitchHeight = value;
+				NotifyOfPropertyChange(() => PitchHeight);
+			}
+		}
+
+		private int pitchWidth;
+		public int PitchWidth
+		{
+			get { return this.pitchWidth; }
+			set
+			{
+				this.pitchWidth = value;
+				NotifyOfPropertyChange(() => PitchWidth);
 			}
 		}
 
@@ -52,6 +93,9 @@ namespace Cm93.UI.Modules.Match
 			this.eventAggregator = eventAggregator;
 			this.ModuleType = ModuleType.Match;
 
+			this.pitchHeight = 400;
+			this.pitchWidth = 300;
+			
 			this.eventAggregator.Subscribe(this);
 		}
 
@@ -60,12 +104,28 @@ namespace Cm93.UI.Modules.Match
 			this.MatchModule = (IMatchModule) model;
 		}
 
+		public void Handle(TeamSetEvent message)
+		{
+			Team = message.Team;
+		}
+
 		public void Handle(ModuleSelectedEvent message)
 		{
 			if (message.Module != ModuleType.Match)
 				return;
 
-			this.MatchModule.Play();
+			var nextCompetition = MatchModule.Competitions.OrderBy(c => c.Week).First();
+
+			var playerFixture = this.MatchModule.Play(nextCompetition.CompetitionName, Team.TeamName);
+
+			if (playerFixture == null)
+				return;
+
+			this.TeamHomeName = playerFixture.TeamHome.TeamName;
+			this.TeamAwayName = playerFixture.TeamAway.TeamName;
+
+			Competition.Simulator.Play(playerFixture);
+			nextCompetition.CompleteRound();
 
 			var spl = this.MatchModule.Competitions.OfType<Division>().First();
 

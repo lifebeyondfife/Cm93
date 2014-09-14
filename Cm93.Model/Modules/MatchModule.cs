@@ -1,6 +1,6 @@
 ﻿/*
-Copyright © Iain McDonald 2013-2014
-This file is part of Cm93.
+        Copyright © Iain McDonald 2013-2014
+        This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -16,7 +16,9 @@ This file is part of Cm93.
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System.Collections.Generic;
+using System.Linq;
 using Cm93.Model.Interfaces;
+using Cm93.Model.Structures;
 
 namespace Cm93.Model.Modules
 {
@@ -29,10 +31,9 @@ namespace Cm93.Model.Modules
 			Competitions = competitions;
 		}
 
-		public void Play()
+		public Fixture Play(string competitionName, string playerTeamName)
 		{
-			foreach (var competition in Competitions)
-				competition.PlayNextRound();
+			return Competitions.Single(c => c.CompetitionName == competitionName).PlayFixtures(playerTeamName);
 		}
 	}
 }
