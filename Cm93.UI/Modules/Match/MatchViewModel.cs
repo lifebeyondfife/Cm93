@@ -32,17 +32,6 @@ namespace Cm93.UI.Modules.Match
 		private IMatchModule MatchModule { get; set; }
 		private Cm93.Model.Structures.Team Team { get; set; }
 
-		private string fixtures;
-		public string Fixtures
-		{
-			get { return this.fixtures; }
-			set
-			{
-				this.fixtures = value;
-				NotifyOfPropertyChange(() => Fixtures);
-			}
-		}
-
 		private string teamHomeName;
 		public string TeamHomeName
 		{
@@ -65,6 +54,8 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
+		#region Player Coordinates
+
 		private int pitchHeight;
 		public int PitchHeight
 		{
@@ -73,6 +64,8 @@ namespace Cm93.UI.Modules.Match
 			{
 				this.pitchHeight = value;
 				NotifyOfPropertyChange(() => PitchHeight);
+
+				UpdatePlayerCoordinates();
 			}
 		}
 
@@ -84,8 +77,123 @@ namespace Cm93.UI.Modules.Match
 			{
 				this.pitchWidth = value;
 				NotifyOfPropertyChange(() => PitchWidth);
+
+				UpdatePlayerCoordinates();
 			}
 		}
+
+		private string player1Shirt;
+		public string Player1Shirt
+		{
+			get { return this.player1Shirt; }
+			set
+			{
+				this.player1Shirt = value;
+				NotifyOfPropertyChange(() => Player1Shirt);
+			}
+		}
+
+		private double player1Top;
+		public double Player1Top
+		{
+			get { return this.player1Top; }
+			set
+			{
+				this.player1Top = value;
+				NotifyOfPropertyChange(() => Player1Top);
+
+				UpdatePlayerCoordinates(0, Player1Left, Player1Top);
+			}
+		}
+
+		private double player1Left;
+		public double Player1Left
+		{
+			get { return this.player1Left; }
+			set
+			{
+				this.player1Left = value;
+				NotifyOfPropertyChange(() => Player1Left);
+
+				UpdatePlayerCoordinates(0, Player1Left, Player1Top);
+			}
+		}
+
+		private string player2Shirt;
+		public string Player2Shirt
+		{
+			get { return this.player2Shirt; }
+			set
+			{
+				this.player2Shirt = value;
+				NotifyOfPropertyChange(() => Player2Shirt);
+			}
+		}
+
+		private double player2Top;
+		public double Player2Top
+		{
+			get { return this.player2Top; }
+			set
+			{
+				this.player2Top = value;
+				NotifyOfPropertyChange(() => Player2Top);
+
+				UpdatePlayerCoordinates(1, Player2Left, Player2Top);
+			}
+		}
+
+		private double player2Left;
+		public double Player2Left
+		{
+			get { return this.player2Left; }
+			set
+			{
+				this.player2Left = value;
+				NotifyOfPropertyChange(() => Player2Left);
+
+				UpdatePlayerCoordinates(1, Player2Left, Player2Top);
+			}
+		}
+
+		private string player3Shirt;
+		public string Player3Shirt
+		{
+			get { return this.player3Shirt; }
+			set
+			{
+				this.player3Shirt = value;
+				NotifyOfPropertyChange(() => Player3Shirt);
+			}
+		}
+
+		private double player3Top;
+		public double Player3Top
+		{
+			get { return this.player3Top; }
+			set
+			{
+				this.player3Top = value;
+				NotifyOfPropertyChange(() => Player3Top);
+
+				UpdatePlayerCoordinates(2, Player3Left, Player3Top);
+			}
+		}
+
+		private double player3Left;
+		public double Player3Left
+		{
+			get { return this.player3Left; }
+			set
+			{
+				this.player3Left = value;
+				NotifyOfPropertyChange(() => Player3Left);
+
+				UpdatePlayerCoordinates(2, Player3Left, Player3Top);
+			}
+		}
+
+		#endregion
 
 		[ImportingConstructor]
 		public MatchViewModel(IEventAggregator eventAggregator)
@@ -126,11 +234,36 @@ namespace Cm93.UI.Modules.Match
 
 			Competition.Simulator.Play(playerFixture);
 			nextCompetition.CompleteRound();
+		}
 
-			var spl = this.MatchModule.Competitions.OfType<Division>().First();
+		private void UpdatePlayerCoordinates()
+		{
+			if (Team.Formation.ContainsKey(0))
+			{
+				Team.Formation[0].Location.X = Player1Left / PitchWidth;
+				Team.Formation[0].Location.Y = Player1Top / PitchHeight;
+			}
 
-			this.Fixtures = new string(spl.Fixtures.SelectMany(f => string.Format(
-				"{0} {1} - {2} {3}\n", f.TeamHome.TeamName, f.GoalsHome, f.GoalsAway, f.TeamAway.TeamName)).ToArray());
+			if (Team.Formation.ContainsKey(1))
+			{
+				Team.Formation[1].Location.X = Player2Left / PitchWidth;
+				Team.Formation[1].Location.Y = Player2Top / PitchHeight;
+			}
+
+			if (Team.Formation.ContainsKey(2))
+			{
+				Team.Formation[2].Location.X = Player3Left / PitchWidth;
+				Team.Formation[2].Location.Y = Player3Top / PitchHeight;
+			}
+		}
+
+		private void UpdatePlayerCoordinates(int index, double left, double top)
+		{
+			if (!Team.Formation.ContainsKey(index))
+				return;
+
+			Team.Formation[index].Location.X = left / PitchWidth;
+			Team.Formation[index].Location.Y = top / PitchHeight;
 		}
 	}
 }
