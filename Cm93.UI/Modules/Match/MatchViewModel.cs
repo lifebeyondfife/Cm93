@@ -16,7 +16,9 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System.ComponentModel.Composition;
+using System.Globalization;
 using System.Linq;
+using System.Windows.Media;
 using Caliburn.Micro;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
@@ -32,14 +34,18 @@ namespace Cm93.UI.Modules.Match
 		private IMatchModule MatchModule { get; set; }
 		private Cm93.Model.Structures.Team Team { get; set; }
 
-		private string fixtures;
-		public string Fixtures
+		private string teamName;
+		public string TeamName
 		{
-			get { return this.fixtures; }
+			get { return this.teamName; }
 			set
 			{
-				this.fixtures = value;
-				NotifyOfPropertyChange(() => Fixtures);
+				if (this.teamName == value)
+					return;
+
+				this.teamName = value;
+
+				NotifyOfPropertyChange(() => TeamName);
 			}
 		}
 
@@ -65,6 +71,30 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
+		private Color primaryColour;
+		public Color PrimaryColour
+		{
+			get { return this.primaryColour; }
+			set
+			{
+				this.primaryColour = value;
+				NotifyOfPropertyChange(() => PrimaryColour);
+			}
+		}
+
+		private Color secondaryColour;
+		public Color SecondaryColour
+		{
+			get { return this.secondaryColour; }
+			set
+			{
+				this.secondaryColour = value;
+				NotifyOfPropertyChange(() => SecondaryColour);
+			}
+		}
+
+		#region Player Coordinates
+
 		private int pitchHeight;
 		public int PitchHeight
 		{
@@ -73,6 +103,8 @@ namespace Cm93.UI.Modules.Match
 			{
 				this.pitchHeight = value;
 				NotifyOfPropertyChange(() => PitchHeight);
+
+				UpdatePlayerCoordinates();
 			}
 		}
 
@@ -84,8 +116,123 @@ namespace Cm93.UI.Modules.Match
 			{
 				this.pitchWidth = value;
 				NotifyOfPropertyChange(() => PitchWidth);
+
+				UpdatePlayerCoordinates();
 			}
 		}
+
+		private string player1Shirt;
+		public string Player1Shirt
+		{
+			get { return this.player1Shirt; }
+			set
+			{
+				this.player1Shirt = value;
+				NotifyOfPropertyChange(() => Player1Shirt);
+			}
+		}
+
+		private double player1Top;
+		public double Player1Top
+		{
+			get { return this.player1Top; }
+			set
+			{
+				this.player1Top = value;
+				NotifyOfPropertyChange(() => Player1Top);
+
+				UpdatePlayerCoordinates(0, Player1Left, Player1Top);
+			}
+		}
+
+		private double player1Left;
+		public double Player1Left
+		{
+			get { return this.player1Left; }
+			set
+			{
+				this.player1Left = value;
+				NotifyOfPropertyChange(() => Player1Left);
+
+				UpdatePlayerCoordinates(0, Player1Left, Player1Top);
+			}
+		}
+
+		private string player2Shirt;
+		public string Player2Shirt
+		{
+			get { return this.player2Shirt; }
+			set
+			{
+				this.player2Shirt = value;
+				NotifyOfPropertyChange(() => Player2Shirt);
+			}
+		}
+
+		private double player2Top;
+		public double Player2Top
+		{
+			get { return this.player2Top; }
+			set
+			{
+				this.player2Top = value;
+				NotifyOfPropertyChange(() => Player2Top);
+
+				UpdatePlayerCoordinates(1, Player2Left, Player2Top);
+			}
+		}
+
+		private double player2Left;
+		public double Player2Left
+		{
+			get { return this.player2Left; }
+			set
+			{
+				this.player2Left = value;
+				NotifyOfPropertyChange(() => Player2Left);
+
+				UpdatePlayerCoordinates(1, Player2Left, Player2Top);
+			}
+		}
+
+		private string player3Shirt;
+		public string Player3Shirt
+		{
+			get { return this.player3Shirt; }
+			set
+			{
+				this.player3Shirt = value;
+				NotifyOfPropertyChange(() => Player3Shirt);
+			}
+		}
+
+		private double player3Top;
+		public double Player3Top
+		{
+			get { return this.player3Top; }
+			set
+			{
+				this.player3Top = value;
+				NotifyOfPropertyChange(() => Player3Top);
+
+				UpdatePlayerCoordinates(2, Player3Left, Player3Top);
+			}
+		}
+
+		private double player3Left;
+		public double Player3Left
+		{
+			get { return this.player3Left; }
+			set
+			{
+				this.player3Left = value;
+				NotifyOfPropertyChange(() => Player3Left);
+
+				UpdatePlayerCoordinates(2, Player3Left, Player3Top);
+			}
+		}
+
+		#endregion
 
 		[ImportingConstructor]
 		public MatchViewModel(IEventAggregator eventAggregator)
@@ -106,13 +253,33 @@ namespace Cm93.UI.Modules.Match
 
 		public void Handle(TeamSetEvent message)
 		{
-			Team = message.Team;
+			TeamName = message.Team.TeamName;
 		}
 
 		public void Handle(ModuleSelectedEvent message)
 		{
 			if (message.Module != ModuleType.Match)
 				return;
+
+			Team = this.MatchModule.Teams[TeamName]; 
+			
+			SetPlayerNames();
+			SetPlayerLocations();
+
+			//	Show both teams, both sets of colours
+
+			//	Add View code behind to move players around
+
+			//	Introduce animated representation of the game i.e. the phases
+
+			//	Bar moving the players except for a brief window at half time
+
+			//	Add view of substitutes
+
+			//	Allow three substitutions
+
+			PrimaryColour = Team.PrimaryColour;
+			SecondaryColour = Team.SecondaryColour;
 
 			var nextCompetition = MatchModule.Competitions.OrderBy(c => c.Week).First();
 
@@ -126,11 +293,81 @@ namespace Cm93.UI.Modules.Match
 
 			Competition.Simulator.Play(playerFixture);
 			nextCompetition.CompleteRound();
+		}
 
-			var spl = this.MatchModule.Competitions.OfType<Division>().First();
+		private void SetPlayerNames()
+		{
+			if (Team.Formation.ContainsKey(0))
+				Player1Shirt = Team.Formation[0].Number != 0 ?
+					Team.Formation[0].Number.ToString(CultureInfo.CurrentCulture) :
+					string.Empty;
 
-			this.Fixtures = new string(spl.Fixtures.SelectMany(f => string.Format(
-				"{0} {1} - {2} {3}\n", f.TeamHome.TeamName, f.GoalsHome, f.GoalsAway, f.TeamAway.TeamName)).ToArray());
+			if (Team.Formation.ContainsKey(1))
+				Player2Shirt = Team.Formation[1].Number != 0 ?
+					Team.Formation[1].Number.ToString(CultureInfo.CurrentCulture) :
+					string.Empty;
+
+			if (Team.Formation.ContainsKey(2))
+				Player3Shirt = Team.Formation[2].Number != 0 ?
+					Team.Formation[2].Number.ToString(CultureInfo.CurrentCulture) :
+					string.Empty;
+		}
+
+		private void SetPlayerLocations()
+		{
+			if (Team.Formation.ContainsKey(0))
+			{
+				player1Left = PitchWidth * Team.Formation[0].Location.X;
+				player1Top = PitchHeight * Team.Formation[0].Location.Y;
+				NotifyOfPropertyChange(() => Player1Left);
+				NotifyOfPropertyChange(() => Player1Top);
+			}
+
+			if (Team.Formation.ContainsKey(1))
+			{
+				player2Left = PitchWidth * Team.Formation[1].Location.X;
+				player2Top = PitchHeight * Team.Formation[1].Location.Y;
+				NotifyOfPropertyChange(() => Player2Left);
+				NotifyOfPropertyChange(() => Player2Top);
+			}
+
+			if (Team.Formation.ContainsKey(2))
+			{
+				player3Left = PitchWidth * Team.Formation[2].Location.X;
+				player3Top = PitchHeight * Team.Formation[2].Location.Y;
+				NotifyOfPropertyChange(() => Player3Left);
+				NotifyOfPropertyChange(() => Player3Top);
+			}
+		}
+
+		private void UpdatePlayerCoordinates()
+		{
+			if (Team.Formation.ContainsKey(0))
+			{
+				Team.Formation[0].Location.X = Player1Left / PitchWidth;
+				Team.Formation[0].Location.Y = Player1Top / PitchHeight;
+			}
+
+			if (Team.Formation.ContainsKey(1))
+			{
+				Team.Formation[1].Location.X = Player2Left / PitchWidth;
+				Team.Formation[1].Location.Y = Player2Top / PitchHeight;
+			}
+
+			if (Team.Formation.ContainsKey(2))
+			{
+				Team.Formation[2].Location.X = Player3Left / PitchWidth;
+				Team.Formation[2].Location.Y = Player3Top / PitchHeight;
+			}
+		}
+
+		private void UpdatePlayerCoordinates(int index, double left, double top)
+		{
+			if (!Team.Formation.ContainsKey(index))
+				return;
+
+			Team.Formation[index].Location.X = left / PitchWidth;
+			Team.Formation[index].Location.Y = top / PitchHeight;
 		}
 	}
 }

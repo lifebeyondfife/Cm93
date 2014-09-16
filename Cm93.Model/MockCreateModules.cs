@@ -110,7 +110,7 @@ namespace Cm93.Model
 						SelectMany(f => f).
 						ToList()
 				};
-			var matchModule = new MatchModule(new [] { Cmcl });
+			var matchModule = new MatchModule(new [] { Cmcl }, Teams);
 
 			Config.Configuration.GlobalWeek = () => Competition.GlobalWeek(new[] { Cmcl });
 
