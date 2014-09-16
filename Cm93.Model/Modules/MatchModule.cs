@@ -25,10 +25,12 @@ namespace Cm93.Model.Modules
 	public class MatchModule : IMatchModule
 	{
 		public IList<ICompetition> Competitions { get; private set; }
+		public IDictionary<string, Team> Teams { get; private set; }
 
-		public MatchModule(IList<ICompetition> competitions)
+		public MatchModule(IList<ICompetition> competitions, IDictionary<string, Team> teams)
 		{
 			Competitions = competitions;
+			Teams = teams;
 		}
 
 		public Fixture Play(string competitionName, string playerTeamName)

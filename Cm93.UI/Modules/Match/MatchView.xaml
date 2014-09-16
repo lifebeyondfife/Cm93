@@ -22,9 +22,7 @@
 		<Viewbox Grid.Row="1" RenderTransformOrigin="0.5, 0.5">
 			<Viewbox.RenderTransform>
 				<TransformGroup>
-					<!-- Now add one of the shirt icons below by adding some code behind stuff.
-						Undo the scale and rotate done by the ViewBox alteration. Use Blend for Visual Studio-->
-					<ScaleTransform ScaleX="1.333" ScaleY="2"/>
+					<ScaleTransform ScaleX="1.3333333" ScaleY="2"/>
 					<RotateTransform Angle="90"/>
 				</TransformGroup>
 			</Viewbox.RenderTransform>
@@ -40,15 +38,33 @@
 				<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="4" Margin="149,37,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="4"/>
 				<ed:Arc ArcThickness="1" EndAngle="-110" Fill="Transparent" HorizontalAlignment="Left" Height="52" Margin="124,24,0,0" Stretch="None" Stroke="White" StrokeThickness="2" StartAngle="110" VerticalAlignment="Top" Width="54"/>
 
-				<Viewbox x:Name="Player1" Width="50" Height="60" Canvas.Top="{Binding Player1Top, Mode=TwoWay}" Canvas.Left="{Binding Player1Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(0)]">
+				<Viewbox  RenderTransformOrigin="0.5, 0.5" x:Name="Player1" Width="50" Height="60" Canvas.Top="{Binding Player1Top, Mode=TwoWay}" Canvas.Left="{Binding Player1Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(0)]">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.5" ScaleY="0.75"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
 					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player1Shirt}" />
 				</Viewbox>
 
-				<Viewbox x:Name="Player2" Width="50" Height="60" Canvas.Top="{Binding Player2Top, Mode=TwoWay}" Canvas.Left="{Binding Player2Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(1)]">
+				<Viewbox  RenderTransformOrigin="0.5, 0.5" x:Name="Player2" Width="50" Height="60" Canvas.Top="{Binding Player2Top, Mode=TwoWay}" Canvas.Left="{Binding Player2Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(1)]">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.5" ScaleY="0.75"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
 					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player2Shirt}" />
 				</Viewbox>
 
-				<Viewbox x:Name="Player3" Visibility="Collapsed" Width="50" Height="60" Canvas.Top="{Binding Player3Top, Mode=TwoWay}" Canvas.Left="{Binding Player3Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(2)]">
+				<Viewbox  RenderTransformOrigin="0.5, 0.5" x:Name="Player3" Visibility="Collapsed" Width="50" Height="60" Canvas.Top="{Binding Player3Top, Mode=TwoWay}" Canvas.Left="{Binding Player3Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(2)]">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.5" ScaleY="0.75"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
 					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player3Shirt}" />
 				</Viewbox>
 			</Canvas>

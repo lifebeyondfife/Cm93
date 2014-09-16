@@ -16,7 +16,9 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System.ComponentModel.Composition;
+using System.Globalization;
 using System.Linq;
+using System.Windows.Media;
 using Caliburn.Micro;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
@@ -31,6 +33,21 @@ namespace Cm93.UI.Modules.Match
 		private readonly IEventAggregator eventAggregator;
 		private IMatchModule MatchModule { get; set; }
 		private Cm93.Model.Structures.Team Team { get; set; }
+
+		private string teamName;
+		public string TeamName
+		{
+			get { return this.teamName; }
+			set
+			{
+				if (this.teamName == value)
+					return;
+
+				this.teamName = value;
+
+				NotifyOfPropertyChange(() => TeamName);
+			}
+		}
 
 		private string teamHomeName;
 		public string TeamHomeName
@@ -51,6 +68,28 @@ namespace Cm93.UI.Modules.Match
 			{
 				this.teamAwayName = value;
 				NotifyOfPropertyChange(() => TeamAwayName);
+			}
+		}
+
+		private Color primaryColour;
+		public Color PrimaryColour
+		{
+			get { return this.primaryColour; }
+			set
+			{
+				this.primaryColour = value;
+				NotifyOfPropertyChange(() => PrimaryColour);
+			}
+		}
+
+		private Color secondaryColour;
+		public Color SecondaryColour
+		{
+			get { return this.secondaryColour; }
+			set
+			{
+				this.secondaryColour = value;
+				NotifyOfPropertyChange(() => SecondaryColour);
 			}
 		}
 
@@ -214,13 +253,33 @@ namespace Cm93.UI.Modules.Match
 
 		public void Handle(TeamSetEvent message)
 		{
-			Team = message.Team;
+			TeamName = message.Team.TeamName;
 		}
 
 		public void Handle(ModuleSelectedEvent message)
 		{
 			if (message.Module != ModuleType.Match)
 				return;
+
+			Team = this.MatchModule.Teams[TeamName]; 
+			
+			SetPlayerNames();
+			SetPlayerLocations();
+
+			//	Show both teams, both sets of colours
+
+			//	Add View code behind to move players around
+
+			//	Introduce animated representation of the game i.e. the phases
+
+			//	Bar moving the players except for a brief window at half time
+
+			//	Add view of substitutes
+
+			//	Allow three substitutions
+
+			PrimaryColour = Team.PrimaryColour;
+			SecondaryColour = Team.SecondaryColour;
 
 			var nextCompetition = MatchModule.Competitions.OrderBy(c => c.Week).First();
 
@@ -234,6 +293,51 @@ namespace Cm93.UI.Modules.Match
 
 			Competition.Simulator.Play(playerFixture);
 			nextCompetition.CompleteRound();
+		}
+
+		private void SetPlayerNames()
+		{
+			if (Team.Formation.ContainsKey(0))
+				Player1Shirt = Team.Formation[0].Number != 0 ?
+					Team.Formation[0].Number.ToString(CultureInfo.CurrentCulture) :
+					string.Empty;
+
+			if (Team.Formation.ContainsKey(1))
+				Player2Shirt = Team.Formation[1].Number != 0 ?
+					Team.Formation[1].Number.ToString(CultureInfo.CurrentCulture) :
+					string.Empty;
+
+			if (Team.Formation.ContainsKey(2))
+				Player3Shirt = Team.Formation[2].Number != 0 ?
+					Team.Formation[2].Number.ToString(CultureInfo.CurrentCulture) :
+					string.Empty;
+		}
+
+		private void SetPlayerLocations()
+		{
+			if (Team.Formation.ContainsKey(0))
+			{
+				player1Left = PitchWidth * Team.Formation[0].Location.X;
+				player1Top = PitchHeight * Team.Formation[0].Location.Y;
+				NotifyOfPropertyChange(() => Player1Left);
+				NotifyOfPropertyChange(() => Player1Top);
+			}
+
+			if (Team.Formation.ContainsKey(1))
+			{
+				player2Left = PitchWidth * Team.Formation[1].Location.X;
+				player2Top = PitchHeight * Team.Formation[1].Location.Y;
+				NotifyOfPropertyChange(() => Player2Left);
+				NotifyOfPropertyChange(() => Player2Top);
+			}
+
+			if (Team.Formation.ContainsKey(2))
+			{
+				player3Left = PitchWidth * Team.Formation[2].Location.X;
+				player3Top = PitchHeight * Team.Formation[2].Location.Y;
+				NotifyOfPropertyChange(() => Player3Left);
+				NotifyOfPropertyChange(() => Player3Top);
+			}
 		}
 
 		private void UpdatePlayerCoordinates()
