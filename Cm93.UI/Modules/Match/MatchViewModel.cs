@@ -33,6 +33,7 @@ namespace Cm93.UI.Modules.Match
 		private readonly IEventAggregator eventAggregator;
 		private IMatchModule MatchModule { get; set; }
 		private Cm93.Model.Structures.Team Team { get; set; }
+		private Cm93.Model.Structures.Team ComputerTeam { get; set; }
 
 		private string teamName;
 		public string TeamName
@@ -46,6 +47,21 @@ namespace Cm93.UI.Modules.Match
 				this.teamName = value;
 
 				NotifyOfPropertyChange(() => TeamName);
+			}
+		}
+
+		private string computerTeamName;
+		public string ComputerTeamName
+		{
+			get { return this.computerTeamName; }
+			set
+			{
+				if (this.computerTeamName == value)
+					return;
+
+				this.computerTeamName = value;
+
+				NotifyOfPropertyChange(() => ComputerTeamName);
 			}
 		}
 
@@ -93,6 +109,28 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
+		private Color primaryComputerColour;
+		public Color PrimaryComputerColour
+		{
+			get { return this.primaryComputerColour; }
+			set
+			{
+				this.primaryComputerColour = value;
+				NotifyOfPropertyChange(() => PrimaryComputerColour);
+			}
+		}
+
+		private Color secondaryComputerColour;
+		public Color SecondaryComputerColour
+		{
+			get { return this.secondaryComputerColour; }
+			set
+			{
+				this.secondaryComputerColour = value;
+				NotifyOfPropertyChange(() => SecondaryComputerColour);
+			}
+		}
+
 		#region Player Coordinates
 
 		private int pitchHeight;
@@ -103,8 +141,6 @@ namespace Cm93.UI.Modules.Match
 			{
 				this.pitchHeight = value;
 				NotifyOfPropertyChange(() => PitchHeight);
-
-				UpdatePlayerCoordinates();
 			}
 		}
 
@@ -116,8 +152,6 @@ namespace Cm93.UI.Modules.Match
 			{
 				this.pitchWidth = value;
 				NotifyOfPropertyChange(() => PitchWidth);
-
-				UpdatePlayerCoordinates();
 			}
 		}
 
@@ -141,7 +175,7 @@ namespace Cm93.UI.Modules.Match
 				this.player1Top = value;
 				NotifyOfPropertyChange(() => Player1Top);
 
-				UpdatePlayerCoordinates(0, Player1Left, Player1Top);
+				UpdatePlayerCoordinates(Team, 0, Player1Left, Player1Top);
 			}
 		}
 
@@ -154,7 +188,7 @@ namespace Cm93.UI.Modules.Match
 				this.player1Left = value;
 				NotifyOfPropertyChange(() => Player1Left);
 
-				UpdatePlayerCoordinates(0, Player1Left, Player1Top);
+				UpdatePlayerCoordinates(Team, 0, Player1Left, Player1Top);
 			}
 		}
 
@@ -178,7 +212,7 @@ namespace Cm93.UI.Modules.Match
 				this.player2Top = value;
 				NotifyOfPropertyChange(() => Player2Top);
 
-				UpdatePlayerCoordinates(1, Player2Left, Player2Top);
+				UpdatePlayerCoordinates(Team, 1, Player2Left, Player2Top);
 			}
 		}
 
@@ -191,7 +225,7 @@ namespace Cm93.UI.Modules.Match
 				this.player2Left = value;
 				NotifyOfPropertyChange(() => Player2Left);
 
-				UpdatePlayerCoordinates(1, Player2Left, Player2Top);
+				UpdatePlayerCoordinates(Team, 1, Player2Left, Player2Top);
 			}
 		}
 
@@ -215,7 +249,7 @@ namespace Cm93.UI.Modules.Match
 				this.player3Top = value;
 				NotifyOfPropertyChange(() => Player3Top);
 
-				UpdatePlayerCoordinates(2, Player3Left, Player3Top);
+				UpdatePlayerCoordinates(Team, 2, Player3Left, Player3Top);
 			}
 		}
 
@@ -228,7 +262,118 @@ namespace Cm93.UI.Modules.Match
 				this.player3Left = value;
 				NotifyOfPropertyChange(() => Player3Left);
 
-				UpdatePlayerCoordinates(2, Player3Left, Player3Top);
+				UpdatePlayerCoordinates(Team, 2, Player3Left, Player3Top);
+			}
+		}
+
+		private string computerPlayer1Shirt;
+		public string ComputerPlayer1Shirt
+		{
+			get { return this.computerPlayer1Shirt; }
+			set
+			{
+				this.computerPlayer1Shirt = value;
+				NotifyOfPropertyChange(() => ComputerPlayer1Shirt);
+			}
+		}
+
+		private double computerPlayer1Top;
+		public double ComputerPlayer1Top
+		{
+			get { return this.computerPlayer1Top; }
+			set
+			{
+				this.computerPlayer1Top = value;
+				NotifyOfPropertyChange(() => ComputerPlayer1Top);
+
+				UpdatePlayerCoordinates(ComputerTeam, 0, ComputerPlayer1Left, ComputerPlayer1Top);
+			}
+		}
+
+		private double computerPlayer1Left;
+		public double ComputerPlayer1Left
+		{
+			get { return this.computerPlayer1Left; }
+			set
+			{
+				this.computerPlayer1Left = value;
+				NotifyOfPropertyChange(() => ComputerPlayer1Left);
+
+				UpdatePlayerCoordinates(ComputerTeam, 0, ComputerPlayer3Left, ComputerPlayer1Left);
+			}
+		}
+
+		private string computerPlayer2Shirt;
+		public string ComputerPlayer2Shirt
+		{
+			get { return this.computerPlayer2Shirt; }
+			set
+			{
+				this.computerPlayer2Shirt = value;
+				NotifyOfPropertyChange(() => ComputerPlayer2Shirt);
+			}
+		}
+
+		private double computerPlayer2Top;
+		public double ComputerPlayer2Top
+		{
+			get { return this.computerPlayer2Top; }
+			set
+			{
+				this.computerPlayer2Top = value;
+				NotifyOfPropertyChange(() => ComputerPlayer2Top);
+
+				UpdatePlayerCoordinates(ComputerTeam, 1, ComputerPlayer2Left, ComputerPlayer2Top);
+			}
+		}
+
+		private double computerPlayer2Left;
+		public double ComputerPlayer2Left
+		{
+			get { return this.computerPlayer2Left; }
+			set
+			{
+				this.computerPlayer2Left = value;
+				NotifyOfPropertyChange(() => ComputerPlayer2Left);
+
+				UpdatePlayerCoordinates(ComputerTeam, 1, ComputerPlayer2Left, ComputerPlayer2Top);
+			}
+		}
+
+		private string computerPlayer3Shirt;
+		public string ComputerPlayer3Shirt
+		{
+			get { return this.computerPlayer3Shirt; }
+			set
+			{
+				this.computerPlayer3Shirt = value;
+				NotifyOfPropertyChange(() => ComputerPlayer3Shirt);
+			}
+		}
+
+		private double computerPlayer3Top;
+		public double ComputerPlayer3Top
+		{
+			get { return this.computerPlayer3Top; }
+			set
+			{
+				this.computerPlayer3Top = value;
+				NotifyOfPropertyChange(() => ComputerPlayer3Top);
+
+				UpdatePlayerCoordinates(ComputerTeam, 2, ComputerPlayer3Left, ComputerPlayer3Top);
+			}
+		}
+
+		private double computerPlayer3Left;
+		public double ComputerPlayer3Left
+		{
+			get { return this.computerPlayer3Left; }
+			set
+			{
+				this.computerPlayer3Left = value;
+				NotifyOfPropertyChange(() => ComputerPlayer3Left);
+
+				UpdatePlayerCoordinates(ComputerTeam, 2, ComputerPlayer3Left, ComputerPlayer3Top);
 			}
 		}
 
@@ -254,6 +399,7 @@ namespace Cm93.UI.Modules.Match
 		public void Handle(TeamSetEvent message)
 		{
 			TeamName = message.Team.TeamName;
+			Team = this.MatchModule.Teams[TeamName];
 		}
 
 		public void Handle(ModuleSelectedEvent message)
@@ -261,14 +407,14 @@ namespace Cm93.UI.Modules.Match
 			if (message.Module != ModuleType.Match)
 				return;
 
-			Team = this.MatchModule.Teams[TeamName]; 
-			
-			SetPlayerNames();
-			SetPlayerLocations();
+			var nextCompetition = MatchModule.Competitions.OrderBy(c => c.Week).First();
 
-			//	Show both teams, both sets of colours
+			var playerFixture = this.MatchModule.Play(nextCompetition.CompetitionName, Team.TeamName);
 
-			//	Add View code behind to move players around
+			if (playerFixture == null)
+				return;
+
+			UpdatePitch(playerFixture);
 
 			//	Introduce animated representation of the game i.e. the phases
 
@@ -278,21 +424,28 @@ namespace Cm93.UI.Modules.Match
 
 			//	Allow three substitutions
 
+			Competition.Simulator.Play(playerFixture);
+			nextCompetition.CompleteRound();
+		}
+
+		private void UpdatePitch(Fixture playerFixture)
+		{
+			TeamHomeName = playerFixture.TeamHome.TeamName;
+			TeamAwayName = playerFixture.TeamAway.TeamName;
+
+			ComputerTeamName = TeamHomeName == TeamName ? TeamAwayName : TeamHomeName;
+
+			Team = this.MatchModule.Teams[TeamName];
+			ComputerTeam = this.MatchModule.Teams[ComputerTeamName];
+
+			SetPlayerNames();
+			SetPlayerLocations();
+
 			PrimaryColour = Team.PrimaryColour;
 			SecondaryColour = Team.SecondaryColour;
 
-			var nextCompetition = MatchModule.Competitions.OrderBy(c => c.Week).First();
-
-			var playerFixture = this.MatchModule.Play(nextCompetition.CompetitionName, Team.TeamName);
-
-			if (playerFixture == null)
-				return;
-
-			this.TeamHomeName = playerFixture.TeamHome.TeamName;
-			this.TeamAwayName = playerFixture.TeamAway.TeamName;
-
-			Competition.Simulator.Play(playerFixture);
-			nextCompetition.CompleteRound();
+			PrimaryComputerColour = ComputerTeam.PrimaryColour;
+			SecondaryComputerColour = ComputerTeam.SecondaryColour;
 		}
 
 		private void SetPlayerNames()
@@ -310,6 +463,21 @@ namespace Cm93.UI.Modules.Match
 			if (Team.Formation.ContainsKey(2))
 				Player3Shirt = Team.Formation[2].Number != 0 ?
 					Team.Formation[2].Number.ToString(CultureInfo.CurrentCulture) :
+					string.Empty;
+
+			if (ComputerTeam.Formation.ContainsKey(0))
+				ComputerPlayer1Shirt = ComputerTeam.Formation[0].Number != 0 ?
+					ComputerTeam.Formation[0].Number.ToString(CultureInfo.CurrentCulture) :
+					string.Empty;
+
+			if (ComputerTeam.Formation.ContainsKey(1))
+				ComputerPlayer2Shirt = ComputerTeam.Formation[1].Number != 0 ?
+					ComputerTeam.Formation[1].Number.ToString(CultureInfo.CurrentCulture) :
+					string.Empty;
+
+			if (ComputerTeam.Formation.ContainsKey(2))
+				ComputerPlayer3Shirt = ComputerTeam.Formation[2].Number != 0 ?
+					ComputerTeam.Formation[2].Number.ToString(CultureInfo.CurrentCulture) :
 					string.Empty;
 		}
 
@@ -338,36 +506,39 @@ namespace Cm93.UI.Modules.Match
 				NotifyOfPropertyChange(() => Player3Left);
 				NotifyOfPropertyChange(() => Player3Top);
 			}
+
+			if (ComputerTeam.Formation.ContainsKey(0))
+			{
+				computerPlayer1Left = PitchWidth * ComputerTeam.Formation[0].Location.X;
+				computerPlayer1Top = PitchHeight * ComputerTeam.Formation[0].Location.Y;
+				NotifyOfPropertyChange(() => ComputerPlayer1Left);
+				NotifyOfPropertyChange(() => ComputerPlayer1Top);
+			}
+
+			if (ComputerTeam.Formation.ContainsKey(1))
+			{
+				computerPlayer2Left = PitchWidth * ComputerTeam.Formation[1].Location.X;
+				computerPlayer2Top = PitchHeight * ComputerTeam.Formation[1].Location.Y;
+				NotifyOfPropertyChange(() => ComputerPlayer2Left);
+				NotifyOfPropertyChange(() => ComputerPlayer2Top);
+			}
+
+			if (ComputerTeam.Formation.ContainsKey(2))
+			{
+				computerPlayer3Left = PitchWidth * ComputerTeam.Formation[2].Location.X;
+				computerPlayer3Top = PitchHeight * ComputerTeam.Formation[2].Location.Y;
+				NotifyOfPropertyChange(() => ComputerPlayer3Left);
+				NotifyOfPropertyChange(() => ComputerPlayer3Top);
+			}
 		}
 
-		private void UpdatePlayerCoordinates()
+		private void UpdatePlayerCoordinates(Cm93.Model.Structures.Team team, int index, double left, double top)
 		{
-			if (Team.Formation.ContainsKey(0))
-			{
-				Team.Formation[0].Location.X = Player1Left / PitchWidth;
-				Team.Formation[0].Location.Y = Player1Top / PitchHeight;
-			}
-
-			if (Team.Formation.ContainsKey(1))
-			{
-				Team.Formation[1].Location.X = Player2Left / PitchWidth;
-				Team.Formation[1].Location.Y = Player2Top / PitchHeight;
-			}
-
-			if (Team.Formation.ContainsKey(2))
-			{
-				Team.Formation[2].Location.X = Player3Left / PitchWidth;
-				Team.Formation[2].Location.Y = Player3Top / PitchHeight;
-			}
-		}
-
-		private void UpdatePlayerCoordinates(int index, double left, double top)
-		{
-			if (!Team.Formation.ContainsKey(index))
+			if (!team.Formation.ContainsKey(index))
 				return;
 
-			Team.Formation[index].Location.X = left / PitchWidth;
-			Team.Formation[index].Location.Y = top / PitchHeight;
+			team.Formation[index].Location.X = left / PitchWidth;
+			team.Formation[index].Location.Y = top / PitchHeight;
 		}
 	}
 }

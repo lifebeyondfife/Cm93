@@ -364,6 +364,7 @@ namespace Cm93.UI.Modules.Team
 			}
 		}
 
+		//	Could this be deleted?
 		private void UpdatePlayerCoordinates()
 		{
 			if (Team.Formation.ContainsKey(0))
