@@ -416,6 +416,11 @@ namespace Cm93.UI.Modules.Match
 
 			UpdatePitch(playerFixture);
 
+			//	Create a wrapper class for the Fixture object (make an IFixture interface)
+			//	The wrapper class is a DependencyObject, which makes the binding so much easier
+			//	All the things you need in the View become MyFixture.HomeTeam.Player1.Opacity etc.
+			//	Also have a function that play the game and has multiple staggered callbacks for updating the ViewModel
+
 			//	Introduce animated representation of the game i.e. the phases
 
 			//	Bar moving the players except for a brief window at half time
