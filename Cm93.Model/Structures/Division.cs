@@ -17,6 +17,7 @@
 */
 using System.Collections.Generic;
 using System.Linq;
+using Cm93.Model.Interfaces;
 
 namespace Cm93.Model.Structures
 {
@@ -55,11 +56,11 @@ namespace Cm93.Model.Structures
 			get { return Fixtures.Max(f => f.Week) - Week; }
 		}
 
-		public override Fixture PlayFixtures(string playerTeamName = "")
+		public override IFixture PlayFixtures(string playerTeamName = "")
 		{
 			++Week;
 
-			Fixture playerFixture = null;
+			IFixture playerFixture = null;
 			foreach (var fixture in Fixtures.Where(f => f.Week == Week))
 			{
 				if (!string.IsNullOrEmpty(playerTeamName) &&
@@ -85,7 +86,7 @@ namespace Cm93.Model.Structures
 			Simulator.ProcessTransfers();
 		}
 
-		private void UpdatePointsAndGoals(Fixture fixture)
+		private void UpdatePointsAndGoals(IFixture fixture)
 		{
 			var homePlace = Places[fixture.TeamHome];
 			var awayPlace = Places[fixture.TeamAway];

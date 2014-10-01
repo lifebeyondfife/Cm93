@@ -25,7 +25,7 @@ namespace Cm93.Model.Interfaces
 	{
 		ILookup<Team, Bid> TeamBids { get; }
 
-		void Play(Fixture fixture);
+		void Play(IFixture fixture);
 		void SubmitBid(Bid bid);
 		void ProcessTransfers();
 	}

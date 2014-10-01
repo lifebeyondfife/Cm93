@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Cm93.Model.Attributes;
 using Cm93.Model.Enumerations;
 
@@ -81,5 +82,10 @@ namespace Cm93.Model.Structures
 		//	This is a very important field to keep secret. At some point change to internal
 		//	and alter assembly attributes to allow the UI project access.
 		public int ReleaseValue { get; set; }
+
+		public override string ToString()
+		{
+			return string.Format("{0} {1}.", LastName, FirstName.First().ToString(CultureInfo.CurrentCulture));
+		}
 	}
 }

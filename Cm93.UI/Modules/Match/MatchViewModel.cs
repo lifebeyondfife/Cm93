@@ -15,6 +15,9 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+
+using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Linq;
@@ -24,6 +27,7 @@ using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
 using Cm93.UI.Events;
+using Cm93.UI.Modules.Players;
 
 namespace Cm93.UI.Modules.Match
 {
@@ -34,56 +38,103 @@ namespace Cm93.UI.Modules.Match
 		private IMatchModule MatchModule { get; set; }
 		private Cm93.Model.Structures.Team Team { get; set; }
 		private Cm93.Model.Structures.Team ComputerTeam { get; set; }
+		private string TeamName { get; set; }
+		private string ComputerTeamName { get; set; }
+		private IFixture Fixture { get; set; }
 
-		private string teamName;
-		public string TeamName
-		{
-			get { return this.teamName; }
-			set
-			{
-				if (this.teamName == value)
-					return;
-
-				this.teamName = value;
-
-				NotifyOfPropertyChange(() => TeamName);
-			}
-		}
-
-		private string computerTeamName;
-		public string ComputerTeamName
-		{
-			get { return this.computerTeamName; }
-			set
-			{
-				if (this.computerTeamName == value)
-					return;
-
-				this.computerTeamName = value;
-
-				NotifyOfPropertyChange(() => ComputerTeamName);
-			}
-		}
-
-		private string teamHomeName;
 		public string TeamHomeName
 		{
-			get { return this.teamHomeName; }
-			set
+			get { return Fixture.TeamHome.TeamName; }
+		}
+
+		public string TeamAwayName
+		{
+			get { return Fixture.TeamAway.TeamName; }
+		}
+
+		public string ScoreString
+		{
+			get { return string.Format("{0} - {1}", Fixture.GoalsHome, Fixture.GoalsAway); }
+		}
+
+		public string Player1Shirt
+		{
+			get
 			{
-				this.teamHomeName = value;
-				NotifyOfPropertyChange(() => TeamHomeName);
+				return Team.Formation.ContainsKey(0) && Team.Formation[0].Number != 0 ?
+					Team.Formation[0].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
 			}
 		}
 
-		private string teamAwayName;
-		public string TeamAwayName
+		public string Player2Shirt
 		{
-			get { return this.teamAwayName; }
+			get
+			{
+				return Team.Formation.ContainsKey(1) && Team.Formation[1].Number != 0 ?
+					Team.Formation[1].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string Player3Shirt
+		{
+			get
+			{
+				return Team.Formation.ContainsKey(2) && Team.Formation[2].Number != 0 ?
+					Team.Formation[2].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string ComputerPlayer1Shirt
+		{
+			get
+			{
+				return ComputerTeam.Formation.ContainsKey(0) && ComputerTeam.Formation[0].Number != 0 ?
+					ComputerTeam.Formation[0].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string ComputerPlayer2Shirt
+		{
+			get
+			{
+				return ComputerTeam.Formation.ContainsKey(1) && ComputerTeam.Formation[1].Number != 0 ?
+					ComputerTeam.Formation[1].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string ComputerPlayer3Shirt
+		{
+			get
+			{
+				return ComputerTeam.Formation.ContainsKey(2) && ComputerTeam.Formation[2].Number != 0 ?
+					ComputerTeam.Formation[2].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public ObservableCollection<Player> PlayerSubstitutes
+		{
+			get
+			{
+				return new ObservableCollection<Player>(Team.Players.
+					Where(p => !Team.Formation.Values.Contains(p)).
+					OrderBy(p => p.LastName).
+					Select(p => p));
+			}
+		}
+
+		private Player selectedSubstitute = default(Player);
+		public Player SelectedSubstitute
+		{
+			get { return this.selectedSubstitute; }
 			set
 			{
-				this.teamAwayName = value;
-				NotifyOfPropertyChange(() => TeamAwayName);
+				this.selectedSubstitute = value;
+				NotifyOfPropertyChange(() => SelectedSubstitute);
 			}
 		}
 
@@ -155,17 +206,6 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
-		private string player1Shirt;
-		public string Player1Shirt
-		{
-			get { return this.player1Shirt; }
-			set
-			{
-				this.player1Shirt = value;
-				NotifyOfPropertyChange(() => Player1Shirt);
-			}
-		}
-
 		private double player1Top;
 		public double Player1Top
 		{
@@ -189,17 +229,6 @@ namespace Cm93.UI.Modules.Match
 				NotifyOfPropertyChange(() => Player1Left);
 
 				UpdatePlayerCoordinates(Team, 0, Player1Left, Player1Top);
-			}
-		}
-
-		private string player2Shirt;
-		public string Player2Shirt
-		{
-			get { return this.player2Shirt; }
-			set
-			{
-				this.player2Shirt = value;
-				NotifyOfPropertyChange(() => Player2Shirt);
 			}
 		}
 
@@ -229,17 +258,6 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
-		private string player3Shirt;
-		public string Player3Shirt
-		{
-			get { return this.player3Shirt; }
-			set
-			{
-				this.player3Shirt = value;
-				NotifyOfPropertyChange(() => Player3Shirt);
-			}
-		}
-
 		private double player3Top;
 		public double Player3Top
 		{
@@ -263,17 +281,6 @@ namespace Cm93.UI.Modules.Match
 				NotifyOfPropertyChange(() => Player3Left);
 
 				UpdatePlayerCoordinates(Team, 2, Player3Left, Player3Top);
-			}
-		}
-
-		private string computerPlayer1Shirt;
-		public string ComputerPlayer1Shirt
-		{
-			get { return this.computerPlayer1Shirt; }
-			set
-			{
-				this.computerPlayer1Shirt = value;
-				NotifyOfPropertyChange(() => ComputerPlayer1Shirt);
 			}
 		}
 
@@ -303,17 +310,6 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
-		private string computerPlayer2Shirt;
-		public string ComputerPlayer2Shirt
-		{
-			get { return this.computerPlayer2Shirt; }
-			set
-			{
-				this.computerPlayer2Shirt = value;
-				NotifyOfPropertyChange(() => ComputerPlayer2Shirt);
-			}
-		}
-
 		private double computerPlayer2Top;
 		public double ComputerPlayer2Top
 		{
@@ -337,17 +333,6 @@ namespace Cm93.UI.Modules.Match
 				NotifyOfPropertyChange(() => ComputerPlayer2Left);
 
 				UpdatePlayerCoordinates(ComputerTeam, 1, ComputerPlayer2Left, ComputerPlayer2Top);
-			}
-		}
-
-		private string computerPlayer3Shirt;
-		public string ComputerPlayer3Shirt
-		{
-			get { return this.computerPlayer3Shirt; }
-			set
-			{
-				this.computerPlayer3Shirt = value;
-				NotifyOfPropertyChange(() => ComputerPlayer3Shirt);
 			}
 		}
 
@@ -409,16 +394,15 @@ namespace Cm93.UI.Modules.Match
 
 			var nextCompetition = MatchModule.Competitions.OrderBy(c => c.Week).First();
 
-			var playerFixture = this.MatchModule.Play(nextCompetition.CompetitionName, Team.TeamName);
+			Fixture = this.MatchModule.Play(nextCompetition.CompetitionName, Team.TeamName);
 
-			if (playerFixture == null)
+			if (Fixture == null)
 				return;
 
-			UpdatePitch(playerFixture);
+			UpdateFixture();
 
-			//	Create a wrapper class for the Fixture object (make an IFixture interface)
-			//	The wrapper class is a DependencyObject, which makes the binding so much easier
-			//	All the things you need in the View become MyFixture.HomeTeam.Player1.Opacity etc.
+			//	Take a break from this to update the XAML a little to make the UI look more fleshed out
+
 			//	Also have a function that play the game and has multiple staggered callbacks for updating the ViewModel
 
 			//	Introduce animated representation of the game i.e. the phases
@@ -429,61 +413,39 @@ namespace Cm93.UI.Modules.Match
 
 			//	Allow three substitutions
 
-			Competition.Simulator.Play(playerFixture);
+			Competition.Simulator.Play(Fixture);
+
+			NotifyOfPropertyChange(() => TeamHomeName);
+			NotifyOfPropertyChange(() => TeamAwayName);
+			NotifyOfPropertyChange(() => ScoreString);
+
 			nextCompetition.CompleteRound();
 		}
 
-		private void UpdatePitch(Fixture playerFixture)
+		private void UpdateFixture()
 		{
-			TeamHomeName = playerFixture.TeamHome.TeamName;
-			TeamAwayName = playerFixture.TeamAway.TeamName;
-
-			ComputerTeamName = TeamHomeName == TeamName ? TeamAwayName : TeamHomeName;
+			ComputerTeamName = Fixture.TeamHome.TeamName == TeamName ?
+				Fixture.TeamAway.TeamName : Fixture.TeamHome.TeamName;
 
 			Team = this.MatchModule.Teams[TeamName];
 			ComputerTeam = this.MatchModule.Teams[ComputerTeamName];
 
-			SetPlayerNames();
 			SetPlayerLocations();
+
+			NotifyOfPropertyChange(() => Player1Shirt);
+			NotifyOfPropertyChange(() => Player2Shirt);
+			NotifyOfPropertyChange(() => Player3Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer1Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer2Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer3Shirt);
+
+			NotifyOfPropertyChange(() => PlayerSubstitutes);
 
 			PrimaryColour = Team.PrimaryColour;
 			SecondaryColour = Team.SecondaryColour;
 
 			PrimaryComputerColour = ComputerTeam.PrimaryColour;
 			SecondaryComputerColour = ComputerTeam.SecondaryColour;
-		}
-
-		private void SetPlayerNames()
-		{
-			if (Team.Formation.ContainsKey(0))
-				Player1Shirt = Team.Formation[0].Number != 0 ?
-					Team.Formation[0].Number.ToString(CultureInfo.CurrentCulture) :
-					string.Empty;
-
-			if (Team.Formation.ContainsKey(1))
-				Player2Shirt = Team.Formation[1].Number != 0 ?
-					Team.Formation[1].Number.ToString(CultureInfo.CurrentCulture) :
-					string.Empty;
-
-			if (Team.Formation.ContainsKey(2))
-				Player3Shirt = Team.Formation[2].Number != 0 ?
-					Team.Formation[2].Number.ToString(CultureInfo.CurrentCulture) :
-					string.Empty;
-
-			if (ComputerTeam.Formation.ContainsKey(0))
-				ComputerPlayer1Shirt = ComputerTeam.Formation[0].Number != 0 ?
-					ComputerTeam.Formation[0].Number.ToString(CultureInfo.CurrentCulture) :
-					string.Empty;
-
-			if (ComputerTeam.Formation.ContainsKey(1))
-				ComputerPlayer2Shirt = ComputerTeam.Formation[1].Number != 0 ?
-					ComputerTeam.Formation[1].Number.ToString(CultureInfo.CurrentCulture) :
-					string.Empty;
-
-			if (ComputerTeam.Formation.ContainsKey(2))
-				ComputerPlayer3Shirt = ComputerTeam.Formation[2].Number != 0 ?
-					ComputerTeam.Formation[2].Number.ToString(CultureInfo.CurrentCulture) :
-					string.Empty;
 		}
 
 		private void SetPlayerLocations()
@@ -544,6 +506,16 @@ namespace Cm93.UI.Modules.Match
 
 			team.Formation[index].Location.X = left / PitchWidth;
 			team.Formation[index].Location.Y = top / PitchHeight;
+		}
+
+		public bool CanSubstitute
+		{
+			get { throw new System.NotImplementedException(); }
+		}
+
+		public void Substitute()
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

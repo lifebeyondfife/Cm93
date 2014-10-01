@@ -30,15 +30,13 @@
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
 
+			<Label Grid.Row="0" Grid.ColumnSpan="6" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="24" FontWeight="ExtraBold" Content="{Binding TeamHomeName}" />
+			<Label Grid.Row="0" Grid.ColumnSpan="6" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="24" FontWeight="ExtraBold" Content="{Binding ScoreString}" />
+			<Label Grid.Row="0" Grid.ColumnSpan="6" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="24" FontWeight="ExtraBold" Content="{Binding TeamAwayName}" />
 
-			<Label Grid.Row="0" Grid.ColumnSpan="6" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="24" FontWeight="ExtraBold" Content="{Binding TeamHomeName, Mode=OneWay}" />
-			<Label Grid.Row="0" Grid.ColumnSpan="6" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="24" FontWeight="ExtraBold" Content="vs" />
-			<!-- make the above line something like "{0} - {1}", TeamHomeScore, TeamAwayScore -->
-			<Label Grid.Row="0" Grid.ColumnSpan="6" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="24" FontWeight="ExtraBold" Content="{Binding TeamAwayName, Mode=OneWay}" />
-
-			<Label Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="20" FontWeight="ExtraBold" Content="3" />
+			<Label Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="20" FontWeight="ExtraBold" Content="~3~" />
 			<!--  Content="{Binding TeamHomeChances, Mode=OneWay}" />-->
-			<Label Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="20" FontWeight="ExtraBold" Content="3" />
+			<Label Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="20" FontWeight="ExtraBold" Content="~2~" />
 			<!--  Content="{Binding TeamAwayChances, Mode=OneWay}" />-->
 
 			<oxy:Plot Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2">
@@ -47,8 +45,15 @@
 				</oxy:BarSeries>
 			</oxy:Plot>
 
-			<Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Background="MediumVioletRed">
-				<!-- Subs drop down, player number to replace drop down, subs button -->
+			<Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<ComboBox Grid.Column="0" Style="{StaticResource Dropdown}" Height="37" VerticalAlignment="Center" HorizontalAlignment="Stretch" ItemsSource="{Binding PlayerSubstitutes}" SelectedItem="{Binding SelectedSubstitute}" Margin="0,0,5,0" />
+				<ComboBox Grid.Column="1" Style="{StaticResource Dropdown}" Height="37" VerticalAlignment="Center" HorizontalAlignment="Left" Width="60" ItemsSource="{Binding PlayerNumbers}" SelectedItem="{Binding SelectedNumber}" Margin="0,0,5,0" />
+				<Button Grid.Column="2" Margin="0,0,5,0" Height="37" Width="120" VerticalAlignment="Center" HorizontalAlignment="Right" Content="Substitute" x:Name="ToggleTeams" />
 			</Grid>
 
 			<Grid Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Background="LightSkyBlue">
@@ -65,12 +70,8 @@
 				</TransformGroup>
 			</Viewbox.RenderTransform>
 			<Canvas Name="Pitch" Height="{Binding PitchHeight}" Width="{Binding PitchWidth}" Background="Transparent" Margin="10">
-				<oxy:Plot Canvas.ZIndex="0" 
-                              Width="{Binding Path=Width, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}"
-                              Height="{Binding Path=Height, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}"
-                              Background="GreenYellow" Foreground="Black" TextColor="White" BorderBrush="White" PlotAreaBorderColor="White" Name="m_Plot">
-					<!-- Make this a heat map thing -->
-				</oxy:Plot>
+				<!-- Make this a heat map thing -->
+				<oxy:Plot Canvas.ZIndex="0" Width="{Binding Path=Width, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" Height="{Binding Path=Height, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" Background="GreenYellow" Foreground="Black" TextColor="White" BorderBrush="White" PlotAreaBorderColor="White" />
 
 				<Path Data="M 0, 0 L 300,0 L300,400 L0,400 Z M0,200 L300,200" Fill="Transparent" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" HorizontalAlignment="Left" />
 				<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="100" Margin="100,150,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="100"/>
@@ -83,7 +84,7 @@
 				<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="4" Margin="149,37,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="4"/>
 				<ed:Arc ArcThickness="1" EndAngle="-110" Fill="Transparent" HorizontalAlignment="Left" Height="52" Margin="124,24,0,0" Stretch="None" Stroke="White" StrokeThickness="2" StartAngle="110" VerticalAlignment="Top" Width="54"/>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player1" Width="50" Height="60" Canvas.Top="{Binding Player1Top, Mode=TwoWay}" Canvas.Left="{Binding Player1Left, Mode=TwoWay}" Opacity="0.5">
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player1" Width="50" Height="60" Canvas.Top="{Binding Player1Top, Mode=TwoWay}" Canvas.Left="{Binding Player1Left, Mode=TwoWay}" Opacity="0.5"> <!--  Opacity="{Binding Player1Touches}" />  etc. -->
 					<Viewbox.RenderTransform>
 						<TransformGroup>
 							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>

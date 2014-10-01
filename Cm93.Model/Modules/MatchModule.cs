@@ -33,7 +33,7 @@ namespace Cm93.Model.Modules
 			Teams = teams;
 		}
 
-		public Fixture Play(string competitionName, string playerTeamName)
+		public IFixture Play(string competitionName, string playerTeamName)
 		{
 			return Competitions.Single(c => c.CompetitionName == competitionName).PlayFixtures(playerTeamName);
 		}

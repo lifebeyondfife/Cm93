@@ -15,27 +15,20 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System.Collections.Generic;
-using System.Linq;
-using Cm93.Model.Interfaces;
+using Cm93.Model.Structures;
 
-namespace Cm93.Model.Structures
+namespace Cm93.Model.Interfaces
 {
-	public abstract class Competition : ICompetition
+	public interface IFixture
 	{
-		public static ISimulator Simulator { get; set; }
+		Team TeamHome { get; }
+		Team TeamAway { get; }
 
-		public string CompetitionName { get; set; }
-		public int Week { get; set; }
-		public IDictionary<string, Team> Teams { get; set; }
+		int Week { get; }
 
-		public abstract IFixture PlayFixtures(string playerTeamName = "");
-		public abstract void CompleteRound();
-		public abstract int MatchesLeft { get; }
-	
-		public static int GlobalWeek(IEnumerable<Competition> competitions)
-		{
-			return competitions.Max(c => c.Week);
-		}
+		int GoalsHome { get; set; }
+		int GoalsAway { get; set; }
+
+		ICompetition Competition { get; }
 	}
 }

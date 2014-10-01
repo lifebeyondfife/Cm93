@@ -37,7 +37,7 @@ namespace Cm93.Simulator.Basic
 			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
 		}
 
-		public void Play(Fixture fixture)
+		public void Play(IFixture fixture)
 		{
 			var random = new Random();
 

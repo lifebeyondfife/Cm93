@@ -54,6 +54,6 @@ namespace Cm93.Model.Interfaces
 	{
 		IList<ICompetition> Competitions { get; }
 		IDictionary<string, Team> Teams { get; }
-		Fixture Play(string competitionName, string playerTeamName = "");
+		IFixture Play(string competitionName, string playerTeamName = "");
 	}
 }

@@ -15,9 +15,11 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Interfaces;
+
 namespace Cm93.Model.Structures
 {
-	public class Fixture
+	public class Fixture : IFixture
 	{
 		public Team TeamHome { get; set; }
 		public Team TeamAway { get; set; }
@@ -27,6 +29,6 @@ namespace Cm93.Model.Structures
 		public int GoalsHome { get; set; }
 		public int GoalsAway { get; set; }
 
-		public Competition Competition { get; set; }
+		public ICompetition Competition { get; set; }
 	}
 }

@@ -15,11 +15,13 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Interfaces;
+
 namespace Cm93.Model.Structures
 {
 	class Cup : Competition
 	{
-		public override Fixture PlayFixtures(string playerTeamName)
+		public override IFixture PlayFixtures(string playerTeamName)
 		{
 			throw new System.NotImplementedException();
 		}
