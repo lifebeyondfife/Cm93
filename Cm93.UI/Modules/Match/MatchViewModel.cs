@@ -16,7 +16,7 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Globalization;
@@ -27,7 +27,6 @@ using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
 using Cm93.UI.Events;
-using Cm93.UI.Modules.Players;
 
 namespace Cm93.UI.Modules.Match
 {
@@ -41,6 +40,9 @@ namespace Cm93.UI.Modules.Match
 		private string TeamName { get; set; }
 		private string ComputerTeamName { get; set; }
 		private IFixture Fixture { get; set; }
+
+		private int SubstitutesUsed { get; set; }
+		private IList<Player> SubstitutedPlayers { get; set; }
 
 		public string TeamHomeName
 		{
@@ -121,7 +123,7 @@ namespace Cm93.UI.Modules.Match
 			get
 			{
 				return new ObservableCollection<Player>(Team.Players.
-					Where(p => !Team.Formation.Values.Contains(p)).
+					Where(p => !Team.Formation.Values.Contains(p) && !SubstitutedPlayers.Contains(p)).
 					OrderBy(p => p.LastName).
 					Select(p => p));
 			}
@@ -134,7 +136,31 @@ namespace Cm93.UI.Modules.Match
 			set
 			{
 				this.selectedSubstitute = value;
+				NotifyOfPropertyChange(() => CanSubstitute);
 				NotifyOfPropertyChange(() => SelectedSubstitute);
+			}
+		}
+
+		public ObservableCollection<int> PlayerNumbers
+		{
+			get
+			{
+				return new ObservableCollection<int>(Team.Players.
+					Where(p => Team.Formation.Values.Contains(p)).
+					OrderBy(p => p.Number).
+					Select(p => p.Number));
+			}
+		}
+
+		private int selectedNumber = default(int);
+		public int SelectedNumber
+		{
+			get { return this.selectedNumber; }
+			set
+			{
+				this.selectedNumber = value;
+				NotifyOfPropertyChange(() => CanSubstitute);
+				NotifyOfPropertyChange(() => SelectedNumber);
 			}
 		}
 
@@ -372,6 +398,8 @@ namespace Cm93.UI.Modules.Match
 
 			this.pitchHeight = 400;
 			this.pitchWidth = 300;
+
+			this.SubstitutedPlayers = new List<Player>();
 			
 			this.eventAggregator.Subscribe(this);
 		}
@@ -424,6 +452,9 @@ namespace Cm93.UI.Modules.Match
 
 		private void UpdateFixture()
 		{
+			SubstitutesUsed = 0;
+			SubstitutedPlayers.Clear();
+
 			ComputerTeamName = Fixture.TeamHome.TeamName == TeamName ?
 				Fixture.TeamAway.TeamName : Fixture.TeamHome.TeamName;
 
@@ -510,12 +541,33 @@ namespace Cm93.UI.Modules.Match
 
 		public bool CanSubstitute
 		{
-			get { throw new System.NotImplementedException(); }
+			get { return SelectedSubstitute != null && SelectedNumber != 0; }
 		}
 
 		public void Substitute()
 		{
-			throw new System.NotImplementedException();
+			var subbedPlayer = Team.Players.Single(p => p.Number == SelectedNumber);
+			var substitutePlayer = SelectedSubstitute;
+
+			SubstitutedPlayers.Add(subbedPlayer);
+
+			substitutePlayer.Location.X = subbedPlayer.Location.X;
+			substitutePlayer.Location.Y = subbedPlayer.Location.Y;
+
+			Team.Formation[Team.Formation.Where(kvp => kvp.Value == subbedPlayer).Select(kvp => kvp.Key).Single()] = substitutePlayer;
+
+			NotifyOfPropertyChange(() => Player1Shirt);
+			NotifyOfPropertyChange(() => Player2Shirt);
+			NotifyOfPropertyChange(() => Player3Shirt);
+
+			PlayerNumbers.Remove(SelectedNumber);
+			PlayerSubstitutes.Remove(substitutePlayer);
+
+			NotifyOfPropertyChange(() => PlayerSubstitutes);
+			NotifyOfPropertyChange(() => PlayerNumbers);
+
+			SelectedNumber = 0;
+			SelectedSubstitute = null;
 		}
 	}
 }

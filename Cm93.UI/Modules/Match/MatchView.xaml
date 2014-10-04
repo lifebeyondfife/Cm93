@@ -53,7 +53,7 @@
 				</Grid.ColumnDefinitions>
 				<ComboBox Grid.Column="0" Style="{StaticResource Dropdown}" Height="37" VerticalAlignment="Center" HorizontalAlignment="Stretch" ItemsSource="{Binding PlayerSubstitutes}" SelectedItem="{Binding SelectedSubstitute}" Margin="0,0,5,0" />
 				<ComboBox Grid.Column="1" Style="{StaticResource Dropdown}" Height="37" VerticalAlignment="Center" HorizontalAlignment="Left" Width="60" ItemsSource="{Binding PlayerNumbers}" SelectedItem="{Binding SelectedNumber}" Margin="0,0,5,0" />
-				<Button Grid.Column="2" Margin="0,0,5,0" Height="37" Width="120" VerticalAlignment="Center" HorizontalAlignment="Right" Content="Substitute" x:Name="ToggleTeams" />
+				<Button Grid.Column="2" Margin="0,0,5,0" Height="37" Width="120" VerticalAlignment="Center" HorizontalAlignment="Right" Content="Substitute" x:Name="Substitute" />
 			</Grid>
 
 			<Grid Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Background="LightSkyBlue">
