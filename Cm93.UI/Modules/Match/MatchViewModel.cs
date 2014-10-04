@@ -554,7 +554,9 @@ namespace Cm93.UI.Modules.Match
 			substitutePlayer.Location.X = subbedPlayer.Location.X;
 			substitutePlayer.Location.Y = subbedPlayer.Location.Y;
 
-			Team.Formation[Team.Formation.Where(kvp => kvp.Value == subbedPlayer).Select(kvp => kvp.Key).Single()] = substitutePlayer;
+			Team.Formation[Team.Formation.
+				Where(kvp => kvp.Value == subbedPlayer).
+				Select(kvp => kvp.Key).Single()] = substitutePlayer;
 
 			NotifyOfPropertyChange(() => Player1Shirt);
 			NotifyOfPropertyChange(() => Player2Shirt);
