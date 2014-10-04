@@ -1,5 +1,5 @@
 ﻿/*
-        Copyright © Iain McDonald 2013-2014
+        Copyright © Iain McDonald 2014
         This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
@@ -15,25 +15,19 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using Cm93.Model.Enumerations;
-using Cm93.Model.Structures;
-
-namespace Cm93.Model.Interfaces
+namespace Cm93.Model.Enumerations
 {
-	public interface IFixture
+	public enum PlayingPeriod
 	{
-		Team TeamHome { get; }
-		Team TeamAway { get; }
-
-		int Week { get; }
-
-		int GoalsHome { get; set; }
-		int GoalsAway { get; set; }
-
-		ICompetition Competition { get; }
-
-		int MinutesAddedOn { get; set; }
-		int Minutes { get; set; }
-		PlayingPeriod PlayingPeriod { get; set; }
+		FirstHalf,
+		HalfTime,
+		SecondHalf,
+		EndOfSecondHalf,
+		ExtraTimeFirstHalf,
+		ExtraTimeHalfTime,
+		ExtraTimeSecondHalf,
+		EndOfExtraTime,
+		Penalties,
+		FullTime
 	}
 }

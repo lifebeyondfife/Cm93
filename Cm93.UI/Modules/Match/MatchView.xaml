@@ -56,8 +56,13 @@
 				<Button Grid.Column="2" Margin="0,0,5,0" Height="37" Width="120" VerticalAlignment="Center" HorizontalAlignment="Right" Content="Substitute" x:Name="Substitute" />
 			</Grid>
 
-			<Grid Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Background="LightSkyBlue">
-				<!-- 1st/2nd Half (Extra time?), minutes on the clock -->
+			<Grid Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="3*" />
+					<ColumnDefinition Width="1*" />
+				</Grid.ColumnDefinitions>
+				<Label Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="24" FontWeight="ExtraBold" Content="{Binding PlayingPeriod}" />
+				<Label Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="24" FontWeight="ExtraBold" Content="{Binding Minutes}" />
 			</Grid>
 		</Grid>
 

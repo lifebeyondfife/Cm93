@@ -15,7 +15,6 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
@@ -23,6 +22,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Media;
 using Caliburn.Micro;
+using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
@@ -57,6 +57,18 @@ namespace Cm93.UI.Modules.Match
 		public string ScoreString
 		{
 			get { return string.Format("{0} - {1}", Fixture.GoalsHome, Fixture.GoalsAway); }
+		}
+
+		public string PlayingPeriod
+		{
+			get { return string.Format("{0}:", Fixture.PlayingPeriod.PeriodString()); }
+		}
+
+		public string Minutes
+		{
+			get { return Fixture.MinutesAddedOn > 0 ?
+				string.Format("{0}m +{1}", Fixture.Minutes, Fixture.MinutesAddedOn) :
+				string.Format("{0}m", Fixture.Minutes); }
 		}
 
 		public string Player1Shirt
