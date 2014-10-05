@@ -18,7 +18,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cm93.Model.Config;
+using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 
@@ -37,7 +39,7 @@ namespace Cm93.Simulator.Basic
 			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
 		}
 
-		public void Play(IFixture fixture)
+		public void Play(IFixture fixture, Action updateUi, Action completeRound)
 		{
 			var random = new Random();
 
@@ -64,7 +66,26 @@ namespace Cm93.Simulator.Basic
 						OrderByDescending(m => m.Value).
 						First().Index].Goals;
 				}
+
+				if (updateUi == null)
+					continue;
+
+				Thread.Sleep(1500);
+
+				fixture.Minutes += 9;
+
+				if (i == 9)
+					fixture.PlayingPeriod = PlayingPeriod.FullTime;
+				else if (i < 5)
+					fixture.PlayingPeriod = PlayingPeriod.FirstHalf;
+				else
+					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
+
+				updateUi();
 			}
+
+			if (completeRound != null)
+				completeRound();
 		}
 
 		public void SubmitBid(Bid bid)

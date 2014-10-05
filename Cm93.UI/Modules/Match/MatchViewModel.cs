@@ -20,6 +20,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using Caliburn.Micro;
 using Cm93.Model.Helpers;
@@ -40,9 +42,21 @@ namespace Cm93.UI.Modules.Match
 		private string TeamName { get; set; }
 		private string ComputerTeamName { get; set; }
 		private IFixture Fixture { get; set; }
+		private TaskScheduler UiScheduler { get; set; }
 
 		private int SubstitutesUsed { get; set; }
 		private IList<Player> SubstitutedPlayers { get; set; }
+
+		#region View Model Properties
+
+		public bool CanMovePlayers
+		{
+			get
+			{
+				//	Do something a bit better with this.
+				return Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.SecondHalf;
+			}
+		}
 
 		public string TeamHomeName
 		{
@@ -66,9 +80,12 @@ namespace Cm93.UI.Modules.Match
 
 		public string Minutes
 		{
-			get { return Fixture.MinutesAddedOn > 0 ?
-				string.Format("{0}m +{1}", Fixture.Minutes, Fixture.MinutesAddedOn) :
-				string.Format("{0}m", Fixture.Minutes); }
+			get
+			{
+				return Fixture.MinutesAddedOn > 0 ?
+					string.Format("{0}m +{1}", Fixture.Minutes, Fixture.MinutesAddedOn) :
+					string.Format("{0}m", Fixture.Minutes);
+			}
 		}
 
 		public string Player1Shirt
@@ -219,6 +236,8 @@ namespace Cm93.UI.Modules.Match
 				NotifyOfPropertyChange(() => SecondaryComputerColour);
 			}
 		}
+
+		#endregion
 
 		#region Player Coordinates
 
@@ -408,11 +427,13 @@ namespace Cm93.UI.Modules.Match
 			this.eventAggregator = eventAggregator;
 			this.ModuleType = ModuleType.Match;
 
+			this.UiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
 			this.pitchHeight = 400;
 			this.pitchWidth = 300;
 
 			this.SubstitutedPlayers = new List<Player>();
-			
+
 			this.eventAggregator.Subscribe(this);
 		}
 
@@ -432,41 +453,43 @@ namespace Cm93.UI.Modules.Match
 			if (message.Module != ModuleType.Match)
 				return;
 
-			var nextCompetition = MatchModule.Competitions.OrderBy(c => c.Week).First();
+			var competition = MatchModule.Competitions.OrderBy(c => c.Week).First();
 
-			Fixture = this.MatchModule.Play(nextCompetition.CompetitionName, Team.TeamName);
+			Fixture = this.MatchModule.Play(competition.CompetitionName, Team.TeamName);
 
 			if (Fixture == null)
 				return;
 
-			UpdateFixture();
+			UpdateStaticFixtureData();
 
-			//	Take a break from this to update the XAML a little to make the UI look more fleshed out
+			//	FINISH - Bar moving the players except for a brief window at half time
 
-			//	Also have a function that play the game and has multiple staggered callbacks for updating the ViewModel
+			//	Make sure changes to formation / subs etc. only change this Fixture's Formation.
+			//		WAIT - the *fixture* should have its own copy of the formation.
+			//		Cascade changes throughout the Match / Simulation classes once altered
 
-			//	Introduce animated representation of the game i.e. the phases
-
-			//	Bar moving the players except for a brief window at half time
-
-			//	Add view of substitutes
-
-			//	Allow three substitutions
-
-			Competition.Simulator.Play(Fixture);
-
+			//	Introduce animated representation of the game i.e. AI computer moving players animated
+			
 			NotifyOfPropertyChange(() => TeamHomeName);
 			NotifyOfPropertyChange(() => TeamAwayName);
-			NotifyOfPropertyChange(() => ScoreString);
 
-			nextCompetition.CompleteRound();
+			Task.Factory.StartNew(() => Competition.Simulator.Play(Fixture, UpdateDynamicFixtureData, competition.CompleteRound));
 		}
 
-		private void UpdateFixture()
+		private void UpdateDynamicFixtureData()
 		{
-			SubstitutesUsed = 0;
-			SubstitutedPlayers.Clear();
+			Task.Factory.StartNew(
+				() =>
+				{
+					NotifyOfPropertyChange(() => ScoreString);
+					NotifyOfPropertyChange(() => Minutes);
+					NotifyOfPropertyChange(() => PlayingPeriod);
+				},
+				CancellationToken.None, TaskCreationOptions.None, UiScheduler);
+		}
 
+		private void UpdateStaticFixtureData()
+		{
 			ComputerTeamName = Fixture.TeamHome.TeamName == TeamName ?
 				Fixture.TeamAway.TeamName : Fixture.TeamHome.TeamName;
 
@@ -475,13 +498,15 @@ namespace Cm93.UI.Modules.Match
 
 			SetPlayerLocations();
 
-			NotifyOfPropertyChange(() => Player1Shirt);
-			NotifyOfPropertyChange(() => Player2Shirt);
-			NotifyOfPropertyChange(() => Player3Shirt);
-			NotifyOfPropertyChange(() => ComputerPlayer1Shirt);
-			NotifyOfPropertyChange(() => ComputerPlayer2Shirt);
-			NotifyOfPropertyChange(() => ComputerPlayer3Shirt);
+			NotifyOfPropertyChange(() => ScoreString);
+			NotifyOfPropertyChange(() => Minutes);
+			NotifyOfPropertyChange(() => PlayingPeriod);
 
+			UpdatePlayerShirts();
+			UpdateComputerShirts();
+
+			SubstitutesUsed = 0;
+			SubstitutedPlayers.Clear();
 			NotifyOfPropertyChange(() => PlayerSubstitutes);
 
 			PrimaryColour = Team.PrimaryColour;
@@ -489,6 +514,20 @@ namespace Cm93.UI.Modules.Match
 
 			PrimaryComputerColour = ComputerTeam.PrimaryColour;
 			SecondaryComputerColour = ComputerTeam.SecondaryColour;
+		}
+
+		private void UpdateComputerShirts()
+		{
+			NotifyOfPropertyChange(() => ComputerPlayer1Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer2Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer3Shirt);
+		}
+
+		private void UpdatePlayerShirts()
+		{
+			NotifyOfPropertyChange(() => Player1Shirt);
+			NotifyOfPropertyChange(() => Player2Shirt);
+			NotifyOfPropertyChange(() => Player3Shirt);
 		}
 
 		private void SetPlayerLocations()
@@ -553,7 +592,7 @@ namespace Cm93.UI.Modules.Match
 
 		public bool CanSubstitute
 		{
-			get { return SelectedSubstitute != null && SelectedNumber != 0; }
+			get { return SelectedSubstitute != null && SelectedNumber != 0 && SubstitutesUsed < 3; }
 		}
 
 		public void Substitute()
@@ -570,9 +609,7 @@ namespace Cm93.UI.Modules.Match
 				Where(kvp => kvp.Value == subbedPlayer).
 				Select(kvp => kvp.Key).Single()] = substitutePlayer;
 
-			NotifyOfPropertyChange(() => Player1Shirt);
-			NotifyOfPropertyChange(() => Player2Shirt);
-			NotifyOfPropertyChange(() => Player3Shirt);
+			UpdatePlayerShirts();
 
 			PlayerNumbers.Remove(SelectedNumber);
 			PlayerSubstitutes.Remove(substitutePlayer);

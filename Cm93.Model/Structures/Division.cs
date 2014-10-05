@@ -70,7 +70,7 @@ namespace Cm93.Model.Structures
 					continue;
 				}
 
-				Simulator.Play(fixture);
+				Simulator.Play(fixture, null, null);
 			}
 
 			return playerFixture;
