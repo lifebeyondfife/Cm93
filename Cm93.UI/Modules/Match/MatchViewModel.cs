@@ -22,7 +22,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+//using System.Windows;
 using System.Windows.Media;
+//using System.Windows.Media.Animation;
 using Caliburn.Micro;
 using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
@@ -53,8 +55,10 @@ namespace Cm93.UI.Modules.Match
 		{
 			get
 			{
-				//	Do something a bit better with this.
-				return Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.SecondHalf;
+				return Fixture.PlayingPeriod != Model.Enumerations.PlayingPeriod.FirstHalf &&
+					Fixture.PlayingPeriod != Model.Enumerations.PlayingPeriod.SecondHalf &&
+					Fixture.PlayingPeriod != Model.Enumerations.PlayingPeriod.ExtraTimeFirstHalf &&
+					Fixture.PlayingPeriod != Model.Enumerations.PlayingPeriod.ExtraTimeSecondHalf;
 			}
 		}
 
@@ -462,14 +466,12 @@ namespace Cm93.UI.Modules.Match
 
 			UpdateStaticFixtureData();
 
-			//	FINISH - Bar moving the players except for a brief window at half time
-
 			//	Make sure changes to formation / subs etc. only change this Fixture's Formation.
 			//		WAIT - the *fixture* should have its own copy of the formation.
 			//		Cascade changes throughout the Match / Simulation classes once altered
 
 			//	Introduce animated representation of the game i.e. AI computer moving players animated
-			
+
 			NotifyOfPropertyChange(() => TeamHomeName);
 			NotifyOfPropertyChange(() => TeamAwayName);
 
@@ -479,8 +481,15 @@ namespace Cm93.UI.Modules.Match
 		private void UpdateDynamicFixtureData()
 		{
 			Task.Factory.StartNew(
-				() =>
-				{
+				() => {
+					//var topAnimation = new DoubleAnimation { To = 23, Duration = TimeSpan.FromSeconds(1.5),
+					//	AccelerationRatio = 0.4, DecelerationRatio = 0.4 };
+					//var storyBoard = new Storyboard();
+					//Storyboard.SetTarget(topAnimation, /* put all the "Top" and "Left" properties in a DependencyObject subclass */);
+					//Storyboard.SetTargetProperty(topAnimation, new PropertyPath(DEPOBJ SUB CLASS.TopProperty));
+					//storyBoard.Children.Add(topAnimation);
+					//storyBoard.Begin();
+
 					NotifyOfPropertyChange(() => ScoreString);
 					NotifyOfPropertyChange(() => Minutes);
 					NotifyOfPropertyChange(() => PlayingPeriod);
@@ -592,7 +601,7 @@ namespace Cm93.UI.Modules.Match
 
 		public bool CanSubstitute
 		{
-			get { return SelectedSubstitute != null && SelectedNumber != 0 && SubstitutesUsed < 3; }
+			get { return Fixture != null && SelectedSubstitute != null && SelectedNumber != 0 && SubstitutesUsed < 3; }
 		}
 
 		public void Substitute()

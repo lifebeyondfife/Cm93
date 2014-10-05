@@ -76,12 +76,21 @@ namespace Cm93.Simulator.Basic
 
 				if (i == 9)
 					fixture.PlayingPeriod = PlayingPeriod.FullTime;
+				else if (i == 4)
+					fixture.PlayingPeriod = PlayingPeriod.HalfTime;
 				else if (i < 5)
 					fixture.PlayingPeriod = PlayingPeriod.FirstHalf;
 				else
 					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
 
 				updateUi();
+
+				if (i == 4)
+				{
+					Thread.Sleep(3500);
+					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
+					updateUi();
+				}
 			}
 
 			if (completeRound != null)
