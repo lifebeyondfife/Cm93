@@ -18,22 +18,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cm93.Model.Interfaces;
-using Cm93.Model.Structures;
 
 namespace Cm93.Model.Modules
 {
 	public class MatchModule : IMatchModule
 	{
 		public IList<ICompetition> Competitions { get; private set; }
-		public IDictionary<string, Team> Teams { get; private set; }
 
-		public MatchModule(IList<ICompetition> competitions, IDictionary<string, Team> teams)
+		public MatchModule(IList<ICompetition> competitions)
 		{
 			Competitions = competitions;
-			Teams = teams;
 		}
 
-		public Fixture Play(string competitionName, string playerTeamName)
+		public IFixture Play(string competitionName, string playerTeamName)
 		{
 			return Competitions.Single(c => c.CompetitionName == competitionName).PlayFixtures(playerTeamName);
 		}

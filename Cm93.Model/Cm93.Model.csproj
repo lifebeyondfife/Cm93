@@ -43,9 +43,12 @@
     <Compile Include="Attributes\PlayerMetricAttribute.cs" />
     <Compile Include="Config\Config.cs" />
     <Compile Include="Enumerations\Instruction.cs" />
+    <Compile Include="Enumerations\PlayingPeriod.cs" />
     <Compile Include="Enumerations\Position.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Interfaces\ICompetition.cs" />
     <Compile Include="Interfaces\ICreateModules.cs" />
+    <Compile Include="Interfaces\IFixture.cs" />
     <Compile Include="Interfaces\ISimulator.cs" />
     <Compile Include="MockCreateModules.cs" />
     <Compile Include="Modules\CompetitionModule.cs" />

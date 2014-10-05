@@ -15,7 +15,7 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-
+using System;
 using System.Linq;
 using Cm93.Model.Structures;
 
@@ -25,7 +25,7 @@ namespace Cm93.Model.Interfaces
 	{
 		ILookup<Team, Bid> TeamBids { get; }
 
-		void Play(Fixture fixture);
+		void Play(IFixture fixture, Action updateUi, Action completeRound);
 		void SubmitBid(Bid bid);
 		void ProcessTransfers();
 	}

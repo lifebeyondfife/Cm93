@@ -1,5 +1,5 @@
 ﻿/*
-        Copyright © Iain McDonald 2013-2014
+        Copyright © Iain McDonald 2014
         This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
@@ -15,27 +15,19 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System.Collections.Generic;
-using System.Linq;
-using Cm93.Model.Interfaces;
-
-namespace Cm93.Model.Structures
+namespace Cm93.Model.Enumerations
 {
-	public abstract class Competition : ICompetition
+	public enum PlayingPeriod
 	{
-		public static ISimulator Simulator { get; set; }
-
-		public string CompetitionName { get; set; }
-		public int Week { get; set; }
-		public IDictionary<string, Team> Teams { get; set; }
-
-		public abstract IFixture PlayFixtures(string playerTeamName = "");
-		public abstract void CompleteRound();
-		public abstract int MatchesLeft { get; }
-	
-		public static int GlobalWeek(IEnumerable<Competition> competitions)
-		{
-			return competitions.Max(c => c.Week);
-		}
+		FirstHalf,
+		HalfTime,
+		SecondHalf,
+		EndOfSecondHalf,
+		ExtraTimeFirstHalf,
+		ExtraTimeHalfTime,
+		ExtraTimeSecondHalf,
+		EndOfExtraTime,
+		Penalties,
+		FullTime
 	}
 }
