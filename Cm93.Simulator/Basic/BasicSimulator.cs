@@ -39,7 +39,7 @@ namespace Cm93.Simulator.Basic
 			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
 		}
 
-		public void Play(IFixture fixture, Action updateUi, Action completeRound)
+		public void Play(IFixture fixture, Action updateUi)
 		{
 			var random = new Random();
 
@@ -92,9 +92,6 @@ namespace Cm93.Simulator.Basic
 					updateUi();
 				}
 			}
-
-			if (completeRound != null)
-				completeRound();
 		}
 
 		public void SubmitBid(Bid bid)

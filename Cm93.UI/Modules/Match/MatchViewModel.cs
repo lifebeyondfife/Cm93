@@ -470,7 +470,8 @@ namespace Cm93.UI.Modules.Match
 			NotifyOfPropertyChange(() => TeamHomeName);
 			NotifyOfPropertyChange(() => TeamAwayName);
 
-			Task.Factory.StartNew(() => Competition.Simulator.Play(Fixture, UpdateDynamicFixtureData, competition.CompleteRound));
+			Task.Factory.StartNew(() => Competition.Simulator.Play(Fixture, UpdateDynamicFixtureData)).
+				ContinueWith(t => competition.CompleteRound());
 		}
 
 		private void UpdateDynamicFixtureData()
