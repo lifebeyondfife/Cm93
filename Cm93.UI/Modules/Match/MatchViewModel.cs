@@ -40,7 +40,8 @@ namespace Cm93.UI.Modules.Match
 		private readonly IEventAggregator eventAggregator;
 		private IMatchModule MatchModule { get; set; }
 		private Cm93.Model.Structures.Team Team { get; set; }
-		private Cm93.Model.Structures.Team ComputerTeam { get; set; }
+		private IDictionary<int, Player> TeamFormation { get; set; }
+		private IDictionary<int, Player> ComputerTeamFormation { get; set; }
 		private string TeamName { get; set; }
 		private string ComputerTeamName { get; set; }
 		private IFixture Fixture { get; set; }
@@ -55,10 +56,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			get
 			{
-				return Fixture.PlayingPeriod != Model.Enumerations.PlayingPeriod.FirstHalf &&
-					Fixture.PlayingPeriod != Model.Enumerations.PlayingPeriod.SecondHalf &&
-					Fixture.PlayingPeriod != Model.Enumerations.PlayingPeriod.ExtraTimeFirstHalf &&
-					Fixture.PlayingPeriod != Model.Enumerations.PlayingPeriod.ExtraTimeSecondHalf;
+				return Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.HalfTime ||
+					   Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.EndOfSecondHalf ||
+					   Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.ExtraTimeHalfTime;
 			}
 		}
 
@@ -96,8 +96,8 @@ namespace Cm93.UI.Modules.Match
 		{
 			get
 			{
-				return Team.Formation.ContainsKey(0) && Team.Formation[0].Number != 0 ?
-					Team.Formation[0].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+				return TeamFormation.ContainsKey(0) && TeamFormation[0].Number != 0 ?
+					TeamFormation[0].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
 			}
 		}
 
@@ -105,8 +105,8 @@ namespace Cm93.UI.Modules.Match
 		{
 			get
 			{
-				return Team.Formation.ContainsKey(1) && Team.Formation[1].Number != 0 ?
-					Team.Formation[1].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+				return TeamFormation.ContainsKey(1) && TeamFormation[1].Number != 0 ?
+					TeamFormation[1].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
 
 			}
 		}
@@ -115,8 +115,8 @@ namespace Cm93.UI.Modules.Match
 		{
 			get
 			{
-				return Team.Formation.ContainsKey(2) && Team.Formation[2].Number != 0 ?
-					Team.Formation[2].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+				return TeamFormation.ContainsKey(2) && TeamFormation[2].Number != 0 ?
+					TeamFormation[2].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
 
 			}
 		}
@@ -125,8 +125,8 @@ namespace Cm93.UI.Modules.Match
 		{
 			get
 			{
-				return ComputerTeam.Formation.ContainsKey(0) && ComputerTeam.Formation[0].Number != 0 ?
-					ComputerTeam.Formation[0].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+				return ComputerTeamFormation.ContainsKey(0) && ComputerTeamFormation[0].Number != 0 ?
+					ComputerTeamFormation[0].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
 
 			}
 		}
@@ -135,8 +135,8 @@ namespace Cm93.UI.Modules.Match
 		{
 			get
 			{
-				return ComputerTeam.Formation.ContainsKey(1) && ComputerTeam.Formation[1].Number != 0 ?
-					ComputerTeam.Formation[1].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+				return ComputerTeamFormation.ContainsKey(1) && ComputerTeamFormation[1].Number != 0 ?
+					ComputerTeamFormation[1].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
 
 			}
 		}
@@ -145,8 +145,8 @@ namespace Cm93.UI.Modules.Match
 		{
 			get
 			{
-				return ComputerTeam.Formation.ContainsKey(2) && ComputerTeam.Formation[2].Number != 0 ?
-					ComputerTeam.Formation[2].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+				return ComputerTeamFormation.ContainsKey(2) && ComputerTeamFormation[2].Number != 0 ?
+					ComputerTeamFormation[2].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
 
 			}
 		}
@@ -156,7 +156,7 @@ namespace Cm93.UI.Modules.Match
 			get
 			{
 				return new ObservableCollection<Player>(Team.Players.
-					Where(p => !Team.Formation.Values.Contains(p) && !SubstitutedPlayers.Contains(p)).
+					Where(p => TeamFormation.Values.All(pcopy => pcopy.Number != p.Number) && !SubstitutedPlayers.Contains(p)).
 					OrderBy(p => p.LastName).
 					Select(p => p));
 			}
@@ -179,7 +179,7 @@ namespace Cm93.UI.Modules.Match
 			get
 			{
 				return new ObservableCollection<int>(Team.Players.
-					Where(p => Team.Formation.Values.Contains(p)).
+					Where(p => TeamFormation.Values.Any(pcopy => pcopy.Number == p.Number)).
 					OrderBy(p => p.Number).
 					Select(p => p.Number));
 			}
@@ -276,7 +276,7 @@ namespace Cm93.UI.Modules.Match
 				this.player1Top = value;
 				NotifyOfPropertyChange(() => Player1Top);
 
-				UpdatePlayerCoordinates(Team, 0, Player1Left, Player1Top);
+				UpdatePlayerCoordinates(TeamFormation, 0, Player1Left, Player1Top);
 			}
 		}
 
@@ -289,7 +289,7 @@ namespace Cm93.UI.Modules.Match
 				this.player1Left = value;
 				NotifyOfPropertyChange(() => Player1Left);
 
-				UpdatePlayerCoordinates(Team, 0, Player1Left, Player1Top);
+				UpdatePlayerCoordinates(TeamFormation, 0, Player1Left, Player1Top);
 			}
 		}
 
@@ -302,7 +302,7 @@ namespace Cm93.UI.Modules.Match
 				this.player2Top = value;
 				NotifyOfPropertyChange(() => Player2Top);
 
-				UpdatePlayerCoordinates(Team, 1, Player2Left, Player2Top);
+				UpdatePlayerCoordinates(TeamFormation, 1, Player2Left, Player2Top);
 			}
 		}
 
@@ -315,7 +315,7 @@ namespace Cm93.UI.Modules.Match
 				this.player2Left = value;
 				NotifyOfPropertyChange(() => Player2Left);
 
-				UpdatePlayerCoordinates(Team, 1, Player2Left, Player2Top);
+				UpdatePlayerCoordinates(TeamFormation, 1, Player2Left, Player2Top);
 			}
 		}
 
@@ -328,7 +328,7 @@ namespace Cm93.UI.Modules.Match
 				this.player3Top = value;
 				NotifyOfPropertyChange(() => Player3Top);
 
-				UpdatePlayerCoordinates(Team, 2, Player3Left, Player3Top);
+				UpdatePlayerCoordinates(TeamFormation, 2, Player3Left, Player3Top);
 			}
 		}
 
@@ -341,7 +341,7 @@ namespace Cm93.UI.Modules.Match
 				this.player3Left = value;
 				NotifyOfPropertyChange(() => Player3Left);
 
-				UpdatePlayerCoordinates(Team, 2, Player3Left, Player3Top);
+				UpdatePlayerCoordinates(TeamFormation, 2, Player3Left, Player3Top);
 			}
 		}
 
@@ -354,7 +354,7 @@ namespace Cm93.UI.Modules.Match
 				this.computerPlayer1Top = value;
 				NotifyOfPropertyChange(() => ComputerPlayer1Top);
 
-				UpdatePlayerCoordinates(ComputerTeam, 0, ComputerPlayer1Left, ComputerPlayer1Top);
+				UpdatePlayerCoordinates(ComputerTeamFormation, 0, ComputerPlayer1Left, ComputerPlayer1Top);
 			}
 		}
 
@@ -367,7 +367,7 @@ namespace Cm93.UI.Modules.Match
 				this.computerPlayer1Left = value;
 				NotifyOfPropertyChange(() => ComputerPlayer1Left);
 
-				UpdatePlayerCoordinates(ComputerTeam, 0, ComputerPlayer3Left, ComputerPlayer1Left);
+				UpdatePlayerCoordinates(ComputerTeamFormation, 0, ComputerPlayer3Left, ComputerPlayer1Left);
 			}
 		}
 
@@ -380,7 +380,7 @@ namespace Cm93.UI.Modules.Match
 				this.computerPlayer2Top = value;
 				NotifyOfPropertyChange(() => ComputerPlayer2Top);
 
-				UpdatePlayerCoordinates(ComputerTeam, 1, ComputerPlayer2Left, ComputerPlayer2Top);
+				UpdatePlayerCoordinates(ComputerTeamFormation, 1, ComputerPlayer2Left, ComputerPlayer2Top);
 			}
 		}
 
@@ -393,7 +393,7 @@ namespace Cm93.UI.Modules.Match
 				this.computerPlayer2Left = value;
 				NotifyOfPropertyChange(() => ComputerPlayer2Left);
 
-				UpdatePlayerCoordinates(ComputerTeam, 1, ComputerPlayer2Left, ComputerPlayer2Top);
+				UpdatePlayerCoordinates(ComputerTeamFormation, 1, ComputerPlayer2Left, ComputerPlayer2Top);
 			}
 		}
 
@@ -406,7 +406,7 @@ namespace Cm93.UI.Modules.Match
 				this.computerPlayer3Top = value;
 				NotifyOfPropertyChange(() => ComputerPlayer3Top);
 
-				UpdatePlayerCoordinates(ComputerTeam, 2, ComputerPlayer3Left, ComputerPlayer3Top);
+				UpdatePlayerCoordinates(ComputerTeamFormation, 2, ComputerPlayer3Left, ComputerPlayer3Top);
 			}
 		}
 
@@ -419,7 +419,7 @@ namespace Cm93.UI.Modules.Match
 				this.computerPlayer3Left = value;
 				NotifyOfPropertyChange(() => ComputerPlayer3Left);
 
-				UpdatePlayerCoordinates(ComputerTeam, 2, ComputerPlayer3Left, ComputerPlayer3Top);
+				UpdatePlayerCoordinates(ComputerTeamFormation, 2, ComputerPlayer3Left, ComputerPlayer3Top);
 			}
 		}
 
@@ -449,7 +449,6 @@ namespace Cm93.UI.Modules.Match
 		public void Handle(TeamSetEvent message)
 		{
 			TeamName = message.Team.TeamName;
-			Team = this.MatchModule.Teams[TeamName];
 		}
 
 		public void Handle(ModuleSelectedEvent message)
@@ -459,16 +458,12 @@ namespace Cm93.UI.Modules.Match
 
 			var competition = MatchModule.Competitions.OrderBy(c => c.Week).First();
 
-			Fixture = this.MatchModule.Play(competition.CompetitionName, Team.TeamName);
+			Fixture = this.MatchModule.Play(competition.CompetitionName, TeamName);
 
 			if (Fixture == null)
 				return;
 
 			UpdateStaticFixtureData();
-
-			//	Make sure changes to formation / subs etc. only change this Fixture's Formation.
-			//		WAIT - the *fixture* should have its own copy of the formation.
-			//		Cascade changes throughout the Match / Simulation classes once altered
 
 			//	Introduce animated representation of the game i.e. AI computer moving players animated
 
@@ -481,7 +476,8 @@ namespace Cm93.UI.Modules.Match
 		private void UpdateDynamicFixtureData()
 		{
 			Task.Factory.StartNew(
-				() => {
+				() =>
+				{
 					//var topAnimation = new DoubleAnimation { To = 23, Duration = TimeSpan.FromSeconds(1.5),
 					//	AccelerationRatio = 0.4, DecelerationRatio = 0.4 };
 					//var storyBoard = new Storyboard();
@@ -502,8 +498,12 @@ namespace Cm93.UI.Modules.Match
 			ComputerTeamName = Fixture.TeamHome.TeamName == TeamName ?
 				Fixture.TeamAway.TeamName : Fixture.TeamHome.TeamName;
 
-			Team = this.MatchModule.Teams[TeamName];
-			ComputerTeam = this.MatchModule.Teams[ComputerTeamName];
+			Team = Fixture.TeamHome.TeamName == TeamName ? Fixture.TeamHome : Fixture.TeamAway;
+			var computerTeam = Fixture.TeamHome.TeamName == ComputerTeamName ? Fixture.TeamHome : Fixture.TeamAway;
+
+			//	We will be making destructive changes to the player's team formation in the ViewModel
+			TeamFormation = CopyTeamFormation(Team.Formation);
+			ComputerTeamFormation = computerTeam.Formation;
 
 			SetPlayerLocations();
 
@@ -516,13 +516,22 @@ namespace Cm93.UI.Modules.Match
 
 			SubstitutesUsed = 0;
 			SubstitutedPlayers.Clear();
+
 			NotifyOfPropertyChange(() => PlayerSubstitutes);
+			NotifyOfPropertyChange(() => PlayerNumbers);
 
 			PrimaryColour = Team.PrimaryColour;
 			SecondaryColour = Team.SecondaryColour;
 
-			PrimaryComputerColour = ComputerTeam.PrimaryColour;
-			SecondaryComputerColour = ComputerTeam.SecondaryColour;
+			PrimaryComputerColour = computerTeam.PrimaryColour;
+			SecondaryComputerColour = computerTeam.SecondaryColour;
+		}
+
+		private static IDictionary<int, Player> CopyTeamFormation(IEnumerable<KeyValuePair<int, Player>> dictionary)
+		{
+			return dictionary.
+				Select(kvp => new KeyValuePair<int, Player>(kvp.Key, (Player) kvp.Value.Clone())).
+				ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 		}
 
 		private void UpdateComputerShirts()
@@ -541,62 +550,62 @@ namespace Cm93.UI.Modules.Match
 
 		private void SetPlayerLocations()
 		{
-			if (Team.Formation.ContainsKey(0))
+			if (TeamFormation.ContainsKey(0))
 			{
-				player1Left = PitchWidth * Team.Formation[0].Location.X;
-				player1Top = PitchHeight * Team.Formation[0].Location.Y;
+				player1Left = PitchWidth * TeamFormation[0].Location.X;
+				player1Top = PitchHeight * TeamFormation[0].Location.Y;
 				NotifyOfPropertyChange(() => Player1Left);
 				NotifyOfPropertyChange(() => Player1Top);
 			}
 
-			if (Team.Formation.ContainsKey(1))
+			if (TeamFormation.ContainsKey(1))
 			{
-				player2Left = PitchWidth * Team.Formation[1].Location.X;
-				player2Top = PitchHeight * Team.Formation[1].Location.Y;
+				player2Left = PitchWidth * TeamFormation[1].Location.X;
+				player2Top = PitchHeight * TeamFormation[1].Location.Y;
 				NotifyOfPropertyChange(() => Player2Left);
 				NotifyOfPropertyChange(() => Player2Top);
 			}
 
-			if (Team.Formation.ContainsKey(2))
+			if (TeamFormation.ContainsKey(2))
 			{
-				player3Left = PitchWidth * Team.Formation[2].Location.X;
-				player3Top = PitchHeight * Team.Formation[2].Location.Y;
+				player3Left = PitchWidth * TeamFormation[2].Location.X;
+				player3Top = PitchHeight * TeamFormation[2].Location.Y;
 				NotifyOfPropertyChange(() => Player3Left);
 				NotifyOfPropertyChange(() => Player3Top);
 			}
 
-			if (ComputerTeam.Formation.ContainsKey(0))
+			if (ComputerTeamFormation.ContainsKey(0))
 			{
-				computerPlayer1Left = PitchWidth * ComputerTeam.Formation[0].Location.X;
-				computerPlayer1Top = PitchHeight * ComputerTeam.Formation[0].Location.Y;
+				computerPlayer1Left = PitchWidth * ComputerTeamFormation[0].Location.X;
+				computerPlayer1Top = PitchHeight * ComputerTeamFormation[0].Location.Y;
 				NotifyOfPropertyChange(() => ComputerPlayer1Left);
 				NotifyOfPropertyChange(() => ComputerPlayer1Top);
 			}
 
-			if (ComputerTeam.Formation.ContainsKey(1))
+			if (ComputerTeamFormation.ContainsKey(1))
 			{
-				computerPlayer2Left = PitchWidth * ComputerTeam.Formation[1].Location.X;
-				computerPlayer2Top = PitchHeight * ComputerTeam.Formation[1].Location.Y;
+				computerPlayer2Left = PitchWidth * ComputerTeamFormation[1].Location.X;
+				computerPlayer2Top = PitchHeight * ComputerTeamFormation[1].Location.Y;
 				NotifyOfPropertyChange(() => ComputerPlayer2Left);
 				NotifyOfPropertyChange(() => ComputerPlayer2Top);
 			}
 
-			if (ComputerTeam.Formation.ContainsKey(2))
+			if (ComputerTeamFormation.ContainsKey(2))
 			{
-				computerPlayer3Left = PitchWidth * ComputerTeam.Formation[2].Location.X;
-				computerPlayer3Top = PitchHeight * ComputerTeam.Formation[2].Location.Y;
+				computerPlayer3Left = PitchWidth * ComputerTeamFormation[2].Location.X;
+				computerPlayer3Top = PitchHeight * ComputerTeamFormation[2].Location.Y;
 				NotifyOfPropertyChange(() => ComputerPlayer3Left);
 				NotifyOfPropertyChange(() => ComputerPlayer3Top);
 			}
 		}
 
-		private void UpdatePlayerCoordinates(Cm93.Model.Structures.Team team, int index, double left, double top)
+		private void UpdatePlayerCoordinates(IDictionary<int, Player> formation, int index, double left, double top)
 		{
-			if (!team.Formation.ContainsKey(index))
+			if (!formation.ContainsKey(index))
 				return;
 
-			team.Formation[index].Location.X = left / PitchWidth;
-			team.Formation[index].Location.Y = top / PitchHeight;
+			formation[index].Location.X = left / PitchWidth;
+			formation[index].Location.Y = top / PitchHeight;
 		}
 
 		public bool CanSubstitute
@@ -614,8 +623,8 @@ namespace Cm93.UI.Modules.Match
 			substitutePlayer.Location.X = subbedPlayer.Location.X;
 			substitutePlayer.Location.Y = subbedPlayer.Location.Y;
 
-			Team.Formation[Team.Formation.
-				Where(kvp => kvp.Value == subbedPlayer).
+			TeamFormation[TeamFormation.
+				Where(kvp => kvp.Value.Number == subbedPlayer.Number).
 				Select(kvp => kvp.Key).Single()] = substitutePlayer;
 
 			UpdatePlayerShirts();

@@ -24,10 +24,10 @@ using Cm93.Model.Enumerations;
 
 namespace Cm93.Model.Structures
 {
-	public class Player
+	public class Player : ICloneable
 	{
 		private Lazy<PlayerIndex> lazyPlayerIndex;
-		
+
 		public Player()
 		{
 			ResetPlayerIndex();
@@ -86,6 +86,26 @@ namespace Cm93.Model.Structures
 		public override string ToString()
 		{
 			return string.Format("{0} {1}.", LastName, FirstName.First().ToString(CultureInfo.CurrentCulture));
+		}
+
+		public object Clone()
+		{
+			return new Player
+				{
+					Age = this.Age,
+					FirstName = this.FirstName,
+					Goals = this.Goals,
+					Instruction = this.Instruction,
+					LastName = this.LastName,
+					lazyPlayerIndex = this.lazyPlayerIndex,
+					Location = new Coordinate { X = this.Location.X, Y = this.Location.Y },
+					Number = this.Number,
+					NumericValue = this.NumericValue,
+					Positions = this.Positions,
+					Rating = this.Rating,
+					ReleaseValue = this.ReleaseValue,
+					Team = this.Team
+				};
 		}
 	}
 }
