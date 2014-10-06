@@ -107,6 +107,7 @@
       <DependentUpon>FixturesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\Fixtures\FixturesViewModel.cs" />
+    <Compile Include="Modules\Match\PlayerCoordinates.cs" />
     <Compile Include="Modules\Players\PlayerMetric.cs" />
     <Compile Include="Modules\Players\PlayerMetricRow.cs" />
     <Compile Include="Modules\Players\PlayerRow.cs" />
