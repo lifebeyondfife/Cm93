@@ -23,14 +23,72 @@ namespace Cm93.UI.Modules.Match
 {
 	public class PlayerCoordinates : DependencyObject
 	{
-		/*
-		 * Not proud of the hackyness of this static boolean state variable. Essentially,
-		 * we need to turn off updating the Formation model when setting initial positions
-		 */
-		public static bool SettingInitialPositions { get; set; }
+		//	TODO: tidy up this file i.e. add regions, group similar sections
 
-		public IDictionary<int, Player> TeamFormation { get; set; }
-		public IDictionary<int, Player> ComputerTeamFormation { get; set; }
+		private IDictionary<int, Player> TeamFormation { get; set; }
+		private IDictionary<int, Player> ComputerTeamFormation { get; set; }
+
+		public void UpdateTeamFormation(IDictionary<int, Player> teamFormation)
+		{
+			TeamFormation = teamFormation;
+
+			if (TeamFormation.ContainsKey(0))
+			{
+				SetValue(Player1LeftProperty, GetPitchWidth(this) * TeamFormation[0].Location.X);
+				SetValue(Player1TopProperty, GetPitchHeight(this) * TeamFormation[0].Location.Y);
+			}
+
+			if (TeamFormation.ContainsKey(1))
+			{
+				SetValue(Player2LeftProperty, GetPitchWidth(this) * TeamFormation[1].Location.X);
+				SetValue(Player2TopProperty, GetPitchHeight(this) * TeamFormation[1].Location.Y);
+			}
+
+			if (TeamFormation.ContainsKey(2))
+			{
+				SetValue(Player3LeftProperty, GetPitchWidth(this) * TeamFormation[2].Location.X);
+				SetValue(Player3TopProperty, GetPitchHeight(this) * TeamFormation[2].Location.Y);
+			}
+		}
+
+		public void UpdateComputerTeamFormation(IDictionary<int, Player> computerTeamFormation)
+		{
+			ComputerTeamFormation = computerTeamFormation;
+
+			if (TeamFormation.ContainsKey(0))
+			{
+				SetValue(ComputerPlayer1LeftProperty, GetPitchWidth(this) * ComputerTeamFormation[0].Location.X);
+				SetValue(ComputerPlayer1TopProperty, GetPitchHeight(this) * ComputerTeamFormation[0].Location.Y);
+			}
+
+			if (TeamFormation.ContainsKey(1))
+			{
+				SetValue(ComputerPlayer2LeftProperty, GetPitchWidth(this) * ComputerTeamFormation[1].Location.X);
+				SetValue(ComputerPlayer2TopProperty, GetPitchHeight(this) * ComputerTeamFormation[1].Location.Y);
+			}
+
+			if (TeamFormation.ContainsKey(2))
+			{
+				SetValue(ComputerPlayer3LeftProperty, GetPitchWidth(this) * ComputerTeamFormation[2].Location.X);
+				SetValue(ComputerPlayer3TopProperty, GetPitchHeight(this) * ComputerTeamFormation[2].Location.Y);
+			}
+		}
+
+		private void UpdatePlayerLeftCoordinate(IDictionary<int, Player> formation, int index, double left)
+		{
+			if (!formation.ContainsKey(index))
+				return;
+
+			formation[index].Location.X = left / GetPitchWidth(this);
+		}
+
+		private void UpdatePlayerTopCoordinate(IDictionary<int, Player> formation, int index, double top)
+		{
+			if (!formation.ContainsKey(index))
+				return;
+
+			formation[index].Location.Y = top / GetPitchHeight(this);
+		}
 
 		public static int GetPitchHeight(DependencyObject obj)
 		{
@@ -60,8 +118,6 @@ namespace Cm93.UI.Modules.Match
 			DependencyProperty.RegisterAttached("PitchWidth", typeof(int),
 			typeof(PlayerCoordinates));
 
-		#region Player Coordinates
-
 		public static double GetPlayer1Top(DependencyObject obj)
 		{
 			return (double) obj.GetValue(Player1TopProperty);
@@ -71,12 +127,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(Player1TopProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates
-				(playerCoordinates.TeamFormation, 0, GetPlayer1Left(playerCoordinates), GetPlayer1Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerTopCoordinate
+				(playerCoordinates.TeamFormation, 0, GetPlayer1Top(playerCoordinates));
 		}
 
 		public static double GetPlayer2Top(DependencyObject obj)
@@ -88,12 +141,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(Player2TopProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates
-				(playerCoordinates.TeamFormation, 1, GetPlayer2Left(playerCoordinates), GetPlayer2Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerTopCoordinate
+				(playerCoordinates.TeamFormation, 1, GetPlayer2Top(playerCoordinates));
 		}
 
 		public static double GetPlayer3Top(DependencyObject obj)
@@ -105,12 +155,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(Player3TopProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates
-				(playerCoordinates.TeamFormation, 2, GetPlayer3Left(playerCoordinates), GetPlayer3Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerTopCoordinate
+				(playerCoordinates.TeamFormation, 2, GetPlayer3Top(playerCoordinates));
 		}
 
 		public static double GetPlayer1Left(DependencyObject obj)
@@ -122,12 +169,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(Player1LeftProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates
-				(playerCoordinates.TeamFormation, 0, GetPlayer1Left(playerCoordinates), GetPlayer1Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerTopCoordinate
+				(playerCoordinates.TeamFormation, 0, GetPlayer1Top(playerCoordinates));
 		}
 
 		public static double GetPlayer2Left(DependencyObject obj)
@@ -139,12 +183,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(Player2LeftProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates
-				(playerCoordinates.TeamFormation, 1, GetPlayer2Left(playerCoordinates), GetPlayer2Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerLeftCoordinate
+				(playerCoordinates.TeamFormation, 1, GetPlayer2Left(playerCoordinates));
 		}
 
 		public static double GetPlayer3Left(DependencyObject obj)
@@ -156,12 +197,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(Player3LeftProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates
-				(playerCoordinates.TeamFormation, 2, GetPlayer3Left(playerCoordinates), GetPlayer3Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerLeftCoordinate
+				(playerCoordinates.TeamFormation, 2, GetPlayer3Left(playerCoordinates));
 		}
 
 		public static double GetComputerPlayer1Top(DependencyObject obj)
@@ -173,12 +211,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(ComputerPlayer1TopProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates(playerCoordinates.ComputerTeamFormation, 0,
-				GetComputerPlayer1Left(playerCoordinates), GetComputerPlayer1Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerTopCoordinate(playerCoordinates.ComputerTeamFormation, 0,
+				GetComputerPlayer1Top(playerCoordinates));
 		}
 
 		public static double GetComputerPlayer2Top(DependencyObject obj)
@@ -190,12 +225,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(ComputerPlayer2TopProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates(playerCoordinates.ComputerTeamFormation, 1,
-				GetComputerPlayer2Left(playerCoordinates), GetComputerPlayer2Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerTopCoordinate(playerCoordinates.ComputerTeamFormation, 1,
+				GetComputerPlayer2Top(playerCoordinates));
 		}
 
 		public static double GetComputerPlayer3Top(DependencyObject obj)
@@ -207,12 +239,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(ComputerPlayer3TopProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates(playerCoordinates.ComputerTeamFormation, 2,
-				GetComputerPlayer3Left(playerCoordinates), GetComputerPlayer3Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerTopCoordinate(playerCoordinates.ComputerTeamFormation, 2,
+				GetComputerPlayer3Top(playerCoordinates));
 		}
 
 		public static double GetComputerPlayer1Left(DependencyObject obj)
@@ -224,12 +253,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(ComputerPlayer1LeftProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates(playerCoordinates.ComputerTeamFormation, 0,
-				GetComputerPlayer1Left(playerCoordinates), GetComputerPlayer1Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerLeftCoordinate(playerCoordinates.ComputerTeamFormation, 0,
+				GetComputerPlayer1Left(playerCoordinates));
 		}
 
 		public static double GetComputerPlayer2Left(DependencyObject obj)
@@ -241,12 +267,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(ComputerPlayer2LeftProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates(playerCoordinates.ComputerTeamFormation, 1,
-				GetComputerPlayer2Left(playerCoordinates), GetComputerPlayer2Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerLeftCoordinate(playerCoordinates.ComputerTeamFormation, 1,
+				GetComputerPlayer2Left(playerCoordinates));
 		}
 
 		public static double GetComputerPlayer3Left(DependencyObject obj)
@@ -258,12 +281,9 @@ namespace Cm93.UI.Modules.Match
 		{
 			obj.SetValue(ComputerPlayer3LeftProperty, number);
 
-			if (SettingInitialPositions)
-				return;
-
 			var playerCoordinates = ((PlayerCoordinates) obj);
-			playerCoordinates.UpdatePlayerCoordinates(playerCoordinates.ComputerTeamFormation, 2,
-				GetComputerPlayer3Left(playerCoordinates), GetComputerPlayer3Top(playerCoordinates));
+			playerCoordinates.UpdatePlayerLeftCoordinate(playerCoordinates.ComputerTeamFormation, 2,
+				GetComputerPlayer3Left(playerCoordinates));
 		}
 
 		public static readonly DependencyProperty Player1TopProperty =
@@ -313,17 +333,5 @@ namespace Cm93.UI.Modules.Match
 		public static readonly DependencyProperty ComputerPlayer3LeftProperty =
 			DependencyProperty.RegisterAttached("ComputerPlayer3Left", typeof(double),
 			typeof(PlayerCoordinates));
-
-
-		#endregion
-
-		private void UpdatePlayerCoordinates(IDictionary<int, Player> formation, int index, double left, double top)
-		{
-			if (!formation.ContainsKey(index))
-				return;
-
-			formation[index].Location.X = left / GetPitchWidth(this);
-			formation[index].Location.Y = top / GetPitchHeight(this);
-		}
 	}
 }

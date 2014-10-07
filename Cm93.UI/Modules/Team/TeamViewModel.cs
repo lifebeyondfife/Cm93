@@ -85,8 +85,6 @@ namespace Cm93.UI.Modules.Team
 			{
 				this.pitchHeight = value;
 				NotifyOfPropertyChange(() => PitchHeight);
-
-				UpdatePlayerCoordinates();
 			}
 		}
 
@@ -98,8 +96,6 @@ namespace Cm93.UI.Modules.Team
 			{
 				this.pitchWidth = value;
 				NotifyOfPropertyChange(() => PitchWidth);
-
-				UpdatePlayerCoordinates();
 			}
 		}
 
@@ -123,7 +119,7 @@ namespace Cm93.UI.Modules.Team
 				this.player1Top = value;
 				NotifyOfPropertyChange(() => Player1Top);
 
-				UpdatePlayerCoordinates(0, Player1Left, Player1Top);
+				UpdatePlayerTopCoordinate(0, Player1Top);
 			}
 		}
 
@@ -136,7 +132,7 @@ namespace Cm93.UI.Modules.Team
 				this.player1Left = value;
 				NotifyOfPropertyChange(() => Player1Left);
 
-				UpdatePlayerCoordinates(0, Player1Left, Player1Top);
+				UpdatePlayerLeftCoordinate(0, Player1Left);
 			}
 		}
 
@@ -160,7 +156,7 @@ namespace Cm93.UI.Modules.Team
 				this.player2Top = value;
 				NotifyOfPropertyChange(() => Player2Top);
 
-				UpdatePlayerCoordinates(1, Player2Left, Player2Top);
+				UpdatePlayerTopCoordinate(1, Player2Top);
 			}
 		}
 
@@ -173,7 +169,7 @@ namespace Cm93.UI.Modules.Team
 				this.player2Left = value;
 				NotifyOfPropertyChange(() => Player2Left);
 
-				UpdatePlayerCoordinates(1, Player2Left, Player2Top);
+				UpdatePlayerLeftCoordinate(1, Player2Left);
 			}
 		}
 
@@ -197,7 +193,7 @@ namespace Cm93.UI.Modules.Team
 				this.player3Top = value;
 				NotifyOfPropertyChange(() => Player3Top);
 
-				UpdatePlayerCoordinates(2, Player3Left, Player3Top);
+				UpdatePlayerTopCoordinate(2, Player3Top);
 			}
 		}
 
@@ -210,7 +206,7 @@ namespace Cm93.UI.Modules.Team
 				this.player3Left = value;
 				NotifyOfPropertyChange(() => Player3Left);
 
-				UpdatePlayerCoordinates(2, Player3Left, Player3Top);
+				UpdatePlayerLeftCoordinate(2, Player3Left);
 			}
 		}
 
@@ -347,51 +343,36 @@ namespace Cm93.UI.Modules.Team
 		{
 			if (Team.Formation.ContainsKey(0))
 			{
-				player1Left = PitchWidth * Team.Formation[0].Location.X;
-				player1Top = PitchHeight * Team.Formation[0].Location.Y;
+				Player1Left = PitchWidth * Team.Formation[0].Location.X;
+				Player1Top = PitchHeight * Team.Formation[0].Location.Y;
 			}
 
 			if (Team.Formation.ContainsKey(1))
 			{
-				player2Left = PitchWidth * Team.Formation[1].Location.X;
-				player2Top = PitchHeight * Team.Formation[1].Location.Y;
+				Player2Left = PitchWidth * Team.Formation[1].Location.X;
+				Player2Top = PitchHeight * Team.Formation[1].Location.Y;
 			}
 
 			if (Team.Formation.ContainsKey(2))
 			{
-				player3Left = PitchWidth * Team.Formation[2].Location.X;
-				player3Top = PitchHeight * Team.Formation[2].Location.Y;
+				Player3Left = PitchWidth * Team.Formation[2].Location.X;
+				Player3Top = PitchHeight * Team.Formation[2].Location.Y;
 			}
 		}
 
-		//	Could this be deleted?
-		private void UpdatePlayerCoordinates()
-		{
-			if (Team.Formation.ContainsKey(0))
-			{
-				Team.Formation[0].Location.X = Player1Left / PitchWidth;
-				Team.Formation[0].Location.Y = Player1Top / PitchHeight;
-			}
-
-			if (Team.Formation.ContainsKey(1))
-			{
-				Team.Formation[1].Location.X = Player2Left / PitchWidth;
-				Team.Formation[1].Location.Y = Player2Top / PitchHeight;
-			}
-
-			if (Team.Formation.ContainsKey(2))
-			{
-				Team.Formation[2].Location.X = Player3Left / PitchWidth;
-				Team.Formation[2].Location.Y = Player3Top / PitchHeight;
-			}
-		}
-
-		private void UpdatePlayerCoordinates(int index, double left, double top)
+		private void UpdatePlayerLeftCoordinate(int index, double left)
 		{
 			if (!Team.Formation.ContainsKey(index))
 				return;
 
 			Team.Formation[index].Location.X = left / PitchWidth;
+		}
+
+		private void UpdatePlayerTopCoordinate(int index, double top)
+		{
+			if (!Team.Formation.ContainsKey(index))
+				return;
+
 			Team.Formation[index].Location.Y = top / PitchHeight;
 		}
 

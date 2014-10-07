@@ -334,10 +334,8 @@ namespace Cm93.UI.Modules.Match
 			TeamFormation = CopyTeamFormation(Team.Formation);
 			ComputerTeamFormation = computerTeam.Formation;
 
-			PlayerCoordinates.TeamFormation = TeamFormation;
-			PlayerCoordinates.ComputerTeamFormation = ComputerTeamFormation;
-
-			SetPlayerLocations();
+			PlayerCoordinates.UpdateTeamFormation(TeamFormation);
+			PlayerCoordinates.UpdateComputerTeamFormation(ComputerTeamFormation);
 
 			NotifyOfPropertyChange(() => ScoreString);
 			NotifyOfPropertyChange(() => Minutes);
@@ -378,49 +376,6 @@ namespace Cm93.UI.Modules.Match
 			NotifyOfPropertyChange(() => Player1Shirt);
 			NotifyOfPropertyChange(() => Player2Shirt);
 			NotifyOfPropertyChange(() => Player3Shirt);
-		}
-
-		private void SetPlayerLocations()
-		{
-			PlayerCoordinates.SettingInitialPositions = true;
-
-			if (TeamFormation.ContainsKey(0))
-			{
-				PlayerCoordinates.SetPlayer1Top(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates)*TeamFormation[0].Location.X);
-				PlayerCoordinates.SetPlayer1Left(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * TeamFormation[0].Location.Y);
-			}
-
-			if (TeamFormation.ContainsKey(1))
-			{
-				PlayerCoordinates.SetPlayer2Top(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * TeamFormation[1].Location.X);
-				PlayerCoordinates.SetPlayer2Left(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * TeamFormation[1].Location.Y);
-			}
-
-			if (TeamFormation.ContainsKey(2))
-			{
-				PlayerCoordinates.SetPlayer3Top(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * TeamFormation[2].Location.X);
-				PlayerCoordinates.SetPlayer3Left(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * TeamFormation[2].Location.Y);
-			}
-
-			if (ComputerTeamFormation.ContainsKey(0))
-			{
-				PlayerCoordinates.SetComputerPlayer1Top(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * ComputerTeamFormation[0].Location.X);
-				PlayerCoordinates.SetComputerPlayer1Left(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * ComputerTeamFormation[0].Location.Y);
-			}
-
-			if (ComputerTeamFormation.ContainsKey(1))
-			{
-				PlayerCoordinates.SetComputerPlayer2Top(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * ComputerTeamFormation[1].Location.X);
-				PlayerCoordinates.SetComputerPlayer2Left(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * ComputerTeamFormation[1].Location.Y);
-			}
-
-			if (ComputerTeamFormation.ContainsKey(2))
-			{
-				PlayerCoordinates.SetComputerPlayer3Top(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * ComputerTeamFormation[2].Location.X);
-				PlayerCoordinates.SetComputerPlayer3Left(PlayerCoordinates, PlayerCoordinates.GetPitchWidth(PlayerCoordinates) * ComputerTeamFormation[2].Location.Y);
-			}
-			
-			PlayerCoordinates.SettingInitialPositions = false;
 		}
 
 		public bool CanSubstitute
