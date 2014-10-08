@@ -15,6 +15,8 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
@@ -23,8 +25,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 //using System.Windows;
+using System.Windows;
 using System.Windows.Media;
 //using System.Windows.Media.Animation;
+using System.Windows.Media.Animation;
 using Caliburn.Micro;
 using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
@@ -286,15 +290,6 @@ namespace Cm93.UI.Modules.Match
 
 			UpdateStaticFixtureData();
 
-			//	Change the UpdateLocation thing of the Formation to two separate calls i.e. one for X, one for Y
-			//	They don't *need* to be together. Do the same to the TeamModuleViewModel too.
-			//	Then remove the hacky SettingUpPositions boolean property in PlayerCoordinates.
-
-			//	In fact... so much wrong with this DependencyObject thing. Try making TeamModuleViewModel cleaner/nicer.
-			//	See if those lessons can be applied in the DependencyObject.
-
-			//	Introduce animated representation of the game i.e. AI computer moving players animated
-
 			NotifyOfPropertyChange(() => TeamHomeName);
 			NotifyOfPropertyChange(() => TeamAwayName);
 
@@ -307,19 +302,48 @@ namespace Cm93.UI.Modules.Match
 			Task.Factory.StartNew(
 				() =>
 				{
-					//var topAnimation = new DoubleAnimation { To = 23, Duration = TimeSpan.FromSeconds(1.5),
-					//	AccelerationRatio = 0.4, DecelerationRatio = 0.4 };
-					//var storyBoard = new Storyboard();
-					//Storyboard.SetTarget(topAnimation, /* put all the "Top" and "Left" properties in a DependencyObject subclass */);
-					//Storyboard.SetTargetProperty(topAnimation, new PropertyPath(DEPOBJ SUB CLASS.TopProperty));
-					//storyBoard.Children.Add(topAnimation);
-					//storyBoard.Begin();
+					var random = new Random();
+					const int variance = 50;
+					var storyBoard = new Storyboard();
+
+					//	The values used for animating the players needs to come from the simultation.
+					//	First try changing the computer opponent coordinates in the Formation object (check this breaks nothing in PlayerCoordinates object)
+					//	If not, something needs to be passed as a parameter to UpdateDynamicFixtureData() - not ideal
+					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer1Left(PlayerCoordinates) +
+						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer1LeftProperty);
+					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer1Top(PlayerCoordinates) +
+						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer1TopProperty);
+					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer2Left(PlayerCoordinates) +
+						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer2LeftProperty);
+					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer2Top(PlayerCoordinates) +
+						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer2TopProperty);
+					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer3Left(PlayerCoordinates) +
+						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer3LeftProperty);
+					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer3Top(PlayerCoordinates) +
+						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer3TopProperty);
+
+					storyBoard.Begin();
 
 					NotifyOfPropertyChange(() => ScoreString);
 					NotifyOfPropertyChange(() => Minutes);
 					NotifyOfPropertyChange(() => PlayingPeriod);
 				},
 				CancellationToken.None, TaskCreationOptions.None, UiScheduler);
+		}
+
+		private void AnimateComputerPlayer(TimelineGroup storyBoard, double position, DependencyProperty property)
+		{
+			var animation = new DoubleAnimation
+				{
+					To = position,
+					Duration = TimeSpan.FromSeconds(1.5),
+					AccelerationRatio = 0.5,
+					DecelerationRatio = 0.5
+				};
+
+			Storyboard.SetTarget(animation, PlayerCoordinates);
+			Storyboard.SetTargetProperty(animation, new PropertyPath(property));
+			storyBoard.Children.Add(animation);
 		}
 
 		private void UpdateStaticFixtureData()
