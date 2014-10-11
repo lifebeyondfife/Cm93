@@ -21,6 +21,7 @@ using System.Linq;
 using System.Threading;
 using Cm93.Model.Config;
 using Cm93.Model.Enumerations;
+using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 
@@ -41,6 +42,8 @@ namespace Cm93.Simulator.Basic
 
 		public void Play(IFixture fixture, Action updateUi)
 		{
+			//	TODO:	Pass through local copies of formation because the simulator needs to make destructive changes to them
+			//	TODO:	Also let the simultator know which team is the computer, which is the player
 			var random = new Random();
 
 			for (var i = 0; i < 10; ++i)
@@ -49,6 +52,11 @@ namespace Cm93.Simulator.Basic
 				var awayTeam = fixture.TeamAway.Formation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
 
 				var round = homeTeam.Zip(awayTeam, (home, away) => (home * home) - (away * away)).Sum();
+
+				fixture.TeamHome.Formation.Values.Do(p => p.Location.X = random.Next(-10, 10));
+				fixture.TeamHome.Formation.Values.Do(p => p.Location.Y = random.Next(-10, 10));
+				fixture.TeamAway.Formation.Values.Do(p => p.Location.X = random.Next(-10, 10));
+				fixture.TeamAway.Formation.Values.Do(p => p.Location.Y = random.Next(-10, 10));
 
 				if (round > 3000)
 				{

@@ -24,10 +24,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-//using System.Windows;
 using System.Windows;
 using System.Windows.Media;
-//using System.Windows.Media.Animation;
 using System.Windows.Media.Animation;
 using Caliburn.Micro;
 using Cm93.Model.Helpers;
@@ -302,25 +300,14 @@ namespace Cm93.UI.Modules.Match
 			Task.Factory.StartNew(
 				() =>
 				{
-					var random = new Random();
-					const int variance = 50;
 					var storyBoard = new Storyboard();
 
-					//	The values used for animating the players needs to come from the simultation.
-					//	First try changing the computer opponent coordinates in the Formation object (check this breaks nothing in PlayerCoordinates object)
-					//	If not, something needs to be passed as a parameter to UpdateDynamicFixtureData() - not ideal
-					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer1Left(PlayerCoordinates) +
-						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer1LeftProperty);
-					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer1Top(PlayerCoordinates) +
-						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer1TopProperty);
-					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer2Left(PlayerCoordinates) +
-						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer2LeftProperty);
-					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer2Top(PlayerCoordinates) +
-						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer2TopProperty);
-					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer3Left(PlayerCoordinates) +
-						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer3LeftProperty);
-					AnimateComputerPlayer(storyBoard, PlayerCoordinates.GetComputerPlayer3Top(PlayerCoordinates) +
-						random.Next(-variance, variance), PlayerCoordinates.ComputerPlayer3TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.X, PlayerCoordinates.ComputerPlayer1LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.Y, PlayerCoordinates.ComputerPlayer1TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.X, PlayerCoordinates.ComputerPlayer2LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.Y, PlayerCoordinates.ComputerPlayer2TopProperty);
+					//AnimateComputerPlayer(storyBoard, ComputerTeamFormation[2].Location.X, PlayerCoordinates.ComputerPlayer3LeftProperty);
+					//AnimateComputerPlayer(storyBoard, ComputerTeamFormation[2].Location.Y, PlayerCoordinates.ComputerPlayer3TopProperty);
 
 					storyBoard.Begin();
 
@@ -337,8 +324,8 @@ namespace Cm93.UI.Modules.Match
 				{
 					To = position,
 					Duration = TimeSpan.FromSeconds(1.5),
-					AccelerationRatio = 0.5,
-					DecelerationRatio = 0.5
+					AccelerationRatio = 0.6,
+					DecelerationRatio = 0.4
 				};
 
 			Storyboard.SetTarget(animation, PlayerCoordinates);
@@ -356,6 +343,8 @@ namespace Cm93.UI.Modules.Match
 
 			//	We will be making destructive changes to the player's team formation in the ViewModel
 			TeamFormation = CopyTeamFormation(Team.Formation);
+
+			//	TODO:	We will also be making destructive changes to ComputerTeamFormation in the Simulation. Make this a copy too.
 			ComputerTeamFormation = computerTeam.Formation;
 
 			PlayerCoordinates.UpdateTeamFormation(TeamFormation);

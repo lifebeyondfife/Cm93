@@ -15,12 +15,20 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using System;
+using System.Collections.Generic;
 using Cm93.Model.Enumerations;
 
 namespace Cm93.Model.Helpers
 {
 	public static class Extensions
 	{
+		public static void Do<T>(this IEnumerable<T> items, Action<T> action)
+		{
+			foreach (var item in items)
+				action(item);
+		}
+
 		public static string PeriodString(this PlayingPeriod playingPeriod)
 		{
 			switch (playingPeriod)
