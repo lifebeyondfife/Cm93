@@ -17,7 +17,9 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cm93.Model.Enumerations;
+using Cm93.Model.Structures;
 
 namespace Cm93.Model.Helpers
 {
@@ -66,6 +68,13 @@ namespace Cm93.Model.Helpers
 				default:
 					return string.Empty;
 			}
+		}
+
+		public static IDictionary<int, Player> FormationClone(this Team team)
+		{
+			return team.Formation.
+				Select(kvp => new KeyValuePair<int, Player>(kvp.Key, (Player) kvp.Value.Clone())).
+				ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 		}
 	}
 }

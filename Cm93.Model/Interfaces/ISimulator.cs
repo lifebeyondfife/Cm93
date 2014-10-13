@@ -16,6 +16,7 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cm93.Model.Structures;
 
@@ -25,7 +26,7 @@ namespace Cm93.Model.Interfaces
 	{
 		ILookup<Team, Bid> TeamBids { get; }
 
-		void Play(IFixture fixture, Action updateUi);
+		void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation, Action updateUi);
 		void SubmitBid(Bid bid);
 		void ProcessTransfers();
 	}

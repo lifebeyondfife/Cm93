@@ -21,7 +21,6 @@ using System.Linq;
 using System.Threading;
 using Cm93.Model.Config;
 using Cm93.Model.Enumerations;
-using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 
@@ -40,23 +39,21 @@ namespace Cm93.Simulator.Basic
 			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
 		}
 
-		public void Play(IFixture fixture, Action updateUi)
+		public void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation,
+			IDictionary<int, Player> awayTeamFormation, Action updateUi)
 		{
-			//	TODO:	Pass through local copies of formation because the simulator needs to make destructive changes to them
-			//	TODO:	Also let the simultator know which team is the computer, which is the player
 			var random = new Random();
 
 			for (var i = 0; i < 10; ++i)
 			{
-				var homeTeam = fixture.TeamHome.Formation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
-				var awayTeam = fixture.TeamAway.Formation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
+				var homeTeam = homeTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
+				var awayTeam = awayTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
 
 				var round = homeTeam.Zip(awayTeam, (home, away) => (home * home) - (away * away)).Sum();
 
-				fixture.TeamHome.Formation.Values.Do(p => p.Location.X = random.Next(-10, 10));
-				fixture.TeamHome.Formation.Values.Do(p => p.Location.Y = random.Next(-10, 10));
-				fixture.TeamAway.Formation.Values.Do(p => p.Location.X = random.Next(-10, 10));
-				fixture.TeamAway.Formation.Values.Do(p => p.Location.Y = random.Next(-10, 10));
+				//	TODO: which is the computer player, or are both computer players?
+				//	computerTeamFormation.Values.Do(p => p.Location.X = random.Next(-10, 10));
+				//	computerTeamFormation.Values.Do(p => p.Location.Y = random.Next(-10, 10));
 
 				if (round > 3000)
 				{

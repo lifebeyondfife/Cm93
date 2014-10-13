@@ -291,7 +291,11 @@ namespace Cm93.UI.Modules.Match
 			NotifyOfPropertyChange(() => TeamHomeName);
 			NotifyOfPropertyChange(() => TeamAwayName);
 
-			Task.Factory.StartNew(() => Competition.Simulator.Play(Fixture, UpdateDynamicFixtureData)).
+			Task.Factory.StartNew(() =>
+					Competition.Simulator.Play(Fixture,
+						Fixture.TeamHome.TeamName == Team.TeamName ? TeamFormation : ComputerTeamFormation,
+						Fixture.TeamHome.TeamName == Team.TeamName ? ComputerTeamFormation : TeamFormation,
+						UpdateDynamicFixtureData)).
 				ContinueWith(t => competition.CompleteRound());
 		}
 
@@ -302,12 +306,11 @@ namespace Cm93.UI.Modules.Match
 				{
 					var storyBoard = new Storyboard();
 
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.X, PlayerCoordinates.ComputerPlayer1LeftProperty);
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.Y, PlayerCoordinates.ComputerPlayer1TopProperty);
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.X, PlayerCoordinates.ComputerPlayer2LeftProperty);
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.Y, PlayerCoordinates.ComputerPlayer2TopProperty);
-					//AnimateComputerPlayer(storyBoard, ComputerTeamFormation[2].Location.X, PlayerCoordinates.ComputerPlayer3LeftProperty);
-					//AnimateComputerPlayer(storyBoard, ComputerTeamFormation[2].Location.Y, PlayerCoordinates.ComputerPlayer3TopProperty);
+					//	TODO: Replace the 300 and 400s with GetPitchWidth / GetPitchHeight
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.X * 300, PlayerCoordinates.ComputerPlayer1LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.Y * 400, PlayerCoordinates.ComputerPlayer1TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.X * 300, PlayerCoordinates.ComputerPlayer2LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.Y * 400, PlayerCoordinates.ComputerPlayer2TopProperty);
 
 					storyBoard.Begin();
 
@@ -341,11 +344,8 @@ namespace Cm93.UI.Modules.Match
 			Team = Fixture.TeamHome.TeamName == TeamName ? Fixture.TeamHome : Fixture.TeamAway;
 			var computerTeam = Fixture.TeamHome.TeamName == ComputerTeamName ? Fixture.TeamHome : Fixture.TeamAway;
 
-			//	We will be making destructive changes to the player's team formation in the ViewModel
-			TeamFormation = CopyTeamFormation(Team.Formation);
-
-			//	TODO:	We will also be making destructive changes to ComputerTeamFormation in the Simulation. Make this a copy too.
-			ComputerTeamFormation = computerTeam.Formation;
+			TeamFormation = Team.FormationClone();
+			ComputerTeamFormation = computerTeam.FormationClone();
 
 			PlayerCoordinates.UpdateTeamFormation(TeamFormation);
 			PlayerCoordinates.UpdateComputerTeamFormation(ComputerTeamFormation);
@@ -368,13 +368,6 @@ namespace Cm93.UI.Modules.Match
 
 			PrimaryComputerColour = computerTeam.PrimaryColour;
 			SecondaryComputerColour = computerTeam.SecondaryColour;
-		}
-
-		private static IDictionary<int, Player> CopyTeamFormation(IEnumerable<KeyValuePair<int, Player>> dictionary)
-		{
-			return dictionary.
-				Select(kvp => new KeyValuePair<int, Player>(kvp.Key, (Player) kvp.Value.Clone())).
-				ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 		}
 
 		private void UpdateComputerShirts()
