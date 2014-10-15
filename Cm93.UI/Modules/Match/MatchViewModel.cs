@@ -97,6 +97,68 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
+		public double Player1Top
+		{
+			get { return TeamFormation[0].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates); }
+			set
+			{
+				TeamFormation[0].Location.Y = value / PlayerCoordinates.GetPitchHeight(PlayerCoordinates);
+				NotifyOfPropertyChange(() => Player1Top);
+			}
+		}
+
+		public double Player2Top
+		{
+			get { return TeamFormation[1].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates); }
+			set
+			{
+				TeamFormation[1].Location.Y = value / PlayerCoordinates.GetPitchHeight(PlayerCoordinates);
+				NotifyOfPropertyChange(() => Player2Top);
+			}
+		}
+
+		public double Player3Top
+		{
+			get { return 0d; }
+			//get { return TeamFormation[2].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates); }
+			set
+			{
+				TeamFormation[2].Location.Y = value / PlayerCoordinates.GetPitchHeight(PlayerCoordinates);
+				NotifyOfPropertyChange(() => Player3Top);
+			}
+		}
+
+		public double Player1Left
+		{
+			get { return TeamFormation[0].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates); }
+			set
+			{
+				TeamFormation[0].Location.X = value / PlayerCoordinates.GetPitchWidth(PlayerCoordinates);
+				NotifyOfPropertyChange(() => Player1Top);
+			}
+		}
+
+		public double Player2Left
+		{
+			get { return TeamFormation[1].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates); }
+			set
+			{
+				TeamFormation[1].Location.X = value / PlayerCoordinates.GetPitchWidth(PlayerCoordinates);
+				NotifyOfPropertyChange(() => Player2Top);
+			}
+		}
+
+		public double Player3Left
+		{
+			get { return 0d; }
+			//get { return TeamFormation[2].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates); }
+			set
+			{
+				TeamFormation[2].Location.X = value / PlayerCoordinates.GetPitchWidth(PlayerCoordinates);
+				NotifyOfPropertyChange(() => Player3Left);
+			}
+		}
+
 		public string Player1Shirt
 		{
 			get
@@ -347,8 +409,14 @@ namespace Cm93.UI.Modules.Match
 			TeamFormation = Team.FormationClone();
 			ComputerTeamFormation = computerTeam.FormationClone();
 
-			PlayerCoordinates.UpdateTeamFormation(TeamFormation);
 			PlayerCoordinates.UpdateComputerTeamFormation(ComputerTeamFormation);
+
+			NotifyOfPropertyChange(() => Player1Left);
+			NotifyOfPropertyChange(() => Player1Top);
+			NotifyOfPropertyChange(() => Player2Left);
+			NotifyOfPropertyChange(() => Player2Top);
+			NotifyOfPropertyChange(() => Player3Left);
+			NotifyOfPropertyChange(() => Player3Top);
 
 			NotifyOfPropertyChange(() => ScoreString);
 			NotifyOfPropertyChange(() => Minutes);

@@ -23,37 +23,7 @@ namespace Cm93.UI.Modules.Match
 {
 	public class PlayerCoordinates : DependencyObject
 	{
-		/*	TODO. Dependency Object is needed for Computer Teams because they
-		 *	need to be animated. However, the Player Team needs to call arbitrary code to update
-		 *	formation objects that are shared by the Simulator. This DepObj doesn't do that.
-		 *	Move Player positions back to the MatchViewModel. And FML.
-		 */
-
-		private IDictionary<int, Player> TeamFormation { get; set; }
 		private IDictionary<int, Player> ComputerTeamFormation { get; set; }
-
-		public void UpdateTeamFormation(IDictionary<int, Player> teamFormation)
-		{
-			TeamFormation = teamFormation;
-
-			if (TeamFormation.ContainsKey(0))
-			{
-				SetValue(Player1LeftProperty, GetPitchWidth(this) * TeamFormation[0].Location.X);
-				SetValue(Player1TopProperty, GetPitchHeight(this) * TeamFormation[0].Location.Y);
-			}
-
-			if (TeamFormation.ContainsKey(1))
-			{
-				SetValue(Player2LeftProperty, GetPitchWidth(this) * TeamFormation[1].Location.X);
-				SetValue(Player2TopProperty, GetPitchHeight(this) * TeamFormation[1].Location.Y);
-			}
-
-			if (TeamFormation.ContainsKey(2))
-			{
-				SetValue(Player3LeftProperty, GetPitchWidth(this) * TeamFormation[2].Location.X);
-				SetValue(Player3TopProperty, GetPitchHeight(this) * TeamFormation[2].Location.Y);
-			}
-		}
 
 		public void UpdateComputerTeamFormation(IDictionary<int, Player> computerTeamFormation)
 		{
@@ -104,30 +74,6 @@ namespace Cm93.UI.Modules.Match
 
 		public static readonly DependencyProperty PitchWidthProperty =
 			DependencyProperty.RegisterAttached("PitchWidth", typeof(int),
-			typeof(PlayerCoordinates));
-
-		public static readonly DependencyProperty Player1TopProperty =
-			DependencyProperty.RegisterAttached("Player1Top", typeof(double),
-			typeof(PlayerCoordinates));
-
-		public static readonly DependencyProperty Player2TopProperty =
-			DependencyProperty.RegisterAttached("Player2Top", typeof(double),
-			typeof(PlayerCoordinates));
-
-		public static readonly DependencyProperty Player3TopProperty =
-			DependencyProperty.RegisterAttached("Player3Top", typeof(double),
-			typeof(PlayerCoordinates));
-
-		public static readonly DependencyProperty Player1LeftProperty =
-			DependencyProperty.RegisterAttached("Player1Left", typeof(double),
-			typeof(PlayerCoordinates));
-
-		public static readonly DependencyProperty Player2LeftProperty =
-			DependencyProperty.RegisterAttached("Player2Left", typeof(double),
-			typeof(PlayerCoordinates));
-
-		public static readonly DependencyProperty Player3LeftProperty =
-			DependencyProperty.RegisterAttached("Player3Left", typeof(double),
 			typeof(PlayerCoordinates));
 
 		public static readonly DependencyProperty ComputerPlayer1TopProperty =
