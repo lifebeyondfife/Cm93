@@ -60,9 +60,10 @@ namespace Cm93.UI.Modules.Match
 		{
 			get
 			{
-				return Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.HalfTime ||
-					   Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.EndOfSecondHalf ||
-					   Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.ExtraTimeHalfTime;
+				return Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.FirstHalf ||
+					   Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.SecondHalf ||
+					   Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.ExtraTimeFirstHalf ||
+					   Fixture.PlayingPeriod == Model.Enumerations.PlayingPeriod.ExtraTimeSecondHalf;
 			}
 		}
 
@@ -306,11 +307,10 @@ namespace Cm93.UI.Modules.Match
 				{
 					var storyBoard = new Storyboard();
 
-					//	TODO: Replace the 300 and 400s with GetPitchWidth / GetPitchHeight
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.X * 300, PlayerCoordinates.ComputerPlayer1LeftProperty);
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.Y * 400, PlayerCoordinates.ComputerPlayer1TopProperty);
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.X * 300, PlayerCoordinates.ComputerPlayer2LeftProperty);
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.Y * 400, PlayerCoordinates.ComputerPlayer2TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates), PlayerCoordinates.ComputerPlayer1LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates), PlayerCoordinates.ComputerPlayer1TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates), PlayerCoordinates.ComputerPlayer2LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates), PlayerCoordinates.ComputerPlayer2TopProperty);
 
 					storyBoard.Begin();
 

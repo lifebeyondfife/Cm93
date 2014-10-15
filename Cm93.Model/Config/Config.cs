@@ -24,6 +24,8 @@ namespace Cm93.Model.Config
 		public const int AsideSize = 2;
 		public const int MaxSquadSize = 22;
 
+		public static string PlayerTeamName { get; set; }
+
 		public static Func<double> GlobalWeek { get; set; }
 	}
 }

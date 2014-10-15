@@ -55,9 +55,9 @@ namespace Cm93.UI.Shell
 					kvp => kvp.Key,
 					kvp => kvp.Key,
 					(vm, m) => new { ViewModel = vm.Value, Model = m.Value }))
-			{
-				modelViewModel.ViewModel.SetModel(modelViewModel.Model);
-			}
+				{
+					modelViewModel.ViewModel.SetModel(modelViewModel.Model);
+				}
 
 			this.ActiveItem = this.children[ModuleType.SelectTeam];
 
