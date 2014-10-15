@@ -21,6 +21,7 @@ using System.Linq;
 using System.Threading;
 using Cm93.Model.Config;
 using Cm93.Model.Enumerations;
+using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 
@@ -39,21 +40,28 @@ namespace Cm93.Simulator.Basic
 			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
 		}
 
-		public void Play(IFixture fixture, Action updateUi)
+		public void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation,
+			IDictionary<int, Player> awayTeamFormation, Action updateUi)
 		{
 			var random = new Random();
 
 			for (var i = 0; i < 10; ++i)
 			{
-				var homeTeam = fixture.TeamHome.Formation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
-				var awayTeam = fixture.TeamAway.Formation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
+				var homeTeamScore = homeTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
+				var awayTeamScore = awayTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
 
-				var round = homeTeam.Zip(awayTeam, (home, away) => (home * home) - (away * away)).Sum();
+				var round = homeTeamScore.Zip(awayTeamScore, (home, away) => (home * home) - (away * away)).Sum();
+
+				if (Configuration.PlayerTeamName != fixture.TeamHome.TeamName)
+					UpdateNpcTeams(homeTeamFormation, random);
+
+				if (Configuration.PlayerTeamName != fixture.TeamAway.TeamName)
+					UpdateNpcTeams(awayTeamFormation, random);
 
 				if (round > 3000)
 				{
 					++fixture.GoalsHome;
-					++fixture.TeamHome.Formation[homeTeam.
+					++fixture.TeamHome.Formation[homeTeamScore.
 						Select((value, index) => new { Index = index, Value = value }).
 						OrderByDescending(m => m.Value).
 						First().Index].Goals;
@@ -61,7 +69,7 @@ namespace Cm93.Simulator.Basic
 				else if (round < -3200)
 				{
 					++fixture.GoalsAway;
-					++fixture.TeamAway.Formation[awayTeam.
+					++fixture.TeamAway.Formation[awayTeamScore.
 						Select((value, index) => new { Index = index, Value = value }).
 						OrderByDescending(m => m.Value).
 						First().Index].Goals;
@@ -92,6 +100,12 @@ namespace Cm93.Simulator.Basic
 					updateUi();
 				}
 			}
+		}
+
+		private static void UpdateNpcTeams(IDictionary<int, Player> teamFormation, Random random)
+		{
+			teamFormation.Values.Do(p => p.Location.X = random.NextDouble() * 0.84d);
+			teamFormation.Values.Do(p => p.Location.Y = random.NextDouble() * 0.84d);
 		}
 
 		public void SubmitBid(Bid bid)

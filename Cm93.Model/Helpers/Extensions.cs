@@ -15,12 +15,22 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cm93.Model.Enumerations;
+using Cm93.Model.Structures;
 
 namespace Cm93.Model.Helpers
 {
 	public static class Extensions
 	{
+		public static void Do<T>(this IEnumerable<T> items, Action<T> action)
+		{
+			foreach (var item in items)
+				action(item);
+		}
+
 		public static string PeriodString(this PlayingPeriod playingPeriod)
 		{
 			switch (playingPeriod)
@@ -58,6 +68,13 @@ namespace Cm93.Model.Helpers
 				default:
 					return string.Empty;
 			}
+		}
+
+		public static IDictionary<int, Player> FormationClone(this Team team)
+		{
+			return team.Formation.
+				Select(kvp => new KeyValuePair<int, Player>(kvp.Key, (Player) kvp.Value.Clone())).
+				ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 		}
 	}
 }

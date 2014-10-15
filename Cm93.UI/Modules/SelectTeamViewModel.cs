@@ -15,11 +15,11 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using Caliburn.Micro;
+using Cm93.Model.Config;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.UI.Events;
@@ -74,6 +74,8 @@ namespace Cm93.UI.Modules
 		{
 			if (string.IsNullOrEmpty(SelectedTeam))
 				return;
+
+			Configuration.PlayerTeamName = SelectedTeam;
 
 			this.eventAggregator.Publish(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam]));
 			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Team));

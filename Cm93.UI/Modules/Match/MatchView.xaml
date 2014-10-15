@@ -74,7 +74,7 @@
 					<RotateTransform Angle="90"/>
 				</TransformGroup>
 			</Viewbox.RenderTransform>
-			<Canvas Name="Pitch" Height="{Binding PitchHeight}" Width="{Binding PitchWidth}" Background="Transparent" Margin="10">
+			<Canvas Name="Pitch" Height="{Binding PlayerCoordinates.PitchHeight}" Width="{Binding PlayerCoordinates.PitchWidth}" Background="Transparent" Margin="10">
 				<!-- Make this a heat map thing -->
 				<oxy:Plot Canvas.ZIndex="0" Width="{Binding Path=Width, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" Height="{Binding Path=Height, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" Background="GreenYellow" Foreground="Black" TextColor="White" BorderBrush="White" PlotAreaBorderColor="White" />
 
@@ -119,7 +119,7 @@
 					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player3Shirt}" />
 				</Viewbox>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer1" Width="50" Height="60" Canvas.Top="{Binding ComputerPlayer1Top, Mode=TwoWay}" Canvas.Left="{Binding ComputerPlayer1Left, Mode=TwoWay}">
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer1" Width="50" Height="60" Canvas.Top="{Binding PlayerCoordinates.ComputerPlayer1Top, Mode=TwoWay}" Canvas.Left="{Binding PlayerCoordinates.ComputerPlayer1Left, Mode=TwoWay}">
 					<Viewbox.RenderTransform>
 						<TransformGroup>
 							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
@@ -129,7 +129,7 @@
 					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer1Shirt}" />
 				</Viewbox>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer2" Width="50" Height="60" Canvas.Top="{Binding ComputerPlayer2Top, Mode=TwoWay}" Canvas.Left="{Binding ComputerPlayer2Left, Mode=TwoWay}">
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer2" Width="50" Height="60" Canvas.Top="{Binding PlayerCoordinates.ComputerPlayer2Top, Mode=TwoWay}" Canvas.Left="{Binding PlayerCoordinates.ComputerPlayer2Left, Mode=TwoWay}">
 					<Viewbox.RenderTransform>
 						<TransformGroup>
 							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
@@ -139,7 +139,7 @@
 					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer2Shirt}" />
 				</Viewbox>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer3" Visibility="Collapsed" Width="50" Height="60" Canvas.Top="{Binding ComputerPlayer3Top, Mode=TwoWay}" Canvas.Left="{Binding ComputerPlayer3Left, Mode=TwoWay}">
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer3" Visibility="Collapsed" Width="50" Height="60" Canvas.Top="{Binding PlayerCoordinates.ComputerPlayer3Top, Mode=TwoWay}" Canvas.Left="{Binding PlayerCoordinates.ComputerPlayer3Left, Mode=TwoWay}">
 					<Viewbox.RenderTransform>
 						<TransformGroup>
 							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>

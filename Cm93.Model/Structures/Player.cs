@@ -43,7 +43,16 @@ namespace Cm93.Model.Structures
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 
+		[PlayerMetric(Order = 1)]
+		public int Number { get; set; }
+
 		[PlayerMetric(Order = 2)]
+		public string TeamName
+		{
+			get { return Team.TeamName; }
+		}
+
+		[PlayerMetric(Order = 3)]
 		public string FullName
 		{
 			get
@@ -52,26 +61,23 @@ namespace Cm93.Model.Structures
 			}
 		}
 
-		[PlayerMetric(Order = 3)]
+		[PlayerMetric(Order = 4)]
 		public int Age { get; set; }
 
 		[PlayerMetric(Order = 5)]
+		public double Rating { get; set; }
+		[PlayerMetric(Order = 6)]
 		public int Goals { get; set; }
 
-		[PlayerMetric(Order = 4)]
-		public double Rating { get; set; }
 		public Team Team { get; set; }
 
-		[PlayerMetric(Order = 6)]
+		[PlayerMetric(Order = 7)]
 		public IList<Position> Positions { get; set; }
-		[PlayerMetric(Order = 1)]
-		public int Number { get; set; }
-
 		public Coordinate Location { get; set; }
 
 		public Instruction Instruction { get; set; }
 
-		[PlayerMetric(Order = 7)]
+		[PlayerMetric(Order = 8)]
 		public string Value
 		{
 			get { return string.Format(CultureInfo.CurrentCulture, "{0:c0}", NumericValue); }
