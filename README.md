@@ -8,16 +8,16 @@ Plan
 
 Cm93 isn't quite playable (well, enjoyable) at present, but a fairly well thrashed out beginning. Enough to get on GitHub certainly. The remainder of this README.md details what I'd like to have done before I can consider it a launchable game. Mainly adding functionality at the moment but in the long term would look to work with a WPF Blend expert to make something that looks nice too.
 
-* Redo UI to side level menu bar buttons instead of quadrants
+* ~~Redo UI to side level menu bar buttons instead of quadrants~~
 
-- Create a player module for looking at detailed stats (team filter like the results page).
-	- Also allows bids for players (for first 4 weeks of season and midpoint)
+- ~~Create a player module for looking at detailed stats (team filter like the results page).~~
+	- ~~Also allows bids for players (for first 4 weeks of season and midpoint)~~
 
 - Match module screen
-	- Show both team formations
-	- Visualise game simulation (nothing too spectacular)
-	- Allow for half-time formation change
-	- Allow three substitutions
+	- ~~Show both team formations~~
+	- ~~Visualise game simulation (nothing too spectacular)~~
+	- ~~Allow for half-time formation change~~
+	- ~~Allow three substitutions~~
 
 - Persist state of game (immediate and continuous auto-save)
 	- Make all the game model structures serialisable
