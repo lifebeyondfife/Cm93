@@ -34,14 +34,14 @@ namespace Cm93.Simulator.Basic
 		{
 			get { return Bids.SelectMany(kvp => kvp.Value).ToLookup(b => b.PurchasingTeam); }
 		}
-		
+
 		public BasicSimulator()
 		{
 			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
 		}
 
 		public void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation,
-			IDictionary<int, Player> awayTeamFormation, Action updateUi)
+			IDictionary<int, Player> awayTeamFormation, Action<double> updateUi)
 		{
 			var random = new Random();
 
@@ -78,8 +78,6 @@ namespace Cm93.Simulator.Basic
 				if (updateUi == null)
 					continue;
 
-				Thread.Sleep(1500);
-
 				fixture.Minutes += 9;
 
 				if (i == 9)
@@ -91,13 +89,16 @@ namespace Cm93.Simulator.Basic
 				else
 					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
 
-				updateUi();
+				var possession = homeTeamScore.Sum() / (homeTeamScore.Sum() + awayTeamScore.Sum());
+				updateUi(possession);
+
+				Thread.Sleep(1500);
 
 				if (i == 4)
 				{
 					Thread.Sleep(3500);
 					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
-					updateUi();
+					updateUi(possession);
 				}
 			}
 		}

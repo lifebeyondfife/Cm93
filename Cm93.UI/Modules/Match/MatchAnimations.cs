@@ -21,7 +21,7 @@ using Cm93.Model.Structures;
 
 namespace Cm93.UI.Modules.Match
 {
-	public class PlayerCoordinates : DependencyObject
+	public class MatchAnimations : DependencyObject
 	{
 		private IDictionary<int, Player> ComputerTeamFormation { get; set; }
 
@@ -48,6 +48,26 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
+		public static double GetHomePossession(DependencyObject obj)
+		{
+			return (double) obj.GetValue(HomePossessionProperty);
+		}
+
+		public static void SetHomePossession(DependencyObject obj, double number)
+		{
+			obj.SetValue(HomePossessionProperty, number);
+		}
+
+		public static double GetAwayPossession(DependencyObject obj)
+		{
+			return (double) obj.GetValue(AwayPossessionProperty);
+		}
+
+		public static void SetAwayPossession(DependencyObject obj, double number)
+		{
+			obj.SetValue(AwayPossessionProperty, number);
+		}
+
 		public static int GetPitchHeight(DependencyObject obj)
 		{
 			return (int) obj.GetValue(PitchHeightProperty);
@@ -68,36 +88,44 @@ namespace Cm93.UI.Modules.Match
 			obj.SetValue(PitchWidthProperty, number);
 		}
 
+		public static readonly DependencyProperty HomePossessionProperty =
+			DependencyProperty.RegisterAttached("HomePossession", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty AwayPossessionProperty =
+			DependencyProperty.RegisterAttached("AwayPossession", typeof(double),
+			typeof(MatchAnimations));
+
 		public static readonly DependencyProperty PitchHeightProperty =
 			DependencyProperty.RegisterAttached("PitchHeight", typeof(int),
-			typeof(PlayerCoordinates));
+			typeof(MatchAnimations));
 
 		public static readonly DependencyProperty PitchWidthProperty =
 			DependencyProperty.RegisterAttached("PitchWidth", typeof(int),
-			typeof(PlayerCoordinates));
+			typeof(MatchAnimations));
 
 		public static readonly DependencyProperty ComputerPlayer1TopProperty =
 			DependencyProperty.RegisterAttached("ComputerPlayer1Top", typeof(double),
-			typeof(PlayerCoordinates));
+			typeof(MatchAnimations));
 
 		public static readonly DependencyProperty ComputerPlayer2TopProperty =
 			DependencyProperty.RegisterAttached("ComputerPlayer2Top", typeof(double),
-			typeof(PlayerCoordinates));
+			typeof(MatchAnimations));
 
 		public static readonly DependencyProperty ComputerPlayer3TopProperty =
 			DependencyProperty.RegisterAttached("ComputerPlayer3Top", typeof(double),
-			typeof(PlayerCoordinates));
+			typeof(MatchAnimations));
 
 		public static readonly DependencyProperty ComputerPlayer1LeftProperty =
 			DependencyProperty.RegisterAttached("ComputerPlayer1Left", typeof(double),
-			typeof(PlayerCoordinates));
+			typeof(MatchAnimations));
 
 		public static readonly DependencyProperty ComputerPlayer2LeftProperty =
 			DependencyProperty.RegisterAttached("ComputerPlayer2Left", typeof(double),
-			typeof(PlayerCoordinates));
+			typeof(MatchAnimations));
 
 		public static readonly DependencyProperty ComputerPlayer3LeftProperty =
 			DependencyProperty.RegisterAttached("ComputerPlayer3Left", typeof(double),
-			typeof(PlayerCoordinates));
+			typeof(MatchAnimations));
 	}
 }

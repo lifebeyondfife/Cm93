@@ -52,7 +52,7 @@ namespace Cm93.UI.Modules.Match
 		private int SubstitutesUsed { get; set; }
 		private IList<Player> SubstitutedPlayers { get; set; }
 
-		public PlayerCoordinates PlayerCoordinates { get; set; }
+		public MatchAnimations MatchAnimations { get; set; }
 
 		#region View Model Properties
 
@@ -99,20 +99,20 @@ namespace Cm93.UI.Modules.Match
 
 		public double Player1Top
 		{
-			get { return TeamFormation[0].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates); }
+			get { return TeamFormation[0].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[0].Location.Y = value / PlayerCoordinates.GetPitchHeight(PlayerCoordinates);
+				TeamFormation[0].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player1Top);
 			}
 		}
 
 		public double Player2Top
 		{
-			get { return TeamFormation[1].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates); }
+			get { return TeamFormation[1].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[1].Location.Y = value / PlayerCoordinates.GetPitchHeight(PlayerCoordinates);
+				TeamFormation[1].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player2Top);
 			}
 		}
@@ -123,27 +123,27 @@ namespace Cm93.UI.Modules.Match
 			//get { return TeamFormation[2].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates); }
 			set
 			{
-				TeamFormation[2].Location.Y = value / PlayerCoordinates.GetPitchHeight(PlayerCoordinates);
+				TeamFormation[2].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player3Top);
 			}
 		}
 
 		public double Player1Left
 		{
-			get { return TeamFormation[0].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates); }
+			get { return TeamFormation[0].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[0].Location.X = value / PlayerCoordinates.GetPitchWidth(PlayerCoordinates);
+				TeamFormation[0].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player1Top);
 			}
 		}
 
 		public double Player2Left
 		{
-			get { return TeamFormation[1].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates); }
+			get { return TeamFormation[1].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[1].Location.X = value / PlayerCoordinates.GetPitchWidth(PlayerCoordinates);
+				TeamFormation[1].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player2Top);
 			}
 		}
@@ -154,7 +154,7 @@ namespace Cm93.UI.Modules.Match
 			//get { return TeamFormation[2].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates); }
 			set
 			{
-				TeamFormation[2].Location.X = value / PlayerCoordinates.GetPitchWidth(PlayerCoordinates);
+				TeamFormation[2].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player3Left);
 			}
 		}
@@ -264,6 +264,50 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
+		private Color homePrimaryColour;
+		public Color HomePrimaryColour
+		{
+			get { return this.homePrimaryColour; }
+			set
+			{
+				this.homePrimaryColour = value;
+				NotifyOfPropertyChange(() => HomePrimaryColour);
+			}
+		}
+
+		private Color homeSecondaryColour;
+		public Color HomeSecondaryColour
+		{
+			get { return this.homeSecondaryColour; }
+			set
+			{
+				this.homeSecondaryColour = value;
+				NotifyOfPropertyChange(() => HomeSecondaryColour);
+			}
+		}
+
+		private Color awayPrimaryColour;
+		public Color AwayPrimaryColour
+		{
+			get { return this.awayPrimaryColour; }
+			set
+			{
+				this.awayPrimaryColour = value;
+				NotifyOfPropertyChange(() => AwayPrimaryColour);
+			}
+		}
+
+		private Color awaySecondaryColour;
+		public Color AwaySecondaryColour
+		{
+			get { return this.awaySecondaryColour; }
+			set
+			{
+				this.awaySecondaryColour = value;
+				NotifyOfPropertyChange(() => AwaySecondaryColour);
+			}
+		}
+
 		private Color primaryColour;
 		public Color PrimaryColour
 		{
@@ -318,9 +362,9 @@ namespace Cm93.UI.Modules.Match
 
 			this.UiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
-			PlayerCoordinates = new PlayerCoordinates();
-			PlayerCoordinates.SetPitchHeight(PlayerCoordinates, 400);
-			PlayerCoordinates.SetPitchWidth(PlayerCoordinates, 300);
+			MatchAnimations = new MatchAnimations();
+			MatchAnimations.SetPitchHeight(MatchAnimations, 400);
+			MatchAnimations.SetPitchWidth(MatchAnimations, 300);
 
 			this.SubstitutedPlayers = new List<Player>();
 
@@ -362,17 +406,19 @@ namespace Cm93.UI.Modules.Match
 				ContinueWith(t => competition.CompleteRound());
 		}
 
-		private void UpdateDynamicFixtureData()
+		private void UpdateDynamicFixtureData(double possession)
 		{
 			Task.Factory.StartNew(
 				() =>
 				{
 					var storyBoard = new Storyboard();
 
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates), PlayerCoordinates.ComputerPlayer1LeftProperty);
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates), PlayerCoordinates.ComputerPlayer1TopProperty);
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates), PlayerCoordinates.ComputerPlayer2LeftProperty);
-					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates), PlayerCoordinates.ComputerPlayer2TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer1LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer1TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer2LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer2TopProperty);
+					AnimatePossessionBar(storyBoard, 1000 * possession, MatchAnimations.HomePossessionProperty);
+					AnimatePossessionBar(storyBoard, 1000 * (1 - possession), MatchAnimations.AwayPossessionProperty);
 
 					storyBoard.Begin();
 
@@ -383,17 +429,32 @@ namespace Cm93.UI.Modules.Match
 				CancellationToken.None, TaskCreationOptions.None, UiScheduler);
 		}
 
+		private const double AnimationDuration = 1.5d;
+
+		private void AnimatePossessionBar(TimelineGroup storyBoard, double possession, DependencyProperty property)
+		{
+			var animation = new DoubleAnimation
+				{
+					To = possession,
+					Duration = TimeSpan.FromSeconds(AnimationDuration),
+				};
+
+			Storyboard.SetTarget(animation, MatchAnimations);
+			Storyboard.SetTargetProperty(animation, new PropertyPath(property));
+			storyBoard.Children.Add(animation);
+		}
+
 		private void AnimateComputerPlayer(TimelineGroup storyBoard, double position, DependencyProperty property)
 		{
 			var animation = new DoubleAnimation
 				{
 					To = position,
-					Duration = TimeSpan.FromSeconds(1.5),
+					Duration = TimeSpan.FromSeconds(AnimationDuration),
 					AccelerationRatio = 0.6,
 					DecelerationRatio = 0.4
 				};
 
-			Storyboard.SetTarget(animation, PlayerCoordinates);
+			Storyboard.SetTarget(animation, MatchAnimations);
 			Storyboard.SetTargetProperty(animation, new PropertyPath(property));
 			storyBoard.Children.Add(animation);
 		}
@@ -409,7 +470,14 @@ namespace Cm93.UI.Modules.Match
 			TeamFormation = Team.FormationClone();
 			ComputerTeamFormation = computerTeam.FormationClone();
 
-			PlayerCoordinates.UpdateComputerTeamFormation(ComputerTeamFormation);
+			HomePrimaryColour = Fixture.TeamHome.PrimaryColour;
+			HomeSecondaryColour = Fixture.TeamHome.SecondaryColour;
+			AwayPrimaryColour = Fixture.TeamAway.PrimaryColour;
+			AwaySecondaryColour = Fixture.TeamAway.SecondaryColour;
+
+			MatchAnimations.UpdateComputerTeamFormation(ComputerTeamFormation);
+			MatchAnimations.SetHomePossession(MatchAnimations, 500);
+			MatchAnimations.SetAwayPossession(MatchAnimations, 500);
 
 			NotifyOfPropertyChange(() => Player1Left);
 			NotifyOfPropertyChange(() => Player1Top);
