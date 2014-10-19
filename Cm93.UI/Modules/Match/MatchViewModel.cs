@@ -391,19 +391,27 @@ namespace Cm93.UI.Modules.Match
 		{
 			var ballPositions = new[,]
 				{
-					{ 0.2d, 0.4d, 0.3d },
-					{ 0.5d, 0.1d, 0.6d }
+					{ double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN },
+					{ double.NaN,		0.1d, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN },
+					{ double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN,		2.4d, double.NaN, double.NaN },
+					{ double.NaN, double.NaN,		0.3d, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN },
+					{ double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN },
+					{ double.NaN, double.NaN, double.NaN,		0.4d, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN },
+					{ double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN }
 				};
 
 			var heatMapSeries = new HeatMapSeries
 				{
-					X0 = 0.5, X1 = 1.5, Y0 = 0.5, Y1 = 2.5, Data = ballPositions
+					X0 = 0d,
+					X1 = 1d,
+					Y0 = 0d,
+					Y1 = 1d,
+					Data = ballPositions,
 				};
 			
 			var linearColorAxis = new LinearColorAxis
 				{
-					HighColor = OxyColors.White,
-					LowColor = OxyColors.Transparent,
+					InvalidNumberColor = OxyColors.Transparent
 				};
 
 			var linearXAxis = new LinearAxis
@@ -418,7 +426,6 @@ namespace Cm93.UI.Modules.Match
 			plotModel.Axes.Add(linearColorAxis);
 			plotModel.Axes.Add(linearXAxis);
 			plotModel.Axes.Add(linearYAxis);
-			plotModel.PlotMargins = new OxyThickness(0, 0, 0, 0);
 			plotModel.PlotAreaBorderThickness = 0;
 			plotModel.Axes.Do(a => a.IsAxisVisible = false);
 
