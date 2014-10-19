@@ -76,7 +76,7 @@
 			</Viewbox.RenderTransform>
 			<Canvas Name="Pitch" Height="{Binding MatchAnimations.PitchHeight}" Width="{Binding MatchAnimations.PitchWidth}" Background="Transparent" Margin="10">
 				<!-- Make this a heat map thing -->
-				<oxy:Plot Model="{Binding HeatMapModel}" Opacity="0.5" Canvas.ZIndex="0" Width="{Binding Path=Width, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" Height="{Binding Path=Height, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" IsHitTestVisible="False" PlotAreaBorderThickness="0" LegendBorderThickness="0" PlotAreaBorderColor="Transparent" TextColor="Transparent" Background="Transparent" />
+				<oxy:Plot Model="{Binding HeatMapModel}" Opacity="0.75" Canvas.ZIndex="0" Width="{Binding Path=Width, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" Height="{Binding Path=Height, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" IsHitTestVisible="False" PlotAreaBorderThickness="0" LegendBorderThickness="0" PlotAreaBorderColor="Transparent" TextColor="Transparent" Background="Transparent" />
 
 				<Path Data="M 0, 0 L 300,0 L300,400 L0,400 Z M0,200 L300,200" Fill="Transparent" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" HorizontalAlignment="Left" />
 				<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="100" Margin="100,150,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="100"/>

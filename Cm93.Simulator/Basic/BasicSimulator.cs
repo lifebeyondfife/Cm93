@@ -30,6 +30,8 @@ namespace Cm93.Simulator.Basic
 	public class BasicSimulator : ISimulator
 	{
 		private IDictionary<PlayerIndex, IList<Bid>> Bids { get; set; }
+		private Random Random { get; set; }
+
 		public ILookup<Team, Bid> TeamBids
 		{
 			get { return Bids.SelectMany(kvp => kvp.Value).ToLookup(b => b.PurchasingTeam); }
@@ -38,25 +40,27 @@ namespace Cm93.Simulator.Basic
 		public BasicSimulator()
 		{
 			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
+			Random = new Random();
 		}
 
 		public void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation,
-			IDictionary<int, Player> awayTeamFormation, Action<double> updateUi)
+			IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi)
 		{
-			var random = new Random();
-
 			for (var i = 0; i < 10; ++i)
 			{
-				var homeTeamScore = homeTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
-				var awayTeamScore = awayTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
+				var ballPositions = new double[15, 20];
+				var homeTeamScore = homeTeamFormation.Values.Select(p => p.Rating * Random.NextDouble()).ToList();
+				var awayTeamScore = awayTeamFormation.Values.Select(p => p.Rating * Random.NextDouble()).ToList();
 
 				var round = homeTeamScore.Zip(awayTeamScore, (home, away) => (home * home) - (away * away)).Sum();
 
 				if (Configuration.PlayerTeamName != fixture.TeamHome.TeamName)
-					UpdateNpcTeams(homeTeamFormation, random);
+					UpdateNpcTeams(homeTeamFormation);
 
 				if (Configuration.PlayerTeamName != fixture.TeamAway.TeamName)
-					UpdateNpcTeams(awayTeamFormation, random);
+					UpdateNpcTeams(awayTeamFormation);
+
+				ColourPositionsAround(round > 0 ? homeTeamFormation.Values : awayTeamFormation.Values, ballPositions);
 
 				if (round > 3000)
 				{
@@ -90,23 +94,44 @@ namespace Cm93.Simulator.Basic
 					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
 
 				var possession = homeTeamScore.Sum() / (homeTeamScore.Sum() + awayTeamScore.Sum());
-				updateUi(possession);
+				updateUi(possession, ballPositions);
 
 				Thread.Sleep(1500);
 
 				if (i == 4)
 				{
-					Thread.Sleep(3500);
 					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
-					updateUi(possession);
+					updateUi(possession, null);
+					Thread.Sleep(3500);
 				}
 			}
 		}
 
-		private static void UpdateNpcTeams(IDictionary<int, Player> teamFormation, Random random)
+		private void ColourPositionsAround(IEnumerable<Player> players, double[,] ballPositions)
 		{
-			teamFormation.Values.Do(p => p.Location.X = random.NextDouble() * 0.84d);
-			teamFormation.Values.Do(p => p.Location.Y = random.NextDouble() * 0.84d);
+			var coordinateList = new List<Tuple<int, int>>();
+
+			foreach (var location in players.Select(p => p.Location))
+			{
+				// TODO: Find all the 15 and 20 references. Put it into a config.
+				coordinateList.AddRange(Enumerable.Range(1, 100).Select(i =>
+					new Tuple<int, int>
+						(
+							(int) (location.X * 15) + Random.Next(-4, 4),
+							(int) (20 - location.Y * 20) + Random.Next(-4, 4)
+						)
+					)
+				);
+			}
+
+			coordinateList.Where(t => t.Item1 > 0 && t.Item1 < 14 && t.Item2 > 0 && t.Item2 < 19).
+				Do(t => ballPositions[t.Item1, t.Item2] += 0.5d);
+		}
+
+		private void UpdateNpcTeams(IDictionary<int, Player> teamFormation)
+		{
+			teamFormation.Values.Do(p => p.Location.X = Random.NextDouble() * 0.84d);
+			teamFormation.Values.Do(p => p.Location.Y = Random.NextDouble() * 0.84d);
 		}
 
 		public void SubmitBid(Bid bid)
