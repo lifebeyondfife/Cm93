@@ -41,8 +41,8 @@
 
 			<Viewbox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2" HorizontalAlignment="Stretch">
 				<Canvas Height="100" Width="1000" Background="Transparent">
-					<Rectangle Width="{Binding MatchAnimations.HomePossession}" Height="100" Fill="{Binding HomePrimaryColour, Converter={StaticResource ColourToBrush}}" Stroke="{Binding HomeSecondaryColour, Converter={StaticResource ColourToBrush}}" StrokeThickness="15" />
-					<Rectangle Width="{Binding MatchAnimations.AwayPossession}" Height="100" Fill="{Binding AwayPrimaryColour, Converter={StaticResource ColourToBrush}}" Stroke="{Binding AwaySecondaryColour, Converter={StaticResource ColourToBrush}}" StrokeThickness="15" Canvas.Left="{Binding MatchAnimations.HomePossession}" />
+					<Rectangle Width="{Binding MatchAnimations.HomePossession}" Height="100" Fill="{Binding HomePrimaryColour, Converter={StaticResource ColourToBrush}}" Stroke="{Binding HomeSecondaryColour, Converter={StaticResource ColourToBrush}}" StrokeThickness="15" RadiusX="10" RadiusY="10" />
+					<Rectangle Canvas.Left="{Binding MatchAnimations.HomePossession}" Width="{Binding MatchAnimations.AwayPossession}" Height="100" Fill="{Binding AwayPrimaryColour, Converter={StaticResource ColourToBrush}}" Stroke="{Binding AwaySecondaryColour, Converter={StaticResource ColourToBrush}}" StrokeThickness="15" RadiusX="10" RadiusY="10" />
 				</Canvas>
 			</Viewbox>
 
@@ -67,7 +67,6 @@
 			</Grid>
 		</Grid>
 
-
 		<Viewbox Grid.Row="1" RenderTransformOrigin="0.5, 0.5">
 			<Viewbox.RenderTransform>
 				<TransformGroup>
@@ -77,7 +76,7 @@
 			</Viewbox.RenderTransform>
 			<Canvas Name="Pitch" Height="{Binding MatchAnimations.PitchHeight}" Width="{Binding MatchAnimations.PitchWidth}" Background="Transparent" Margin="10">
 				<!-- Make this a heat map thing -->
-				<oxy:Plot Canvas.ZIndex="0" Width="{Binding Path=Width, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" Height="{Binding Path=Height, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" Background="GreenYellow" Foreground="Black" TextColor="White" BorderBrush="White" PlotAreaBorderColor="White" />
+				<oxy:Plot Model="{Binding HeatMapModel}" Canvas.ZIndex="0" Width="{Binding Path=Width, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" Height="{Binding Path=Height, RelativeSource={RelativeSource  Mode=FindAncestor, AncestorType={x:Type Canvas}}}" IsHitTestVisible="False" PlotAreaBorderThickness="0" LegendBorderThickness="0" PlotAreaBorderColor="Transparent" TextColor="Transparent" Background="Transparent" />
 
 				<Path Data="M 0, 0 L 300,0 L300,400 L0,400 Z M0,200 L300,200" Fill="Transparent" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" HorizontalAlignment="Left" />
 				<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="100" Margin="100,150,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="100"/>

@@ -33,13 +33,16 @@ using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
 using Cm93.UI.Events;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 
 namespace Cm93.UI.Modules.Match
 {
 	[Export(typeof(ModuleViewModelBase))]
 	public class MatchViewModel : ModuleViewModelBase, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>
 	{
-		private readonly IEventAggregator eventAggregator;
+		private IEventAggregator eventAggregator;
 		private IMatchModule MatchModule { get; set; }
 		private Cm93.Model.Structures.Team Team { get; set; }
 		private IDictionary<int, Player> TeamFormation { get; set; }
@@ -53,6 +56,17 @@ namespace Cm93.UI.Modules.Match
 		private IList<Player> SubstitutedPlayers { get; set; }
 
 		public MatchAnimations MatchAnimations { get; set; }
+
+		private PlotModel heatMapModel;
+		public PlotModel HeatMapModel
+		{
+			get { return this.heatMapModel; }
+			set
+			{
+				this.heatMapModel = value;
+				NotifyOfPropertyChange(() => HeatMapModel);
+			}
+		}
 
 		#region View Model Properties
 
@@ -369,6 +383,46 @@ namespace Cm93.UI.Modules.Match
 			this.SubstitutedPlayers = new List<Player>();
 
 			this.eventAggregator.Subscribe(this);
+
+			CreateHeatMapModel();
+		}
+
+		private void CreateHeatMapModel()
+		{
+			var ballPositions = new[,]
+				{
+					{ 0.2d, 0.4d, 0.3d },
+					{ 0.5d, 0.1d, 0.6d }
+				};
+
+			var heatMapSeries = new HeatMapSeries
+				{
+					X0 = 0.5, X1 = 1.5, Y0 = 0.5, Y1 = 2.5, Data = ballPositions
+				};
+			
+			var linearColorAxis = new LinearColorAxis
+				{
+					HighColor = OxyColors.White,
+					LowColor = OxyColors.Transparent,
+				};
+
+			var linearXAxis = new LinearAxis
+				{
+					Position = AxisPosition.Bottom
+				};
+
+			var linearYAxis = new LinearAxis();
+
+			var plotModel = new PlotModel();
+			plotModel.Series.Add(heatMapSeries);
+			plotModel.Axes.Add(linearColorAxis);
+			plotModel.Axes.Add(linearXAxis);
+			plotModel.Axes.Add(linearYAxis);
+			plotModel.PlotMargins = new OxyThickness(0, 0, 0, 0);
+			plotModel.PlotAreaBorderThickness = 0;
+			plotModel.Axes.Do(a => a.IsAxisVisible = false);
+
+			HeatMapModel = plotModel;
 		}
 
 		public override void SetModel(IModule model)
