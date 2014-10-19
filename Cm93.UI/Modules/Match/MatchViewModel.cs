@@ -33,13 +33,16 @@ using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
 using Cm93.UI.Events;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 
 namespace Cm93.UI.Modules.Match
 {
 	[Export(typeof(ModuleViewModelBase))]
 	public class MatchViewModel : ModuleViewModelBase, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>
 	{
-		private readonly IEventAggregator eventAggregator;
+		private IEventAggregator eventAggregator;
 		private IMatchModule MatchModule { get; set; }
 		private Cm93.Model.Structures.Team Team { get; set; }
 		private IDictionary<int, Player> TeamFormation { get; set; }
@@ -53,6 +56,17 @@ namespace Cm93.UI.Modules.Match
 		private IList<Player> SubstitutedPlayers { get; set; }
 
 		public MatchAnimations MatchAnimations { get; set; }
+
+		private PlotModel heatMapModel;
+		public PlotModel HeatMapModel
+		{
+			get { return this.heatMapModel; }
+			set
+			{
+				this.heatMapModel = value;
+				NotifyOfPropertyChange(() => HeatMapModel);
+			}
+		}
 
 		#region View Model Properties
 
@@ -365,10 +379,64 @@ namespace Cm93.UI.Modules.Match
 			MatchAnimations = new MatchAnimations();
 			MatchAnimations.SetPitchHeight(MatchAnimations, 400);
 			MatchAnimations.SetPitchWidth(MatchAnimations, 300);
+			CreateHeatMapModel();
 
 			this.SubstitutedPlayers = new List<Player>();
 
 			this.eventAggregator.Subscribe(this);
+		}
+
+		private void CreateHeatMapModel(double[,] ballUpdates = null)
+		{
+			double[,] ballPositions;
+			if (ballUpdates == null)
+			{
+				ballPositions = new double[15, 20];
+				for (var i = 0; i < ballPositions.GetLength(0); ++i)
+					for (var j = 0; j < ballPositions.GetLength(1); ++j)
+						ballPositions[i, j] = double.NaN;
+			}
+			else
+			{
+				ballPositions = ((HeatMapSeries) HeatMapModel.Series.First()).Data;
+				for (var i = 0; i < ballPositions.GetLength(0); ++i)
+					for (var j = 0; j < ballPositions.GetLength(1); ++j)
+						if (double.IsNaN(ballPositions[i, j]) && Math.Abs(ballUpdates[i, j] - 0d) > 1E-5)
+							ballPositions[i, j] = ballUpdates[i, j];
+						else
+							ballPositions[i, j] += ballUpdates[i, j];
+			}
+
+			var heatMapSeries = new HeatMapSeries
+				{
+					X0 = 0d,
+					X1 = 1d,
+					Y0 = 0d,
+					Y1 = 1d,
+					Data = ballPositions,
+				};
+
+			var linearColorAxis = new LinearColorAxis
+				{
+					InvalidNumberColor = OxyColors.Transparent
+				};
+
+			var linearXAxis = new LinearAxis
+				{
+					Position = AxisPosition.Bottom
+				};
+
+			var linearYAxis = new LinearAxis();
+
+			var plotModel = new PlotModel();
+			plotModel.Series.Add(heatMapSeries);
+			plotModel.Axes.Add(linearColorAxis);
+			plotModel.Axes.Add(linearXAxis);
+			plotModel.Axes.Add(linearYAxis);
+			plotModel.PlotAreaBorderThickness = 0;
+			plotModel.Axes.Do(a => a.IsAxisVisible = false);
+
+			HeatMapModel = plotModel;
 		}
 
 		public override void SetModel(IModule model)
@@ -406,7 +474,7 @@ namespace Cm93.UI.Modules.Match
 				ContinueWith(t => competition.CompleteRound());
 		}
 
-		private void UpdateDynamicFixtureData(double possession)
+		private void UpdateDynamicFixtureData(double possession, double[,] ballUpdates)
 		{
 			Task.Factory.StartNew(
 				() =>
@@ -421,6 +489,8 @@ namespace Cm93.UI.Modules.Match
 					AnimatePossessionBar(storyBoard, 1000 * (1 - possession), MatchAnimations.AwayPossessionProperty);
 
 					storyBoard.Begin();
+
+					CreateHeatMapModel(ballUpdates);
 
 					NotifyOfPropertyChange(() => ScoreString);
 					NotifyOfPropertyChange(() => Minutes);
