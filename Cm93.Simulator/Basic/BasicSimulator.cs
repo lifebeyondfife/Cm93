@@ -48,7 +48,7 @@ namespace Cm93.Simulator.Basic
 		{
 			for (var i = 0; i < 10; ++i)
 			{
-				var ballPositions = new double[15, 20];
+				var ballPositions = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
 				var homeTeamScore = homeTeamFormation.Values.Select(p => p.Rating * Random.NextDouble()).ToList();
 				var awayTeamScore = awayTeamFormation.Values.Select(p => p.Rating * Random.NextDouble()).ToList();
 
@@ -61,6 +61,11 @@ namespace Cm93.Simulator.Basic
 					UpdateNpcTeams(awayTeamFormation);
 
 				ColourPositionsAround(round > 0 ? homeTeamFormation.Values : awayTeamFormation.Values, ballPositions);
+
+				if (round > 0)
+					++fixture.ChancesHome;
+				else
+					++fixture.ChancesAway;
 
 				if (round > 3000)
 				{
@@ -113,12 +118,11 @@ namespace Cm93.Simulator.Basic
 
 			foreach (var location in players.Select(p => p.Location))
 			{
-				// TODO: Find all the 15 and 20 references. Put it into a config.
 				coordinateList.AddRange(Enumerable.Range(1, 100).Select(i =>
 					new Tuple<int, int>
 						(
-							(int) (location.X * 15) + Random.Next(-4, 4),
-							(int) (20 - location.Y * 20) + Random.Next(-4, 4)
+							(int) (location.X * Configuration.HeatMapDimensions.Item1) + Random.Next(-4, 4),
+							(int) (Configuration.HeatMapDimensions.Item2 - location.Y * Configuration.HeatMapDimensions.Item2) + Random.Next(-4, 4)
 						)
 					)
 				);
@@ -168,6 +172,7 @@ namespace Cm93.Simulator.Basic
 				if (highestBid.BidAmount < player.ReleaseValue)
 					continue;	//	Winning bid isn't high enough
 
+				//	TODO: purchased players still existing in other team's match days.
 				highestBid.PurchasingTeam.Balance -= highestBid.BidAmount;
 				player.Team.Balance += highestBid.BidAmount;
 

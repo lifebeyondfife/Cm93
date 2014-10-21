@@ -31,13 +31,11 @@
 			</Grid.ColumnDefinitions>
 
 			<Label Grid.Row="0" Grid.ColumnSpan="6" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="24" FontWeight="ExtraBold" Content="{Binding TeamHomeName}" />
-			<Label Grid.Row="0" Grid.ColumnSpan="6" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="24" FontWeight="ExtraBold" Content="{Binding ScoreString}" />
+			<Label Grid.Row="0" Grid.ColumnSpan="6" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="24" FontWeight="ExtraBold" Content="{Binding Score}" />
 			<Label Grid.Row="0" Grid.ColumnSpan="6" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="24" FontWeight="ExtraBold" Content="{Binding TeamAwayName}" />
 
-			<Label Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="20" FontWeight="ExtraBold" Content="~3~" />
-			<!--  Content="{Binding TeamHomeChances, Mode=OneWay}" />-->
-			<Label Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="20" FontWeight="ExtraBold" Content="~2~" />
-			<!--  Content="{Binding TeamAwayChances, Mode=OneWay}" />-->
+			<Label Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="20" FontWeight="ExtraBold" Content="{Binding ChancesHome, Mode=OneWay}" />
+			<Label Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="20" FontWeight="ExtraBold" Content="{Binding ChancesAway, Mode=OneWay}" />
 
 			<Viewbox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2" HorizontalAlignment="Stretch">
 				<Canvas Height="100" Width="1000" Background="Transparent">

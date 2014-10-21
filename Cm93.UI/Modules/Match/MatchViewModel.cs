@@ -28,6 +28,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Caliburn.Micro;
+using Cm93.Model.Config;
 using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
@@ -91,9 +92,19 @@ namespace Cm93.UI.Modules.Match
 			get { return Fixture.TeamAway.TeamName; }
 		}
 
-		public string ScoreString
+		public string Score
 		{
 			get { return string.Format("{0} - {1}", Fixture.GoalsHome, Fixture.GoalsAway); }
+		}
+
+		public int ChancesHome
+		{
+			get { return Fixture.ChancesHome; }
+		}
+
+		public int ChancesAway
+		{
+			get { return Fixture.ChancesAway; }
 		}
 
 		public string PlayingPeriod
@@ -391,7 +402,7 @@ namespace Cm93.UI.Modules.Match
 			double[,] ballPositions;
 			if (ballUpdates == null)
 			{
-				ballPositions = new double[15, 20];
+				ballPositions = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
 				for (var i = 0; i < ballPositions.GetLength(0); ++i)
 					for (var j = 0; j < ballPositions.GetLength(1); ++j)
 						ballPositions[i, j] = double.NaN;
@@ -492,9 +503,11 @@ namespace Cm93.UI.Modules.Match
 
 					CreateHeatMapModel(ballUpdates);
 
-					NotifyOfPropertyChange(() => ScoreString);
+					NotifyOfPropertyChange(() => Score);
 					NotifyOfPropertyChange(() => Minutes);
 					NotifyOfPropertyChange(() => PlayingPeriod);
+					NotifyOfPropertyChange(() => ChancesHome);
+					NotifyOfPropertyChange(() => ChancesAway);
 				},
 				CancellationToken.None, TaskCreationOptions.None, UiScheduler);
 		}
@@ -556,7 +569,7 @@ namespace Cm93.UI.Modules.Match
 			NotifyOfPropertyChange(() => Player3Left);
 			NotifyOfPropertyChange(() => Player3Top);
 
-			NotifyOfPropertyChange(() => ScoreString);
+			NotifyOfPropertyChange(() => Score);
 			NotifyOfPropertyChange(() => Minutes);
 			NotifyOfPropertyChange(() => PlayingPeriod);
 
