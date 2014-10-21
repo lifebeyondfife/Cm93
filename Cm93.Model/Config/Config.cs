@@ -24,6 +24,11 @@ namespace Cm93.Model.Config
 		public const int AsideSize = 2;
 		public const int MaxSquadSize = 22;
 
+		public static Tuple<int, int> HeatMapDimensions
+		{
+			get { return new Tuple<int, int>(15, 20); }
+		}
+
 		public static string PlayerTeamName { get; set; }
 
 		public static Func<double> GlobalWeek { get; set; }

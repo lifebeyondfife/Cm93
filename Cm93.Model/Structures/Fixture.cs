@@ -29,6 +29,8 @@ namespace Cm93.Model.Structures
 
 		public int GoalsHome { get; set; }
 		public int GoalsAway { get; set; }
+		public int ChancesHome { get; set; }
+		public int ChancesAway { get; set; }
 
 		public ICompetition Competition { get; set; }
 

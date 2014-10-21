@@ -29,6 +29,8 @@ namespace Cm93.Model.Interfaces
 
 		int GoalsHome { get; set; }
 		int GoalsAway { get; set; }
+		int ChancesHome { get; set; }
+		int ChancesAway { get; set; }
 
 		ICompetition Competition { get; }
 
