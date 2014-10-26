@@ -10,7 +10,7 @@ using Config = Cm93.Model.Config;
 
 namespace Cm93.State.Game
 {
-	public class StateManager : IStateManager, ICreateModules
+	public class StateManager : IStateManager
 	{
 		private IRepository Repository { get; set; }
 		private IState State { get; set; }
@@ -50,8 +50,11 @@ namespace Cm93.State.Game
 			return Repository.ListGames();
 		}
 
-		public IDictionary<ModuleType, IModule> CreateModules()
+		public IDictionary<ModuleType, IModule> StartGame()
 		{
+			if (State == null)
+				throw new ApplicationException("Game has not been created yet.");
+
 			State.Model.Cmcl.Fixtures = State.Model.CmclFixtures;
 			State.Model.Cmcl.Places = State.Model.CmclPlaces;
 

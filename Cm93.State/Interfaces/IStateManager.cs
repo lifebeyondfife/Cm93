@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cm93.Model.Interfaces;
+using Cm93.Model.Modules;
 
 namespace Cm93.State.Interfaces
 {
@@ -11,5 +13,6 @@ namespace Cm93.State.Interfaces
 		IList<Tuple<string, Guid>> ListGames();
 			
 		void SaveGame();
+		IDictionary<ModuleType, IModule> StartGame();
 	}
 }

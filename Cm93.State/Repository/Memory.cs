@@ -9,6 +9,11 @@ namespace Cm93.State.Repository
 	{
 		private IDictionary<Guid, IState> Games { get; set; }
 
+		public Memory()
+		{
+			Games = new Dictionary<Guid, IState>();
+		}
+
 		public void DeleteGame(Guid key)
 		{
 			Games.Remove(key);
