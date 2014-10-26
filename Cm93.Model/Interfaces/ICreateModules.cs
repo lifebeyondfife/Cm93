@@ -22,6 +22,6 @@ namespace Cm93.Model.Interfaces
 {
 	public interface ICreateModules
 	{
-		IDictionary<ModuleType, IModule> CreateModules();
+		IDictionary<ModuleType, IModule> CreateModules(); 
 	}
 }

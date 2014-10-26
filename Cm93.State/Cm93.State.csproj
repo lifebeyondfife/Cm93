@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F4FD474A-B62D-4540-929A-0AC98C414E2E}</ProjectGuid>
+    <ProjectGuid>{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cm93.Model</RootNamespace>
-    <AssemblyName>Cm93.Model</AssemblyName>
+    <RootNamespace>Cm93.State</RootNamespace>
+    <AssemblyName>Cm93.State</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,7 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,38 +39,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\PlayerMetricAttribute.cs" />
-    <Compile Include="Config\Config.cs" />
-    <Compile Include="Enumerations\Instruction.cs" />
-    <Compile Include="Enumerations\PlayingPeriod.cs" />
-    <Compile Include="Enumerations\Position.cs" />
-    <Compile Include="Helpers\Extensions.cs" />
-    <Compile Include="Interfaces\ICompetition.cs" />
-    <Compile Include="Interfaces\ICreateModules.cs" />
-    <Compile Include="Interfaces\IFixture.cs" />
-    <Compile Include="Interfaces\IModel.cs" />
-    <Compile Include="Interfaces\ISimulator.cs" />
-    <Compile Include="MockCreateModules.cs" />
-    <Compile Include="Modules\CompetitionModule.cs" />
-    <Compile Include="Interfaces\IModule.cs" />
-    <Compile Include="Modules\FixturesModule.cs" />
-    <Compile Include="Modules\MatchModule.cs" />
-    <Compile Include="Modules\Module.cs" />
-    <Compile Include="Modules\PlayersModule.cs" />
-    <Compile Include="Modules\TeamModule.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\IState.cs" />
+    <Compile Include="Interfaces\IStateManager.cs" />
+    <Compile Include="Game\Model.cs" />
+    <Compile Include="Repository\Memory.cs" />
+    <Compile Include="Repository\SqLite.cs" />
+    <Compile Include="Game\State.cs" />
+    <Compile Include="Game\StateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Structures\Bid.cs" />
-    <Compile Include="Structures\Competition.cs" />
-    <Compile Include="Structures\Coordinate.cs" />
-    <Compile Include="Structures\Cup.cs" />
-    <Compile Include="Structures\Division.cs" />
-    <Compile Include="Structures\Fixture.cs" />
-    <Compile Include="Structures\Place.cs" />
-    <Compile Include="Structures\Player.cs" />
-    <Compile Include="Structures\PlayerIndex.cs" />
-    <Compile Include="Structures\Team.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Cm93.Model\Cm93.Model.csproj">
+      <Project>{f4fd474a-b62d-4540-929a-0ac98c414e2e}</Project>
+      <Name>Cm93.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cm93.Simulator\Cm93.Simulator.csproj">
+      <Project>{4e196610-7bba-4c9d-b546-51d174516799}</Project>
+      <Name>Cm93.Simulator</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

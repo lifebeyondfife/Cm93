@@ -17,7 +17,6 @@
 */
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media;
 using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
@@ -30,17 +29,18 @@ namespace Cm93.Model
 		private IDictionary<string, Team> Teams { get; set; }
 		private IList<Player> Players { get; set; }
 		private Division Cmcl { get; set; }
-		private IList<Fixture> SplFixtures { get; set; }
-		private IDictionary<Team, Place> SplPlaces { get; set; }
+		private IList<Fixture> CmclFixtures { get; set; }
+		private IDictionary<Team, Place> CmclPlaces { get; set; }
 
 		public MockCreateModules()
 		{
 			Teams = new Dictionary<string, Team>
 				{
-					{ "Sothbury Wanderers FC", new Team { Balance = 10032412d, PrimaryColour = Colors.Gray, SecondaryColour = Colors.Gold, TeamName = "Sothbury Wanderers FC" } },
-					{ "Bicester Royals FC", new Team { Balance = 12734794d, PrimaryColour = Colors.BlueViolet, SecondaryColour = Colors.DeepSkyBlue, TeamName = "Bicester Royals FC" } },
-					{ "Caddington City FC", new Team { Balance = 43462412d, PrimaryColour = Colors.CadetBlue, SecondaryColour = Colors.Aqua, TeamName = "Caddington City FC" } },
-					{ "Uthmalton Town FC", new Team { Balance = 1439622d, PrimaryColour = Colors.DeepPink, SecondaryColour = Colors.Black, TeamName = "Uthmalton Town FC" } },
+					//	Look at System.Windows.Media.KnownColor for uint values of common colours
+					{ "Sothbury Wanderers FC", new Team { Balance = 10032412d, PrimaryColourInt = 4286611584U, SecondaryColourInt = 4294956800U, TeamName = "Sothbury Wanderers FC" } },
+					{ "Bicester Royals FC", new Team { Balance = 12734794d, PrimaryColourInt = 4287245282U, SecondaryColourInt = 4278239231U, TeamName = "Bicester Royals FC" } },
+					{ "Caddington City FC", new Team { Balance = 43462412d, PrimaryColourInt = 4284456608U, SecondaryColourInt = 4278255615U, TeamName = "Caddington City FC" } },
+					{ "Uthmalton Town FC", new Team { Balance = 1439622d, PrimaryColourInt = 4294907027U, SecondaryColourInt = 4278190080U, TeamName = "Uthmalton Town FC" } },
 				};
 
 			Players = new List<Player>
@@ -66,7 +66,7 @@ namespace Cm93.Model
 					Teams = Teams
 				};
 
-			SplFixtures = new List<Fixture>
+			CmclFixtures = new List<Fixture>
 				{
 					new Fixture { TeamHome = Teams["Sothbury Wanderers FC"], TeamAway = Teams["Bicester Royals FC"], Week = 1, Competition = Cmcl },
 					new Fixture { TeamHome = Teams["Caddington City FC"], TeamAway = Teams["Uthmalton Town FC"], Week = 1, Competition = Cmcl },
@@ -76,7 +76,7 @@ namespace Cm93.Model
 					new Fixture { TeamHome = Teams["Uthmalton Town FC"], TeamAway = Teams["Sothbury Wanderers FC"], Week = 3, Competition = Cmcl },
 				};
 
-			SplPlaces = new Dictionary<Team, Place>
+			CmclPlaces = new Dictionary<Team, Place>
 				{
 					{ Teams["Sothbury Wanderers FC"], new Place { Team = Teams["Sothbury Wanderers FC"] } },
 					{ Teams["Bicester Royals FC"], new Place { Team = Teams["Bicester Royals FC"] } },
@@ -87,8 +87,8 @@ namespace Cm93.Model
 
 		public IDictionary<ModuleType, IModule> CreateModules()
 		{
-			Cmcl.Fixtures = SplFixtures;
-			Cmcl.Places = SplPlaces;
+			Cmcl.Fixtures = CmclFixtures;
+			Cmcl.Places = CmclPlaces;
 
 			var playersModule = new PlayersModule(Competition.Simulator, Players);
 			

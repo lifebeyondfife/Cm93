@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cm93.Simulator", "Cm93.Simu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cm93.UI", "Cm93.UI\Cm93.UI.csproj", "{DE9643C2-EB54-495A-8F86-4908D5B6322B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cm93.State", "Cm93.State\Cm93.State.csproj", "{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{DE9643C2-EB54-495A-8F86-4908D5B6322B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE9643C2-EB54-495A-8F86-4908D5B6322B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE9643C2-EB54-495A-8F86-4908D5B6322B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

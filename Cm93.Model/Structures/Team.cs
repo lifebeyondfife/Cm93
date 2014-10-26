@@ -24,8 +24,12 @@ namespace Cm93.Model.Structures
 	{
 		public string TeamName { get; set; }
 		public double Balance { get; set; }
-		public Color PrimaryColour { get; set; }
-		public Color SecondaryColour { get; set; }
+
+		public Color PrimaryColour { get { return FromUInt32(PrimaryColourInt); } }
+		public Color SecondaryColour { get { return FromUInt32(SecondaryColourInt); } }
+
+		public uint PrimaryColourInt { get; set; }
+		public uint SecondaryColourInt { get; set; }
 
 		public IList<Player> Players { get; set; }
 
@@ -35,5 +39,14 @@ namespace Cm93.Model.Structures
 		public int PenaltyTaker { get; set; }
 
 		public IList<Competition> Competitions { get; set; }
+
+		//	This function allows a separation so that System.Windows.Media doesn't pollute other non-UI DLLs
+		private static Color FromUInt32(uint argb)
+		{
+			return Color.FromArgb((byte) ((argb & 0xff000000) >> 24),
+				(byte) ((argb & 0x00ff0000) >> 16),
+				(byte) ((argb & 0x0000ff00) >> 8),
+				(byte) (argb & 0x000000ff));
+		}
 	}
 }
