@@ -17,10 +17,11 @@
 */
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Cm93.Model;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Simulator.Basic;
+using Cm93.State.Game;
+using Cm93.State.Interfaces;
 
 namespace Cm93.UI
 {
@@ -33,11 +34,15 @@ namespace Cm93.UI
 	public class CreateModel : ICreateModel
 	{
 		public IDictionary<ModuleType, IModule> Modules { get; set; }
+		public IStateManager StateManager { get; set; }
 		
 		public CreateModel()
 		{
 			new AttachBasicSimulator().AttachSimulator();
-			this.Modules = new MockCreateModules().CreateModules();
+			
+			StateManager = new StateManager();
+			StateManager.CreateGame("My new game");
+			Modules = StateManager.StartGame();
 		}
 	}
 }

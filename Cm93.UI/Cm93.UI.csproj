@@ -213,6 +213,10 @@
       <Project>{4e196610-7bba-4c9d-b546-51d174516799}</Project>
       <Name>Cm93.Simulator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Cm93.State\Cm93.State.csproj">
+      <Project>{1cf64690-d57e-4221-a9c1-dfb3599ece0d}</Project>
+      <Name>Cm93.State</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Shirt.cur" />
