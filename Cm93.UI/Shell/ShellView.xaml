@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Cm93.UI.Shell.ShellView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+        xmlns:cal="http://www.caliburnproject.org"
         Title="Cm93" Height="600" Width="960">
     <Grid Background="{StaticResource GreyToBlackDiagonal}">
 		<Grid.Resources>

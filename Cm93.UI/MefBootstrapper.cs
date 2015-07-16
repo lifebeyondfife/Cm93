@@ -1,5 +1,5 @@
 ﻿/*
-        Copyright © Iain McDonald 2013-2014
+        Copyright © Iain McDonald 2013-2015
         This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
@@ -15,21 +15,32 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Caliburn.Micro;
+using Cm93.UI.Shell;
 using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
+using System.Windows;
 using System.Windows.Threading;
-using Caliburn.Micro;
-using Cm93.UI.Shell;
 
 namespace Cm93.UI
 {
-	public sealed class MefBootstrapper : Bootstrapper<ShellViewModel>, IDisposable
+	public sealed class MefBootstrapper : BootstrapperBase, IDisposable
 	{
 		private CompositionContainer container;
-		
+
 		public Dispatcher AppDispatcher { get; set; }
+
+		public MefBootstrapper()
+		{
+			Initialize();
+		}
+
+		protected override void OnStartup(object sender, StartupEventArgs e)
+		{
+			DisplayRootViewFor<ShellViewModel>();
+		}
 
 		protected override void Configure()
 		{
@@ -52,7 +63,7 @@ namespace Cm93.UI
 			var contract = string.IsNullOrEmpty(key) ? AttributedModelServices.GetContractName(serviceType) : key;
 			return container.GetExportedValues<object>(contract).FirstOrDefault();
 		}
-		
+
 		public void Dispose()
 		{
 			this.container.Dispose();
