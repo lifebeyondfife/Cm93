@@ -1,5 +1,5 @@
 ﻿/*
-        Copyright © Iain McDonald 2013-2014
+        Copyright © Iain McDonald 2013-2015
         This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
@@ -64,7 +64,7 @@ namespace Cm93.UI.Modules
 
 		public override void SetModel(IModule model)
 		{
-			SelectPlayerModel = (ITeamModule) model;
+			SelectPlayerModel = (ITeamModule)model;
 
 			foreach (var teamName in SelectPlayerModel.Teams.Keys.OrderBy(k => k))
 				AvailableTeams.Add(teamName);
@@ -77,8 +77,8 @@ namespace Cm93.UI.Modules
 
 			Configuration.PlayerTeamName = SelectedTeam;
 
-			this.eventAggregator.Publish(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam]));
-			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Team));
+			this.eventAggregator.PublishOnUIThread(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam]));
+			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Team));
 		}
 	}
 }

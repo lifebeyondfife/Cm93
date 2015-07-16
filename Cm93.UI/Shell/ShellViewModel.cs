@@ -1,5 +1,5 @@
 ﻿/*
-        Copyright © Iain McDonald 2013-2014
+        Copyright © Iain McDonald 2013-2015
         This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
@@ -55,9 +55,9 @@ namespace Cm93.UI.Shell
 					kvp => kvp.Key,
 					kvp => kvp.Key,
 					(vm, m) => new { ViewModel = vm.Value, Model = m.Value }))
-				{
-					modelViewModel.ViewModel.SetModel(modelViewModel.Model);
-				}
+			{
+				modelViewModel.ViewModel.SetModel(modelViewModel.Model);
+			}
 
 			this.ActiveItem = this.children[ModuleType.SelectTeam];
 
@@ -76,7 +76,7 @@ namespace Cm93.UI.Shell
 
 		public void Team()
 		{
-			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Team));
+			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Team));
 		}
 
 		public bool CanPlayers()
@@ -86,7 +86,7 @@ namespace Cm93.UI.Shell
 
 		public void Players()
 		{
-			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Players));
+			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Players));
 		}
 
 		public bool CanFixtures()
@@ -96,7 +96,7 @@ namespace Cm93.UI.Shell
 
 		public void Fixtures()
 		{
-			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Fixtures));
+			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Fixtures));
 		}
 
 		public bool CanMatch()
@@ -106,7 +106,7 @@ namespace Cm93.UI.Shell
 
 		public void Match()
 		{
-			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Match));
+			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Match));
 		}
 
 		public bool CanCompetitions()
@@ -116,7 +116,7 @@ namespace Cm93.UI.Shell
 
 		public void Competitions()
 		{
-			this.eventAggregator.Publish(new ModuleSelectedEvent(ModuleType.Competitions));
+			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Competitions));
 		}
 
 		public void Handle(TeamSetEvent message)
