@@ -71,6 +71,12 @@
     <Compile Include="Game\StateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sqlite\Cm93Context.cs" />
+    <Compile Include="Sqlite\Tables\Competition.cs" />
+    <Compile Include="Sqlite\Tables\Division.cs" />
+    <Compile Include="Sqlite\Tables\Fixture.cs" />
+    <Compile Include="Sqlite\Tables\Player.cs" />
+    <Compile Include="Sqlite\Tables\Rating.cs" />
+    <Compile Include="Sqlite\Tables\Team.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cm93.Model\Cm93.Model.csproj">
@@ -83,10 +89,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Sqlite\Cm93.sqlite">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
