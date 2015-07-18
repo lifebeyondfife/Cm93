@@ -34,7 +34,7 @@ namespace Cm93.UI.Modules.Players
 				{
 					{ PlayerFilter.Age, ColumnAge },
 					{ PlayerFilter.Goals, ColumnGoals },
-					{ PlayerFilter.Positions, ColumnPositions },
+					{ PlayerFilter.Position, ColumnPosition },
 					{ PlayerFilter.Rating, ColumnRating },
 					{ PlayerFilter.Team, ColumnTeam }
 				};

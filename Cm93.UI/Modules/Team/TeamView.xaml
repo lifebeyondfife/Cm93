@@ -27,7 +27,7 @@
 
 		<DataGrid VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding PlayerGrid, Mode=OneWay}" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" AutoGenerateColumns="False" IsHitTestVisible="False">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="Positions" Binding="{Binding Path=Positions}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn Header="Position" Binding="{Binding Path=Position}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
 				<DataGridTextColumn Header="Age" Binding="{Binding Path=Age}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
 				<DataGridTextColumn Header="Rating" Binding="{Binding Path=Rating}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
 				<DataGridTextColumn Header="Goals" Binding="{Binding Path=Goals}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>

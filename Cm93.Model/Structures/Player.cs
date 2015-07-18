@@ -72,7 +72,7 @@ namespace Cm93.Model.Structures
 		public Team Team { get; set; }
 
 		[PlayerMetric(Order = 7)]
-		public IList<Position> Positions { get; set; }
+		public Position Position { get; set; }
 		public Coordinate Location { get; set; }
 
 		public Instruction Instruction { get; set; }
@@ -107,7 +107,7 @@ namespace Cm93.Model.Structures
 					Location = new Coordinate { X = this.Location.X, Y = this.Location.Y },
 					Number = this.Number,
 					NumericValue = this.NumericValue,
-					Positions = this.Positions,
+					Position = this.Position,
 					Rating = this.Rating,
 					ReleaseValue = this.ReleaseValue,
 					Team = this.Team

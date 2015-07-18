@@ -19,7 +19,7 @@ namespace Cm93.UI.Modules.Players
 {
 	public enum PlayerFilter
 	{
-		Positions,
+		Position,
 		Age,
 		Rating,
 		Team,
@@ -31,7 +31,7 @@ namespace Cm93.UI.Modules.Players
 		public int Number { get; internal set; }
 		public string Name { get; internal set; }
 		public string Team { get; internal set; }
-		public string Positions { get; internal set; }
+		public string Position { get; internal set; }
 		public int Age { get; internal set; }
 		public double Rating { get; internal set; }
 		public int Goals { get; internal set; }
