@@ -15,18 +15,20 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using Cm93.State.Sqlite.Tables;
-using System.Data.Entity;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Cm93.State.Sqlite
+namespace Cm93.State.Sqlite.Tables
 {
-	public class Cm93Context : DbContext
+	public class Team
 	{
-		public DbSet<Competition> Competitions { get; set; }
-		public DbSet<Division> Divisions { get; set; }
-		public DbSet<Fixture> Fixtures { get; set; }
-		public DbSet<Player> Players { get; set; }
-		public DbSet<Rating> Ratings { get; set; }
-		public DbSet<Team> Teams { get; set; }
+		[Key]
+		[Column(Order = 1)]
+		public long TeamID { get; set; }
+
+		public string TeamName { get; set; }
+		public long PrimaryColour { get; set; }
+		public long SecondaryColour { get; set; }
+		public long Balance { get; set; }
 	}
 }

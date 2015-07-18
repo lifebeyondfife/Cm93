@@ -19,59 +19,40 @@ using System;
 
 namespace Cm93.Model.Enumerations
 {
+    [Flags]
     public enum Position
     {
-        All,
-        GoalKeeper,
-        CentreBack,
-        LeftFullBack,
-        RightFullBack,
-        LeftWingback,
-        RightWingback,
-        CentreMid,
-        LeftWinger,
-        RightWinger,
-        Forward,
-        Striker,
-        Roaming
-    }
+        //       FMDLR
+        GK   = 0x00000,
 
-   // [Flags]
-   // public enum Position
-   // {
-   //     //       FMDLR
-   //     GK   = 0x00000,
+        D    = 0x00111,
+        M    = 0x01011,
+        F    = 0x10011,
 
-   //     D    = 0x00111,
-   //     M    = 0x01011,
-   //     F    = 0x10011,
+        DM   = 0x01111,
+        MF   = 0x11011,
 
-   //     DM   = 0x01111,
-   //     MF   = 0x11011,
-   //     DF   = 0x10111,
+        CB   = 0x00100,
+        CM   = 0x01000,
+        CF   = 0x10000,
 
-   //     CD   = 0x00100,
-   //     CM   = 0x01000,
-   //     CF   = 0x10000,
+        CDM  = 0x01100,
+        CMF  = 0x11000,
 
-   //     CDM  = 0x01100,
-   //     CFM  = 0x11000,
-   //     CDF  = 0x10100,
+        LB   = 0x00110,
+        LW   = 0x10010,
 
-   //     LD   = 0x00110,
-   //     LM   = 0x01010,
-   //     LF   = 0x10010,
+        LDM  = 0x01110,
+        LMF  = 0x11010,
 
-   //     LDM  = 0x01110,
-   //     LFM  = 0x11010,
-   //     LDF  = 0x10110,
+        RB   = 0x00101,
+        RW   = 0x10001,
 
-   //     RD   = 0x00101,
-   //     RM   = 0x01001,
-   //     RF   = 0x10001,
+        RDM  = 0x01101,
+        RMF  = 0x11001,
 
-   //     RDM  = 0x01101,
-   //     RFM  = 0x11001,
-   //     RDF  = 0x10101,
-   //}
+		All  = 0x11111
+		//	LB / RB ?
+		//	RW / LW ?
+   }
 }

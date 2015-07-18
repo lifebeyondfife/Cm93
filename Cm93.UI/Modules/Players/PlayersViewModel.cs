@@ -355,7 +355,7 @@ namespace Cm93.UI.Modules.Players
 
 			foreach (var player in PlayersModel.Players.Where(p =>
 				(SelectedPositionFilter == Position.All ||
-				p.Positions.Contains(SelectedPositionFilter)) &&
+				p.Position == SelectedPositionFilter) &&
 				(!ShowOnlyMyTeam || p.Team.TeamName == Team.TeamName)))
 				this.playerGrid.Add(new PlayerRow
 					{
@@ -363,7 +363,7 @@ namespace Cm93.UI.Modules.Players
 						Number = player.Number,
 						Age = player.Age,
 						Goals = player.Goals,
-						Positions = string.Join("\n", player.Positions),
+						Position = Enum.GetName(typeof(Position), player.Position),
 						Rating = player.Rating,
 						Team = player.Team.TeamName
 					});

@@ -251,7 +251,7 @@ namespace Cm93.UI.Modules.Team
 			this.playerGrid.Add(new PlayerRow
 				{
 					Age = player.Age,
-					Positions = string.Join("\n", player.Positions.Select(p => Enum.GetName(typeof(Position), p))),
+					Position = Enum.GetName(typeof(Position), player.Position),
 					Rating = player.Rating,
 					Goals = player.Goals
 				});

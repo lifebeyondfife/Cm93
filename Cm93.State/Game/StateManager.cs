@@ -37,6 +37,10 @@ namespace Cm93.State.Game
 			//	TODO: Load this from a configuration file
 
 			//	Repository = new SqLite();
+
+			var test = new SqLite();
+			test.LoadGame(new Guid());
+
 			Repository = new Memory();
 		}
 

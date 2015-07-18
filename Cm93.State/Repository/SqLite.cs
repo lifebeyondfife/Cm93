@@ -16,7 +16,9 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using Cm93.State.Interfaces;
+using Cm93.State.Sqlite;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Cm93.State.Repository
@@ -36,7 +38,21 @@ namespace Cm93.State.Repository
 
 		public IState LoadGame(Guid key)
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
+
+			using (var context = new Cm93Context())
+			{
+				foreach (var competitionName in context.Competitions.Select(c => c.CompetitionName))
+					Console.WriteLine(competitionName);
+
+				foreach (var team in context.Divisions.Select(d => d.Team))
+					Console.WriteLine(team.TeamName);
+
+				foreach (var fixture in context.Fixtures)
+					Console.WriteLine("{0} vs {1}", fixture.HomeTeam.TeamName, fixture.AwayTeam.TeamName);
+			}
+
+			return null;
 		}
 
 		public IList<Tuple<string, Guid>> ListGames()

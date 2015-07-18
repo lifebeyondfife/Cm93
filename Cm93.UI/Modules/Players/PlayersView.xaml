@@ -31,7 +31,7 @@
 					<DataGridTextColumn Header="Number" Binding="{Binding Path=Number}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
 					<DataGridTextColumn Header="Player" Binding="{Binding Path=Name}" Width="6*" CanUserSort="False" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
 					<DataGridTextColumn x:Name="ColumnTeam" Header="Team" Binding="{Binding Path=Team}" Width="5*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
-					<DataGridTextColumn x:Name="ColumnPositions" Header="Positions" Binding="{Binding Path=Positions}" Width="4*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
+					<DataGridTextColumn x:Name="ColumnPosition" Header="Position" Binding="{Binding Path=Position}" Width="4*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
 					<DataGridTextColumn x:Name="ColumnAge" Header="Age" Binding="{Binding Path=Age}" Width="2*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
 					<DataGridTextColumn x:Name="ColumnRating" Header="Rating" Binding="{Binding Path=Rating}" Width="2*" SortDirection="Ascending" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
 					<DataGridTextColumn x:Name="ColumnGoals" Header="Goals" Binding="{Binding Path=Goals}" Width="2*" SortDirection="Ascending" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}" />
