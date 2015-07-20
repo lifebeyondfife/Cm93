@@ -17,12 +17,16 @@
 */
 using Cm93.State.Sqlite.Tables;
 using System.Data.Entity;
+using TableState = Cm93.State.Sqlite.Tables.State;
 
 namespace Cm93.State.Sqlite
 {
 	public class Cm93Context : DbContext
 	{
 		public DbSet<Competition> Competitions { get; set; }
+		public DbSet<TeamBalance> TeamBalances { get; set; }
+		public DbSet<PlayerStat> PlayerStats { get; set; }
+		public DbSet<TableState> States { get; set; }
 		public DbSet<Division> Divisions { get; set; }
 		public DbSet<Fixture> Fixtures { get; set; }
 		public DbSet<Player> Players { get; set; }

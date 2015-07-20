@@ -24,12 +24,15 @@ namespace Cm93.State.Sqlite.Tables
 	{
 		[Key]
 		[Column(Order = 1)]
-		public long CompetitionID { get; set; }
+		public long CompetitionId { get; set; }
 
 		[Key]
 		[Column(Order = 2)]
-		//[ForeignKey("Team")]
-		public long TeamID { get; set; }
+		public long TeamId { get; set; }
+
+		[Key]
+		[Column(Order = 3)]
+		public long StateId { get; set; }
 
 		public long Wins { get; set; }
 		public long Draws { get; set; }
@@ -41,5 +44,6 @@ namespace Cm93.State.Sqlite.Tables
 
 		public virtual Competition Competition { get; set; }
 		public virtual Team Team { get; set; }
+		public virtual State State { get; set; }
 	}
 }

@@ -20,31 +20,38 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cm93.State.Sqlite.Tables
 {
+	[Table("Fixtures")]
 	public class Fixture
 	{
 		[Key]
 		[Column(Order = 1)]
 		[ForeignKey("Competition")]
-		public long CompetitionID { get; set; }
+		public long CompetitionId { get; set; }
 
 		[Key]
 		[Column(Order = 2)]
-		[ForeignKey("HomeTeam")]
-		public long HomeTeamID { get; set; }
+		[ForeignKey("State")]
+		public long StateId { get; set; }
 
 		[Key]
 		[Column(Order = 3)]
+		[ForeignKey("HomeTeam")]
+		public long HomeTeamId { get; set; }
+
+		[Key]
+		[Column(Order = 4)]
 		[ForeignKey("AwayTeam")]
-		public long AwayTeamID { get; set; }
+		public long AwayTeamId { get; set; }
+
+		[Key]
+		[Column(Order = 5)]
+		public long Week { get; set; }
 
 		public long HomeGoals { get; set; }
 		public long AwayGoals { get; set; }
 
-		[Key]
-		[Column(Order = 4)]
-		public long Week { get; set; }
-
 		public virtual Competition Competition { get; set; }
+		public virtual State State { get; set; }
 		public virtual Team HomeTeam { get; set; }
 		public virtual Team AwayTeam { get; set; }
 	}

@@ -22,7 +22,7 @@ namespace Cm93.State.Sqlite.Tables
 	public class Competition
 	{
 		[Key]
-		public long CompetitionID { get; set; }
+		public long CompetitionId { get; set; }
 
 		public string CompetitionType { get; set; }
 		public string CompetitionName { get; set; }

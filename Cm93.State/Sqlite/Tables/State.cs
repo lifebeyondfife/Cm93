@@ -15,19 +15,22 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cm93.State.Sqlite.Tables
 {
-	public class Team
+	[Table("States")]
+	public class State
 	{
 		[Key]
-		[Column(Order = 1)]
-		public long TeamId { get; set; }
+		public long StateId { get; set; }
 
-		public string TeamName { get; set; }
-		public long PrimaryColour { get; set; }
-		public long SecondaryColour { get; set; }
+		//public string StateGuid { get; set; }
+		public string Name { get; set; }
+		public DateTime Created { get; set; }
+		public DateTime LastSaved { get; set; }
+		public string Hash { get; set; }
 	}
 }
