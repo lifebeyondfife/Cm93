@@ -75,8 +75,11 @@
     <Compile Include="Sqlite\Tables\Division.cs" />
     <Compile Include="Sqlite\Tables\Fixture.cs" />
     <Compile Include="Sqlite\Tables\Player.cs" />
+    <Compile Include="Sqlite\Tables\PlayerStat.cs" />
     <Compile Include="Sqlite\Tables\Rating.cs" />
+    <Compile Include="Sqlite\Tables\State.cs" />
     <Compile Include="Sqlite\Tables\Team.cs" />
+    <Compile Include="Sqlite\Tables\TeamBalance.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cm93.Model\Cm93.Model.csproj">

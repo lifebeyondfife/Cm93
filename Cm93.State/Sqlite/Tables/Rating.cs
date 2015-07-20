@@ -24,12 +24,12 @@ namespace Cm93.State.Sqlite.Tables
 	{
 		[Key]
 		[Column(Order = 1)]
-		[ForeignKey("Player")]
-		public long PlayerID { get; set; }
+		[ForeignKey("PlayerStat")]
+		public long PlayerStatId { get; set; }
 
 		[Column("Rating")]
 		public float RatingValue { get; set; }
 
-		public virtual Player Player { get; set; }
+		public virtual PlayerStat PlayerStat { get; set; }
 	}
 }

@@ -20,14 +20,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cm93.State.Sqlite.Tables
 {
-	public class Team
+	public class PlayerStat
 	{
 		[Key]
 		[Column(Order = 1)]
-		public long TeamId { get; set; }
+		public long PlayerStatId { get; set; }
 
-		public string TeamName { get; set; }
-		public long PrimaryColour { get; set; }
-		public long SecondaryColour { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public long Age { get; set; }
+		public long Position { get; set; }
 	}
 }

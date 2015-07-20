@@ -50,6 +50,9 @@ namespace Cm93.State.Repository
 
 				foreach (var fixture in context.Fixtures)
 					Console.WriteLine("{0} vs {1}", fixture.HomeTeam.TeamName, fixture.AwayTeam.TeamName);
+
+				foreach (var player in context.Players)
+					Console.WriteLine("{0} {1}", player.PlayerStat.FirstName, player.PlayerStat.LastName);
 			}
 
 			return null;
