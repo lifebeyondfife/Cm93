@@ -19,8 +19,9 @@ using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 using Cm93.State.Interfaces;
+using Cm93.State.Sqlite;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace Cm93.State.Game
 {
@@ -44,98 +45,77 @@ namespace Cm93.State.Game
 
 		private static IModel CreateModel()
 		{
-			//	TODO: Create from configuration or load from some text file or... anything else
-
-			var model = new Model
-				{
-					Teams = new Dictionary<string, Team>
-						{
-							//	Look at System.Windows.Media.KnownColor for uint values of common colours
-							{
-								"Sothbury Wanderers FC",
-								new Team
-									{
-										Balance = 10032412d,
-										PrimaryColourInt = 4286611584U,
-										SecondaryColourInt = 4294956800U,
-										TeamName = "Sothbury Wanderers FC"
-									}
-							},
-							{
-								"Bicester Royals FC",
-								new Team
-									{
-										Balance = 12734794d,
-										PrimaryColourInt = 4287245282U,
-										SecondaryColourInt = 4278239231U,
-										TeamName = "Bicester Royals FC"
-									}
-							},
-							{
-								"Caddington City FC",
-								new Team
-									{
-										Balance = 43462412d,
-										PrimaryColourInt = 4284456608U,
-										SecondaryColourInt = 4278255615U,
-										TeamName = "Caddington City FC"
-									}
-							},
-							{
-								"Uthmalton Town FC",
-								new Team
-									{
-										Balance = 1439622d,
-										PrimaryColourInt = 4294907027U,
-										SecondaryColourInt = 4278190080U,
-										TeamName = "Uthmalton Town FC"
-									}
-							},
-						}
-				};
-
-			model.Players = new List<Player>
-				{
-					new Player { Age = 21, ReleaseValue = 40000000, NumericValue = 23000000, FirstName = "John", LastName = "McMasterson", Rating = 92.4, Number = 9, Position = Position.CB, Team = model.Teams["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.13d, Y = 0.2d } },
-					new Player { Age = 24, ReleaseValue = 4000000, NumericValue = 6000000, FirstName = "Ted", LastName = "Eddington", Rating = 60.3, Number = 3, Position = Position.CMF, Team = model.Teams["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.5d, Y = 0.4d } },
-					new Player { Age = 27, ReleaseValue = 15000000, NumericValue = 13000000, FirstName = "Bill", LastName = "Formica", Rating = 79.3, Number = 1, Position = Position.LDM, Team = model.Teams["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.7d, Y = 0.7d } },
-					new Player { Age = 22, ReleaseValue = 20000000, NumericValue = 19000000, FirstName = "Sam", LastName = "Cosmic", Rating = 83.5, Number = 10, Position = Position.RDM, Team = model.Teams["Bicester Royals FC"], Location = new Coordinate { X = 0.2d, Y = 0.3d } },
-					new Player { Age = 28, ReleaseValue = 2000000, NumericValue = 3000000, FirstName = "Tarquin", LastName = "Frederick", Rating = 41.2, Number = 8, Position = Position.CF, Team = model.Teams["Bicester Royals FC"], Location = new Coordinate { X = 0.8d, Y = 0.3d } },
-					new Player { Age = 27, ReleaseValue = 750000, NumericValue = 1000000, FirstName = "Philip", LastName = "Thomas", Rating = 28.5, Number = 2, Position = Position.D, Team = model.Teams["Bicester Royals FC"], Location = new Coordinate { X = 0.5, Y = 0.6d } },
-					new Player { Age = 24, ReleaseValue = 2000000, NumericValue = 2500000, FirstName = "Elliot", LastName = "Cloud", Rating = 55.7, Number = 23, Position = Position.MF, Team = model.Teams["Caddington City FC"], Location = new Coordinate { X = 0.13d, Y = 0.2d } },
-					new Player { Age = 20, ReleaseValue = 5000000, NumericValue = 4500000, FirstName = "Bob", LastName = "Spire", Rating = 66.4, Number = 4, Position = Position.GK, Team = model.Teams["Caddington City FC"], Location = new Coordinate { X = 0.34d, Y = 0.4d } },
-					new Player { Age = 33, ReleaseValue = 500000, NumericValue = 850000, FirstName = "Terrence", LastName = "Nottingham", Rating = 26.5, Number = 1, Position = Position.F, Team = model.Teams["Caddington City FC"], Location = new Coordinate { X = 0.54d, Y = 0.7d } },
-					new Player { Age = 36, ReleaseValue = 15000000, NumericValue = 11000000, FirstName = "Bastion", LastName = "Rockton", Rating = 86.9, Number = 5, Position = Position.CM, Team = model.Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.2d, Y = 0.4d } },
-					new Player { Age = 19, ReleaseValue = 3000000, NumericValue = 2000000, FirstName = "Huppert", LastName = "Strafer", Rating = 47.7, Number = 6, Position = Position.CB, Team = model.Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.5d } },
-					new Player { Age = 17, ReleaseValue = 3000000, NumericValue = 2500000, FirstName = "Fergus", LastName = "Mystic", Rating = 56.3, Number = 2, Position = Position.LDM, Team = model.Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.75d } },
-				};
-
-			model.Cmcl = new Division
+			using (var context = new Cm93Context())
 			{
-				CompetitionName = "Cm93 Competition League",
-				Week = 0,
-				Teams = model.Teams
-			};
+				var teams = context.TeamBalances.
+					Where(tb => tb.StateId == 0).
+					ToList(). // Need an in memory structure for some of the following LINQ code
+					Select(tb => new Team
+						{
+							Balance = tb.Balance,
+							PrimaryColourInt = Convert.ToUInt32(tb.Team.PrimaryColour),
+							SecondaryColourInt = Convert.ToUInt32(tb.Team.SecondaryColour),
+							TeamName = tb.Team.TeamName
+						}).
+					ToDictionary(t => t.TeamName);
 
-			model.CmclFixtures = new List<Fixture>
-				{
-					new Fixture { TeamHome = model.Teams["Sothbury Wanderers FC"], TeamAway = model.Teams["Bicester Royals FC"], Week = 1, Competition = model.Cmcl },
-					new Fixture { TeamHome = model.Teams["Caddington City FC"], TeamAway = model.Teams["Uthmalton Town FC"], Week = 1, Competition = model.Cmcl },
-					new Fixture { TeamHome = model.Teams["Sothbury Wanderers FC"], TeamAway = model.Teams["Caddington City FC"], Week = 2, Competition = model.Cmcl },
-					new Fixture { TeamHome = model.Teams["Uthmalton Town FC"], TeamAway = model.Teams["Bicester Royals FC"], Week = 2, Competition = model.Cmcl },
-					new Fixture { TeamHome = model.Teams["Bicester Royals FC"], TeamAway = model.Teams["Caddington City FC"], Week = 3, Competition = model.Cmcl },
-					new Fixture { TeamHome = model.Teams["Uthmalton Town FC"], TeamAway = model.Teams["Sothbury Wanderers FC"], Week = 3, Competition = model.Cmcl },
-				};
+				var players = context.Players.
+					Where(p => p.StateId == 0).
+					ToList(). // Need an in memory structure for some of the following LINQ code
+					Select(p => new Player
+						{
+							Age = (int) p.PlayerStat.Age,
+							ReleaseValue = (int) p.ReleaseValue,
+							NumericValue = (int) p.NumericValue,
+							FirstName = p.PlayerStat.FirstName,
+							LastName = p.PlayerStat.LastName,
+							Rating = p.PlayerStat.Rating.RatingValue,
+							Number = (int) p.Number,
+							Position = (Position) p.PlayerStat.Position,
+							Team = teams[p.Team.TeamName],
+							Location = new Coordinate { X = p.LocationX, Y = p.LocationY }
+						}).
+					ToList();
 
-			model.CmclPlaces = new Dictionary<Team, Place>
-				{
-					{ model.Teams["Sothbury Wanderers FC"], new Place { Team = model.Teams["Sothbury Wanderers FC"] } },
-					{ model.Teams["Bicester Royals FC"], new Place { Team = model.Teams["Bicester Royals FC"] } },
-					{ model.Teams["Caddington City FC"], new Place { Team = model.Teams["Caddington City FC"] } },
-					{ model.Teams["Uthmalton Town FC"], new Place { Team = model.Teams["Uthmalton Town FC"] } }
-				};
+				var division = context.Competitions.
+					Where(c => c.CompetitionId == 0).
+					ToList(). // Need an in memory structure for some of the following LINQ code
+					Select(c => new Division
+						{
+							CompetitionName = c.CompetitionName,
+							Week = 0,
+							Teams = teams
+						}).
+					Single();
 
-			return model;
+				var fixtures = context.Fixtures.
+					Where(f => f.StateId == 0).
+					ToList(). // Need an in memory structure for some of the following LINQ code
+					Select(f => new Fixture
+						{
+							TeamHome = teams[f.HomeTeam.TeamName],
+							TeamAway = teams[f.AwayTeam.TeamName],
+							Week = (int) f.Week,
+							Competition = division
+						}).
+					ToList();
+
+				var places = teams.
+					Select(t => new Place
+						{
+							Team = t.Value
+						}).
+					ToDictionary(t => t.Team);
+
+				return new Model
+					{
+						Cmcl = division,
+						CmclFixtures = fixtures,
+						CmclPlaces = places,
+						Players = players,
+						Teams = teams
+					};
+			}
 		}
 	}
 }

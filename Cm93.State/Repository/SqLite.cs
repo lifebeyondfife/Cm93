@@ -38,24 +38,7 @@ namespace Cm93.State.Repository
 
 		public IState LoadGame(Guid key)
 		{
-			//throw new NotImplementedException();
-
-			using (var context = new Cm93Context())
-			{
-				foreach (var competitionName in context.Competitions.Select(c => c.CompetitionName))
-					Console.WriteLine(competitionName);
-
-				foreach (var team in context.Divisions.Select(d => d.Team))
-					Console.WriteLine(team.TeamName);
-
-				foreach (var fixture in context.Fixtures)
-					Console.WriteLine("{0} vs {1}", fixture.HomeTeam.TeamName, fixture.AwayTeam.TeamName);
-
-				foreach (var player in context.Players)
-					Console.WriteLine("{0} {1}", player.PlayerStat.FirstName, player.PlayerStat.LastName);
-			}
-
-			return null;
+			throw new NotImplementedException();
 		}
 
 		public IList<Tuple<string, Guid>> ListGames()
