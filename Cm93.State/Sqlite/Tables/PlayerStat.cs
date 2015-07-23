@@ -24,11 +24,14 @@ namespace Cm93.State.Sqlite.Tables
 	{
 		[Key]
 		[Column(Order = 1)]
+		[ForeignKey("Rating")]
 		public long PlayerStatId { get; set; }
 
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public long Age { get; set; }
 		public long Position { get; set; }
+
+		public virtual Rating Rating { get; set; }
 	}
 }
