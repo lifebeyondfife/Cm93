@@ -31,14 +31,25 @@ namespace Cm93.UI.Shell
 		private readonly IEventAggregator eventAggregator;
 		private readonly IDictionary<ModuleType, ModuleViewModelBase> children;
 
-		private bool teamSelected = false;
-		public bool TeamSelected
+		private bool isGameLive = false;
+		public bool IsGameLive
 		{
-			get { return teamSelected; }
+			get { return isGameLive; }
 			set
 			{
-				teamSelected = value;
-				NotifyOfPropertyChange(() => TeamSelected);
+				isGameLive = value;
+				NotifyOfPropertyChange(() => IsGameLive);
+			}
+		}
+
+		private bool isStartScreen = true;
+		public bool IsStartScreen
+		{
+			get { return isStartScreen; }
+			set
+			{
+				isStartScreen = value;
+				NotifyOfPropertyChange(() => IsStartScreen);
 			}
 		}
 
@@ -59,7 +70,7 @@ namespace Cm93.UI.Shell
 				modelViewModel.ViewModel.SetModel(modelViewModel.Model);
 			}
 
-			this.ActiveItem = this.children[ModuleType.SelectTeam];
+			this.ActiveItem = this.children[ModuleType.StartScreen];
 
 			this.eventAggregator.Subscribe(this);
 		}
@@ -119,9 +130,31 @@ namespace Cm93.UI.Shell
 			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Competitions));
 		}
 
+		public bool CanNewGame()
+		{
+			return true;
+		}
+
+		public void NewGame()
+		{
+			IsStartScreen = false;
+			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.SelectTeam));
+		}
+
+		public bool CanLoadGame()
+		{
+			return true;
+		}
+
+		public void LoadGame()
+		{
+			IsStartScreen = false;
+			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.LoadGame));
+		}
+
 		public void Handle(TeamSetEvent message)
 		{
-			TeamSelected = !string.IsNullOrEmpty(message.Team.TeamName);
+			IsGameLive = !string.IsNullOrEmpty(message.Team.TeamName);
 		}
 	}
 }

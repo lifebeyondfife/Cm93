@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Cm93.UI.Modules.SelectTeamView"
+﻿<UserControl x:Class="Cm93.UI.Modules.SelectTeam.SelectTeamView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

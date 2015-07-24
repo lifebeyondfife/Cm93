@@ -55,4 +55,8 @@ namespace Cm93.Model.Interfaces
 		IList<ICompetition> Competitions { get; }
 		IFixture Play(string competitionName, string playerTeamName = "");
 	}
+
+	public interface IGameModule : IModule
+	{
+	}
 }

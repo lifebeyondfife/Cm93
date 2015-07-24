@@ -94,6 +94,8 @@ namespace Cm93.State.Game
 			};
 			var matchModule = new MatchModule(new[] { State.Model.Cmcl });
 
+			var gameModule = new GameModule();
+
 			Config.Configuration.GlobalWeek = () => Competition.GlobalWeek(new[] { State.Model.Cmcl });
 
 			return new Dictionary<ModuleType, IModule>
@@ -103,7 +105,9 @@ namespace Cm93.State.Game
 					{ ModuleType.Fixtures, fixturesModule },
 					{ ModuleType.Competitions, competitionModule },
 					{ ModuleType.Match, matchModule },
-					{ ModuleType.Players, playersModule }
+					{ ModuleType.Players, playersModule },
+					{ ModuleType.StartScreen, gameModule },
+					{ ModuleType.LoadGame, gameModule }
 				};
 		}
 	}

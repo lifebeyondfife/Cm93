@@ -20,14 +20,19 @@
 			<ColumnDefinition Width="1*"/>
 		</Grid.ColumnDefinitions>
 
-		<StackPanel Visibility="{Binding TeamSelected, Converter={StaticResource BoolVisible}}" Grid.Column="0" Grid.Row="1">
+		<StackPanel Visibility="{Binding IsGameLive, Converter={StaticResource BoolVisible}}" Grid.Column="0" Grid.Row="1">
 			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Fixtures" Content="Fixtures" />
 			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Team" Content="Team" />
 			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Players" Content="Players" />
 			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Competitions" Content="Competitions" />
 			<Button Margin="5, 0, 5, 5" Height="45" x:Name="Match" Content="Match" />
 		</StackPanel>
-		
+
+		<StackPanel Visibility="{Binding IsStartScreen, Converter={StaticResource BoolVisible}}" Grid.Column="0" Grid.Row="1">
+			<Button Margin="5, 0, 5, 5" Height="45" x:Name="NewGame" Content="New Game" />
+			<Button Margin="5, 0, 5, 5" Height="45" x:Name="LoadGame" Content="Load Game" />
+		</StackPanel>
+
 		<ContentControl Grid.Row="1" Grid.Column="2" cal:View.Model="{Binding ActiveItem}" />
 	</Grid>
 </Window>
