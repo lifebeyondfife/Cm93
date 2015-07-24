@@ -82,6 +82,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Printing" />
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
@@ -141,10 +142,14 @@
       <DependentUpon>PlayersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\Players\PlayersViewModel.cs" />
-    <Compile Include="Modules\SelectTeamView.xaml.cs">
+    <Compile Include="Modules\SelectTeam\SelectTeamView.xaml.cs">
       <DependentUpon>SelectTeamView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\SelectTeamViewModel.cs" />
+    <Compile Include="Modules\SelectTeam\SelectTeamViewModel.cs" />
+    <Compile Include="Modules\StartScreen\StartScreenView.xaml.cs">
+      <DependentUpon>StartScreenView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\StartScreen\StartScreenViewModel.cs" />
     <Compile Include="Modules\Team\PlayerRow.cs" />
     <Compile Include="Modules\Team\TeamRow.cs" />
     <Compile Include="Modules\Team\TeamView.xaml.cs">
@@ -169,7 +174,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Modules\SelectTeamView.xaml">
+    <Page Include="Modules\SelectTeam\SelectTeamView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\StartScreen\StartScreenView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -247,6 +256,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Shirt.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules\LoadGame\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\StartScreen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.97.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.97.0\build\net45\System.Data.SQLite.Core.targets')" />

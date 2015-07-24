@@ -55,6 +55,7 @@
     <Compile Include="Modules\CompetitionModule.cs" />
     <Compile Include="Interfaces\IModule.cs" />
     <Compile Include="Modules\FixturesModule.cs" />
+    <Compile Include="Modules\GameModule.cs" />
     <Compile Include="Modules\MatchModule.cs" />
     <Compile Include="Modules\Module.cs" />
     <Compile Include="Modules\PlayersModule.cs" />

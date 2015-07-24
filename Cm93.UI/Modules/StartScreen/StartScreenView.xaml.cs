@@ -15,17 +15,13 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-namespace Cm93.Model.Modules
+namespace Cm93.UI.Modules.StartScreen
 {
-	public enum ModuleType
+	public partial class StartScreenView
 	{
-		Competitions,
-		Fixtures,
-		Players,
-		Match,
-		SelectTeam,
-		Team,
-		StartScreen,
-		LoadGame
+		public StartScreenView()
+		{
+			InitializeComponent();
+		}
 	}
 }

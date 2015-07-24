@@ -24,7 +24,7 @@ using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.UI.Events;
 
-namespace Cm93.UI.Modules
+namespace Cm93.UI.Modules.SelectTeam
 {
 	[Export(typeof(ModuleViewModelBase))]
 	public class SelectTeamViewModel : ModuleViewModelBase
@@ -64,7 +64,7 @@ namespace Cm93.UI.Modules
 
 		public override void SetModel(IModule model)
 		{
-			SelectPlayerModel = (ITeamModule)model;
+			SelectPlayerModel = (ITeamModule) model;
 
 			foreach (var teamName in SelectPlayerModel.Teams.Keys.OrderBy(k => k))
 				AvailableTeams.Add(teamName);
