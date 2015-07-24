@@ -15,21 +15,33 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.ObjectModel;
+using System.ComponentModel.Composition;
+using System.Linq;
+using Caliburn.Micro;
+using Cm93.Model.Config;
+using Cm93.Model.Interfaces;
+using Cm93.Model.Modules;
+using Cm93.UI.Events;
 
-namespace Cm93.State.Sqlite.Tables
+namespace Cm93.UI.Modules.LoadGame
 {
-	public class State
+	[Export(typeof(ModuleViewModelBase))]
+	public class LoadGameViewModel : ModuleViewModelBase
 	{
-		[Key]
-		public long StateId { get; set; }
+		private readonly IEventAggregator eventAggregator;
+		private IGameModule GameModule { get; set; }
 
-		public string StateGuid { get; set; }
-		public string Name { get; set; }
-		public DateTime Created { get; set; }
-		public DateTime LastSaved { get; set; }
-		public string Hash { get; set; }
+		[ImportingConstructor]
+		public LoadGameViewModel(IEventAggregator eventAggregator)
+		{
+			this.eventAggregator = eventAggregator;
+			this.ModuleType = ModuleType.LoadGame;
+		}
+
+		public override void SetModel(IModule model)
+		{
+			GameModule = (IGameModule) model;
+		}
 	}
 }

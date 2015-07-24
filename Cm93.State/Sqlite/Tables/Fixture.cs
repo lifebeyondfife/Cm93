@@ -20,7 +20,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cm93.State.Sqlite.Tables
 {
-	[Table("Fixtures")]
 	public class Fixture
 	{
 		[Key]
