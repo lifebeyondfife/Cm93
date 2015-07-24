@@ -42,6 +42,9 @@ namespace Cm93.UI
 			
 			StateManager = new StateManager();
 			StateManager.CreateGame("My new game");
+
+			//	TODO: Split out call to create GameModule, then once a game has
+			//	been loaded call the StartGame implementation.
 			Modules = StateManager.StartGame();
 		}
 	}

@@ -138,6 +138,7 @@ namespace Cm93.Simulator.Basic
 			teamFormation.Values.Do(p => p.Location.Y = Random.NextDouble() * 0.84d);
 		}
 
+		//	TODO: game simulation *and* player bidding in one class violates SOLID principles... fix it!
 		public void SubmitBid(Bid bid)
 		{
 			if (bid.BidAmount > bid.PurchasingTeam.Balance - TeamBids[bid.PurchasingTeam].Sum(b => b.BidAmount))

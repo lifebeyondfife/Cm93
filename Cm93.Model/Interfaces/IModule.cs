@@ -58,5 +58,6 @@ namespace Cm93.Model.Interfaces
 
 	public interface IGameModule : IModule
 	{
+		IList<IGame> Games { get; }
 	}
 }

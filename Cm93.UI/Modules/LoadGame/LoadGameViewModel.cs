@@ -32,6 +32,29 @@ namespace Cm93.UI.Modules.LoadGame
 		private readonly IEventAggregator eventAggregator;
 		private IGameModule GameModule { get; set; }
 
+		private string selectedGame = string.Empty;
+		public string SelectedGame
+		{
+			get { return this.selectedGame; }
+			set
+			{
+				this.selectedGame = value;
+
+				NotifyOfPropertyChange(() => SelectedGame);
+			}
+		}
+
+		private ObservableCollection<GameRow> gamesGrid = new ObservableCollection<GameRow>();
+		public ObservableCollection<GameRow> GamesGrid
+		{
+			get { return this.gamesGrid; }
+			set
+			{
+				this.gamesGrid = value;
+				NotifyOfPropertyChange(() => GamesGrid);
+			}
+		}
+
 		[ImportingConstructor]
 		public LoadGameViewModel(IEventAggregator eventAggregator)
 		{
@@ -42,6 +65,23 @@ namespace Cm93.UI.Modules.LoadGame
 		public override void SetModel(IModule model)
 		{
 			GameModule = (IGameModule) model;
+		}
+
+		public void Load()
+		{
+			if (string.IsNullOrEmpty(SelectedGame))
+				return;
+
+			//	Here is where you interface with the IRepository classes and load a game instance. The
+			//	calls below are from the similar SelectTeam view model where the user starts a new game.
+
+			//	ALSO, while I'm thinking... make any calls to Cm93.State classes (that go to SQLite DB code)
+			//	async/await calls so you don't block the UI thread.
+
+			//Configuration.PlayerTeamName = SelectedTeam;
+
+			//this.eventAggregator.PublishOnUIThread(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam]));
+			//this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Team));
 		}
 	}
 }

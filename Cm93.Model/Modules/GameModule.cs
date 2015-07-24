@@ -16,10 +16,12 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using Cm93.Model.Interfaces;
+using System.Collections.Generic;
 
 namespace Cm93.Model.Modules
 {
 	public class GameModule : IGameModule
 	{
+		public IList<IGame> Games { get; set; }
 	}
 }

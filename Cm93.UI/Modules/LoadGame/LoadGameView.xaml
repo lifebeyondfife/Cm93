@@ -1,11 +1,49 @@
 ﻿<UserControl x:Class="Cm93.UI.Modules.LoadGame.LoadGameView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
-    </Grid>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="6*"/>
+			<ColumnDefinition Width="4*"/>
+		</Grid.ColumnDefinitions>
+
+		<Grid Grid.Column="0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="1*"/>
+			</Grid.RowDefinitions>
+
+			<TextBlock Grid.Row="0" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="ExtraBold" Foreground="White" Text="Games" />
+			<ListBox Grid.Row="1" FontSize="18"  Margin="15" Background="Transparent" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Stretch" FontWeight="ExtraBold" ItemsSource="{Binding AvailableGames}" SelectedItem="{Binding SelectedGame}" cal:Message.Attach="[Event MouseDoubleClick] = [Action Load]" />
+
+			<DataGrid Grid.Row="1" FontSize="18" Margin="15" AutoGenerateColumns="False" ItemsSource="{Binding GamesGrid, Mode=OneWay}" Background="Transparent" RowBackground="Transparent" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserResizeRows="False" HeadersVisibility="None" IsReadOnly="True">
+				<DataGrid.Columns>
+					<DataGridTextColumn Binding="{Binding Path=Name}" Width="5*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
+					<DataGridTextColumn Binding="{Binding Path=LastSaved}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				</DataGrid.Columns>
+			</DataGrid>
+		</Grid>
+
+		<Grid Grid.Column="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="1*"/>
+			</Grid.RowDefinitions>
+
+			<TextBlock Grid.Row="0" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="ExtraBold" Foreground="White" Text="Info" />
+			<ListBox Grid.Row="1" FontSize="18"  Margin="15" Background="Transparent" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Stretch" FontWeight="ExtraBold" ItemsSource="{Binding GameInfo}" />
+
+			<DataGrid Grid.Row="1" FontSize="18" Margin="15" IsHitTestVisible="False" AutoGenerateColumns="False" ItemsSource="{Binding FixturesGrid, Mode=OneWay}" Background="Transparent" RowBackground="Transparent" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserResizeRows="False" HeadersVisibility="None" IsReadOnly="True">
+				<DataGrid.Columns>
+					<DataGridTextColumn Binding="{Binding Path=Name}" Width="5*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
+					<DataGridTextColumn Binding="{Binding Path=LastSaved}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+				</DataGrid.Columns>
+			</DataGrid>
+		</Grid>
+	</Grid>
 </UserControl>

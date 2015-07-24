@@ -16,23 +16,23 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Cm93.State.Sqlite.Tables
+namespace Cm93.Model.Interfaces
 {
-	public class State
+	public interface IGame
 	{
-		[Key]
-		public long StateId { get; set; }
+		string Name { get; set; }
+		DateTime LastSaved { get; set; }
 
-		public string StateGuid { get; set; }
-		public string Name { get; set; }
-		public DateTime Created { get; set; }
-		public DateTime LastSaved { get; set; }
-		public string Hash { get; set; }
+		DateTime Created { get; }
+		string TeamName { get; }
+		string Place { get; }
 
-		public long Week { get; set; }
-		public long Season { get; set; }
+		int Week { get; }
+		int Season { get; }
 	}
 }

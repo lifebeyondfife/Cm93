@@ -134,6 +134,11 @@
       <DependentUpon>FixturesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\Fixtures\FixturesViewModel.cs" />
+    <Compile Include="Modules\LoadGame\GameRow.cs" />
+    <Compile Include="Modules\LoadGame\LoadGameView.xaml.cs">
+      <DependentUpon>LoadGameView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\LoadGame\LoadGameViewModel.cs" />
     <Compile Include="Modules\Match\MatchAnimations.cs" />
     <Compile Include="Modules\Players\PlayerMetric.cs" />
     <Compile Include="Modules\Players\PlayerMetricRow.cs" />
@@ -167,6 +172,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Modules\Fixtures\FixturesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\LoadGame\LoadGameView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -257,9 +266,7 @@
   <ItemGroup>
     <Resource Include="Images\Shirt.cur" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\LoadGame\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\StartScreen.png" />
   </ItemGroup>
