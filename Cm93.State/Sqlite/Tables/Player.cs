@@ -34,12 +34,12 @@ namespace Cm93.State.Sqlite.Tables
 
 		public long ReleaseValue { get; set; }
 		public long NumericValue { get; set; }
-		public long Number { get; set; }
+		public long? Number { get; set; }
 		public float LocationX { get; set; }
 		public float LocationY { get; set; }
 
 		[ForeignKey("Team")]
-		public long TeamId { get; set; }
+		public long? TeamId { get; set; }
 
 		public virtual PlayerStat PlayerStat { get; set; }
 		public virtual State State { get; set; }

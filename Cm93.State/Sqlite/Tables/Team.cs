@@ -23,7 +23,6 @@ namespace Cm93.State.Sqlite.Tables
 	public class Team
 	{
 		[Key]
-		[Column(Order = 1)]
 		public long TeamId { get; set; }
 
 		public string TeamName { get; set; }

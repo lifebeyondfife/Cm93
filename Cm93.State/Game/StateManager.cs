@@ -111,8 +111,10 @@ namespace Cm93.State.Game
 									Created = s.Created,
 									Name = s.Name,
 									Week = (int) s.Week,
-									Season = (int) s.Season
+									Season = (int) s.Season,
+									TeamName = s.SelectedTeam.TeamName
 								}).
+							ToList(). // Need an in memory structure for some of the following LINQ code
 							Cast<IGame>().
 							ToList()
 					};
