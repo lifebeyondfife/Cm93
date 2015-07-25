@@ -1,19 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{260A8AE8-E415-4090-AB77-5F0BC4087B6A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cm93.State</RootNamespace>
-    <AssemblyName>Cm93.State</AssemblyName>
+    <RootNamespace>Cm93.DatabaseBootstrap</RootNamespace>
+    <AssemblyName>Cm93.DatabaseBootstrap</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>c48ac228</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>5637f27d</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,11 +34,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -61,41 +63,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\State.cs" />
-    <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Interfaces\IState.cs" />
-    <Compile Include="Interfaces\IStateManager.cs" />
-    <Compile Include="Game\Model.cs" />
-    <Compile Include="Repository\Memory.cs" />
-    <Compile Include="Repository\SqLite.cs" />
-    <Compile Include="Game\StateManager.cs" />
+    <Compile Include="Cm93Context.cs" />
+    <Compile Include="CreateDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sqlite\Cm93Context.cs" />
-    <Compile Include="Sqlite\Tables\Competition.cs" />
-    <Compile Include="Sqlite\Tables\Division.cs" />
-    <Compile Include="Sqlite\Tables\Fixture.cs" />
-    <Compile Include="Sqlite\Tables\Player.cs" />
-    <Compile Include="Sqlite\Tables\PlayerStat.cs" />
-    <Compile Include="Sqlite\Tables\Rating.cs" />
-    <Compile Include="Sqlite\Tables\State.cs" />
-    <Compile Include="Sqlite\Tables\Team.cs" />
-    <Compile Include="Sqlite\Tables\TeamBalance.cs" />
+    <Compile Include="TestDatabase\Table.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cm93.Model\Cm93.Model.csproj">
-      <Project>{f4fd474a-b62d-4540-929a-0ac98c414e2e}</Project>
-      <Name>Cm93.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cm93.Simulator\Cm93.Simulator.csproj">
-      <Project>{4e196610-7bba-4c9d-b546-51d174516799}</Project>
-      <Name>Cm93.Simulator</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="App.config" />
+    <EmbeddedResource Include="Empty.sqlite" />
     <None Include="packages.config" />
-    <Content Include="Sqlite\Cm93.sqlite">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.97.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.97.0\build\net45\System.Data.SQLite.Core.targets')" />
