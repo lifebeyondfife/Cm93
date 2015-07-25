@@ -15,24 +15,13 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Cm93.State.Sqlite.Tables
+namespace Cm93.UI.Modules.LoadGame
 {
-	public class State
+	public partial class LoadGameView
 	{
-		[Key]
-		public long StateId { get; set; }
-
-		public string StateGuid { get; set; }
-		public string Name { get; set; }
-		public DateTime Created { get; set; }
-		public DateTime LastSaved { get; set; }
-		public string Hash { get; set; }
-
-		public long Week { get; set; }
-		public long Season { get; set; }
+		public LoadGameView()
+		{
+			InitializeComponent();
+		}
 	}
 }

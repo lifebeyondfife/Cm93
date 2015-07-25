@@ -20,10 +20,12 @@ using Cm93.Model.Modules;
 using Cm93.Model.Structures;
 using Cm93.State.Interfaces;
 using Cm93.State.Repository;
+using Cm93.State.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Config = Cm93.Model.Config;
+using GameModel = Cm93.Model.Structures.Game;
 
 namespace Cm93.State.Game
 {
@@ -67,6 +69,8 @@ namespace Cm93.State.Game
 		public IDictionary<ModuleType, IModule> StartGame()
 		{
 			if (State == null)
+				//	TODO: Don't need to have a new game started by default. Wait to
+				//	see if user clicks "New Game" or "Load Game" before creating.
 				throw new ApplicationException("Game has not been created yet.");
 
 			State.Model.Cmcl.Fixtures = State.Model.CmclFixtures;
@@ -94,7 +98,25 @@ namespace Cm93.State.Game
 			};
 			var matchModule = new MatchModule(new[] { State.Model.Cmcl });
 
-			var gameModule = new GameModule();
+			var gameModule = default(GameModule);
+
+			using (var context = new Cm93Context())
+			{
+				gameModule = new GameModule
+					{
+						Games = context.States.
+							Select(s => new GameModel
+								{
+									LastSaved = s.LastSaved,
+									Created = s.Created,
+									Name = s.Name,
+									Week = (int) s.Week,
+									Season = (int) s.Season
+								}).
+							Cast<IGame>().
+							ToList()
+					};
+			}
 
 			Config.Configuration.GlobalWeek = () => Competition.GlobalWeek(new[] { State.Model.Cmcl });
 

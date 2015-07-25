@@ -49,6 +49,7 @@
     <Compile Include="Interfaces\ICompetition.cs" />
     <Compile Include="Interfaces\ICreateModules.cs" />
     <Compile Include="Interfaces\IFixture.cs" />
+    <Compile Include="Interfaces\IGame.cs" />
     <Compile Include="Interfaces\IModel.cs" />
     <Compile Include="Interfaces\ISimulator.cs" />
     <Compile Include="MockCreateModules.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Structures\Cup.cs" />
     <Compile Include="Structures\Division.cs" />
     <Compile Include="Structures\Fixture.cs" />
+    <Compile Include="Structures\Game.cs" />
     <Compile Include="Structures\Place.cs" />
     <Compile Include="Structures\Player.cs" />
     <Compile Include="Structures\PlayerIndex.cs" />

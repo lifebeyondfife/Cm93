@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cm93.Model", "Cm93.Model\Cm93.Model.csproj", "{F4FD474A-B62D-4540-929A-0AC98C414E2E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cm93.UnitTests", "Cm93.UnitTests\Cm93.UnitTests.csproj", "{E0EABDF8-AE8E-4DF2-911D-8BE270768119}"
@@ -10,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cm93.UI", "Cm93.UI\Cm93.UI.csproj", "{DE9643C2-EB54-495A-8F86-4908D5B6322B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cm93.State", "Cm93.State\Cm93.State.csproj", "{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cm93.DatabaseBootstrap", "Cm93.DatabaseBootstrap\Cm93.DatabaseBootstrap.csproj", "{260A8AE8-E415-4090-AB77-5F0BC4087B6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,10 @@ Global
 		{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CF64690-D57E-4221-A9C1-DFB3599ECE0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{260A8AE8-E415-4090-AB77-5F0BC4087B6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{260A8AE8-E415-4090-AB77-5F0BC4087B6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{260A8AE8-E415-4090-AB77-5F0BC4087B6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{260A8AE8-E415-4090-AB77-5F0BC4087B6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
