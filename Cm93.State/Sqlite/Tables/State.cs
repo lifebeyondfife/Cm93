@@ -32,7 +32,11 @@ namespace Cm93.State.Sqlite.Tables
 		public DateTime LastSaved { get; set; }
 		public string Hash { get; set; }
 
+		[ForeignKey("SelectedTeam")]
+		public long? TeamId { get; set; }
 		public long Week { get; set; }
 		public long Season { get; set; }
+
+		public virtual Team SelectedTeam { get; set; }
 	}
 }
