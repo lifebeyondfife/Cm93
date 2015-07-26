@@ -26,12 +26,12 @@ namespace Cm93.Model.Interfaces
 
 	public interface ICompetitionsModule : IModule
 	{
-		IList<Competition> Competitions { get; }
+		IList<ICompetition> Competitions { get; }
 	}
 
 	public interface IFixturesModule : IModule
 	{
-		IList<Fixture> Fixtures { get; }
+		IList<IFixture> Fixtures { get; }
 	}
 
 	public interface ITeamModule : IModule

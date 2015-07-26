@@ -15,33 +15,30 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Interfaces;
+using Cm93.Model.Modules;
 using Cm93.State.Interfaces;
-using Cm93.State.Sqlite;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace Cm93.State.Repository
 {
-    // This is the class that will transform the tables to flat game state objects and vice versa
-	public class SqLite : IRepository
+	// This is the class that will transform the tables to flat game state objects and vice versa
+	public class Sqlite : IRepository
 	{
+		public IList<IGame> Games { get; private set; }
+
 		public void DeleteGame(Guid key)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void SaveGame(IState state)
+		public void UpdateGame(ModuleType moduleType, IState state)
 		{
 			throw new NotImplementedException();
 		}
 
 		public IState LoadGame(Guid key)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<Tuple<string, Guid>> ListGames()
 		{
 			throw new NotImplementedException();
 		}

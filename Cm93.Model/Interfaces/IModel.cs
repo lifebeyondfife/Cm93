@@ -22,10 +22,14 @@ namespace Cm93.Model.Interfaces
 {
 	public interface IModel
 	{
-		IDictionary<string, Team> Teams { get; set; }
-		IList<Player> Players { get; set; }
-		Division Cmcl { get; set; }
-		IList<Fixture> CmclFixtures { get; set; }
-		IDictionary<Team, Place> CmclPlaces { get; set; }
+		//string SelectedTeam { get; set; }
+		//int Week { get; set; }
+		//int Season { get; set; }
+
+		//IDictionary<string, Team> Teams { get; set; }
+		//IList<Player> Players { get; set; }
+		//Division Cmcl { get; set; }
+		//IList<Fixture> CmclFixtures { get; set; }
+		//IDictionary<Team, Place> CmclPlaces { get; set; }
 	}
 }

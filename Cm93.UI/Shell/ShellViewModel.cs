@@ -62,7 +62,7 @@ namespace Cm93.UI.Shell
 			this.children = children.ToDictionary(c => c.ModuleType);
 
 			foreach (var modelViewModel in this.children.
-				Join(model.Modules,
+				Join(model.StateManager.Modules,
 					kvp => kvp.Key,
 					kvp => kvp.Key,
 					(vm, m) => new { ViewModel = vm.Value, Model = m.Value }))

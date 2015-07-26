@@ -34,6 +34,16 @@ namespace Cm93.State.Game
 		private IRepository Repository { get; set; }
 		private IState State { get; set; }
 
+		public IDictionary<ModuleType, IModule> Modules
+		{
+			get { return State.Modules; }
+		}
+
+		public IList<IGame> Games
+		{
+			get { return Repository.Games; }
+		}
+
 		public StateManager()
 		{
 			Repository = new Memory();
@@ -42,13 +52,18 @@ namespace Cm93.State.Game
 		public void CreateGame(string name)
 		{
 			State = new State(name);
+			
+			// ICompetitionsModule, IMatchModule, IPlayersModule, ITeamModule, ISelectTeamModule
 
-			SaveGame();
+			// competitions
+			// player stats
+			// ratings
+			// teams
 		}
 
-		public void SaveGame()
+		public void UpdateGame(ModuleType moduleType)
 		{
-			Repository.SaveGame(State);
+			Repository.UpdateGame(moduleType, State);
 		}
 
 		public void DeleteGame(Guid key)
@@ -61,20 +76,17 @@ namespace Cm93.State.Game
 			State = Repository.LoadGame(key);
 		}
 
-		public IList<Tuple<string, Guid>> ListGames()
-		{
-			return Repository.ListGames();
-		}
-
-		public IDictionary<ModuleType, IModule> StartGame()
+		//	TODO: StateManager needs to synchronise Cm93.State accessing the DB, with Cm93.Model objects that are used by the UI.
+		//	In order to do so, this class has to retain some kind of exact object reference to the Cm93.Model objects it creates
+		//	instead of creating them in this function, returning them, and forgetting about them.
+		//	It needs to have a reference to these objects so that when the ShellViewModel gets a command to update something, it
+		//	can use its instance of StateManager (which it already has) to get Cm93.State to do the necessary work.
+		/*public IDictionary<ModuleType, IModule> StartGame()
 		{
 			if (State == null)
 				//	TODO: Don't need to have a new game started by default. Wait to
 				//	see if user clicks "New Game" or "Load Game" before creating.
 				throw new ApplicationException("Game has not been created yet.");
-
-			State.Model.Cmcl.Fixtures = State.Model.CmclFixtures;
-			State.Model.Cmcl.Places = State.Model.CmclPlaces;
 
 			var playersModule = new PlayersModule(Competition.Simulator, State.Model.Players);
 
@@ -94,6 +106,7 @@ namespace Cm93.State.Game
 					OfType<Division>().
 					Select(d => d.Fixtures).
 					SelectMany(f => f).
+					Cast<IFixture>().
 					ToList()
 			};
 			var matchModule = new MatchModule(new[] { State.Model.Cmcl });
@@ -133,6 +146,6 @@ namespace Cm93.State.Game
 					{ ModuleType.StartScreen, gameModule },
 					{ ModuleType.LoadGame, gameModule }
 				};
-		}
+		}*/
 	}
 }

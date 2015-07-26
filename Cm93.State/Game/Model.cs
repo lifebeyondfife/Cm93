@@ -23,10 +23,14 @@ namespace Cm93.State.Game
 {
 	public class Model : IModel
 	{
-		public IDictionary<string, Team> Teams { get; set; }
-		public IList<Player> Players { get; set; }
-		public Division Cmcl { get; set; }
-		public IList<Fixture> CmclFixtures { get; set; }
-		public IDictionary<Team, Place> CmclPlaces { get; set; }
+		//public string SelectedTeam { get; set; }
+		//public int Week { get; set; }
+		//public int Season { get; set; }
+
+		//public IDictionary<string, Team> Teams { get; set; }
+		//public IList<Player> Players { get; set; }
+		//public Division Cmcl { get; set; }
+		//public IList<Fixture> CmclFixtures { get; set; }
+		//public IDictionary<Team, Place> CmclPlaces { get; set; }
 	}
 }

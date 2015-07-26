@@ -82,7 +82,7 @@ namespace Cm93.UI.Modules.Fixtures
 				SetFixtures(this.FixturesModule.Fixtures);
 		}
 
-		private void SetFixtures(IEnumerable<Fixture> fixtures)
+		private void SetFixtures(IEnumerable<IFixture> fixtures)
 		{
 			this.fixturesGrid.Clear();
 

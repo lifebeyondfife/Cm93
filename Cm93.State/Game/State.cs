@@ -17,10 +17,12 @@
 */
 using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
+using Cm93.Model.Modules;
 using Cm93.Model.Structures;
 using Cm93.State.Interfaces;
 using Cm93.State.Sqlite;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Cm93.State.Game
@@ -30,17 +32,93 @@ namespace Cm93.State.Game
 		public string Name { get; set; }
 		public Guid Key { get; private set; }
 		public DateTime Created { get; private set; }
-		public DateTime Modified { get; set; }
-		public IModel Model { get; private set; }
+		public DateTime LastSaved { get; set; }
+
+		public IDictionary<ModuleType, IModule> Modules { get; private set; }
+
+		public State()
+		{
+			// ICompetitionsModule, IMatchModule, IPlayersModule, ITeamModule, ISelectTeamModule
+
+			Modules = new Dictionary<ModuleType, IModule>
+				{
+					{ ModuleType.Competitions, CompetitionsModule() },
+					{ ModuleType.Fixtures, FixturesModule() },
+					{ ModuleType.Match, MatchModule() },
+					{ ModuleType.Players, PlayersModule() },
+				};
+
+			var gameModule = GameModule();
+			var teamModule = TeamModule();
+
+			Modules[ModuleType.LoadGame] = gameModule;
+			Modules[ModuleType.StartScreen] = gameModule;
+
+			Modules[ModuleType.SelectTeam] = teamModule;
+			Modules[ModuleType.Team] = teamModule;
+		}
+
+		private ITeamModule TeamModule()
+		{
+			throw new NotImplementedException();
+		}
+
+		private IGameModule GameModule()
+		{
+			throw new NotImplementedException();
+		}
+
+		private IPlayersModule PlayersModule()
+		{
+			throw new NotImplementedException();
+		}
+
+		private IMatchModule MatchModule()
+		{
+			throw new NotImplementedException();
+		}
+
+		private IFixturesModule FixturesModule()
+		{
+			throw new NotImplementedException();
+		}
+
+		private ICompetitionsModule CompetitionsModule()
+		{
+			using (var context = new Cm93Context())
+			{
+				var divisions = context.Competitions.
+					Where(c => c.CompetitionType == "League").
+					ToList(). // Need an in memory structure for some of the following LINQ code
+					Select(c => new Division
+						{
+							CompetitionName = c.CompetitionName,
+						}).
+					Cast<ICompetition>().
+					ToList();
+
+				var cups = context.Competitions.
+					Where(c => c.CompetitionType == "Knockout").
+					ToList(). // Need an in memory structure for some of the following LINQ code
+					Select(c => new Cup
+						{
+							CompetitionName = c.CompetitionName,
+						}).
+					Cast<ICompetition>().
+					ToList();
+
+				return new CompetitionsModule(divisions.Concat(cups).ToList());
+			}
+		}
+
+		//-------------------------------------------------------------------------------------------
 
 		public State(string name)
 		{
 			Name = name;
 			Key = Guid.NewGuid();
 			Created = DateTime.UtcNow;
-			Modified = DateTime.UtcNow;
-
-			Model = CreateModel();
+			LastSaved = DateTime.UtcNow;
 		}
 
 		private static IModel CreateModel()
@@ -107,15 +185,88 @@ namespace Cm93.State.Game
 						}).
 					ToDictionary(t => t.Team);
 
+				division.Fixtures = fixtures;
+				division.Places = places;
+
 				return new Model
 					{
-						Cmcl = division,
-						CmclFixtures = fixtures,
-						CmclPlaces = places,
-						Players = players,
-						Teams = teams
+						//Season = 2015,
+						//Week = 0,
+
+						//Cmcl = division,
+						//CmclFixtures = fixtures,
+						//CmclPlaces = places,
+						//Players = players,
+						//Teams = teams
 					};
 			}
 		}
+
+		/*public IDictionary<ModuleType, IModule> StartGame()
+		{
+			if (State == null)
+				//	TODO: Don't need to have a new game started by default. Wait to
+				//	see if user clicks "New Game" or "Load Game" before creating.
+				throw new ApplicationException("Game has not been created yet.");
+
+			var playersModule = new PlayersModule(Competition.Simulator, State.Model.Players);
+
+			//	Need to create just a Teams list object. Selecting the Teams Module has to refresh the potentially changed team.
+			foreach (var team in State.Model.Teams.Values)
+			{
+				team.Players = new List<Player>(State.Model.Players.Where(p => p.Team == team));
+				team.Formation[0] = team.Players[0];
+				team.Formation[1] = team.Players[1];
+			}
+			var teamModule = new TeamModule(State.Model.Teams);
+
+			var competitionModule = new CompetitionsModule(new[] { State.Model.Cmcl });
+			var fixturesModule = new FixturesModule
+			{
+				Fixtures = competitionModule.Competitions.
+					OfType<Division>().
+					Select(d => d.Fixtures).
+					SelectMany(f => f).
+					Cast<IFixture>().
+					ToList()
+			};
+			var matchModule = new MatchModule(new[] { State.Model.Cmcl });
+
+			var gameModule = default(GameModule);
+
+			using (var context = new Cm93Context())
+			{
+				gameModule = new GameModule
+				{
+					Games = context.States.
+						Select(s => new GameModel
+						{
+							LastSaved = s.LastSaved,
+							Created = s.Created,
+							Name = s.Name,
+							Week = (int) s.Week,
+							Season = (int) s.Season,
+							TeamName = s.SelectedTeam.TeamName
+						}).
+						ToList(). // Need an in memory structure for some of the following LINQ code
+						Cast<IGame>().
+						ToList()
+				};
+			}
+
+			Config.Configuration.GlobalWeek = () => Competition.GlobalWeek(new[] { State.Model.Cmcl });
+
+			return new Dictionary<ModuleType, IModule>
+				{
+					{ ModuleType.Team, teamModule },
+					{ ModuleType.SelectTeam, teamModule },
+					{ ModuleType.Fixtures, fixturesModule },
+					{ ModuleType.Competitions, competitionModule },
+					{ ModuleType.Match, matchModule },
+					{ ModuleType.Players, playersModule },
+					{ ModuleType.StartScreen, gameModule },
+					{ ModuleType.LoadGame, gameModule }
+				};
+		}*/
 	}
 }

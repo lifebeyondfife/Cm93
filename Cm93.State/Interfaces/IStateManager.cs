@@ -7,12 +7,12 @@ namespace Cm93.State.Interfaces
 {
 	public interface IStateManager
 	{
+		IList<IGame> Games { get; }
+		IDictionary<ModuleType, IModule> Modules { get; }
+
 		void CreateGame(string name);
 		void DeleteGame(Guid key);
 		void LoadGame(Guid key);
-		IList<Tuple<string, Guid>> ListGames();
-			
-		void SaveGame();
-		IDictionary<ModuleType, IModule> StartGame();
+		void UpdateGame(ModuleType moduleType);
 	}
 }

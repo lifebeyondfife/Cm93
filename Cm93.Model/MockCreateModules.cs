@@ -108,6 +108,7 @@ namespace Cm93.Model
 						OfType<Division>().
 						Select(d => d.Fixtures).
 						SelectMany(f => f).
+						Cast<IFixture>().
 						ToList()
 				};
 			var matchModule = new MatchModule(new [] { Cmcl });

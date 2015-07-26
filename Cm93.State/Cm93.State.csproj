@@ -67,7 +67,7 @@
     <Compile Include="Interfaces\IStateManager.cs" />
     <Compile Include="Game\Model.cs" />
     <Compile Include="Repository\Memory.cs" />
-    <Compile Include="Repository\SqLite.cs" />
+    <Compile Include="Repository\Sqlite.cs" />
     <Compile Include="Game\StateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sqlite\Cm93Context.cs" />
