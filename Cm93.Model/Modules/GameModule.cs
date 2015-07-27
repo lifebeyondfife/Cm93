@@ -23,5 +23,10 @@ namespace Cm93.Model.Modules
 	public class GameModule : IGameModule
 	{
 		public IList<IGame> Games { get; set; }
+
+		public GameModule(IList<IGame> games)
+		{
+			Games = games;
+		}
 	}
 }

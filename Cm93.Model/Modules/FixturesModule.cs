@@ -24,5 +24,10 @@ namespace Cm93.Model.Modules
 	public class FixturesModule : IFixturesModule
 	{
 		public IList<IFixture> Fixtures { get; set; }
+
+		public FixturesModule(IList<IFixture> fixtures)
+		{
+			Fixtures = fixtures;
+		}
 	}
 }

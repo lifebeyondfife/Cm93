@@ -47,18 +47,15 @@ namespace Cm93.State.Game
 		public StateManager()
 		{
 			Repository = new Memory();
+			State = new State();
 		}
 
 		public void CreateGame(string name)
 		{
-			State = new State(name);
-			
-			// ICompetitionsModule, IMatchModule, IPlayersModule, ITeamModule, ISelectTeamModule
+			State.Name = name;
 
-			// competitions
-			// player stats
-			// ratings
-			// teams
+			foreach (var moduleType in Enum.GetValues(typeof(ModuleType)).Cast<ModuleType>())
+				UpdateGame(moduleType);
 		}
 
 		public void UpdateGame(ModuleType moduleType)
@@ -81,71 +78,5 @@ namespace Cm93.State.Game
 		//	instead of creating them in this function, returning them, and forgetting about them.
 		//	It needs to have a reference to these objects so that when the ShellViewModel gets a command to update something, it
 		//	can use its instance of StateManager (which it already has) to get Cm93.State to do the necessary work.
-		/*public IDictionary<ModuleType, IModule> StartGame()
-		{
-			if (State == null)
-				//	TODO: Don't need to have a new game started by default. Wait to
-				//	see if user clicks "New Game" or "Load Game" before creating.
-				throw new ApplicationException("Game has not been created yet.");
-
-			var playersModule = new PlayersModule(Competition.Simulator, State.Model.Players);
-
-			//	Need to create just a Teams list object. Selecting the Teams Module has to refresh the potentially changed team.
-			foreach (var team in State.Model.Teams.Values)
-			{
-				team.Players = new List<Player>(State.Model.Players.Where(p => p.Team == team));
-				team.Formation[0] = team.Players[0];
-				team.Formation[1] = team.Players[1];
-			}
-			var teamModule = new TeamModule(State.Model.Teams);
-
-			var competitionModule = new CompetitionsModule(new[] { State.Model.Cmcl });
-			var fixturesModule = new FixturesModule
-			{
-				Fixtures = competitionModule.Competitions.
-					OfType<Division>().
-					Select(d => d.Fixtures).
-					SelectMany(f => f).
-					Cast<IFixture>().
-					ToList()
-			};
-			var matchModule = new MatchModule(new[] { State.Model.Cmcl });
-
-			var gameModule = default(GameModule);
-
-			using (var context = new Cm93Context())
-			{
-				gameModule = new GameModule
-					{
-						Games = context.States.
-							Select(s => new GameModel
-								{
-									LastSaved = s.LastSaved,
-									Created = s.Created,
-									Name = s.Name,
-									Week = (int) s.Week,
-									Season = (int) s.Season,
-									TeamName = s.SelectedTeam.TeamName
-								}).
-							ToList(). // Need an in memory structure for some of the following LINQ code
-							Cast<IGame>().
-							ToList()
-					};
-			}
-
-			Config.Configuration.GlobalWeek = () => Competition.GlobalWeek(new[] { State.Model.Cmcl });
-
-			return new Dictionary<ModuleType, IModule>
-				{
-					{ ModuleType.Team, teamModule },
-					{ ModuleType.SelectTeam, teamModule },
-					{ ModuleType.Fixtures, fixturesModule },
-					{ ModuleType.Competitions, competitionModule },
-					{ ModuleType.Match, matchModule },
-					{ ModuleType.Players, playersModule },
-					{ ModuleType.StartScreen, gameModule },
-					{ ModuleType.LoadGame, gameModule }
-				};
-		}*/
 	}
 }

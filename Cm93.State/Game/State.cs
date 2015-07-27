@@ -15,6 +15,7 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Config;
 using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
@@ -24,6 +25,7 @@ using Cm93.State.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameModel = Cm93.Model.Structures.Game;
 
 namespace Cm93.State.Game
 {
@@ -38,94 +40,44 @@ namespace Cm93.State.Game
 
 		public State()
 		{
-			// ICompetitionsModule, IMatchModule, IPlayersModule, ITeamModule, ISelectTeamModule
-
-			Modules = new Dictionary<ModuleType, IModule>
-				{
-					{ ModuleType.Competitions, CompetitionsModule() },
-					{ ModuleType.Fixtures, FixturesModule() },
-					{ ModuleType.Match, MatchModule() },
-					{ ModuleType.Players, PlayersModule() },
-				};
-
-			var gameModule = GameModule();
-			var teamModule = TeamModule();
-
-			Modules[ModuleType.LoadGame] = gameModule;
-			Modules[ModuleType.StartScreen] = gameModule;
-
-			Modules[ModuleType.SelectTeam] = teamModule;
-			Modules[ModuleType.Team] = teamModule;
-		}
-
-		private ITeamModule TeamModule()
-		{
-			throw new NotImplementedException();
-		}
-
-		private IGameModule GameModule()
-		{
-			throw new NotImplementedException();
-		}
-
-		private IPlayersModule PlayersModule()
-		{
-			throw new NotImplementedException();
-		}
-
-		private IMatchModule MatchModule()
-		{
-			throw new NotImplementedException();
-		}
-
-		private IFixturesModule FixturesModule()
-		{
-			throw new NotImplementedException();
-		}
-
-		private ICompetitionsModule CompetitionsModule()
-		{
-			using (var context = new Cm93Context())
-			{
-				var divisions = context.Competitions.
-					Where(c => c.CompetitionType == "League").
-					ToList(). // Need an in memory structure for some of the following LINQ code
-					Select(c => new Division
-						{
-							CompetitionName = c.CompetitionName,
-						}).
-					Cast<ICompetition>().
-					ToList();
-
-				var cups = context.Competitions.
-					Where(c => c.CompetitionType == "Knockout").
-					ToList(). // Need an in memory structure for some of the following LINQ code
-					Select(c => new Cup
-						{
-							CompetitionName = c.CompetitionName,
-						}).
-					Cast<ICompetition>().
-					ToList();
-
-				return new CompetitionsModule(divisions.Concat(cups).ToList());
-			}
-		}
-
-		//-------------------------------------------------------------------------------------------
-
-		public State(string name)
-		{
-			Name = name;
+			Created = DateTime.Now;
 			Key = Guid.NewGuid();
-			Created = DateTime.UtcNow;
-			LastSaved = DateTime.UtcNow;
+
+			var games = Games();
+			var teams = Teams();
+			var players = Players(teams);
+
+			foreach (var team in teams.Values)
+			{
+				team.Players = new List<Player>(players.Where(p => p.Team == team));
+				foreach (var playerIndex in team.Players.
+						Select((p, i) => new { Player = p, Index = i }).
+						Where(pi => pi.Index < Configuration.AsideSize))
+					team.Formation[playerIndex.Index] = playerIndex.Player;
+			}
+
+			var division = Division(teams);
+			var fixtures = Fixtures(teams, division);
+			var places = Places(teams);
+
+			division.Fixtures = fixtures;
+			division.Places = places;
+
+			Modules = new Dictionary<ModuleType, IModule>();
+
+			Modules[ModuleType.LoadGame] = Modules[ModuleType.StartScreen] = new GameModule(games);
+			Modules[ModuleType.Players] = new PlayersModule(Competition.Simulator, players);
+			Modules[ModuleType.Team] = Modules[ModuleType.SelectTeam] = new TeamModule(teams);
+			Modules[ModuleType.Competitions] = new CompetitionsModule(new[] { division });
+			Modules[ModuleType.Fixtures] = new FixturesModule(fixtures.Cast<IFixture>().ToList());
+			Modules[ModuleType.Match] = new MatchModule(new[] { division });
 		}
 
-		private static IModel CreateModel()
+		private static IDictionary<string, Team> Teams()
 		{
 			using (var context = new Cm93Context())
 			{
-				var teams = context.TeamBalances.
+				return context.TeamBalances.
 					Where(tb => tb.StateId == 0).
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Select(tb => new Team
@@ -136,8 +88,14 @@ namespace Cm93.State.Game
 							TeamName = tb.Team.TeamName
 						}).
 					ToDictionary(t => t.TeamName);
+			}
+		}
 
-				var players = context.Players.
+		private static IList<Player> Players(IDictionary<string, Team> teams)
+		{
+			using (var context = new Cm93Context())
+			{
+				return context.Players.
 					Where(p => p.StateId == 0).
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Select(p => new Player
@@ -154,9 +112,17 @@ namespace Cm93.State.Game
 							Location = new Coordinate { X = p.LocationX, Y = p.LocationY }
 						}).
 					ToList();
+			}
+		}
 
-				var division = context.Competitions.
-					Where(c => c.CompetitionId == 0).
+		//	TODO: A competition needs an explicit list of the teams playing
+		//	in it e.g. a division will have promotions and relegations
+		private static Division Division(IDictionary<string, Team> teams)
+		{
+			using (var context = new Cm93Context())
+			{
+				return context.Competitions.
+					Where(c => c.CompetitionId == 0 && c.CompetitionType == "League").
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Select(c => new Division
 						{
@@ -165,8 +131,14 @@ namespace Cm93.State.Game
 							Teams = teams
 						}).
 					Single();
+			}
+		}
 
-				var fixtures = context.Fixtures.
+		private static IList<Fixture> Fixtures(IDictionary<string, Team> teams, Division division)
+		{
+			using (var context = new Cm93Context())
+			{
+				return context.Fixtures.
 					Where(f => f.StateId == 0).
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Select(f => new Fixture
@@ -177,96 +149,37 @@ namespace Cm93.State.Game
 							Competition = division
 						}).
 					ToList();
-
-				var places = teams.
-					Select(t => new Place
-						{
-							Team = t.Value
-						}).
-					ToDictionary(t => t.Team);
-
-				division.Fixtures = fixtures;
-				division.Places = places;
-
-				return new Model
-					{
-						//Season = 2015,
-						//Week = 0,
-
-						//Cmcl = division,
-						//CmclFixtures = fixtures,
-						//CmclPlaces = places,
-						//Players = players,
-						//Teams = teams
-					};
 			}
 		}
 
-		/*public IDictionary<ModuleType, IModule> StartGame()
+		private static IDictionary<Team, Place> Places(IDictionary<string, Team> teams)
 		{
-			if (State == null)
-				//	TODO: Don't need to have a new game started by default. Wait to
-				//	see if user clicks "New Game" or "Load Game" before creating.
-				throw new ApplicationException("Game has not been created yet.");
+			return teams.
+				Select(t => new Place
+					{
+						Team = t.Value
+					}).
+				ToDictionary(t => t.Team);
+		}
 
-			var playersModule = new PlayersModule(Competition.Simulator, State.Model.Players);
-
-			//	Need to create just a Teams list object. Selecting the Teams Module has to refresh the potentially changed team.
-			foreach (var team in State.Model.Teams.Values)
-			{
-				team.Players = new List<Player>(State.Model.Players.Where(p => p.Team == team));
-				team.Formation[0] = team.Players[0];
-				team.Formation[1] = team.Players[1];
-			}
-			var teamModule = new TeamModule(State.Model.Teams);
-
-			var competitionModule = new CompetitionsModule(new[] { State.Model.Cmcl });
-			var fixturesModule = new FixturesModule
-			{
-				Fixtures = competitionModule.Competitions.
-					OfType<Division>().
-					Select(d => d.Fixtures).
-					SelectMany(f => f).
-					Cast<IFixture>().
-					ToList()
-			};
-			var matchModule = new MatchModule(new[] { State.Model.Cmcl });
-
-			var gameModule = default(GameModule);
-
+		private static IList<IGame> Games()
+		{
 			using (var context = new Cm93Context())
 			{
-				gameModule = new GameModule
-				{
-					Games = context.States.
-						Select(s => new GameModel
-						{
-							LastSaved = s.LastSaved,
-							Created = s.Created,
-							Name = s.Name,
-							Week = (int) s.Week,
-							Season = (int) s.Season,
-							TeamName = s.SelectedTeam.TeamName
-						}).
-						ToList(). // Need an in memory structure for some of the following LINQ code
-						Cast<IGame>().
-						ToList()
-				};
+				return context.States.
+					Select(s => new GameModel
+					{
+						LastSaved = s.LastSaved,
+						Created = s.Created,
+						Name = s.Name,
+						Week = (int) s.Week,
+						Season = (int) s.Season,
+						TeamName = s.SelectedTeam.TeamName
+					}).
+					ToList(). // Need an in memory structure for some of the following LINQ code
+					Cast<IGame>().
+					ToList();
 			}
-
-			Config.Configuration.GlobalWeek = () => Competition.GlobalWeek(new[] { State.Model.Cmcl });
-
-			return new Dictionary<ModuleType, IModule>
-				{
-					{ ModuleType.Team, teamModule },
-					{ ModuleType.SelectTeam, teamModule },
-					{ ModuleType.Fixtures, fixturesModule },
-					{ ModuleType.Competitions, competitionModule },
-					{ ModuleType.Match, matchModule },
-					{ ModuleType.Players, playersModule },
-					{ ModuleType.StartScreen, gameModule },
-					{ ModuleType.LoadGame, gameModule }
-				};
-		}*/
+		}
 	}
 }
