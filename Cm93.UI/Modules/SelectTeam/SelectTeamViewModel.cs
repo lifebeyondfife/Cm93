@@ -15,14 +15,15 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System.Collections.ObjectModel;
-using System.ComponentModel.Composition;
-using System.Linq;
 using Caliburn.Micro;
 using Cm93.Model.Config;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.UI.Events;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel.Composition;
+using System.Linq;
 
 namespace Cm93.UI.Modules.SelectTeam
 {
@@ -41,6 +42,20 @@ namespace Cm93.UI.Modules.SelectTeam
 				this.selectedTeam = value;
 
 				NotifyOfPropertyChange(() => SelectedTeam);
+				NotifyOfPropertyChange(() => CanStart);
+			}
+		}
+
+		private string gameTitle = string.Empty;
+		public string GameTitle
+		{
+			get { return this.gameTitle; }
+			set
+			{
+				this.gameTitle = value;
+
+				NotifyOfPropertyChange(() => GameTitle);
+				NotifyOfPropertyChange(() => CanStart);
 			}
 		}
 
@@ -60,6 +75,8 @@ namespace Cm93.UI.Modules.SelectTeam
 		{
 			this.eventAggregator = eventAggregator;
 			this.ModuleType = ModuleType.SelectTeam;
+
+			this.gameTitle = string.Format("New Game ({0})", DateTime.Now.ToString("HH:mm dd MMMM"));
 		}
 
 		public override void SetModel(IModule model)
@@ -70,6 +87,14 @@ namespace Cm93.UI.Modules.SelectTeam
 				AvailableTeams.Add(teamName);
 		}
 
+		public bool CanStart
+		{
+			get
+			{
+				return !string.IsNullOrEmpty(GameTitle) && !string.IsNullOrEmpty(SelectedTeam);
+			}
+		}
+
 		public void Start()
 		{
 			if (string.IsNullOrEmpty(SelectedTeam))
@@ -77,7 +102,7 @@ namespace Cm93.UI.Modules.SelectTeam
 
 			Configuration.PlayerTeamName = SelectedTeam;
 
-			this.eventAggregator.PublishOnUIThread(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam]));
+			this.eventAggregator.PublishOnUIThread(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam], GameTitle));
 			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Team));
 		}
 	}
