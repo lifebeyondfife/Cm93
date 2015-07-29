@@ -18,15 +18,71 @@
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.State.Interfaces;
+using Cm93.State.Sqlite;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using GameModel = Cm93.Model.Structures.Game;
 
 namespace Cm93.State.Repository
 {
-	// This is the class that will transform the tables to flat game state objects and vice versa
 	public class Sqlite : IRepository
 	{
-		public IList<IGame> Games { get; private set; }
+		public IList<IGame> Games
+		{
+			get
+			{
+				using (var context = new Cm93Context())
+				{
+					return context.States.
+						Select(s => new GameModel
+							{
+								Created = s.Created,
+								LastSaved = s.LastSaved,
+								Name = s.Name,
+								Season = (int) s.Season,
+								TeamName = s.SelectedTeam.TeamName,
+								Week = (int) s.Week
+							}).
+						Cast<IGame>().
+						ToList();
+				}
+			}
+		}
+
+		private IDictionary<ModuleType, Action<IState>> UpdateActions { get; set; }
+
+		public Sqlite()
+		{
+			UpdateActions = new Dictionary<ModuleType, Action<IState>>
+				{
+					{ ModuleType.Competitions, state => UpdateCompetitions(state) },
+					{ ModuleType.Fixtures, state => UpdateCompetitions(state) },
+					{ ModuleType.Players, state => UpdateCompetitions(state) },
+					{ ModuleType.SelectTeam, state => UpdateCompetitions(state) },
+					{ ModuleType.Team, state => UpdateCompetitions(state) }
+				};
+		}
+
+		private void UpdateCompetitions(IState state)
+		{
+		}
+
+		private void UpdateFixtures(IState state)
+		{
+		}
+
+		private void UpdatePlayers(IState state)
+		{
+		}
+
+		private void UpdateSelectTeam(IState state)
+		{
+		}
+
+		private void UpdateTeam(IState state)
+		{
+		}
 
 		public void DeleteGame(Guid key)
 		{
