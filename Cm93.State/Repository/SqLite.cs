@@ -15,6 +15,7 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Config;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.State.Interfaces;
@@ -23,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameModel = Cm93.Model.Structures.Game;
+using StateRow = Cm93.State.Sqlite.Tables.State;
 
 namespace Cm93.State.Repository
 {
@@ -57,31 +59,72 @@ namespace Cm93.State.Repository
 			UpdateActions = new Dictionary<ModuleType, Action<IState>>
 				{
 					{ ModuleType.Competitions, state => UpdateCompetitions(state) },
-					{ ModuleType.Fixtures, state => UpdateCompetitions(state) },
-					{ ModuleType.Players, state => UpdateCompetitions(state) },
-					{ ModuleType.SelectTeam, state => UpdateCompetitions(state) },
-					{ ModuleType.Team, state => UpdateCompetitions(state) }
+					{ ModuleType.Fixtures, state => UpdateFixtures(state) },
+					{ ModuleType.Players, state => UpdatePlayers(state) },
+					{ ModuleType.SelectTeam, state => UpdateSelectedTeam(state) },
+					{ ModuleType.Team, state => UpdateTeam(state) }
 				};
 		}
 
 		private void UpdateCompetitions(IState state)
 		{
+			using (var context = new Cm93Context())
+			{
+				var stateRow = context.States.Single(s => s.StateGuid == state.Key.ToString());
+
+				stateRow.LastSaved = DateTime.Now;
+				stateRow.Week = Configuration.GlobalWeek();
+				stateRow.Season = Configuration.Season;
+
+				context.SaveChangesAsync();
+			}
 		}
 
 		private void UpdateFixtures(IState state)
 		{
+			//public interface IFixturesModule : IModule
+			//{
+			//	IList<IFixture> Fixtures { get; }
+			//}
 		}
 
 		private void UpdatePlayers(IState state)
 		{
+			//public interface IPlayersModule : IModule
+			//{
+			//	IList<Player> Players { get; }
+			//	ISimulator Simulator { get; }
+			//}
 		}
 
-		private void UpdateSelectTeam(IState state)
+		private void UpdateSelectedTeam(IState state)
 		{
+			using (var context = new Cm93Context())
+			{
+				var stateRow = new StateRow
+					{
+						LastSaved = DateTime.Now,
+						Name = state.Name,
+						Created = state.Created,
+						StateGuid = state.Key.ToString(),
+
+						TeamId = context.Teams.
+								Single(t => t.TeamName == Configuration.PlayerTeamName).
+								TeamId
+					};
+
+				context.States.Add(stateRow);
+
+				context.SaveChangesAsync();
+			}
 		}
 
 		private void UpdateTeam(IState state)
 		{
+			//public interface ITeamModule : IModule
+			//{
+			//	IDictionary<string, Team> Teams { get; }
+			//}
 		}
 
 		public void DeleteGame(Guid key)
@@ -91,7 +134,8 @@ namespace Cm93.State.Repository
 
 		public void UpdateGame(ModuleType moduleType, IState state)
 		{
-			throw new NotImplementedException();
+			if (UpdateActions.ContainsKey(moduleType))
+				UpdateActions[moduleType](state);
 		}
 
 		public IState LoadGame(Guid key)

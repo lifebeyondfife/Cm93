@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Config = Cm93.Model.Config;
 using GameModel = Cm93.Model.Structures.Game;
+using SqliteRepo = Cm93.State.Repository.Sqlite;
 
 namespace Cm93.State.Game
 {
@@ -46,7 +47,7 @@ namespace Cm93.State.Game
 
 		public StateManager()
 		{
-			Repository = new Memory();
+			Repository = new SqliteRepo();
 			State = new State();
 		}
 
@@ -54,8 +55,7 @@ namespace Cm93.State.Game
 		{
 			State.Name = name;
 
-			foreach (var moduleType in Enum.GetValues(typeof(ModuleType)).Cast<ModuleType>())
-				UpdateGame(moduleType);
+			Repository.UpdateGame(ModuleType.SelectTeam, State);
 		}
 
 		public void UpdateGame(ModuleType moduleType)

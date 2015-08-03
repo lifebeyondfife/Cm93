@@ -31,6 +31,7 @@ namespace Cm93.Model.Config
 
 		public static string PlayerTeamName { get; set; }
 
-		public static Func<double> GlobalWeek { get; set; }
+		public static Func<int> GlobalWeek { get; set; }
+		public static int Season { get; set; }
 	}
 }

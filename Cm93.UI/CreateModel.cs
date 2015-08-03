@@ -15,13 +15,11 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using Cm93.Model.Interfaces;
-using Cm93.Model.Modules;
+using Cm93.Model.Config;
 using Cm93.Simulator.Basic;
 using Cm93.State.Game;
 using Cm93.State.Interfaces;
+using System.ComponentModel.Composition;
 
 namespace Cm93.UI
 {
@@ -38,9 +36,10 @@ namespace Cm93.UI
 		public CreateModel()
 		{
 			new AttachBasicSimulator().AttachSimulator();
-			
+
+			Configuration.Season = 2015;
+
 			StateManager = new StateManager();
-			//StateManager.CreateGame("My new game");
 		}
 	}
 }

@@ -78,7 +78,7 @@ namespace Cm93.State.Game
 			using (var context = new Cm93Context())
 			{
 				return context.TeamBalances.
-					Where(tb => tb.StateId == 0).
+					Where(tb => tb.StateId == 0).	// TODO: Create this structure using application logic, not DB rows
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Select(tb => new Team
 						{
@@ -96,7 +96,7 @@ namespace Cm93.State.Game
 			using (var context = new Cm93Context())
 			{
 				return context.Players.
-					Where(p => p.StateId == 0).
+					Where(p => p.StateId == 0).	// TODO: Create this structure using application logic, not DB rows
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Select(p => new Player
 						{
@@ -122,7 +122,7 @@ namespace Cm93.State.Game
 			using (var context = new Cm93Context())
 			{
 				return context.Competitions.
-					Where(c => c.CompetitionId == 0 && c.CompetitionType == "League").
+					Where(c => c.CompetitionId == 0 && c.CompetitionType == "League").	// TODO: Create this structure using application logic, not DB rows
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Select(c => new Division
 						{
@@ -139,7 +139,7 @@ namespace Cm93.State.Game
 			using (var context = new Cm93Context())
 			{
 				return context.Fixtures.
-					Where(f => f.StateId == 0).
+					Where(f => f.StateId == 0).	// TODO: Create this structure using application logic, not DB rows
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Select(f => new Fixture
 						{
