@@ -102,14 +102,14 @@ namespace Cm93.Model
 			var teamModule = new TeamModule(Teams);
 
 			var competitionModule = new CompetitionsModule(new[] { Cmcl });
-			var fixturesModule = new FixturesModule
-				{
-					Fixtures = competitionModule.Competitions.
+			var fixturesModule = new FixturesModule(
+					competitionModule.Competitions.
 						OfType<Division>().
 						Select(d => d.Fixtures).
 						SelectMany(f => f).
+						Cast<IFixture>().
 						ToList()
-				};
+				);
 			var matchModule = new MatchModule(new [] { Cmcl });
 
 			Config.Configuration.GlobalWeek = () => Competition.GlobalWeek(new[] { Cmcl });

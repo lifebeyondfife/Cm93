@@ -15,37 +15,31 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using Cm93.Model.Interfaces;
-using Cm93.Model.Modules;
+using Cm93.Model.Config;
 using Cm93.Simulator.Basic;
 using Cm93.State.Game;
 using Cm93.State.Interfaces;
+using System.ComponentModel.Composition;
 
 namespace Cm93.UI
 {
 	public interface ICreateModel
 	{
-		IDictionary<ModuleType, IModule> Modules { get; set; }
+		IStateManager StateManager { get; set; }
 	}
 
 	[Export(typeof(ICreateModel))]
 	public class CreateModel : ICreateModel
 	{
-		public IDictionary<ModuleType, IModule> Modules { get; set; }
 		public IStateManager StateManager { get; set; }
 		
 		public CreateModel()
 		{
 			new AttachBasicSimulator().AttachSimulator();
-			
-			StateManager = new StateManager();
-			StateManager.CreateGame("My new game");
 
-			//	TODO: Split out call to create GameModule, then once a game has
-			//	been loaded call the StartGame implementation.
-			Modules = StateManager.StartGame();
+			Configuration.Season = 2015;
+
+			StateManager = new StateManager();
 		}
 	}
 }

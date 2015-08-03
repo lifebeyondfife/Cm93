@@ -29,6 +29,7 @@ namespace Cm93.UI.Shell
 	public class ShellViewModel : Conductor<ModuleViewModelBase>.Collection.OneActive, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>
 	{
 		private readonly IEventAggregator eventAggregator;
+		private readonly ICreateModel model;
 		private readonly IDictionary<ModuleType, ModuleViewModelBase> children;
 
 		private bool isGameLive = false;
@@ -58,11 +59,12 @@ namespace Cm93.UI.Shell
 			[ImportMany(typeof(ModuleViewModelBase))] IEnumerable<ModuleViewModelBase> children, ICreateModel model)
 		{
 			this.eventAggregator = eventAggregator;
+			this.model = model;
 
 			this.children = children.ToDictionary(c => c.ModuleType);
 
 			foreach (var modelViewModel in this.children.
-				Join(model.Modules,
+				Join(model.StateManager.Modules,
 					kvp => kvp.Key,
 					kvp => kvp.Key,
 					(vm, m) => new { ViewModel = vm.Value, Model = m.Value }))
@@ -155,6 +157,8 @@ namespace Cm93.UI.Shell
 		public void Handle(TeamSetEvent message)
 		{
 			IsGameLive = !string.IsNullOrEmpty(message.Team.TeamName);
+
+			this.model.StateManager.CreateGame(message.GameTitle);
 		}
 	}
 }

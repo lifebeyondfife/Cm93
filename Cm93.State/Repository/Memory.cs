@@ -15,42 +15,65 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Interfaces;
+using Cm93.Model.Modules;
 using Cm93.State.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using GameModel = Cm93.Model.Structures.Game;
 
 namespace Cm93.State.Repository
 {
 	public class Memory : IRepository
 	{
-		private IDictionary<Guid, IState> Games { get; set; }
+		public IList<IGame> Games
+		{
+			get
+			{
+				return Enumerable.Empty<IGame>().ToList();
+				//return GameLookup.OrderBy(kvp => kvp.Value.LastSaved).
+				//		 Select(kvp => kvp.Value).
+				//		 Select(g => new GameModel
+				//			{
+				//				Created = g.Created,
+				//				LastSaved = g.LastSaved,
+				//				Name = g.Name,
+				//				Place = g.Model.CmclPlaces.
+				//					ToList().
+				//					IndexOf(g.Model.CmclPlaces.
+				//						Single(kvp => kvp.Key.TeamName == g.Model.SelectedTeam)
+				//					).
+				//					ToString(CultureInfo.InvariantCulture),
+				//				Season = g.Model.Season,
+				//				Week = g.Model.Week
+				//			}).
+				//		Cast<IGame>().
+				//		ToList();
+			}
+		}
+
+		private IDictionary<Guid, IState> GameLookup { get; set; }
 
 		public Memory()
 		{
-			Games = new Dictionary<Guid, IState>();
+			GameLookup = new Dictionary<Guid, IState>();
 		}
 
 		public void DeleteGame(Guid key)
 		{
-			Games.Remove(key);
+			GameLookup.Remove(key);
 		}
 
-		public void SaveGame(IState state)
+		public void UpdateGame(ModuleType moduleType, IState state)
 		{
-			Games[state.Key] = state;
+			GameLookup[state.Key] = state;
 		}
 
 		public IState LoadGame(Guid key)
 		{
-			return Games[key];
-		}
-
-		public IList<Tuple<string, Guid>> ListGames()
-		{
-			return Games.OrderBy(kvp => kvp.Value.Modified).
-						 Select(kvp => new Tuple<string, Guid>(kvp.Value.Name, kvp.Key)).
-			             ToList();
+			return GameLookup[key];
 		}
 	}
 }

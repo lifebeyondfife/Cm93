@@ -15,13 +15,14 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System.Collections.Generic;
-using System.Linq;
 using Cm93.Model;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
+using Cm93.Model.Structures;
 using Cm93.Simulator.Basic;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cm93.UnitTests
 {
@@ -41,7 +42,7 @@ namespace Cm93.UnitTests
 		{
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			while (cmcl.MatchesLeft > 0)
+			while (((Competition) cmcl).MatchesLeft > 0)
 				cmcl.PlayFixtures();
 		}
 	}

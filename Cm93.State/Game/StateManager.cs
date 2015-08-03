@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Config = Cm93.Model.Config;
 using GameModel = Cm93.Model.Structures.Game;
+using SqliteRepo = Cm93.State.Repository.Sqlite;
 
 namespace Cm93.State.Game
 {
@@ -34,21 +35,32 @@ namespace Cm93.State.Game
 		private IRepository Repository { get; set; }
 		private IState State { get; set; }
 
+		public IDictionary<ModuleType, IModule> Modules
+		{
+			get { return State.Modules; }
+		}
+
+		public IList<IGame> Games
+		{
+			get { return Repository.Games; }
+		}
+
 		public StateManager()
 		{
-			Repository = new Memory();
+			Repository = new SqliteRepo();
+			State = new State();
 		}
 
 		public void CreateGame(string name)
 		{
-			State = new State(name);
+			State.Name = name;
 
-			SaveGame();
+			Repository.UpdateGame(ModuleType.SelectTeam, State);
 		}
 
-		public void SaveGame()
+		public void UpdateGame(ModuleType moduleType)
 		{
-			Repository.SaveGame(State);
+			Repository.UpdateGame(moduleType, State);
 		}
 
 		public void DeleteGame(Guid key)
@@ -61,78 +73,10 @@ namespace Cm93.State.Game
 			State = Repository.LoadGame(key);
 		}
 
-		public IList<Tuple<string, Guid>> ListGames()
-		{
-			return Repository.ListGames();
-		}
-
-		public IDictionary<ModuleType, IModule> StartGame()
-		{
-			if (State == null)
-				//	TODO: Don't need to have a new game started by default. Wait to
-				//	see if user clicks "New Game" or "Load Game" before creating.
-				throw new ApplicationException("Game has not been created yet.");
-
-			State.Model.Cmcl.Fixtures = State.Model.CmclFixtures;
-			State.Model.Cmcl.Places = State.Model.CmclPlaces;
-
-			var playersModule = new PlayersModule(Competition.Simulator, State.Model.Players);
-
-			//	Need to create just a Teams list object. Selecting the Teams Module has to refresh the potentially changed team.
-			foreach (var team in State.Model.Teams.Values)
-			{
-				team.Players = new List<Player>(State.Model.Players.Where(p => p.Team == team));
-				team.Formation[0] = team.Players[0];
-				team.Formation[1] = team.Players[1];
-			}
-			var teamModule = new TeamModule(State.Model.Teams);
-
-			var competitionModule = new CompetitionsModule(new[] { State.Model.Cmcl });
-			var fixturesModule = new FixturesModule
-			{
-				Fixtures = competitionModule.Competitions.
-					OfType<Division>().
-					Select(d => d.Fixtures).
-					SelectMany(f => f).
-					ToList()
-			};
-			var matchModule = new MatchModule(new[] { State.Model.Cmcl });
-
-			var gameModule = default(GameModule);
-
-			using (var context = new Cm93Context())
-			{
-				gameModule = new GameModule
-					{
-						Games = context.States.
-							Select(s => new GameModel
-								{
-									LastSaved = s.LastSaved,
-									Created = s.Created,
-									Name = s.Name,
-									Week = (int) s.Week,
-									Season = (int) s.Season,
-									TeamName = s.SelectedTeam.TeamName
-								}).
-							ToList(). // Need an in memory structure for some of the following LINQ code
-							Cast<IGame>().
-							ToList()
-					};
-			}
-
-			Config.Configuration.GlobalWeek = () => Competition.GlobalWeek(new[] { State.Model.Cmcl });
-
-			return new Dictionary<ModuleType, IModule>
-				{
-					{ ModuleType.Team, teamModule },
-					{ ModuleType.SelectTeam, teamModule },
-					{ ModuleType.Fixtures, fixturesModule },
-					{ ModuleType.Competitions, competitionModule },
-					{ ModuleType.Match, matchModule },
-					{ ModuleType.Players, playersModule },
-					{ ModuleType.StartScreen, gameModule },
-					{ ModuleType.LoadGame, gameModule }
-				};
-		}
+		//	TODO: StateManager needs to synchronise Cm93.State accessing the DB, with Cm93.Model objects that are used by the UI.
+		//	In order to do so, this class has to retain some kind of exact object reference to the Cm93.Model objects it creates
+		//	instead of creating them in this function, returning them, and forgetting about them.
+		//	It needs to have a reference to these objects so that when the ShellViewModel gets a command to update something, it
+		//	can use its instance of StateManager (which it already has) to get Cm93.State to do the necessary work.
 	}
 }

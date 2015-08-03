@@ -27,11 +27,11 @@ namespace Cm93.Model.Structures
 
 		public string CompetitionName { get; set; }
 		public int Week { get; set; }
+		public abstract int MatchesLeft { get; }
 		public IDictionary<string, Team> Teams { get; set; }
 
 		public abstract IFixture PlayFixtures(string playerTeamName = "");
 		public abstract void CompleteRound();
-		public abstract int MatchesLeft { get; }
 	
 		public static int GlobalWeek(IEnumerable<Competition> competitions)
 		{

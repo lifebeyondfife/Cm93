@@ -19,7 +19,7 @@ using Cm93.Model.Interfaces;
 
 namespace Cm93.Model.Structures
 {
-	class Cup : Competition
+	public class Cup : Competition
 	{
 		public override IFixture PlayFixtures(string playerTeamName)
 		{
