@@ -15,12 +15,13 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System.Collections.Generic;
-using System.Linq;
+using Cm93.Model.Config;
 using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cm93.Model
 {
@@ -90,7 +91,7 @@ namespace Cm93.Model
 			Cmcl.Fixtures = CmclFixtures;
 			Cmcl.Places = CmclPlaces;
 
-			var playersModule = new PlayersModule(Competition.Simulator, Players);
+			var playersModule = new PlayersModule(Configuration.Simulator, Players);
 			
 			//	Need to create just a Teams list object. Selecting the Teams Module has to refresh the potentially changed team.
 			foreach (var team in Teams.Values)

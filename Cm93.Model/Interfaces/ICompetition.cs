@@ -15,12 +15,17 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Structures;
+using System.Collections.Generic;
+
 namespace Cm93.Model.Interfaces
 {
 	public interface ICompetition
 	{
 		string CompetitionName { get; }
 		int Week { get; }
+		int MatchesLeft { get; }
+		IDictionary<string, Team> Teams { get; set; }
 
 		IFixture PlayFixtures(string teamName = "");
 		void CompleteRound();

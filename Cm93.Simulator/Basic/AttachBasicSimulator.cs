@@ -16,6 +16,7 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using Cm93.Model.Structures;
+using Cm93.Model.Config;
 
 namespace Cm93.Simulator.Basic
 {
@@ -23,7 +24,7 @@ namespace Cm93.Simulator.Basic
 	{
 		public void AttachSimulator()
 		{
-			Competition.Simulator = new BasicSimulator();
+			Configuration.Simulator = new BasicSimulator();
 		}
 	}
 }

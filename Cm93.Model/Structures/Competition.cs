@@ -23,8 +23,6 @@ namespace Cm93.Model.Structures
 {
 	public abstract class Competition : ICompetition
 	{
-		public static ISimulator Simulator { get; set; }
-
 		public string CompetitionName { get; set; }
 		public int Week { get; set; }
 		public abstract int MatchesLeft { get; }
@@ -33,7 +31,7 @@ namespace Cm93.Model.Structures
 		public abstract IFixture PlayFixtures(string playerTeamName = "");
 		public abstract void CompleteRound();
 	
-		public static int GlobalWeek(IEnumerable<Competition> competitions)
+		public static int GlobalWeek(IEnumerable<ICompetition> competitions)
 		{
 			return competitions.Max(c => c.Week);
 		}
