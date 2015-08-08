@@ -55,6 +55,9 @@ namespace Cm93.State.Game
 		{
 			State.Name = name;
 
+			Config.Configuration.GlobalWeek = () =>
+				Competition.GlobalWeek(((ICompetitionsModule) State.Modules[ModuleType.Competitions]).Competitions);
+
 			Repository.UpdateGame(ModuleType.SelectTeam, State);
 		}
 

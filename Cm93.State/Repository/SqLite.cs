@@ -82,10 +82,39 @@ namespace Cm93.State.Repository
 
 		private void UpdateFixtures(IState state)
 		{
-			//public interface IFixturesModule : IModule
-			//{
-			//	IList<IFixture> Fixtures { get; }
-			//}
+			using (var context = new Cm93Context())
+			{
+				var stateRow = context.States.Single(s => s.StateGuid == state.Key.ToString());
+
+				stateRow.LastSaved = DateTime.Now;
+				stateRow.Week = Configuration.GlobalWeek();
+				stateRow.Season = Configuration.Season;
+
+				var fixtures = ((IFixturesModule) state.Modules[ModuleType.Fixtures]).Fixtures;
+
+				foreach (var competitionWeek in fixtures.
+					GroupBy(f => new { Week = f.Week, CompetitionName = f.Competition.CompetitionName}))
+				{
+					var competitionWeekFixtures = context.Fixtures.
+						Where(f =>
+							competitionWeek.Key.CompetitionName == f.Competition.CompetitionName &&
+							competitionWeek.Key.Week == (int) f.Week &&
+							stateRow.StateId == f.StateId
+						).Join(competitionWeek,
+							f => new { HomeTeamName = f.HomeTeam.TeamName, AwayTeamName = f.AwayTeam.TeamName },
+							cw => new { HomeTeamName = cw.TeamHome.TeamName, AwayTeamName = cw.TeamAway.TeamName },
+							(f, cw) => new { FixtureRow = f, FixtureObj = cw }
+						);
+
+					foreach (var fixtureRowObj in competitionWeekFixtures)
+					{
+						fixtureRowObj.FixtureRow.HomeGoals = fixtureRowObj.FixtureObj.GoalsHome;
+						fixtureRowObj.FixtureRow.AwayGoals = fixtureRowObj.FixtureObj.GoalsAway;
+					}
+				}
+
+				context.SaveChangesAsync();
+			}
 		}
 
 		private void UpdatePlayers(IState state)
