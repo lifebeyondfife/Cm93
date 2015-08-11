@@ -26,7 +26,7 @@ using Cm93.UI.Modules;
 namespace Cm93.UI.Shell
 {
 	[Export(typeof(ShellViewModel))]
-	public class ShellViewModel : Conductor<ModuleViewModelBase>.Collection.OneActive, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>
+	public class ShellViewModel : Conductor<ModuleViewModelBase>.Collection.OneActive, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>, IHandle<MatchCompleteEvent>
 	{
 		private readonly IEventAggregator eventAggregator;
 		private readonly ICreateModel model;
@@ -51,6 +51,21 @@ namespace Cm93.UI.Shell
 			{
 				isStartScreen = value;
 				NotifyOfPropertyChange(() => IsStartScreen);
+			}
+		}
+
+		private bool isMatch = false;
+		private bool IsMatch
+		{
+			get { return isMatch; }
+			set
+			{
+				isMatch = value;
+				NotifyOfPropertyChange(() => CanCompetitions);
+				NotifyOfPropertyChange(() => CanFixtures);
+				NotifyOfPropertyChange(() => CanMatch);
+				NotifyOfPropertyChange(() => CanPlayers);
+				NotifyOfPropertyChange(() => CanTeam);
 			}
 		}
 
@@ -82,9 +97,9 @@ namespace Cm93.UI.Shell
 			this.ActiveItem = this.children[message.Module];
 		}
 
-		public bool CanTeam()
+		public bool CanTeam
 		{
-			return true;
+			get { return !IsMatch; }
 		}
 
 		public void Team()
@@ -92,9 +107,9 @@ namespace Cm93.UI.Shell
 			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Team));
 		}
 
-		public bool CanPlayers()
+		public bool CanPlayers
 		{
-			return true;
+			get { return !IsMatch; }
 		}
 
 		public void Players()
@@ -102,9 +117,9 @@ namespace Cm93.UI.Shell
 			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Players));
 		}
 
-		public bool CanFixtures()
+		public bool CanFixtures
 		{
-			return true;
+			get { return !IsMatch; }
 		}
 
 		public void Fixtures()
@@ -112,19 +127,21 @@ namespace Cm93.UI.Shell
 			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Fixtures));
 		}
 
-		public bool CanMatch()
+		public bool CanMatch
 		{
-			return true;
+			get { return !IsMatch; }
 		}
 
 		public void Match()
 		{
+			IsMatch = true;
+
 			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Match));
 		}
 
-		public bool CanCompetitions()
+		public bool CanCompetitions
 		{
-			return true;
+			get { return !IsMatch; }
 		}
 
 		public void Competitions()
@@ -132,9 +149,9 @@ namespace Cm93.UI.Shell
 			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Competitions));
 		}
 
-		public bool CanNewGame()
+		public bool CanNewGame
 		{
-			return true;
+			get { return !IsMatch; }
 		}
 
 		public void NewGame()
@@ -143,9 +160,9 @@ namespace Cm93.UI.Shell
 			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.SelectTeam));
 		}
 
-		public bool CanLoadGame()
+		public bool CanLoadGame
 		{
-			return true;
+			get { return !IsMatch; }
 		}
 
 		public void LoadGame()
@@ -159,6 +176,14 @@ namespace Cm93.UI.Shell
 			IsGameLive = !string.IsNullOrEmpty(message.Team.TeamName);
 
 			this.model.StateManager.CreateGame(message.GameTitle);
+		}
+
+		public void Handle(MatchCompleteEvent message)
+		{
+			IsMatch = false;
+
+			this.model.StateManager.UpdateGame(ModuleType.Fixtures);
+			this.model.StateManager.UpdateGame(ModuleType.Players);
 		}
 	}
 }

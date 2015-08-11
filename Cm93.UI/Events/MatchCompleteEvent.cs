@@ -15,19 +15,9 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using Cm93.Model.Structures;
-
 namespace Cm93.UI.Events
 {
-	public class TeamSetEvent
+	public class MatchCompleteEvent
 	{
-		public Team Team { get; set; }
-		public string GameTitle { get; set; }
-
-		public TeamSetEvent(Team team, string gameTitle)
-		{
-			Team = team;
-			GameTitle = gameTitle;
-		}
 	}
 }
