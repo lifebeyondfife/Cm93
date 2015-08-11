@@ -3,6 +3,13 @@ Cm93
 
 Simple football manager app in the vein of the early Championship Manager games.
 
+![Intro](https://raw.githubusercontent.com/lifebeyondfife/Cm93/master/screenshots/cm93%20intro.png)
+![Fixtures](https://raw.githubusercontent.com/lifebeyondfife/Cm93/master/screenshots/cm93%20fixtures.png)
+![Team](https://raw.githubusercontent.com/lifebeyondfife/Cm93/master/screenshots/cm93%20team.png)
+![Players](https://raw.githubusercontent.com/lifebeyondfife/Cm93/master/screenshots/cm93%20players.png)
+![League](https://raw.githubusercontent.com/lifebeyondfife/Cm93/master/screenshots/cm93%20league.png)
+![Match](https://raw.githubusercontent.com/lifebeyondfife/Cm93/master/screenshots/cm93%20match.png)
+
 Plan
 ----
 
