@@ -20,6 +20,7 @@ using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.State.Interfaces;
 using Cm93.State.Sqlite;
+using Cm93.State.Sqlite.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,25 +93,20 @@ namespace Cm93.State.Repository
 
 				var fixtures = ((IFixturesModule) state.Modules[ModuleType.Fixtures]).Fixtures;
 
-				foreach (var competitionWeek in fixtures.
-					GroupBy(f => new { Week = f.Week, CompetitionName = f.Competition.CompetitionName }))
+				foreach (var fixture in fixtures.Where(f => f.Week == stateRow.Week))
 				{
-					var competitionWeekFixtures = context.Fixtures.
-						Where(f =>
-							competitionWeek.Key.CompetitionName == f.Competition.CompetitionName &&
-							competitionWeek.Key.Week == (int) f.Week &&
-							stateRow.StateId == f.StateId
-						).Join(competitionWeek,
-							f => new { HomeTeamName = f.HomeTeam.TeamName, AwayTeamName = f.AwayTeam.TeamName },
-							cw => new { HomeTeamName = cw.TeamHome.TeamName, AwayTeamName = cw.TeamAway.TeamName },
-							(f, cw) => new { FixtureRow = f, FixtureObj = cw }
-						);
-
-					foreach (var fixtureRowObj in competitionWeekFixtures)
-					{
-						fixtureRowObj.FixtureRow.HomeGoals = fixtureRowObj.FixtureObj.GoalsHome;
-						fixtureRowObj.FixtureRow.AwayGoals = fixtureRowObj.FixtureObj.GoalsAway;
-					}
+					context.Fixtures.Add(
+						new Fixture
+						{
+							Week = stateRow.Week,
+							StateId = stateRow.StateId,
+							HomeTeamId = context.Teams.Single(t => t.TeamName == fixture.TeamHome.TeamName).TeamId,
+							AwayTeamId = context.Teams.Single(t => t.TeamName == fixture.TeamAway.TeamName).TeamId,
+							HomeGoals = fixture.GoalsHome,
+							AwayGoals = fixture.GoalsAway,
+							CompetitionId = context.Competitions.Single(c => c.CompetitionName == fixture.Competition.CompetitionName).CompetitionId
+						}
+					);
 				}
 
 				context.SaveChangesAsync();
