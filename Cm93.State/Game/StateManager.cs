@@ -15,17 +15,13 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Config;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
 using Cm93.State.Interfaces;
-using Cm93.State.Repository;
-using Cm93.State.Sqlite;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Config = Cm93.Model.Config;
-using GameModel = Cm93.Model.Structures.Game;
 using SqliteRepo = Cm93.State.Repository.Sqlite;
 
 namespace Cm93.State.Game
@@ -54,6 +50,9 @@ namespace Cm93.State.Game
 		public void CreateGame(string name)
 		{
 			State.Name = name;
+
+			Configuration.GlobalWeek = () =>
+				Competition.GlobalWeek(((ICompetitionsModule) State.Modules[ModuleType.Competitions]).Competitions);
 
 			Repository.UpdateGame(ModuleType.SelectTeam, State);
 		}

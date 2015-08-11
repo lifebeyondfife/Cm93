@@ -66,7 +66,7 @@ namespace Cm93.State.Game
 			Modules = new Dictionary<ModuleType, IModule>();
 
 			Modules[ModuleType.LoadGame] = Modules[ModuleType.StartScreen] = new GameModule(games);
-			Modules[ModuleType.Players] = new PlayersModule(Competition.Simulator, players);
+			Modules[ModuleType.Players] = new PlayersModule(Configuration.Simulator, players);
 			Modules[ModuleType.Team] = Modules[ModuleType.SelectTeam] = new TeamModule(teams);
 			Modules[ModuleType.Competitions] = new CompetitionsModule(new[] { division });
 			Modules[ModuleType.Fixtures] = new FixturesModule(fixtures.Cast<IFixture>().ToList());

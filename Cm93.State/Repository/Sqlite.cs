@@ -20,6 +20,7 @@ using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.State.Interfaces;
 using Cm93.State.Sqlite;
+using Cm93.State.Sqlite.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,10 +83,34 @@ namespace Cm93.State.Repository
 
 		private void UpdateFixtures(IState state)
 		{
-			//public interface IFixturesModule : IModule
-			//{
-			//	IList<IFixture> Fixtures { get; }
-			//}
+			using (var context = new Cm93Context())
+			{
+				var stateRow = context.States.Single(s => s.StateGuid == state.Key.ToString());
+
+				stateRow.LastSaved = DateTime.Now;
+				stateRow.Week = Configuration.GlobalWeek();
+				stateRow.Season = Configuration.Season;
+
+				var fixtures = ((IFixturesModule) state.Modules[ModuleType.Fixtures]).Fixtures;
+
+				foreach (var fixture in fixtures.Where(f => f.Week == stateRow.Week))
+				{
+					context.Fixtures.Add(
+						new Fixture
+						{
+							Week = stateRow.Week,
+							StateId = stateRow.StateId,
+							HomeTeamId = context.Teams.Single(t => t.TeamName == fixture.TeamHome.TeamName).TeamId,
+							AwayTeamId = context.Teams.Single(t => t.TeamName == fixture.TeamAway.TeamName).TeamId,
+							HomeGoals = fixture.GoalsHome,
+							AwayGoals = fixture.GoalsAway,
+							CompetitionId = context.Competitions.Single(c => c.CompetitionName == fixture.Competition.CompetitionName).CompetitionId
+						}
+					);
+				}
+
+				context.SaveChangesAsync();
+			}
 		}
 
 		private void UpdatePlayers(IState state)

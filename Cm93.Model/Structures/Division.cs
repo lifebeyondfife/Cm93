@@ -17,6 +17,7 @@
 */
 using System.Collections.Generic;
 using System.Linq;
+using Cm93.Model.Config;
 using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 
@@ -71,7 +72,7 @@ namespace Cm93.Model.Structures
 					continue;
 				}
 
-				Simulator.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null);
+				Configuration.Simulator.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null);
 			}
 
 			return playerFixture;
@@ -84,7 +85,7 @@ namespace Cm93.Model.Structures
 
 			UpdatePositions();
 
-			Simulator.ProcessTransfers();
+			Configuration.Simulator.ProcessTransfers();
 		}
 
 		private void UpdatePointsAndGoals(IFixture fixture)

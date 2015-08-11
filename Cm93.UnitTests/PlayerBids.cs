@@ -23,6 +23,7 @@ using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
 using Cm93.Simulator.Basic;
+using Cm93.Model.Config;
 using NUnit.Framework;
 
 namespace Cm93.UnitTests
@@ -55,7 +56,7 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Competition.Simulator.SubmitBid(bid);
+			Configuration.Simulator.SubmitBid(bid);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
@@ -84,7 +85,7 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Competition.Simulator.SubmitBid(bid);
+			Configuration.Simulator.SubmitBid(bid);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
@@ -129,9 +130,9 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Competition.Simulator.SubmitBid(bid1);
-			Competition.Simulator.SubmitBid(bid2);
-			Competition.Simulator.SubmitBid(bid3);
+			Configuration.Simulator.SubmitBid(bid1);
+			Configuration.Simulator.SubmitBid(bid2);
+			Configuration.Simulator.SubmitBid(bid3);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
@@ -168,8 +169,8 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Competition.Simulator.SubmitBid(bidUnder);
-			Competition.Simulator.SubmitBid(bidOver);
+			Configuration.Simulator.SubmitBid(bidUnder);
+			Configuration.Simulator.SubmitBid(bidOver);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
@@ -198,7 +199,7 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Competition.Simulator.SubmitBid(bid);
+			Configuration.Simulator.SubmitBid(bid);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();

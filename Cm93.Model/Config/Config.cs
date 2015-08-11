@@ -15,6 +15,7 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Interfaces;
 using System;
 
 namespace Cm93.Model.Config
@@ -33,5 +34,7 @@ namespace Cm93.Model.Config
 
 		public static Func<int> GlobalWeek { get; set; }
 		public static int Season { get; set; }
+
+		public static ISimulator Simulator { get; set; }
 	}
 }

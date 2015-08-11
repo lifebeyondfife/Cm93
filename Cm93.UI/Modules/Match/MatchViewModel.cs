@@ -478,11 +478,12 @@ namespace Cm93.UI.Modules.Match
 			NotifyOfPropertyChange(() => TeamAwayName);
 
 			Task.Factory.StartNew(() =>
-					Competition.Simulator.Play(Fixture,
+					Configuration.Simulator.Play(Fixture,
 						Fixture.TeamHome.TeamName == Team.TeamName ? TeamFormation : ComputerTeamFormation,
 						Fixture.TeamHome.TeamName == Team.TeamName ? ComputerTeamFormation : TeamFormation,
 						UpdateDynamicFixtureData)).
-				ContinueWith(t => competition.CompleteRound());
+				ContinueWith(t => competition.CompleteRound()).
+				ContinueWith(t => this.eventAggregator.BeginPublishOnUIThread(new MatchCompleteEvent()));
 		}
 
 		private void UpdateDynamicFixtureData(double possession, double[,] ballUpdates)
