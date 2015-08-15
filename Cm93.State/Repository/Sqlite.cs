@@ -109,17 +109,42 @@ namespace Cm93.State.Repository
 					);
 				}
 
+				//	Intensive operations so only update when matches have been played
+				var players = ((IPlayersModule) state.Modules[ModuleType.Players]).Players;
+
+				foreach (var player in players)
+				{
+					var playerRow = context.Players.Single(p => p.StateId == stateRow.StateId && p.PlayerStatId == player.Id);
+
+					playerRow.Goals = player.Goals;
+					playerRow.TeamId = context.Teams.Single(t => t.TeamName == player.TeamName).TeamId;
+				}
+
 				context.SaveChangesAsync();
 			}
 		}
 
 		private void UpdatePlayers(IState state)
 		{
-			//public interface IPlayersModule : IModule
-			//{
-			//	IList<Player> Players { get; }
-			//	ISimulator Simulator { get; }
-			//}
+			using (var context = new Cm93Context())
+			{
+				var stateRow = context.States.Single(s => s.StateGuid == state.Key.ToString());
+
+				stateRow.LastSaved = DateTime.Now;
+				stateRow.Week = Configuration.GlobalWeek();
+				stateRow.Season = Configuration.Season;
+
+				var players = ((IPlayersModule) state.Modules[ModuleType.Players]).Players;
+
+				foreach (var player in players.Where(p => p.TeamName == Configuration.PlayerTeamName))
+				{
+					var playerRow = context.Players.Single(p => p.StateId == stateRow.StateId && p.PlayerStatId == player.Id);
+
+					playerRow.ReleaseValue = player.ReleaseValue;
+				}
+
+				context.SaveChangesAsync();
+			}
 		}
 
 		private void UpdateSelectedTeam(IState state)
@@ -146,10 +171,27 @@ namespace Cm93.State.Repository
 
 		private void UpdateTeam(IState state)
 		{
-			//public interface ITeamModule : IModule
-			//{
-			//	IDictionary<string, Team> Teams { get; }
-			//}
+			using (var context = new Cm93Context())
+			{
+				var stateRow = context.States.Single(s => s.StateGuid == state.Key.ToString());
+
+				stateRow.LastSaved = DateTime.Now;
+				stateRow.Week = Configuration.GlobalWeek();
+				stateRow.Season = Configuration.Season;
+
+				var playerTeam = ((ITeamModule) state.Modules[ModuleType.Team]).Teams[Configuration.PlayerTeamName];
+
+				foreach (var player in playerTeam.Players)
+				{
+					var playerRow = context.Players.Single(p => p.StateId == stateRow.StateId && p.PlayerStatId == player.Id);
+
+					playerRow.LocationX = (float) player.Location.X;
+					playerRow.LocationY = (float) player.Location.Y;
+					playerRow.Number = player.Number;
+				}
+
+				context.SaveChangesAsync();
+			}
 		}
 
 		public void DeleteGame(Guid key)

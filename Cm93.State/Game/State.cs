@@ -105,11 +105,13 @@ namespace Cm93.State.Game
 							NumericValue = (int) p.NumericValue,
 							FirstName = p.PlayerStat.FirstName,
 							LastName = p.PlayerStat.LastName,
-							Rating = p.PlayerStat.Rating.RatingValue,
+							Rating = Math.Round(p.PlayerStat.Rating.RatingValue, 1),
 							Number = (int) p.Number,
 							Position = (Position) p.PlayerStat.Position,
 							Team = teams[p.Team.TeamName],
-							Location = new Coordinate { X = p.LocationX, Y = p.LocationY }
+							Location = new Coordinate { X = p.LocationX, Y = p.LocationY },
+							Id = (int) p.PlayerStatId,
+							Goals = (int) p.Goals
 						}).
 					ToList();
 			}

@@ -89,6 +89,10 @@ namespace Cm93.Model.Structures
 		//	and alter assembly attributes to allow the UI project access.
 		public int ReleaseValue { get; set; }
 
+		//	Cannot guarantee uniqueness of player based on any union of player fields
+		//	therefore, have to include the DB index within this class
+		public int Id { get; set; }
+
 		public override string ToString()
 		{
 			return string.Format("{0} {1}.", LastName, FirstName.First().ToString(CultureInfo.CurrentCulture));

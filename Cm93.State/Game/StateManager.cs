@@ -47,6 +47,11 @@ namespace Cm93.State.Game
 			State = new State();
 		}
 
+		public void RefreshState()
+		{
+			LoadGame(State.Key);
+		}
+
 		public void CreateGame(string name)
 		{
 			State.Name = name;

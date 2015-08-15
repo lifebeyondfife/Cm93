@@ -37,6 +37,7 @@ namespace Cm93.State.Sqlite.Tables
 		public long? Number { get; set; }
 		public float LocationX { get; set; }
 		public float LocationY { get; set; }
+		public long Goals { get; set; }
 
 		[ForeignKey("Team")]
 		public long? TeamId { get; set; }
