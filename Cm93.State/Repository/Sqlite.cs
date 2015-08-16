@@ -165,6 +165,24 @@ namespace Cm93.State.Repository
 
 				context.States.Add(stateRow);
 
+				var players = ((IPlayersModule) state.Modules[ModuleType.Players]).Players;
+
+				context.Players.AddRange(players.
+					Select(p => new Player
+						{
+							Goals = 0,
+							LocationX = (float) p.Location.X,
+							LocationY = (float) p.Location.Y,
+							Number = p.Number,
+							NumericValue = p.NumericValue,
+							PlayerStatId = p.Id,
+							ReleaseValue = p.ReleaseValue,
+							StateId = stateRow.StateId,
+							TeamId = context.Teams.Single(t => t.TeamName == p.TeamName).TeamId
+						}
+					)
+				);
+
 				context.SaveChangesAsync();
 			}
 		}
