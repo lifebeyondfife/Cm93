@@ -78,22 +78,32 @@ namespace Cm93.UI.Shell
 
 			this.children = children.ToDictionary(c => c.ModuleType);
 
-			foreach (var modelViewModel in this.children.
-				Join(model.StateManager.Modules,
-					kvp => kvp.Key,
-					kvp => kvp.Key,
-					(vm, m) => new { ViewModel = vm.Value, Model = m.Value }))
-			{
-				modelViewModel.ViewModel.SetModel(modelViewModel.Model);
-			}
+			SetModels();
 
 			this.ActiveItem = this.children[ModuleType.StartScreen];
 
 			this.eventAggregator.Subscribe(this);
 		}
 
+		private void SetModels()
+		{
+			foreach (var modelViewModel in this.children.
+				Join(this.model.StateManager.Modules,
+					kvp => kvp.Key,
+					kvp => kvp.Key,
+					(vm, m) => new { ViewModel = vm.Value, Model = m.Value }))
+			{
+				modelViewModel.ViewModel.SetModel(modelViewModel.Model);
+			}
+		}
+
 		public void Handle(ModuleSelectedEvent message)
 		{
+			if (this.ActiveItem == this.children[ModuleType.Team])
+				this.model.StateManager.UpdateGame(ModuleType.Team);
+			else if (this.ActiveItem == this.children[ModuleType.Players])
+				this.model.StateManager.UpdateGame(ModuleType.Players);
+
 			this.ActiveItem = this.children[message.Module];
 		}
 
@@ -184,6 +194,15 @@ namespace Cm93.UI.Shell
 
 			this.model.StateManager.UpdateGame(ModuleType.Fixtures);
 			this.model.StateManager.UpdateGame(ModuleType.Players);
+
+			//	TODO: Once LoadGame is working, uncomment these lines
+			//	Updating post match details requires a new set of model
+			//	objects. Could be done more granularly if performance
+			//	becomes an issue but for v0.1, try it and see.
+
+			//this.model.StateManager.RefreshState();
+
+			//SetModels();
 		}
 	}
 }

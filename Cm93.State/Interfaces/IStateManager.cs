@@ -14,5 +14,6 @@ namespace Cm93.State.Interfaces
 		void DeleteGame(Guid key);
 		void LoadGame(Guid key);
 		void UpdateGame(ModuleType moduleType);
+		void RefreshState();
 	}
 }
