@@ -65,6 +65,26 @@ namespace Cm93.UI.Modules.LoadGame
 		public override void SetModel(IModule model)
 		{
 			GameModule = (IGameModule) model;
+
+			SetGames();
+
+			NotifyOfPropertyChange(() => GamesGrid);
+		}
+
+		public bool CanLoad
+		{
+			get { return true; }
+		}
+
+		private void SetGames()
+		{
+			this.gamesGrid.Clear();
+
+			foreach (var game in GameModule.Games.OrderByDescending(g => g.LastSaved))
+				gamesGrid.Add(new GameRow
+					{
+						Name = game.Name,
+					});
 		}
 
 		public void Load()

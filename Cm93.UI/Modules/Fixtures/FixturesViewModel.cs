@@ -88,14 +88,14 @@ namespace Cm93.UI.Modules.Fixtures
 
 			foreach (var fixture in fixtures)
 				fixturesGrid.Add(new FixtureRow
-				{
-					TeamHome = fixture.TeamHome.TeamName,
-					TeamAway = fixture.TeamAway.TeamName,
-					GoalsHome = Configuration.GlobalWeek() < fixture.Week ?
-						"-" : fixture.GoalsHome.ToString(CultureInfo.CurrentCulture),
-					GoalsAway = Configuration.GlobalWeek() < fixture.Week ?
-						"-" : fixture.GoalsAway.ToString(CultureInfo.CurrentCulture)
-				});
+					{
+						TeamHome = fixture.TeamHome.TeamName,
+						TeamAway = fixture.TeamAway.TeamName,
+						GoalsHome = Configuration.GlobalWeek() < fixture.Week ?
+							"-" : fixture.GoalsHome.ToString(CultureInfo.CurrentCulture),
+						GoalsAway = Configuration.GlobalWeek() < fixture.Week ?
+							"-" : fixture.GoalsAway.ToString(CultureInfo.CurrentCulture)
+					});
 		}
 
 		private ObservableCollection<FixtureRow> fixturesGrid = new ObservableCollection<FixtureRow>();

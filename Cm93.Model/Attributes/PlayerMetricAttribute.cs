@@ -20,7 +20,7 @@ using System;
 namespace Cm93.Model.Attributes
 {
 	[AttributeUsage(AttributeTargets.Property)]
-	public class PlayerMetricAttribute : Attribute
+	public class DataGridRowMetricAttribute : Attribute
 	{
 		public int Order { get; set; }
 	}

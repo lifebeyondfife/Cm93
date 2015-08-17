@@ -15,6 +15,7 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Attributes;
 using System;
 
 namespace Cm93.UI.Modules.LoadGame
@@ -22,6 +23,8 @@ namespace Cm93.UI.Modules.LoadGame
 	public class GameRow
 	{
 		public string Name { get; internal set; }
+
+		[DataGridRowMetric(Order = 1)]
 		public DateTime LastSaved { get; internal set; }
 	}
 }

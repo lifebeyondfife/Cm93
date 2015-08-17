@@ -502,11 +502,11 @@ namespace Cm93.UI.Modules.Players
 
 			foreach (var propertyDefinition in properties)
 			{
-				if (!propertyDefinition.IsDefined(typeof(PlayerMetricAttribute), true))
+				if (!propertyDefinition.IsDefined(typeof(DataGridRowMetricAttribute), true))
 					continue;
 
 				var propertyValue = propertyDefinition.GetValue(player, null);
-				var attribute = propertyDefinition.GetAttributes<PlayerMetricAttribute>(false).Single();
+				var attribute = propertyDefinition.GetAttributes<DataGridRowMetricAttribute>(false).Single();
 
 				var propertyString = propertyValue is ICollection
 					? string.Join("\n", ((ICollection) propertyValue).

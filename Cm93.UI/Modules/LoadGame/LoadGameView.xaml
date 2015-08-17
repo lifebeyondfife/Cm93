@@ -12,6 +12,11 @@
 			<ColumnDefinition Width="4*"/>
 		</Grid.ColumnDefinitions>
 
+		<Grid.RowDefinitions>
+			<RowDefinition Height="1*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
 		<Grid Grid.Column="0">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
@@ -24,7 +29,6 @@
 			<DataGrid Grid.Row="1" FontSize="18" Margin="15" AutoGenerateColumns="False" ItemsSource="{Binding GamesGrid, Mode=OneWay}" Background="Transparent" RowBackground="Transparent" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserResizeRows="False" HeadersVisibility="None" IsReadOnly="True">
 				<DataGrid.Columns>
 					<DataGridTextColumn Binding="{Binding Path=Name}" Width="5*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
-					<DataGridTextColumn Binding="{Binding Path=LastSaved}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
 				</DataGrid.Columns>
 			</DataGrid>
 		</Grid>
@@ -40,10 +44,12 @@
 
 			<DataGrid Grid.Row="1" FontSize="18" Margin="15" IsHitTestVisible="False" AutoGenerateColumns="False" ItemsSource="{Binding FixturesGrid, Mode=OneWay}" Background="Transparent" RowBackground="Transparent" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserResizeRows="False" HeadersVisibility="None" IsReadOnly="True">
 				<DataGrid.Columns>
-					<DataGridTextColumn Binding="{Binding Path=Name}" Width="5*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
-					<DataGridTextColumn Binding="{Binding Path=LastSaved}" Width="1*" ElementStyle="{StaticResource CellStyleCentre}" CellStyle="{StaticResource CellStyle}"/>
+					<DataGridTextColumn Header="Attribute" Binding="{Binding Path=Attribute}" Width="7*" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
+					<DataGridTextColumn Header="Value" Binding="{Binding Path=Value}" Width="12*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
 				</DataGrid.Columns>
 			</DataGrid>
 		</Grid>
+
+		<Button Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Height="45" VerticalAlignment="Center" Content="Load" x:Name="Load" />
 	</Grid>
 </UserControl>
