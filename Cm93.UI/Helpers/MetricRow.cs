@@ -15,9 +15,9 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-namespace Cm93.UI.Modules.Players
+namespace Cm93.UI.Helpers
 {
-	public class PlayerMetricRow
+	public class MetricRow
 	{
 		public int Order { get; set; }
 		public string Attribute { get; set; }
