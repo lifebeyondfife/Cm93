@@ -25,6 +25,15 @@ namespace Cm93.UI.Modules.LoadGame
 		public string Name { get; internal set; }
 
 		[DataGridRowMetric(Order = 1)]
+		public string TeamName { get; internal set; }
+
+		[DataGridRowMetric(Order = 2)]
+		public int Week { get; internal set; }
+
+		[DataGridRowMetric(Order = 3)]
+		public int Season { get; internal set; }
+
+		[DataGridRowMetric(Order = 4)]
 		public DateTime LastSaved { get; internal set; }
 	}
 }

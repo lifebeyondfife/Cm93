@@ -24,13 +24,14 @@
 			</Grid.RowDefinitions>
 
 			<TextBlock Grid.Row="0" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="ExtraBold" Foreground="White" Text="Games" />
-			<ListBox Grid.Row="1" FontSize="18"  Margin="15" Background="Transparent" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Stretch" FontWeight="ExtraBold" ItemsSource="{Binding AvailableGames}" SelectedItem="{Binding SelectedGame}" cal:Message.Attach="[Event MouseDoubleClick] = [Action Load]" />
 
-			<DataGrid Grid.Row="1" FontSize="18" Margin="15" AutoGenerateColumns="False" ItemsSource="{Binding GamesGrid, Mode=OneWay}" Background="Transparent" RowBackground="Transparent" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserResizeRows="False" HeadersVisibility="None" IsReadOnly="True">
-				<DataGrid.Columns>
-					<DataGridTextColumn Binding="{Binding Path=Name}" Width="5*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
-				</DataGrid.Columns>
-			</DataGrid>
+			<ListBox Grid.Row="1" FontSize="18" Margin="15" Background="Transparent" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Stretch" FontWeight="ExtraBold" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedGame}" cal:Message.Attach="[Event MouseDoubleClick] = [Action Load]">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}" />
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
 		</Grid>
 
 		<Grid Grid.Column="1">
@@ -40,12 +41,11 @@
 			</Grid.RowDefinitions>
 
 			<TextBlock Grid.Row="0" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="ExtraBold" Foreground="White" Text="Info" />
-			<ListBox Grid.Row="1" FontSize="18"  Margin="15" Background="Transparent" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Stretch" FontWeight="ExtraBold" ItemsSource="{Binding GameInfo}" />
 
-			<DataGrid Grid.Row="1" FontSize="18" Margin="15" IsHitTestVisible="False" AutoGenerateColumns="False" ItemsSource="{Binding FixturesGrid, Mode=OneWay}" Background="Transparent" RowBackground="Transparent" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserDeleteRows="False" CanUserResizeRows="False" HeadersVisibility="None" IsReadOnly="True">
+			<DataGrid Grid.Row="1" Margin="0, 15" ItemsSource="{Binding GameInfoGrid, Mode=OneWay}" HeadersVisibility="None" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" IsHitTestVisible="False" AutoGenerateColumns="False">
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Attribute" Binding="{Binding Path=Attribute}" Width="7*" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
-					<DataGridTextColumn Header="Value" Binding="{Binding Path=Value}" Width="12*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
+					<DataGridTextColumn Binding="{Binding Path=Attribute}" Width="7*" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
+					<DataGridTextColumn Binding="{Binding Path=Value}" Width="12*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
 				</DataGrid.Columns>
 			</DataGrid>
 		</Grid>

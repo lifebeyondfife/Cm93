@@ -31,6 +31,7 @@ using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
 using Cm93.UI.Events;
+using Cm93.UI.Helpers;
 
 namespace Cm93.UI.Modules.Players
 {
@@ -221,8 +222,8 @@ namespace Cm93.UI.Modules.Players
 			}
 		}
 
-		private ObservableCollection<PlayerMetricRow> playerMetricGrid = new ObservableCollection<PlayerMetricRow>();
-		public ObservableCollection<PlayerMetricRow> PlayerMetricGrid
+		private ObservableCollection<MetricRow> playerMetricGrid = new ObservableCollection<MetricRow>();
+		public ObservableCollection<MetricRow> PlayerMetricGrid
 		{
 			get { return this.playerMetricGrid; }
 			set
@@ -458,7 +459,7 @@ namespace Cm93.UI.Modules.Players
 			NotifyOfPropertyChange(() => PlayerAbItems);
 		}
 
-		private void UpdateBidRelease(Player player, ICollection<PlayerMetricRow> playerMetricRows)
+		private void UpdateBidRelease(Player player, ICollection<MetricRow> playerMetricRows)
 		{
 			MaxBidValue = player.Team == Team ? player.NumericValue * 3 : Math.Min(player.NumericValue * 2, NumericAvailable);
 			Bid = player.Team == Team ? player.ReleaseValue : Math.Min(player.NumericValue, NumericAvailable);
@@ -467,7 +468,7 @@ namespace Cm93.UI.Modules.Players
 			{
 				ShirtNumberVisible = false;
 				ContractButtonLabel = "Release";
-				playerMetricRows.Add(new PlayerMetricRow
+				playerMetricRows.Add(new MetricRow
 					{
 						Order = playerMetricRows.Count + 1,
 						Attribute = "Release",
@@ -494,11 +495,11 @@ namespace Cm93.UI.Modules.Players
 			}
 		}
 
-		private static IList<PlayerMetricRow> PopulateMetricGrid(Player player)
+		private static IList<MetricRow> PopulateMetricGrid(Player player)
 		{
 			var properties = player.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-			var playerMetricRows = new List<PlayerMetricRow>();
+			var playerMetricRows = new List<MetricRow>();
 
 			foreach (var propertyDefinition in properties)
 			{
@@ -515,7 +516,7 @@ namespace Cm93.UI.Modules.Players
 						OrderBy(s => s))
 					: propertyValue.ToString();
 
-				playerMetricRows.Add(new PlayerMetricRow
+				playerMetricRows.Add(new MetricRow
 					{
 						Order = attribute.Order,
 						Attribute = propertyDefinition.Name,

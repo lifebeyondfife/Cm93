@@ -23,6 +23,11 @@ using Cm93.Model.Config;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.UI.Events;
+using Cm93.UI.Helpers;
+using System.Collections.Generic;
+using System.Reflection;
+using Cm93.Model.Attributes;
+using System.Collections;
 
 namespace Cm93.UI.Modules.LoadGame
 {
@@ -32,26 +37,38 @@ namespace Cm93.UI.Modules.LoadGame
 		private readonly IEventAggregator eventAggregator;
 		private IGameModule GameModule { get; set; }
 
-		private string selectedGame = string.Empty;
-		public string SelectedGame
+		private GameRow selectedGame = null;
+		public GameRow SelectedGame
 		{
 			get { return this.selectedGame; }
 			set
 			{
 				this.selectedGame = value;
+				UpdateGameSelected();
 
 				NotifyOfPropertyChange(() => SelectedGame);
 			}
 		}
 
-		private ObservableCollection<GameRow> gamesGrid = new ObservableCollection<GameRow>();
-		public ObservableCollection<GameRow> GamesGrid
+		private ObservableCollection<GameRow> games = new ObservableCollection<GameRow>();
+		public ObservableCollection<GameRow> Games
 		{
-			get { return this.gamesGrid; }
+			get { return this.games; }
 			set
 			{
-				this.gamesGrid = value;
-				NotifyOfPropertyChange(() => GamesGrid);
+				this.games = value;
+				NotifyOfPropertyChange(() => Games);
+			}
+		}
+
+		private ObservableCollection<MetricRow> gameInfoGrid = new ObservableCollection<MetricRow>();
+		public ObservableCollection<MetricRow> GameInfoGrid
+		{
+			get { return this.gameInfoGrid; }
+			set
+			{
+				this.gameInfoGrid = value;
+				NotifyOfPropertyChange(() => GameInfoGrid);
 			}
 		}
 
@@ -68,7 +85,7 @@ namespace Cm93.UI.Modules.LoadGame
 
 			SetGames();
 
-			NotifyOfPropertyChange(() => GamesGrid);
+			NotifyOfPropertyChange(() => Games);
 		}
 
 		public bool CanLoad
@@ -78,18 +95,69 @@ namespace Cm93.UI.Modules.LoadGame
 
 		private void SetGames()
 		{
-			this.gamesGrid.Clear();
+			this.games.Clear();
 
 			foreach (var game in GameModule.Games.OrderByDescending(g => g.LastSaved))
-				gamesGrid.Add(new GameRow
+				games.Add(new GameRow
 					{
 						Name = game.Name,
+						LastSaved = game.LastSaved,
+						Season = game.Season,
+						Week = game.Week,
+						TeamName = game.TeamName
 					});
+		}
+
+		private void UpdateGameSelected()
+		{
+			this.gameInfoGrid.Clear();
+
+			if (SelectedGame == null)
+				return;
+
+			var gameInfoRows = PopulateGameInfoGrid(SelectedGame);
+
+			foreach (var gameInfoRow in gameInfoRows.OrderBy(r => r.Order))
+				this.gameInfoGrid.Add(gameInfoRow);
+
+			NotifyOfPropertyChange(() => GameInfoGrid);
+		}
+
+		private static IList<MetricRow> PopulateGameInfoGrid(GameRow game)
+		{
+			var properties = game.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+			var gameInfoRows = new List<MetricRow>();
+
+			foreach (var propertyDefinition in properties)
+			{
+				if (!propertyDefinition.IsDefined(typeof(DataGridRowMetricAttribute), true))
+					continue;
+
+				var propertyValue = propertyDefinition.GetValue(game, null);
+				var attribute = propertyDefinition.GetAttributes<DataGridRowMetricAttribute>(false).Single();
+
+				var propertyString = propertyValue is ICollection
+					? string.Join("\n", ((ICollection) propertyValue).
+						Cast<object>().
+						Select(o => o.ToString()).
+						OrderBy(s => s))
+					: propertyValue.ToString();
+
+				gameInfoRows.Add(new MetricRow
+				{
+					Order = attribute.Order,
+					Attribute = propertyDefinition.Name,
+					Value = propertyString
+				});
+			}
+
+			return gameInfoRows;
 		}
 
 		public void Load()
 		{
-			if (string.IsNullOrEmpty(SelectedGame))
+			if (SelectedGame == null)
 				return;
 
 			//	Here is where you interface with the IRepository classes and load a game instance. The
