@@ -381,7 +381,7 @@ namespace Cm93.UI.Modules.Players
 
 			var player = Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
 
-			var playerMetricRows = PopulateMetricGrid(player);
+			var playerMetricRows = player.GetGridRows();
 			UpdateBidRelease(player, playerMetricRows);
 			UpdateChart(player);
 
@@ -409,8 +409,8 @@ namespace Cm93.UI.Modules.Players
 			PlayerAColour = PlayerAb[PlayerA].Team.PrimaryColour;
 			PlayerBColour = PlayerAb[PlayerB].Team.PrimaryColour;
 
-			var playerAMetrics = PopulateMetricGrid(PlayerAb[PlayerA]);
-			var playerBMetrics = PopulateMetricGrid(PlayerAb[PlayerB]);
+			var playerAMetrics = PlayerAb[PlayerA].GetGridRows();
+			var playerBMetrics = PlayerAb[PlayerB].GetGridRows();
 
 			PlayerAbItems = new ObservableCollection<PlayerMetric>();
 
@@ -439,7 +439,7 @@ namespace Cm93.UI.Modules.Players
 			else
 				BTitle = player.LastName;
 
-			var playerMetrics = PopulateMetricGrid(player);
+			var playerMetrics = player.GetGridRows();
 
 			PlayerAbItems = new ObservableCollection<PlayerMetric>();
 
@@ -493,38 +493,6 @@ namespace Cm93.UI.Modules.Players
 					MaxBidValue = previousBid.BidAmount;
 				}
 			}
-		}
-
-		private static IList<MetricRow> PopulateMetricGrid(Player player)
-		{
-			var properties = player.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-			var playerMetricRows = new List<MetricRow>();
-
-			foreach (var propertyDefinition in properties)
-			{
-				if (!propertyDefinition.IsDefined(typeof(DataGridRowMetricAttribute), true))
-					continue;
-
-				var propertyValue = propertyDefinition.GetValue(player, null);
-				var attribute = propertyDefinition.GetAttributes<DataGridRowMetricAttribute>(false).Single();
-
-				var propertyString = propertyValue is ICollection
-					? string.Join("\n", ((ICollection) propertyValue).
-						Cast<object>().
-						Select(o => o.ToString()).
-						OrderBy(s => s))
-					: propertyValue.ToString();
-
-				playerMetricRows.Add(new MetricRow
-					{
-						Order = attribute.Order,
-						Attribute = propertyDefinition.Name,
-						Value = propertyString
-					});
-			}
-
-			return playerMetricRows;
 		}
 
 		public void Handle(TeamSetEvent message)

@@ -16,13 +16,15 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using Cm93.Model.Attributes;
+using Cm93.Model.Interfaces;
 using System;
 
 namespace Cm93.UI.Modules.LoadGame
 {
-	public class GameRow
+	public class GameRow : IGameInfo
 	{
 		public string Name { get; internal set; }
+		public string GameId { get; internal set; }
 
 		[DataGridRowMetric(Order = 1)]
 		public string TeamName { get; internal set; }

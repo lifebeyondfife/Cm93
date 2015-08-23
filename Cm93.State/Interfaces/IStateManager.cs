@@ -7,7 +7,6 @@ namespace Cm93.State.Interfaces
 {
 	public interface IStateManager
 	{
-		IList<IGame> Games { get; }
 		IDictionary<ModuleType, IModule> Modules { get; }
 
 		void CreateGame(string name);

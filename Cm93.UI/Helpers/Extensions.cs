@@ -15,25 +15,38 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
+using Caliburn.Micro;
+using Cm93.Model.Attributes;
+using Cm93.Model.Interfaces;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
-namespace Cm93.Model.Interfaces
+namespace Cm93.UI.Helpers
 {
-	public interface IGame
+	public static class Extensions
 	{
-		string Name { get; set; }
-		DateTime LastSaved { get; set; }
-		string GameId { get; set; }
+		public static IList<MetricRow> GetGridRows(this IGameInfo obj)
+		{
+			var properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-		DateTime Created { get; }
-		string TeamName { get; }
-		string Place { get; }
+			var rows = new List<MetricRow>();
 
-		int Week { get; }
-		int Season { get; }
+			foreach (var propertyDefinition in properties)
+			{
+				if (!propertyDefinition.IsDefined(typeof(DataGridRowMetricAttribute), true))
+					continue;
+
+				rows.Add(new MetricRow
+					{
+						Order = propertyDefinition.GetAttributes<DataGridRowMetricAttribute>(false).Single().Order,
+						Attribute = propertyDefinition.Name,
+						Value = propertyDefinition.GetValue(obj, null).ToString()
+					});
+			}
+
+			return rows;
+		}
 	}
 }

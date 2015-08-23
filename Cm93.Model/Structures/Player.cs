@@ -15,16 +15,16 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using Cm93.Model.Attributes;
 using Cm93.Model.Enumerations;
+using Cm93.Model.Interfaces;
+using System;
+using System.Globalization;
+using System.Linq;
 
 namespace Cm93.Model.Structures
 {
-	public class Player : ICloneable
+	public class Player : ICloneable, IGameInfo
 	{
 		private Lazy<PlayerIndex> lazyPlayerIndex;
 

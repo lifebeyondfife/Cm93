@@ -15,25 +15,9 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Cm93.Model.Interfaces
 {
-	public interface IGame
+	public interface IGameInfo
 	{
-		string Name { get; set; }
-		DateTime LastSaved { get; set; }
-		string GameId { get; set; }
-
-		DateTime Created { get; }
-		string TeamName { get; }
-		string Place { get; }
-
-		int Week { get; }
-		int Season { get; }
 	}
 }

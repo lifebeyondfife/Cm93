@@ -151,10 +151,10 @@
 			</Expander>
 		</Grid>
 
-		<DataGrid Grid.Column="2" ItemsSource="{Binding PlayerMetricGrid, Mode=OneWay}" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" IsHitTestVisible="False" AutoGenerateColumns="False">
+		<DataGrid Grid.Column="2" Margin="0, 50, 0, 0" ItemsSource="{Binding PlayerMetricGrid, Mode=OneWay}" HeadersVisibility="None" IsReadOnly="True" Background="Transparent" RowBackground="Transparent" IsHitTestVisible="False" AutoGenerateColumns="False">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="Attribute" Binding="{Binding Path=Attribute}" Width="7*" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
-				<DataGridTextColumn Header="Value" Binding="{Binding Path=Value}" Width="12*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn Binding="{Binding Path=Attribute}" Width="7*" ElementStyle="{StaticResource CellStyleLeft}" CellStyle="{StaticResource CellStyle}"/>
+				<DataGridTextColumn Binding="{Binding Path=Value}" Width="12*" ElementStyle="{StaticResource CellStyleRight}" CellStyle="{StaticResource CellStyle}"/>
 			</DataGrid.Columns>
 		</DataGrid>
 

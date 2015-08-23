@@ -31,28 +31,6 @@ namespace Cm93.State.Repository
 {
 	public class Sqlite : IRepository
 	{
-		public IList<IGame> Games
-		{
-			get
-			{
-				using (var context = new Cm93Context())
-				{
-					return context.States.
-						Select(s => new GameModel
-							{
-								Created = s.Created,
-								LastSaved = s.LastSaved,
-								Name = s.Name,
-								Season = (int) s.Season,
-								TeamName = s.SelectedTeam.TeamName,
-								Week = (int) s.Week
-							}).
-						Cast<IGame>().
-						ToList();
-				}
-			}
-		}
-
 		private IDictionary<ModuleType, Action<IState>> UpdateActions { get; set; }
 
 		public Sqlite()
