@@ -24,6 +24,7 @@ namespace Cm93.Model.Structures
 	{
 		public string Name { get; set; }
 		public DateTime LastSaved { get; set; }
+		public string GameId { get; set; }
 
 		public DateTime Created { get; set; }
 		public string TeamName { get; set; }

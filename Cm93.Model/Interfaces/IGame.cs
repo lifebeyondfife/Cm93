@@ -27,6 +27,7 @@ namespace Cm93.Model.Interfaces
 	{
 		string Name { get; set; }
 		DateTime LastSaved { get; set; }
+		string GameId { get; set; }
 
 		DateTime Created { get; }
 		string TeamName { get; }

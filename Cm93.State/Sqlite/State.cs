@@ -171,14 +171,15 @@ namespace Cm93.State.Sqlite
 				return context.States.
 					Where(s => s.StateId != 0).	// TODO: Get all bootstrapping game info out of the DB, this should be in a "New Game" module of some kind
 					Select(s => new GameModel
-					{
-						LastSaved = s.LastSaved,
-						Created = s.Created,
-						Name = s.Name,
-						Week = (int) s.Week,
-						Season = (int) s.Season,
-						TeamName = s.SelectedTeam.TeamName
-					}).
+						{
+							GameId = s.StateGuid,
+							LastSaved = s.LastSaved,
+							Created = s.Created,
+							Name = s.Name,
+							Week = (int) s.Week,
+							Season = (int) s.Season,
+							TeamName = s.SelectedTeam.TeamName
+						}).
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Cast<IGame>().
 					ToList();

@@ -38,22 +38,12 @@ namespace Cm93.UI.Helpers
 				if (!propertyDefinition.IsDefined(typeof(DataGridRowMetricAttribute), true))
 					continue;
 
-				var propertyValue = propertyDefinition.GetValue(obj, null);
-				var attribute = propertyDefinition.GetAttributes<DataGridRowMetricAttribute>(false).Single();
-
-				var propertyString = propertyValue is ICollection
-					? string.Join("\n", ((ICollection) propertyValue).
-						Cast<object>().
-						Select(o => o.ToString()).
-						OrderBy(s => s))
-					: propertyValue.ToString();
-
 				rows.Add(new MetricRow
-				{
-					Order = attribute.Order,
-					Attribute = propertyDefinition.Name,
-					Value = propertyString
-				});
+					{
+						Order = propertyDefinition.GetAttributes<DataGridRowMetricAttribute>(false).Single().Order,
+						Attribute = propertyDefinition.Name,
+						Value = propertyDefinition.GetValue(obj, null).ToString()
+					});
 			}
 
 			return rows;

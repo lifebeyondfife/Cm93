@@ -98,7 +98,8 @@ namespace Cm93.UI.Modules.LoadGame
 						LastSaved = game.LastSaved,
 						Season = game.Season,
 						Week = game.Week,
-						TeamName = game.TeamName
+						TeamName = game.TeamName,
+						GameId = game.GameId
 					});
 		}
 

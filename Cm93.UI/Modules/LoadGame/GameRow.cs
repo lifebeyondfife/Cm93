@@ -24,6 +24,7 @@ namespace Cm93.UI.Modules.LoadGame
 	public class GameRow : IGameInfo
 	{
 		public string Name { get; internal set; }
+		public string GameId { get; internal set; }
 
 		[DataGridRowMetric(Order = 1)]
 		public string TeamName { get; internal set; }
