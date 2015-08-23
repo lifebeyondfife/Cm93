@@ -124,6 +124,7 @@
     <Compile Include="Events\MatchCompleteEvent.cs" />
     <Compile Include="Events\ModuleSelectedEvent.cs" />
     <Compile Include="Events\TeamSetEvent.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\PlayerShirtProperties.cs" />
     <Compile Include="Modules\Competitions\CompetitionsView.xaml.cs">
       <DependentUpon>CompetitionsView.xaml</DependentUpon>

@@ -15,19 +15,13 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Caliburn.Micro;
+using Cm93.Model.Interfaces;
+using Cm93.Model.Modules;
+using Cm93.UI.Helpers;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using Caliburn.Micro;
-using Cm93.Model.Config;
-using Cm93.Model.Interfaces;
-using Cm93.Model.Modules;
-using Cm93.UI.Events;
-using Cm93.UI.Helpers;
-using System.Collections.Generic;
-using System.Reflection;
-using Cm93.Model.Attributes;
-using System.Collections;
 
 namespace Cm93.UI.Modules.LoadGame
 {
@@ -115,44 +109,12 @@ namespace Cm93.UI.Modules.LoadGame
 			if (SelectedGame == null)
 				return;
 
-			var gameInfoRows = PopulateGameInfoGrid(SelectedGame);
+			var gameInfoRows = SelectedGame.GetGridRows();
 
 			foreach (var gameInfoRow in gameInfoRows.OrderBy(r => r.Order))
 				this.gameInfoGrid.Add(gameInfoRow);
 
 			NotifyOfPropertyChange(() => GameInfoGrid);
-		}
-
-		private static IList<MetricRow> PopulateGameInfoGrid(GameRow game)
-		{
-			var properties = game.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-			var gameInfoRows = new List<MetricRow>();
-
-			foreach (var propertyDefinition in properties)
-			{
-				if (!propertyDefinition.IsDefined(typeof(DataGridRowMetricAttribute), true))
-					continue;
-
-				var propertyValue = propertyDefinition.GetValue(game, null);
-				var attribute = propertyDefinition.GetAttributes<DataGridRowMetricAttribute>(false).Single();
-
-				var propertyString = propertyValue is ICollection
-					? string.Join("\n", ((ICollection) propertyValue).
-						Cast<object>().
-						Select(o => o.ToString()).
-						OrderBy(s => s))
-					: propertyValue.ToString();
-
-				gameInfoRows.Add(new MetricRow
-				{
-					Order = attribute.Order,
-					Attribute = propertyDefinition.Name,
-					Value = propertyString
-				});
-			}
-
-			return gameInfoRows;
 		}
 
 		public void Load()

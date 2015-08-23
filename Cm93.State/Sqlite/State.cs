@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GameModel = Cm93.Model.Structures.Game;
 
-namespace Cm93.State.Game
+namespace Cm93.State.Sqlite
 {
 	public class State : IState
 	{
@@ -169,6 +169,7 @@ namespace Cm93.State.Game
 			using (var context = new Cm93Context())
 			{
 				return context.States.
+					Where(s => s.StateId != 0).	// TODO: Get all bootstrapping game info out of the DB, this should be in a "New Game" module of some kind
 					Select(s => new GameModel
 					{
 						LastSaved = s.LastSaved,

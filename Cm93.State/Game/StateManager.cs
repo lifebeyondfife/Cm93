@@ -23,6 +23,7 @@ using Cm93.State.Interfaces;
 using System;
 using System.Collections.Generic;
 using SqliteRepo = Cm93.State.Repository.Sqlite;
+using SqliteState = Cm93.State.Sqlite.State;
 
 namespace Cm93.State.Game
 {
@@ -36,15 +37,10 @@ namespace Cm93.State.Game
 			get { return State.Modules; }
 		}
 
-		public IList<IGame> Games
-		{
-			get { return Repository.Games; }
-		}
-
 		public StateManager()
 		{
 			Repository = new SqliteRepo();
-			State = new State();
+			State = new SqliteState();
 		}
 
 		public void RefreshState()

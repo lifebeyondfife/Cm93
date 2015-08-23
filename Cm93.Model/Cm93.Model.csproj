@@ -50,6 +50,7 @@
     <Compile Include="Interfaces\ICreateModules.cs" />
     <Compile Include="Interfaces\IFixture.cs" />
     <Compile Include="Interfaces\IGame.cs" />
+    <Compile Include="Interfaces\IGameInfo.cs" />
     <Compile Include="Interfaces\ISimulator.cs" />
     <Compile Include="MockCreateModules.cs" />
     <Compile Include="Modules\CompetitionModule.cs" />
