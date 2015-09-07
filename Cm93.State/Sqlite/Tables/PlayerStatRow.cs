@@ -30,6 +30,7 @@ namespace Cm93.State.Sqlite.Tables
 
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
+		public string Nationality { get; set; }
 		public long Age { get; set; }
 		public long Position { get; set; }
 

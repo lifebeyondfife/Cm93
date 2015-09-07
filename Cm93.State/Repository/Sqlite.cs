@@ -162,7 +162,7 @@ namespace Cm93.State.Repository
 
 					if (teamBalance == null)
 						context.TeamBalances.Add(
-							new TeamBalanceRow
+							new TeamStateRow
 							{
 								Balance = teamKeyValue.Value.Balance,
 								StateId = stateRow.StateId,
@@ -356,6 +356,7 @@ namespace Cm93.State.Repository
 							Rating = Math.Round(p.PlayerStat.Rating.RatingValue, 1),
 							Number = (int) p.Number,
 							Position = (Position) p.PlayerStat.Position,
+							Nationality = p.PlayerStat.Nationality,
 							Team = teams[p.Team.TeamName],
 							Location = new Coordinate { X = p.LocationX, Y = p.LocationY },
 							Id = (int) p.PlayerStatId,
@@ -371,7 +372,7 @@ namespace Cm93.State.Repository
 		{
 			using (var context = new Cm93Context())
 			{
-				return context.Competitions.
+				return context.Competitions. 
 					Where(c => c.CompetitionId == 0 && c.CompetitionType == "League").	// TODO: Create this structure using application logic, not DB rows
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Select(c => new Division

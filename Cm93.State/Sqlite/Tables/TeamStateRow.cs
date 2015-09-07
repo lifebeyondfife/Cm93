@@ -20,8 +20,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cm93.State.Sqlite.Tables
 {
-	[Table("TeamBalances")]
-	public class TeamBalanceRow
+	[Table("TeamStates")]
+	public class TeamStateRow
 	{
 		[Key]
 		[Column(Order = 1)]
@@ -32,6 +32,7 @@ namespace Cm93.State.Sqlite.Tables
 		public long StateId { get; set; }
 
 		public long Balance { get; set; }
+		public long Division { get; set; }
 
 		public virtual TeamRow Team { get; set; }
 		public virtual StateRow State { get; set; }

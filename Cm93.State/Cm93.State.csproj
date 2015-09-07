@@ -77,7 +77,7 @@
     <Compile Include="Sqlite\Tables\RatingRow.cs" />
     <Compile Include="Sqlite\Tables\StateRow.cs" />
     <Compile Include="Sqlite\Tables\TeamRow.cs" />
-    <Compile Include="Sqlite\Tables\TeamBalanceRow.cs" />
+    <Compile Include="Sqlite\Tables\TeamStateRow.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cm93.Model\Cm93.Model.csproj">

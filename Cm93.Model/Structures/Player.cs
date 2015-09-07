@@ -73,11 +73,13 @@ namespace Cm93.Model.Structures
 
 		[DataGridRowMetric(Order = 7)]
 		public Position Position { get; set; }
-		public Coordinate Location { get; set; }
+		[DataGridRowMetric(Order = 8)]
+		public string Nationality { get; set; }
 
+		public Coordinate Location { get; set; }
 		public Instruction Instruction { get; set; }
 
-		[DataGridRowMetric(Order = 8)]
+		[DataGridRowMetric(Order = 9)]
 		public string Value
 		{
 			get { return string.Format(CultureInfo.CurrentCulture, "{0:c0}", NumericValue); }
@@ -112,6 +114,7 @@ namespace Cm93.Model.Structures
 					Number = this.Number,
 					NumericValue = this.NumericValue,
 					Position = this.Position,
+					Nationality = this.Nationality,
 					Rating = this.Rating,
 					ReleaseValue = this.ReleaseValue,
 					Team = this.Team
