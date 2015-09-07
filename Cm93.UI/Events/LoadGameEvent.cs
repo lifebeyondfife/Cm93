@@ -15,22 +15,10 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using Cm93.State.Sqlite.Tables;
-using System.Data.Entity;
-using TableState = Cm93.State.Sqlite.Tables.StateRow;
-
-namespace Cm93.State.Sqlite
+namespace Cm93.UI.Events
 {
-	public class Cm93Context : DbContext
+	public class LoadGameEvent
 	{
-		public DbSet<CompetitionRow> Competitions { get; set; }
-		public DbSet<TeamBalanceRow> TeamBalances { get; set; }
-		public DbSet<PlayerStatRow> PlayerStats { get; set; }
-		public DbSet<TableState> States { get; set; }
-		public DbSet<DivisionRow> Divisions { get; set; }
-		public DbSet<FixtureRow> Fixtures { get; set; }
-		public DbSet<PlayerRow> Players { get; set; }
-		public DbSet<RatingRow> Ratings { get; set; }
-		public DbSet<TeamRow> Teams { get; set; }
+		public string GameId { get; set; }
 	}
 }

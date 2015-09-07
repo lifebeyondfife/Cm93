@@ -27,26 +27,19 @@ namespace Cm93.UI.Helpers
 {
 	public static class Extensions
 	{
-		public static IList<MetricRow> GetGridRows(this IGameInfo obj)
+		public static IList<MetricRow> GetGridRows(this IGameInfo gameInfo)
 		{
-			var properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-			var rows = new List<MetricRow>();
-
-			foreach (var propertyDefinition in properties)
-			{
-				if (!propertyDefinition.IsDefined(typeof(DataGridRowMetricAttribute), true))
-					continue;
-
-				rows.Add(new MetricRow
+			return gameInfo.
+				GetType().
+				GetProperties(BindingFlags.Public | BindingFlags.Instance).
+				Where(p => p.IsDefined(typeof(DataGridRowMetricAttribute), true)).
+				Select(p => new MetricRow
 					{
-						Order = propertyDefinition.GetAttributes<DataGridRowMetricAttribute>(false).Single().Order,
-						Attribute = propertyDefinition.Name,
-						Value = propertyDefinition.GetValue(obj, null).ToString()
-					});
-			}
-
-			return rows;
+						Order = p.GetAttributes<DataGridRowMetricAttribute>(false).Single().Order,
+						Attribute = p.Name,
+						Value = p.GetValue(gameInfo, null).ToString()
+					}).
+				ToList();
 		}
 	}
 }

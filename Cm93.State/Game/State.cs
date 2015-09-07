@@ -15,22 +15,33 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using Cm93.State.Sqlite.Tables;
-using System.Data.Entity;
-using TableState = Cm93.State.Sqlite.Tables.StateRow;
+using Cm93.Model.Config;
+using Cm93.Model.Enumerations;
+using Cm93.Model.Interfaces;
+using Cm93.Model.Modules;
+using Cm93.Model.Structures;
+using Cm93.State.Interfaces;
+using Cm93.State.Sqlite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using GameModel = Cm93.Model.Structures.Game;
 
-namespace Cm93.State.Sqlite
+namespace Cm93.State.Game
 {
-	public class Cm93Context : DbContext
+	public class State : IState
 	{
-		public DbSet<CompetitionRow> Competitions { get; set; }
-		public DbSet<TeamBalanceRow> TeamBalances { get; set; }
-		public DbSet<PlayerStatRow> PlayerStats { get; set; }
-		public DbSet<TableState> States { get; set; }
-		public DbSet<DivisionRow> Divisions { get; set; }
-		public DbSet<FixtureRow> Fixtures { get; set; }
-		public DbSet<PlayerRow> Players { get; set; }
-		public DbSet<RatingRow> Ratings { get; set; }
-		public DbSet<TeamRow> Teams { get; set; }
+		public string Name { get; set; }
+		public Guid Key { get; set; }
+		public DateTime Created { get; set; }
+		public DateTime LastSaved { get; set; }
+
+		public IDictionary<ModuleType, IModule> Modules { get; set; }
+
+		public State()
+		{
+			Created = DateTime.Now;
+			Key = Guid.NewGuid();
+		}
 	}
 }

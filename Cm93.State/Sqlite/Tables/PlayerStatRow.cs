@@ -15,39 +15,24 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using Cm93.Model.Interfaces;
-using Cm93.Model.Modules;
-using Cm93.State.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using GameModel = Cm93.Model.Structures.Game;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Cm93.State.Repository
+namespace Cm93.State.Sqlite.Tables
 {
-	public class Memory : IRepository
+	[Table("PlayerStats")]
+	public class PlayerStatRow
 	{
-		private IDictionary<Guid, IState> GameLookup { get; set; }
+		[Key]
+		[Column(Order = 1)]
+		[ForeignKey("Rating")]
+		public long PlayerStatId { get; set; }
 
-		public Memory()
-		{
-			GameLookup = new Dictionary<Guid, IState>();
-		}
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public long Age { get; set; }
+		public long Position { get; set; }
 
-		public void DeleteGame(Guid key)
-		{
-			GameLookup.Remove(key);
-		}
-
-		public void UpdateGame(ModuleType moduleType, IState state)
-		{
-			GameLookup[state.Key] = state;
-		}
-
-		public IState LoadGame(Guid key)
-		{
-			return GameLookup[key];
-		}
+		public virtual RatingRow Rating { get; set; }
 	}
 }

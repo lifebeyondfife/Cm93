@@ -23,7 +23,6 @@ using Cm93.State.Interfaces;
 using System;
 using System.Collections.Generic;
 using SqliteRepo = Cm93.State.Repository.Sqlite;
-using SqliteState = Cm93.State.Sqlite.State;
 
 namespace Cm93.State.Game
 {
@@ -40,7 +39,9 @@ namespace Cm93.State.Game
 		public StateManager()
 		{
 			Repository = new SqliteRepo();
-			State = new SqliteState();
+			State = new State();
+
+			Repository.CreateGame(State);
 		}
 
 		public void RefreshState()
@@ -70,13 +71,8 @@ namespace Cm93.State.Game
 
 		public void LoadGame(Guid key)
 		{
-			State = Repository.LoadGame(key);
+			State.Key = key;
+			Repository.RetrieveGame(key, State);
 		}
-
-		//	TODO: StateManager needs to synchronise Cm93.State accessing the DB, with Cm93.Model objects that are used by the UI.
-		//	In order to do so, this class has to retain some kind of exact object reference to the Cm93.Model objects it creates
-		//	instead of creating them in this function, returning them, and forgetting about them.
-		//	It needs to have a reference to these objects so that when the ShellViewModel gets a command to update something, it
-		//	can use its instance of StateManager (which it already has) to get Cm93.State to do the necessary work.
 	}
 }

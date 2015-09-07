@@ -23,7 +23,7 @@ namespace Cm93.Model.Structures
 	public class Team
 	{
 		public string TeamName { get; set; }
-		public double Balance { get; set; }
+		public long Balance { get; set; }
 
 		public Color PrimaryColour { get { return FromUInt32(PrimaryColourInt); } }
 		public Color SecondaryColour { get { return FromUInt32(SecondaryColourInt); } }

@@ -20,16 +20,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cm93.State.Sqlite.Tables
 {
-	public class Rating
+	[Table("TeamBalances")]
+	public class TeamBalanceRow
 	{
 		[Key]
 		[Column(Order = 1)]
-		[ForeignKey("PlayerStat")]
-		public long PlayerStatId { get; set; }
+		public long TeamId { get; set; }
 
-		[Column("Rating")]
-		public float RatingValue { get; set; }
+		[Key]
+		[Column(Order = 2)]
+		public long StateId { get; set; }
 
-		public virtual PlayerStat PlayerStat { get; set; }
+		public long Balance { get; set; }
+
+		public virtual TeamRow Team { get; set; }
+		public virtual StateRow State { get; set; }
 	}
 }

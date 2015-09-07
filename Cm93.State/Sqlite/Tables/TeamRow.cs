@@ -16,15 +16,18 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cm93.State.Sqlite.Tables
 {
-	public class Competition
+	[Table("Teams")]
+	public class TeamRow
 	{
 		[Key]
-		public long CompetitionId { get; set; }
+		public long TeamId { get; set; }
 
-		public string CompetitionType { get; set; }
-		public string CompetitionName { get; set; }
+		public string TeamName { get; set; }
+		public long PrimaryColour { get; set; }
+		public long SecondaryColour { get; set; }
 	}
 }

@@ -38,10 +38,10 @@ namespace Cm93.Model
 			Teams = new Dictionary<string, Team>
 				{
 					//	Look at System.Windows.Media.KnownColor for uint values of common colours
-					{ "Sothbury Wanderers FC", new Team { Balance = 10032412d, PrimaryColourInt = 4286611584U, SecondaryColourInt = 4294956800U, TeamName = "Sothbury Wanderers FC" } },
-					{ "Bicester Royals FC", new Team { Balance = 12734794d, PrimaryColourInt = 4287245282U, SecondaryColourInt = 4278239231U, TeamName = "Bicester Royals FC" } },
-					{ "Caddington City FC", new Team { Balance = 43462412d, PrimaryColourInt = 4284456608U, SecondaryColourInt = 4278255615U, TeamName = "Caddington City FC" } },
-					{ "Uthmalton Town FC", new Team { Balance = 1439622d, PrimaryColourInt = 4294907027U, SecondaryColourInt = 4278190080U, TeamName = "Uthmalton Town FC" } },
+					{ "Sothbury Wanderers FC", new Team { Balance = 10032412L, PrimaryColourInt = 4286611584U, SecondaryColourInt = 4294956800U, TeamName = "Sothbury Wanderers FC" } },
+					{ "Bicester Royals FC", new Team { Balance = 12734794L, PrimaryColourInt = 4287245282U, SecondaryColourInt = 4278239231U, TeamName = "Bicester Royals FC" } },
+					{ "Caddington City FC", new Team { Balance = 43462412L, PrimaryColourInt = 4284456608U, SecondaryColourInt = 4278255615U, TeamName = "Caddington City FC" } },
+					{ "Uthmalton Town FC", new Team { Balance = 1439622L, PrimaryColourInt = 4294907027U, SecondaryColourInt = 4278190080U, TeamName = "Uthmalton Town FC" } },
 				};
 
 			Players = new List<Player>

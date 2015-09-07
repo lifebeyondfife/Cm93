@@ -20,19 +20,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cm93.State.Sqlite.Tables
 {
-	public class TeamBalance
+	[Table("Competitions")]
+	public class CompetitionRow
 	{
 		[Key]
-		[Column(Order = 1)]
-		public long TeamId { get; set; }
+		public long CompetitionId { get; set; }
 
-		[Key]
-		[Column(Order = 2)]
-		public long StateId { get; set; }
-
-		public long Balance { get; set; }
-
-		public virtual Team Team { get; set; }
-		public virtual State State { get; set; }
+		public string CompetitionType { get; set; }
+		public string CompetitionName { get; set; }
 	}
 }
