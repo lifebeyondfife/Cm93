@@ -19,7 +19,7 @@ using Cm93.Model;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
-using Cm93.Simulator.Basic;
+using Cm93.GameEngine.Basic;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +33,7 @@ namespace Cm93.UnitTests
 		[SetUp]
 		public void SetupCmcl()
 		{
-			new AttachBasicSimulator().AttachSimulator();
+			new AttachBasicGameEngine().AttachGameEngine();
 			Modules = new MockCreateModules().CreateModules();
 		}
 

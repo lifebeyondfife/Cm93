@@ -478,7 +478,7 @@ namespace Cm93.UI.Modules.Match
 			NotifyOfPropertyChange(() => TeamAwayName);
 
 			Task.Factory.StartNew(() =>
-					Configuration.Simulator.Play(Fixture,
+					Configuration.GameEngine.Play(Fixture,
 						Fixture.TeamHome.TeamName == Team.TeamName ? TeamFormation : ComputerTeamFormation,
 						Fixture.TeamHome.TeamName == Team.TeamName ? ComputerTeamFormation : TeamFormation,
 						UpdateDynamicFixtureData)).

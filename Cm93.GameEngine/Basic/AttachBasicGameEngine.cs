@@ -15,19 +15,16 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Cm93.Model.Structures;
+using Cm93.Model.Config;
 
-namespace Cm93.Model.Interfaces
+namespace Cm93.GameEngine.Basic
 {
-	public interface ISimulator
+	public class AttachBasicGameEngine : IAttachGameEngine
 	{
-		ILookup<Team, Bid> TeamBids { get; }
-
-		void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi);
-		void SubmitBid(Bid bid);
-		void ProcessTransfers();
+		public void AttachGameEngine()
+		{
+			Configuration.GameEngine = new BasicGameEngine();
+		}
 	}
 }

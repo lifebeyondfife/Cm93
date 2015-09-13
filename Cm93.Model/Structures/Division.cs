@@ -72,7 +72,7 @@ namespace Cm93.Model.Structures
 					continue;
 				}
 
-				Configuration.Simulator.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null);
+				Configuration.GameEngine.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null);
 			}
 
 			return playerFixture;
@@ -85,7 +85,7 @@ namespace Cm93.Model.Structures
 
 			UpdatePositions();
 
-			Configuration.Simulator.ProcessTransfers();
+			Configuration.GameEngine.ProcessTransfers();
 		}
 
 		private void UpdatePointsAndGoals(IFixture fixture)

@@ -91,7 +91,7 @@ namespace Cm93.Model
 			Cmcl.Fixtures = CmclFixtures;
 			Cmcl.Places = CmclPlaces;
 
-			var playersModule = new PlayersModule(Configuration.Simulator, Players);
+			var playersModule = new PlayersModule(Configuration.GameEngine, Players);
 			
 			//	Need to create just a Teams list object. Selecting the Teams Module has to refresh the potentially changed team.
 			foreach (var team in Teams.Values)

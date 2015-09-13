@@ -15,21 +15,15 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using System;
 using System.Collections.Generic;
-using Cm93.Model.Interfaces;
-using Cm93.Model.Structures;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Cm93.Model.Modules
+namespace Cm93.GameEngine.Basic
 {
-	public class PlayersModule : IPlayersModule
+	public class Competitions
 	{
-		public IList<Player> Players { get; private set; }
-		public IGameEngine GameEngine { get; private set; }
-
-		public PlayersModule(IGameEngine gameEngine, IList<Player> players)
-		{
-			GameEngine = gameEngine;
-			Players = players;
-		}
 	}
 }

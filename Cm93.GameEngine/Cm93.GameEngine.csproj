@@ -7,8 +7,8 @@
     <ProjectGuid>{4E196610-7BBA-4C9D-B546-51D174516799}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cm93.Simulator</RootNamespace>
-    <AssemblyName>Cm93.Simulator</AssemblyName>
+    <RootNamespace>Cm93.GameEngine</RootNamespace>
+    <AssemblyName>Cm93.GameEngine</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,15 +39,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Basic\AttachBasicSimulator.cs" />
-    <Compile Include="Basic\BasicSimulator.cs" />
-    <Compile Include="IAttachSimulator.cs" />
+    <Compile Include="Basic\AttachBasicGameEngine.cs" />
+    <Compile Include="Basic\BasicGameEngine.cs" />
+    <Compile Include="Basic\Competitions.cs" />
+    <Compile Include="Basic\Fixtures.cs" />
+    <Compile Include="Basic\MatchSimulator.cs" />
+    <Compile Include="Basic\PlayerBids.cs" />
+    <Compile Include="IAttachGameEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cm93.Model\Cm93.Model.csproj">
       <Project>{f4fd474a-b62d-4540-929a-0ac98c414e2e}</Project>
-      <Name>Cm93.Structures</Name>
+      <Name>Cm93.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -16,7 +16,7 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using Cm93.Model.Config;
-using Cm93.Simulator.Basic;
+using Cm93.GameEngine.Basic;
 using Cm93.State.Game;
 using Cm93.State.Interfaces;
 using System.ComponentModel.Composition;
@@ -35,7 +35,7 @@ namespace Cm93.UI
 		
 		public CreateModel()
 		{
-			new AttachBasicSimulator().AttachSimulator();
+			new AttachBasicGameEngine().AttachGameEngine();
 
 			Configuration.Season = 2015;
 

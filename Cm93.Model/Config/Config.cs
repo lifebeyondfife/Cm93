@@ -35,6 +35,6 @@ namespace Cm93.Model.Config
 		public static Func<int> GlobalWeek { get; set; }
 		public static int Season { get; set; }
 
-		public static ISimulator Simulator { get; set; }
+		public static IGameEngine GameEngine { get; set; }
 	}
 }

@@ -281,7 +281,7 @@ namespace Cm93.UI.Modules.Players
 
 		public double NumericAvailable
 		{
-			get { return this.Team.Balance - PlayersModel.Simulator.TeamBids[this.Team].Sum(b => b.BidAmount); }
+			get { return this.Team.Balance - PlayersModel.GameEngine.TeamBids[this.Team].Sum(b => b.BidAmount); }
 		}
 
 		public string Available
@@ -481,11 +481,11 @@ namespace Cm93.UI.Modules.Players
 				ContractButtonLabel = "Bid";
 				var smallestFreeNumber = 1;
 				while (Team.Players.Any(p => p.Number == smallestFreeNumber) ||
-					PlayersModel.Simulator.TeamBids[Team].Any(b => b.PlayerNumber == smallestFreeNumber))
+					PlayersModel.GameEngine.TeamBids[Team].Any(b => b.PlayerNumber == smallestFreeNumber))
 					++smallestFreeNumber;
 				PlayerNumber = smallestFreeNumber;
 
-				var previousBid = PlayersModel.Simulator.TeamBids[Team].SingleOrDefault(b => b.Player == player);
+				var previousBid = PlayersModel.GameEngine.TeamBids[Team].SingleOrDefault(b => b.Player == player);
 
 				if (previousBid != null)
 				{
@@ -526,7 +526,7 @@ namespace Cm93.UI.Modules.Players
 
 				var player = Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
 
-				return player.Team == Team || PlayersModel.Simulator.TeamBids[Team].All(b => b.Player != player);
+				return player.Team == Team || PlayersModel.GameEngine.TeamBids[Team].All(b => b.Player != player);
 			}
 		}
 
@@ -543,7 +543,7 @@ namespace Cm93.UI.Modules.Players
 
 			var playerBid = new Bid { BidAmount = (int) Bid, Player = player, PlayerNumber = PlayerNumber, PurchasingTeam = Team };
 
-			PlayersModel.Simulator.SubmitBid(playerBid);
+			PlayersModel.GameEngine.SubmitBid(playerBid);
 
 			NotifyOfPropertyChange(() => CanContractBidRelease);
 			NotifyOfPropertyChange(() => Available);
@@ -562,7 +562,7 @@ namespace Cm93.UI.Modules.Players
 			var raisedPlayerNumber = PlayerNumber + 1;
 
 			while ((Team.Players.Any(p => p.Number == raisedPlayerNumber) ||
-				PlayersModel.Simulator.TeamBids[Team].Any(b => b.PlayerNumber == raisedPlayerNumber)) &&
+				PlayersModel.GameEngine.TeamBids[Team].Any(b => b.PlayerNumber == raisedPlayerNumber)) &&
 				raisedPlayerNumber < 50)
 				++raisedPlayerNumber;
 
@@ -583,7 +583,7 @@ namespace Cm93.UI.Modules.Players
 			var loweredPlayerNumber = PlayerNumber - 1;
 
 			while ((Team.Players.Any(p => p.Number == loweredPlayerNumber) ||
-				PlayersModel.Simulator.TeamBids[Team].Any(b => b.PlayerNumber == loweredPlayerNumber)) &&
+				PlayersModel.GameEngine.TeamBids[Team].Any(b => b.PlayerNumber == loweredPlayerNumber)) &&
 				loweredPlayerNumber > 0)
 				--loweredPlayerNumber;
 

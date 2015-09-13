@@ -24,7 +24,7 @@ namespace Cm93.State.Sqlite
 	public class Cm93Context : DbContext
 	{
 		public DbSet<CompetitionRow> Competitions { get; set; }
-		public DbSet<TeamStateRow> TeamBalances { get; set; }
+		public DbSet<TeamStateRow> TeamStates { get; set; }
 		public DbSet<PlayerStatRow> PlayerStats { get; set; }
 		public DbSet<TableState> States { get; set; }
 		public DbSet<DivisionRow> Divisions { get; set; }

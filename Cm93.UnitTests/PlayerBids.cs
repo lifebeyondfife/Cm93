@@ -22,7 +22,7 @@ using Cm93.Model;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
-using Cm93.Simulator.Basic;
+using Cm93.GameEngine.Basic;
 using Cm93.Model.Config;
 using NUnit.Framework;
 
@@ -35,7 +35,7 @@ namespace Cm93.UnitTests
 		[SetUp]
 		public void SetupCmcl()
 		{
-			new AttachBasicSimulator().AttachSimulator();
+			new AttachBasicGameEngine().AttachGameEngine();
 			Modules = new MockCreateModules().CreateModules();
 		}
 
@@ -56,7 +56,7 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Configuration.Simulator.SubmitBid(bid);
+			Configuration.GameEngine.SubmitBid(bid);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
@@ -85,7 +85,7 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Configuration.Simulator.SubmitBid(bid);
+			Configuration.GameEngine.SubmitBid(bid);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
@@ -130,9 +130,9 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Configuration.Simulator.SubmitBid(bid1);
-			Configuration.Simulator.SubmitBid(bid2);
-			Configuration.Simulator.SubmitBid(bid3);
+			Configuration.GameEngine.SubmitBid(bid1);
+			Configuration.GameEngine.SubmitBid(bid2);
+			Configuration.GameEngine.SubmitBid(bid3);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
@@ -169,8 +169,8 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Configuration.Simulator.SubmitBid(bidUnder);
-			Configuration.Simulator.SubmitBid(bidOver);
+			Configuration.GameEngine.SubmitBid(bidUnder);
+			Configuration.GameEngine.SubmitBid(bidOver);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
@@ -199,7 +199,7 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Configuration.Simulator.SubmitBid(bid);
+			Configuration.GameEngine.SubmitBid(bid);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();

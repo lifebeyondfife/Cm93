@@ -25,9 +25,9 @@ using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 
-namespace Cm93.Simulator.Basic
+namespace Cm93.GameEngine.Basic
 {
-	public class BasicSimulator : ISimulator
+	public class BasicGameEngine : IGameEngine
 	{
 		private IDictionary<PlayerIndex, IList<Bid>> Bids { get; set; }
 		private Random Random { get; set; }
@@ -37,7 +37,7 @@ namespace Cm93.Simulator.Basic
 			get { return Bids.SelectMany(kvp => kvp.Value).ToLookup(b => b.PurchasingTeam); }
 		}
 
-		public BasicSimulator()
+		public BasicGameEngine()
 		{
 			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
 			Random = new Random();
@@ -186,6 +186,17 @@ namespace Cm93.Simulator.Basic
 			}
 
 			Bids.Clear();
+		}
+
+		//"Create multiple Helper classes (SOLID principles), this class collects the necessary calls from each and exposes them here to implement ISimulator."
+		public IList<IFixture> Fixtures
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public IList<ICompetition> Competitions
+		{
+			get { throw new NotImplementedException(); }
 		}
 	}
 }

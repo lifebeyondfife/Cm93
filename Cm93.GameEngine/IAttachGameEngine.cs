@@ -15,10 +15,10 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-namespace Cm93.Simulator
+namespace Cm93.GameEngine
 {
-	public interface IAttachSimulator
+	public interface IAttachGameEngine
 	{
-		void AttachSimulator();
+		void AttachGameEngine();
 	}
 }

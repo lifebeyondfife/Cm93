@@ -72,7 +72,7 @@ namespace Cm93.State.Repository
 			var modules = new Dictionary<ModuleType, IModule>();
 
 			modules[ModuleType.LoadGame] = modules[ModuleType.StartScreen] = new GameModule(games);
-			modules[ModuleType.Players] = new PlayersModule(Configuration.Simulator, players);
+			modules[ModuleType.Players] = new PlayersModule(Configuration.GameEngine, players);
 			modules[ModuleType.Team] = modules[ModuleType.SelectTeam] = new TeamModule(teams);
 			modules[ModuleType.Competitions] = new CompetitionsModule(new[] { division });
 			modules[ModuleType.Fixtures] = new FixturesModule(fixtures.Cast<IFixture>().ToList());
@@ -106,7 +106,7 @@ namespace Cm93.State.Repository
 
 			var modules = new Dictionary<ModuleType, IModule>();
 
-			modules[ModuleType.Players] = new PlayersModule(Configuration.Simulator, players);
+			modules[ModuleType.Players] = new PlayersModule(Configuration.GameEngine, players);
 			modules[ModuleType.Team] = modules[ModuleType.SelectTeam] = new TeamModule(teams);
 			modules[ModuleType.Competitions] = new CompetitionsModule(new[] { division });
 			modules[ModuleType.Fixtures] = new FixturesModule(fixtures.Cast<IFixture>().ToList());
@@ -158,10 +158,10 @@ namespace Cm93.State.Repository
 				{
 					var teamId = context.Teams.Single(t => t.TeamName == teamKeyValue.Key).TeamId;
 
-					var teamBalance = context.TeamBalances.SingleOrDefault(tb => tb.StateId == stateRow.StateId && tb.TeamId == teamId);
+					var teamBalance = context.TeamStates.SingleOrDefault(tb => tb.StateId == stateRow.StateId && tb.TeamId == teamId);
 
 					if (teamBalance == null)
-						context.TeamBalances.Add(
+						context.TeamStates.Add(
 							new TeamStateRow
 							{
 								Balance = teamKeyValue.Value.Balance,
@@ -325,7 +325,7 @@ namespace Cm93.State.Repository
 		{
 			using (var context = new Cm93Context())
 			{
-				return context.TeamBalances.
+				return context.TeamStates.
 					Where(tb => tb.StateId == stateId).	// TODO: Create this structure using application logic, not DB rows
 					ToList(). // Need an in memory structure for some of the following LINQ code
 					Select(tb => new Team
