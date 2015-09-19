@@ -23,7 +23,22 @@ using System.Threading.Tasks;
 
 namespace Cm93.GameEngine.Basic
 {
+	public class Country
+	{
+		public string Name { get; set; }
+		public IList<string> Leagues { get; set; }
+		public string Cup { get; set; }
+	}
+
 	public class Competitions
 	{
+		public static readonly IList<Country> Countries = new List<Country>
+			{
+				new Country { Cup = "Scottish Cup", Name = "Scotland", Leagues = new List<string> { "SPFL", "Championship", "League One", "League Two" } },
+				new Country { Cup = "FA Cup", Name = "England", Leagues = new List<string> { "Premier League", "Championship", "League One", "League Two" } },
+				new Country { Cup = "Copa del Rey", Name = "Spain", Leagues = new List<string> { "La Liga" } },
+			};
+
+
 	}
 }
