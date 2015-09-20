@@ -19,21 +19,32 @@ using Cm93.Model.Interfaces;
 
 namespace Cm93.Model.Structures
 {
-	public class Cup : Competition
+	public abstract class Cup : ICompetition
 	{
-		public override IFixture PlayFixtures(string playerTeamName)
-		{
-			throw new System.NotImplementedException();
-		}
+		public abstract IFixture PlayFixtures(string playerTeamName);
+		public abstract void CompleteRound();
+		public abstract int MatchesLeft { get; }
 
-		public override void CompleteRound()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public override int MatchesLeft
+		public string CompetitionName
 		{
 			get { throw new System.NotImplementedException(); }
+		}
+
+		public int Week
+		{
+			get { throw new System.NotImplementedException(); }
+		}
+
+		public System.Collections.Generic.IDictionary<string, Team> Teams
+		{
+			get
+			{
+				throw new System.NotImplementedException();
+			}
+			set
+			{
+				throw new System.NotImplementedException();
+			}
 		}
 	}
 }

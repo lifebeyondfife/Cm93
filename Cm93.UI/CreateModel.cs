@@ -20,6 +20,8 @@ using Cm93.GameEngine.Basic;
 using Cm93.State.Game;
 using Cm93.State.Interfaces;
 using System.ComponentModel.Composition;
+using System.Linq;
+using Cm93.Model.Structures;
 
 namespace Cm93.UI
 {
@@ -35,7 +37,7 @@ namespace Cm93.UI
 		
 		public CreateModel()
 		{
-			new AttachBasicGameEngine().AttachGameEngine();
+			new AttachBasicGameEngine().AttachGameEngine(Enumerable.Empty<Team>().ToList());
 
 			Configuration.Season = 2015;
 

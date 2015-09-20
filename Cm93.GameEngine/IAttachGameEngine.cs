@@ -15,10 +15,13 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.Model.Structures;
+using System.Collections.Generic;
+
 namespace Cm93.GameEngine
 {
 	public interface IAttachGameEngine
 	{
-		void AttachGameEngine();
+		void AttachGameEngine(IList<Team> teams);
 	}
 }

@@ -33,7 +33,7 @@ namespace Cm93.UnitTests
 		[SetUp]
 		public void SetupCmcl()
 		{
-			new AttachBasicGameEngine().AttachGameEngine();
+			new AttachBasicGameEngine().AttachGameEngine(Enumerable.Empty<Team>().ToList());
 			Modules = new MockCreateModules().CreateModules();
 		}
 

@@ -31,11 +31,13 @@ namespace Cm93.GameEngine.Basic
 	{
 		private PlayerBids PlayerBids { get; set; }
 		private MatchSimulator MatchSimulator { get; set; }
+		private CompetitionImpl CompetitionImpl { get; set; }
 
-		public BasicGameEngine()
+		public BasicGameEngine(IList<Team> teams)
 		{
 			PlayerBids = new PlayerBids();
 			MatchSimulator = new MatchSimulator();
+			CompetitionImpl = new CompetitionImpl(teams);
 		}
 
 		#region Player Bids
@@ -66,15 +68,22 @@ namespace Cm93.GameEngine.Basic
 
 		#endregion
 
-		//"Create multiple Helper classes (SOLID principles), this class collects the necessary calls from each and exposes them here to implement ISimulator."
+		#region Competitions
+
+		public IList<ICompetition> Competitions
+		{
+			get { return CompetitionImpl.Competitions; }
+		}
+
+		#endregion
+
+		#region Fixtures
+
 		public IList<IFixture> Fixtures
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public IList<ICompetition> Competitions
-		{
-			get { throw new NotImplementedException(); }
-		}
+		#endregion
 	}
 }

@@ -15,11 +15,9 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
+using Cm93.Model.Interfaces;
+using Cm93.Model.Structures;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cm93.GameEngine.Basic
 {
@@ -27,18 +25,31 @@ namespace Cm93.GameEngine.Basic
 	{
 		public string Name { get; set; }
 		public IList<string> Leagues { get; set; }
-		public string Cup { get; set; }
+		public IList<string> Cups { get; set; }
 	}
 
-	public class Competitions
+	public class CompetitionImpl
 	{
 		public static readonly IList<Country> Countries = new List<Country>
 			{
-				new Country { Cup = "Scottish Cup", Name = "Scotland", Leagues = new List<string> { "SPFL", "Championship", "League One", "League Two" } },
-				new Country { Cup = "FA Cup", Name = "England", Leagues = new List<string> { "Premier League", "Championship", "League One", "League Two" } },
-				new Country { Cup = "Copa del Rey", Name = "Spain", Leagues = new List<string> { "La Liga" } },
+				new Country { Name = "Scotland", Cups = new List<string> { "Scottish League Cup", "Scottish Cup" }, Leagues = new List<string> { "SPFL Premier League", "SPFL Championship", "SPFL League One", "SPFL League Two" } },
+				new Country { Name = "England", Cups = new List<string> { "Capital One Cup", "FA Cup" }, Leagues = new List<string> { "English Premier League", "English Championship", "English League One", "English League Two" } },
+				new Country { Name = "Spain", Cups = new List<string> { "Copa del Rey" }, Leagues = new List<string> { "La Liga Primera División", "La Liga Segunda División" } },
+				new Country { Name = "Germany", Cups = new List<string> { "DFB Pokal" }, Leagues = new List<string> { "Bundesliga", "Zweite Bundesliga" } }
 			};
 
+		public IList<ICompetition> Competitions
+		{
+			get
+			{
+				//"Do this next"
+				throw new System.NotImplementedException();
+			}
+		}
 
+		public CompetitionImpl(IList<Team> teams)
+		{
+
+		}
 	}
 }
