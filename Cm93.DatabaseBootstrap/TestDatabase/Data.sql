@@ -1,4 +1,4 @@
-INSERT INTO "Competitions" VALUES(0,'League','Cm93 Competition League');
+INSERT INTO "Competitions" VALUES(0,'League','Cm93 Competition League', 'Cm93istan');
 INSERT INTO "Divisions" VALUES(0,0,0,0,0,0,0,0,0,0);
 INSERT INTO "Divisions" VALUES(0,1,0,0,0,0,0,0,0,0);
 INSERT INTO "Divisions" VALUES(0,2,0,0,0,0,0,0,0,0);
@@ -39,7 +39,7 @@ INSERT INTO "Ratings" VALUES(8,26.5);
 INSERT INTO "Ratings" VALUES(9,86.9);
 INSERT INTO "Ratings" VALUES(10,47.7);
 INSERT INTO "Ratings" VALUES(11,56.3);
-INSERT INTO "States" VALUES(0,'403a4008-a7bc-4e3f-b10c-cc7c09c4daa3','My First Cm93 Game','2015-07-20 17:00','2015-07-20 17:00',NULL,NULL,0,2015);
+INSERT INTO "States" VALUES(0,'403a4008-a7bc-4e3f-b10c-cc7c09c4daa3','Start State','2015-07-20 17:00','2015-07-20 17:00',NULL,NULL,0,2015);
 INSERT INTO "TeamStates" VALUES(0,0,0,10032412);
 INSERT INTO "TeamStates" VALUES(1,0,0,12734794);
 INSERT INTO "TeamStates" VALUES(2,0,0,43462412);

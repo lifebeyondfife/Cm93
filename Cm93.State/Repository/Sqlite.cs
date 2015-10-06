@@ -47,43 +47,10 @@ namespace Cm93.State.Repository
 				};
 		}
 
-		public void CreateGame(IState state)
-		{
-			var games = Games();
-			var teams = Teams(0L);
-			var players = Players(0L, teams);
-
-			foreach (var team in teams.Values)
-			{
-				team.Players = new List<Player>(players.Where(p => p.Team == team));
-				foreach (var playerIndex in team.Players.
-						Select((p, i) => new { Player = p, Index = i }).
-						Where(pi => pi.Index < Configuration.AsideSize))
-					team.Formation[playerIndex.Index] = playerIndex.Player;
-			}
-
-			var division = Division(teams);
-			var fixtures = Fixtures(0L, teams, division);
-			var places = Places(teams);
-
-			division.Fixtures = fixtures;
-			division.Places = places;
-
-			var modules = new Dictionary<ModuleType, IModule>();
-
-			modules[ModuleType.LoadGame] = modules[ModuleType.StartScreen] = new GameModule(games);
-			modules[ModuleType.Players] = new PlayersModule(Configuration.GameEngine, players);
-			modules[ModuleType.Team] = modules[ModuleType.SelectTeam] = new TeamModule(teams);
-			modules[ModuleType.Competitions] = new CompetitionsModule(new[] { division });
-			modules[ModuleType.Fixtures] = new FixturesModule(fixtures.Cast<IFixture>().ToList());
-			modules[ModuleType.Match] = new MatchModule(new[] { division });
-
-			state.Modules = modules;
-		}
-	
-		public void RetrieveGame(Guid key, IState state)
+		public void RetrieveGame(IState state)
 		{
 			var stateId = GetStateId(state);
+			var games = Games();
 
 			var teams = Teams(stateId);
 			var players = Players(stateId, teams);
@@ -97,20 +64,32 @@ namespace Cm93.State.Repository
 					team.Formation[playerIndex.Index] = playerIndex.Player;
 			}
 
-			var division = Division(teams);
-			var fixtures = Fixtures(stateId, teams, division);
-			var places = Places(teams);
+			var divisions = Divisions(stateId, teams);
+			var fixtures = Fixtures(stateId, teams, divisions);
+			var places = Places(stateId, teams, divisions);
 
-			division.Fixtures = fixtures;
-			division.Places = places;
+			foreach (var division in divisions)
+			{
+				division.Fixtures = fixtures.ContainsKey(division) ?
+					fixtures[division] :
+					Enumerable.Empty<Fixture>().ToList();
+				division.Places = places[division];
+
+				foreach (var place in division.Places)
+					if (place.Key.Competitions == null)
+						place.Key.Competitions = new List<ICompetition> { division };
+					else
+						place.Key.Competitions.Add(division);
+			}
 
 			var modules = new Dictionary<ModuleType, IModule>();
 
+			modules[ModuleType.LoadGame] = modules[ModuleType.StartScreen] = new GameModule(games);
 			modules[ModuleType.Players] = new PlayersModule(Configuration.GameEngine, players);
 			modules[ModuleType.Team] = modules[ModuleType.SelectTeam] = new TeamModule(teams);
-			modules[ModuleType.Competitions] = new CompetitionsModule(new[] { division });
+			modules[ModuleType.Competitions] = new CompetitionsModule(divisions.Cast<ICompetition>().ToList());
 			modules[ModuleType.Fixtures] = new FixturesModule(fixtures.Cast<IFixture>().ToList());
-			modules[ModuleType.Match] = new MatchModule(new[] { division });
+			modules[ModuleType.Match] = new MatchModule(divisions.Cast<ICompetition>().ToList());
 
 			state.Modules = modules;
 		}
@@ -133,7 +112,10 @@ namespace Cm93.State.Repository
 			using (var context = new Cm93Context())
 			{
 				var stateRow = context.States.
-					Single(s => s.StateGuid == state.Key.ToString());
+					SingleOrDefault(s => s.StateGuid == state.Key.ToString());
+
+				if (stateRow == null)
+					return 0L;
 
 				state.Created = stateRow.Created;
 				state.LastSaved = stateRow.LastSaved;
@@ -366,51 +348,65 @@ namespace Cm93.State.Repository
 			}
 		}
 
-		//	TODO: A competition needs an explicit list of the teams playing
-		//	in it e.g. a division will have promotions and relegations
-		private static Division Division(IDictionary<string, Team> teams)
+		private static IList<Division> Divisions(long stateId, IDictionary<string, Team> teams)
 		{
 			using (var context = new Cm93Context())
 			{
-				return context.Competitions. 
-					Where(c => c.CompetitionId == 0 && c.CompetitionType == "League").	// TODO: Create this structure using application logic, not DB rows
-					ToList(). // Need an in memory structure for some of the following LINQ code
-					Select(c => new Division
-						{
-							CompetitionName = c.CompetitionName,
-							Week = 0,
-							Teams = teams
-						}).
-					Single();
-			}
-		}
+				var leagues = context.Competitions.
+					Where(c => c.CompetitionType == "League").
+					ToDictionary(c => c.CompetitionId, c => c);
 
-		private static IList<Fixture> Fixtures(long stateId, IDictionary<string, Team> teams, Division division)
-		{
-			using (var context = new Cm93Context())
-			{
-				return context.Fixtures.
-					Where(f => f.StateId == stateId).	// TODO: Create this structure using application logic, not DB rows
+				return context.Divisions.
+					Where(d => d.StateId == stateId).
 					ToList(). // Need an in memory structure for some of the following LINQ code
-					Select(f => new Fixture
+					GroupBy(d => d.CompetitionId).
+					Select(gd => new Division
 						{
-							TeamHome = teams[f.HomeTeam.TeamName],
-							TeamAway = teams[f.AwayTeam.TeamName],
-							Week = (int) f.Week,
-							Competition = division
+							CompetitionName = leagues[gd.Key].CompetitionName,
+							Country = leagues[gd.Key].Country,
+							Teams = gd.
+								Select(d => teams[d.Team.TeamName]).
+								ToDictionary(t => t.TeamName, t => t)
 						}).
 					ToList();
 			}
 		}
 
-		private static IDictionary<Team, Place> Places(IDictionary<string, Team> teams)
+		private static IDictionary<Division, List<Fixture>> Fixtures(long stateId, IDictionary<string, Team> teams, IList<Division> divisions)
 		{
-			return teams.
-				Select(t => new Place
-					{
-						Team = t.Value
-					}).
-				ToDictionary(t => t.Team);
+			using (var context = new Cm93Context())
+			{
+				return context.Fixtures.
+					Where(f => f.StateId == stateId).
+					ToList(). // Need an in memory structure for some of the following LINQ code
+					GroupBy(f => f.Competition.CompetitionName).
+					ToDictionary(cf => divisions.Single(d => d.CompetitionName == cf.Key), cf => cf.
+						Select(f => new Fixture
+							{
+								TeamHome = teams[f.HomeTeam.TeamName],
+								TeamAway = teams[f.AwayTeam.TeamName],
+								Week = (int) f.Week,
+								Competition = divisions.Single(d => d.CompetitionName == cf.Key)
+							}).
+						ToList());
+			}
+		}
+
+		private static IDictionary<Division, Dictionary<Team, Place>> Places(long stateId, IDictionary<string, Team> teams, IList<Division> divisions)
+		{
+			using (var context = new Cm93Context())
+			{
+				return context.Divisions.
+					Where(d => d.StateId == stateId).
+					ToList(). // Need an in memory structure for some of the following LINQ code
+					GroupBy(d => d.Competition.CompetitionName).
+					ToDictionary(cf => divisions.Single(d => d.CompetitionName == cf.Key), cf => cf.
+						Select(p => new Place
+							{
+								Team = teams[p.Team.TeamName]
+							}).
+						ToDictionary(t => t.Team));
+			}
 		}
 
 		private static IList<IGame> Games()

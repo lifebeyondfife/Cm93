@@ -23,9 +23,9 @@ namespace Cm93.GameEngine.Basic
 {
 	public class AttachBasicGameEngine : IAttachGameEngine
 	{
-		public void AttachGameEngine(IList<Team> teams)
+		public void AttachGameEngine()
 		{
-			Configuration.GameEngine = new BasicGameEngine(teams);
+			Configuration.GameEngine = new BasicGameEngine();
 		}
 	}
 }

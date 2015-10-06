@@ -22,6 +22,6 @@ namespace Cm93.GameEngine
 {
 	public interface IAttachGameEngine
 	{
-		void AttachGameEngine(IList<Team> teams);
+		void AttachGameEngine();
 	}
 }

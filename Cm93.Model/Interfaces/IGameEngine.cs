@@ -32,5 +32,6 @@ namespace Cm93.Model.Interfaces
 		void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi);
 		void SubmitBid(Bid bid);
 		void ProcessTransfers();
+		void TeamsAndCompetitions(IList<Team> teams);
 	}
 }

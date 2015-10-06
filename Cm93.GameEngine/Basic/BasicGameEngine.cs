@@ -33,11 +33,10 @@ namespace Cm93.GameEngine.Basic
 		private MatchSimulator MatchSimulator { get; set; }
 		private CompetitionImpl CompetitionImpl { get; set; }
 
-		public BasicGameEngine(IList<Team> teams)
+		public BasicGameEngine()
 		{
 			PlayerBids = new PlayerBids();
 			MatchSimulator = new MatchSimulator();
-			CompetitionImpl = new CompetitionImpl(teams);
 		}
 
 		#region Player Bids
@@ -73,6 +72,11 @@ namespace Cm93.GameEngine.Basic
 		public IList<ICompetition> Competitions
 		{
 			get { return CompetitionImpl.Competitions; }
+		}
+
+		public void TeamsAndCompetitions(IList<Team> teams)
+		{
+			CompetitionImpl = new CompetitionImpl(teams);
 		}
 
 		#endregion

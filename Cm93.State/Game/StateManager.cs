@@ -22,6 +22,7 @@ using Cm93.Model.Structures;
 using Cm93.State.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SqliteRepo = Cm93.State.Repository.Sqlite;
 
 namespace Cm93.State.Game
@@ -41,7 +42,10 @@ namespace Cm93.State.Game
 			Repository = new SqliteRepo();
 			State = new State();
 
-			Repository.CreateGame(State);
+			Repository.RetrieveGame(State);
+
+			Configuration.GameEngine.TeamsAndCompetitions(((TeamModule) State.Modules[ModuleType.Team]).Teams.Values.ToList());
+			"Here and below..."
 		}
 
 		public void RefreshState()
@@ -72,7 +76,10 @@ namespace Cm93.State.Game
 		public void LoadGame(Guid key)
 		{
 			State.Key = key;
-			Repository.RetrieveGame(key, State);
+			Repository.RetrieveGame(State);
+
+			Configuration.GameEngine.TeamsAndCompetitions(((TeamModule) State.Modules[ModuleType.Team]).Teams.Values.ToList());
+			"...yeah here. We need to get Fixture objects from the GameEngine to give to the Fixtures Module. Of course, adding past Fixtures from the DB."
 		}
 	}
 }

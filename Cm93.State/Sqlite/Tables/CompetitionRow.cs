@@ -28,5 +28,6 @@ namespace Cm93.State.Sqlite.Tables
 
 		public string CompetitionType { get; set; }
 		public string CompetitionName { get; set; }
+		public string Country { get; set; }
 	}
 }

@@ -37,7 +37,7 @@ namespace Cm93.UI
 		
 		public CreateModel()
 		{
-			new AttachBasicGameEngine().AttachGameEngine(Enumerable.Empty<Team>().ToList());
+			new AttachBasicGameEngine().AttachGameEngine();
 
 			Configuration.Season = 2015;
 
