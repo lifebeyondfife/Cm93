@@ -23,6 +23,7 @@ namespace Cm93.Model.Interfaces
 	public interface ICompetition
 	{
 		string CompetitionName { get; }
+		string Country { get; }
 		int Week { get; }
 		int MatchesLeft { get; }
 		IDictionary<string, Team> Teams { get; set; }

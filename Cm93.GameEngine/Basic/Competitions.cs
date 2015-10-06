@@ -18,6 +18,7 @@
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Cm93.GameEngine.Basic
 {
@@ -38,18 +39,50 @@ namespace Cm93.GameEngine.Basic
 				new Country { Name = "Germany", Cups = new List<string> { "DFB Pokal" }, Leagues = new List<string> { "Bundesliga", "Zweite Bundesliga" } }
 			};
 
+		private IDictionary<string, List<Team>> CompetitionTeams { get; set; }
+
 		public IList<ICompetition> Competitions
 		{
 			get
 			{
-				//"Do this next"
-				throw new System.NotImplementedException();
+				return CompetitionImpl.Countries.
+					Select(c => c.Cups.
+						Zip(Enumerable.Repeat(c.Name, c.Cups.Count), (b, a) => new { Name = a, Country = b }).
+						Select(cn => new Cup
+							{
+								CompetitionName = cn.Name,
+								Country = cn.Country,
+								Teams = CompetitionTeams[cn.Name].ToDictionary(ct => ct.TeamName, ct => ct)
+							}
+						)).
+					SelectMany(a => a).
+					Cast<ICompetition>().
+					Concat(CompetitionImpl.Countries.
+						Select(c => c.Leagues.
+							Zip(Enumerable.Repeat(c.Name, c.Leagues.Count), (b, a) => new { Name = a, Country = b }).
+							Select(cn => new Division
+								{
+									CompetitionName = cn.Name,
+									Country = cn.Country,
+									Teams = CompetitionTeams[cn.Name].ToDictionary(ct => ct.TeamName, ct => ct)
+								}
+							)).
+						SelectMany(a => a).
+						Cast<ICompetition>()).
+					ToList();
 			}
 		}
 
 		public CompetitionImpl(IList<Team> teams)
 		{
+			//"Ensure that the teams get passed in with all the static competition data tied up from the DB layer";
+			//"Also, test the above Competitions property";
 
+			CompetitionTeams = teams.Select(t => t.Competitions.
+				Zip(Enumerable.Repeat(t, t.Competitions.Count), (b, a) => new { Team = a, b.CompetitionName })).
+				SelectMany(a => a).
+				GroupBy(x => x.CompetitionName).
+				ToDictionary(ct => ct.Key, ct => ct.Select(t => t.Team).ToList());
 		}
 	}
 }
