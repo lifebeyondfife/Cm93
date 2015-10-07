@@ -30,6 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Decider.Csp.BaseTypes, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Decider.0.3.0\lib\net45\Decider.Csp.BaseTypes.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Decider.Csp.Global.AllDifferentInteger, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Decider.0.3.0\lib\net45\Decider.Csp.Global.AllDifferentInteger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Decider.Csp.Integer, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Decider.0.3.0\lib\net45\Decider.Csp.Integer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,6 +65,9 @@
       <Project>{f4fd474a-b62d-4540-929a-0ac98c414e2e}</Project>
       <Name>Cm93.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

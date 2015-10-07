@@ -70,7 +70,26 @@ namespace Cm93.GameEngine.Basic
 
 			CupRounds(cup, fixtures, cupSize);
 
+			RoundOneTeams(random, fixtures, cup.Teams);
+
 			return fixtures;
+		}
+
+		private void RoundOneTeams(Random random, IList<IFixture> fixtures, IDictionary<string, Team> teams)
+		{
+			var teamList = teams.Values.OrderBy(t => random.Next()).ToList();
+
+			var teamPairs = teamList.
+				Take(teamList.Count / 2).
+				Zip(teamList.
+					Skip(teamList.Count / 2), (a, b) => Tuple.Create(a, b)).
+				ToList();
+
+			foreach (var teamPairFixture in fixtures.Reverse().Zip(teamPairs, (a, b) => new { Fixture = a, TeamPair = b }))
+			{
+				teamPairFixture.Fixture.TeamHome = teamPairFixture.TeamPair.Item1;
+				teamPairFixture.Fixture.TeamAway = teamPairFixture.TeamPair.Item2;
+			}
 		}
 
 		private void CupRounds(Cup cup, List<IFixture> fixtures, int cupSize)
