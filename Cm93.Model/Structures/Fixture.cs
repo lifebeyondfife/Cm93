@@ -37,5 +37,8 @@ namespace Cm93.Model.Structures
 		public int MinutesAddedOn { get; set; }
 		public int Minutes { get; set; }
 		public PlayingPeriod PlayingPeriod { get; set; }
+
+		public Fixture DependentHome { get; set; }
+		public Fixture DependentAway { get; set; }
 	}
 }

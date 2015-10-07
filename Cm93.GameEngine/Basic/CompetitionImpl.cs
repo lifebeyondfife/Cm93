@@ -31,6 +31,8 @@ namespace Cm93.GameEngine.Basic
 
 	public class CompetitionImpl
 	{
+		private IDictionary<string, List<Team>> CompetitionTeams { get; set; }
+
 		public static readonly IList<Country> Countries = new List<Country>
 			{
 				new Country { Name = "Cm93istan", Cups = new List<string>(), Leagues = new List<string> { "Cm93 Competition League" } },
@@ -39,8 +41,6 @@ namespace Cm93.GameEngine.Basic
 				//new Country { Name = "Spain", Cups = new List<string> { "Copa del Rey" }, Leagues = new List<string> { "La Liga Primera División", "La Liga Segunda División" } },
 				//new Country { Name = "Germany", Cups = new List<string> { "DFB Pokal" }, Leagues = new List<string> { "Bundesliga", "Zweite Bundesliga" } }
 			};
-
-		private IDictionary<string, List<Team>> CompetitionTeams { get; set; }
 
 		public IList<ICompetition> Competitions
 		{
@@ -76,9 +76,6 @@ namespace Cm93.GameEngine.Basic
 
 		public CompetitionImpl(IList<Team> teams)
 		{
-			//"Ensure that the teams get passed in with all the static competition data tied up from the DB layer";
-			//"Also, test the above Competitions property";
-
 			CompetitionTeams = teams.Select(t => t.Competitions.
 				Zip(Enumerable.Repeat(t, t.Competitions.Count), (b, a) => new { Team = a, b.CompetitionName })).
 				SelectMany(a => a).

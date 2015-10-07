@@ -26,6 +26,7 @@ namespace Cm93.Model.Structures
 		public string CompetitionName { get; set; }
 		public string Country { get; set; }
 		public int Week { get; set; }
+		public int WeekStart { get; set; }
 		public abstract int MatchesLeft { get; }
 		public IDictionary<string, Team> Teams { get; set; }
 

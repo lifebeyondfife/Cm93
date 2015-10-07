@@ -41,8 +41,8 @@
   <ItemGroup>
     <Compile Include="Basic\AttachBasicGameEngine.cs" />
     <Compile Include="Basic\BasicGameEngine.cs" />
-    <Compile Include="Basic\Competitions.cs" />
-    <Compile Include="Basic\Fixtures.cs" />
+    <Compile Include="Basic\CompetitionImpl.cs" />
+    <Compile Include="Basic\FixtureImpl.cs" />
     <Compile Include="Basic\MatchSimulator.cs" />
     <Compile Include="Basic\PlayerBids.cs" />
     <Compile Include="IAttachGameEngine.cs" />

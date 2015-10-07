@@ -37,5 +37,8 @@ namespace Cm93.Model.Interfaces
 		int MinutesAddedOn { get; set; }
 		int Minutes { get; set; }
 		PlayingPeriod PlayingPeriod { get; set; }
+
+		Fixture DependentHome { get; set; }
+		Fixture DependentAway { get; set; }
 	}
 }
