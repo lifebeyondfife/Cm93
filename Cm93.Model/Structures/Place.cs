@@ -22,51 +22,14 @@ namespace Cm93.Model.Structures
 		public int Position { get; set; }
 		public Team Team { get; set; }
 
-		public int WinsHome { get; set; }
-		public int DrawsHome { get; set; }
-		public int LossesHome { get; set; }
+		public int Wins { get; set; }
+		public int Draws { get; set; }
+		public int Losses { get; set; }
 
-		public int WinsAway { get; set; }
-		public int DrawsAway { get; set; }
-		public int LossesAway { get; set; }
+		public int Points { get; set; }
 
-		public int PointsHome { get; set; }
-		public int PointsAway { get; set; }
-
-		public int ForHome { get; set; }
-		public int AgainstHome { get; set; }
-		public int ForAway { get; set; }
-		public int AgainstAway { get; set; }
-
-		public int Wins
-		{
-			get { return WinsHome + WinsAway; }
-		}
-
-		public int Draws
-		{
-			get { return DrawsHome + DrawsAway; }
-		}
-
-		public int Losses
-		{
-			get { return LossesHome + LossesAway; }
-		}
-
-		public int For
-		{
-			get { return ForHome + ForAway; }
-		}
-
-		public int Against
-		{
-			get { return AgainstHome + AgainstAway; }
-		}
-
-		public int Points
-		{
-			get { return PointsHome + PointsAway; }
-		}
+		public int For { get; set; }
+		public int Against { get; set; }
 
 		public int GoalDifference
 		{

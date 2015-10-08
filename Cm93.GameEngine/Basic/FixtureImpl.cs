@@ -39,20 +39,12 @@ namespace Cm93.GameEngine.Basic
 				), 0);
 		}
 
-		public IList<IFixture> GetFixtures(CompetitionImpl CompetitionImpl)
-		{
-			return CompetitionImpl.Competitions.
-				Select(c => GetFixtures(c)).
-				SelectMany(a => a).
-				ToList();
-		}
-
-		private IEnumerable<IFixture> GetFixtures(ICompetition competition)
+		public void GetFixtures(ICompetition competition)
 		{
 			if (competition is Division)
-				return GetFixtures((Division) competition);
+				competition.Fixtures = GetFixtures((Division) competition).ToList();
 			else if (competition is Cup)
-				return GetFixtures((Cup) competition);
+				competition.Fixtures = GetFixtures((Cup) competition).ToList();
 			else
 				throw new ApplicationException("Unexpected competition type.");
 		}
@@ -114,7 +106,6 @@ namespace Cm93.GameEngine.Basic
 
 			CupRounds(cup, fixtures, cupSize / 2);
 		}
-
 
 		private IEnumerable<IFixture> GetFixtures(Division division)
 		{

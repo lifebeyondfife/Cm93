@@ -16,6 +16,7 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using System.Collections.Generic;
+using System.Linq;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
 
@@ -23,11 +24,22 @@ namespace Cm93.Model.Modules
 {
 	public class FixturesModule : IFixturesModule
 	{
-		public IList<IFixture> Fixtures { get; set; }
-
-		public FixturesModule(IList<IFixture> fixtures)
+		public IList<ICompetition> Competitions { get; set; }
+		public IList<IFixture> Fixtures
 		{
-			Fixtures = fixtures;
+			get
+			{
+				return Competitions.
+					Select(d => d.Fixtures).
+					SelectMany(f => f).
+					Cast<IFixture>().
+					ToList();
+			}
+		}
+
+		public FixturesModule(IList<ICompetition> competitions)
+		{
+			Competitions = competitions;
 		}
 	}
 }

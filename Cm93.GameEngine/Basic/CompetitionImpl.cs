@@ -42,36 +42,43 @@ namespace Cm93.GameEngine.Basic
 				//new Country { Name = "Germany", Cups = new List<string> { "DFB Pokal" }, Leagues = new List<string> { "Bundesliga", "Zweite Bundesliga" } }
 			};
 
-		public IList<ICompetition> Competitions
+		public IList<ICompetition> CompetitionsWithFixtures()
 		{
-			get
-			{
-				return CompetitionImpl.Countries.
-					Select(c => c.Cups.
-						Zip(Enumerable.Repeat(c.Name, c.Cups.Count), (a, b) => new { Name = a, Country = b }).
-						Select(cn => new Cup
+			var fixtureImpl = new FixtureImpl();
+
+			var competitions = CompetitionImpl.Countries.
+				Select(c => c.Cups.
+					Zip(Enumerable.Repeat(c.Name, c.Cups.Count), (a, b) => new { Name = a, Country = b }).
+					Select(cn => new Cup
+						{
+							CompetitionName = cn.Name,
+							Country = cn.Country,
+							Teams = CompetitionTeams[cn.Name].ToDictionary(ct => ct.TeamName, ct => ct)
+						}
+					)).
+				SelectMany(a => a).
+				Cast<ICompetition>().
+				Concat(CompetitionImpl.Countries.
+					Select(c => c.Leagues.
+						Zip(Enumerable.Repeat(c.Name, c.Leagues.Count), (a, b) => new { Name = a, Country = b }).
+						Select(cn => new Division
 							{
 								CompetitionName = cn.Name,
 								Country = cn.Country,
-								Teams = CompetitionTeams[cn.Name].ToDictionary(ct => ct.TeamName, ct => ct)
+								Teams = CompetitionTeams[cn.Name].ToDictionary(ct => ct.TeamName, ct => ct),
+								Places = CompetitionTeams[cn.Name].ToDictionary(ct => ct, ct => new Place { Team = ct })
 							}
 						)).
 					SelectMany(a => a).
-					Cast<ICompetition>().
-					Concat(CompetitionImpl.Countries.
-						Select(c => c.Leagues.
-							Zip(Enumerable.Repeat(c.Name, c.Leagues.Count), (a, b) => new { Name = a, Country = b }).
-							Select(cn => new Division
-								{
-									CompetitionName = cn.Name,
-									Country = cn.Country,
-									Teams = CompetitionTeams[cn.Name].ToDictionary(ct => ct.TeamName, ct => ct)
-								}
-							)).
-						SelectMany(a => a).
-						Cast<ICompetition>()).
-					ToList();
+					Cast<ICompetition>()).
+				ToList();
+
+			foreach (var competition in competitions)
+			{
+				fixtureImpl.GetFixtures(competition);
 			}
+
+			return competitions;
 		}
 
 		public CompetitionImpl(IList<Team> teams)

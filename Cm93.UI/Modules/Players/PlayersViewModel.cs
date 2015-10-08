@@ -543,7 +543,14 @@ namespace Cm93.UI.Modules.Players
 				return;
 			}
 
-			var playerBid = new Bid { BidAmount = (int) Bid, Player = player, PlayerNumber = PlayerNumber, PurchasingTeam = Team };
+			var playerBid = new Bid
+				{
+					BidAmount = (int) Bid,
+					Player = player,
+					PlayerNumber = PlayerNumber,
+					PurchasingTeam = Team,
+					SellingTeam = Teams[player.TeamName]
+				};
 
 			PlayersModel.GameEngine.SubmitBid(playerBid);
 

@@ -85,11 +85,9 @@ namespace Cm93.State.Game
 		private void ReunifyFixtures()
 		{
 			var stateFixtures = ((FixturesModule) State.Modules[ModuleType.Fixtures]).Fixtures;
-			var generatedFixtures = Configuration.GameEngine.Fixtures;
+			var competitions = Configuration.GameEngine.Competitions;
 
-			State.Modules[ModuleType.Fixtures] = new FixturesModule(generatedFixtures);
-
-			var loadScores = stateFixtures.Join(generatedFixtures,
+			var loadScores = stateFixtures.Join(competitions.Select(c => c.Fixtures).SelectMany(a => a),
 				f => new { f.Week, f.Competition.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
 				f => new { f.Week, f.Competition.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
 				(sf, gf) => new { StateFixture = sf, GeneratedFixture = gf });
@@ -99,6 +97,10 @@ namespace Cm93.State.Game
 				score.GeneratedFixture.GoalsHome = score.StateFixture.ChancesAway;
 				score.GeneratedFixture.GoalsAway = score.StateFixture.ChancesAway;
 			}
+
+			State.Modules[ModuleType.Competitions] = new CompetitionsModule(competitions);
+			State.Modules[ModuleType.Fixtures] = new FixturesModule(competitions);
+			State.Modules[ModuleType.Match] = new MatchModule(competitions);
 		}
 	}
 }

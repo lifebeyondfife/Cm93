@@ -32,13 +32,11 @@ namespace Cm93.GameEngine.Basic
 		private PlayerBids PlayerBids { get; set; }
 		private MatchSimulator MatchSimulator { get; set; }
 		private CompetitionImpl CompetitionImpl { get; set; }
-		private FixtureImpl FixtureImpl { get; set; }
 
 		public BasicGameEngine()
 		{
 			PlayerBids = new PlayerBids();
 			MatchSimulator = new MatchSimulator();
-			FixtureImpl = new FixtureImpl();
 		}
 
 		#region Player Bids
@@ -76,16 +74,12 @@ namespace Cm93.GameEngine.Basic
 			CompetitionImpl = new CompetitionImpl(teams);
 		}
 
-		#endregion
-
-		#region Fixtures
-
-		public IList<IFixture> Fixtures
+		public IList<ICompetition> Competitions
 		{
-			get { return FixtureImpl.
-				GetFixtures(CompetitionImpl).
-				OrderBy(f => f.Week).
-				ToList(); }
+			get
+			{
+				return CompetitionImpl.CompetitionsWithFixtures();
+			}
 		}
 
 		#endregion

@@ -28,7 +28,7 @@ namespace Cm93.Model.Interfaces
 		int Week { get; }
 		int MatchesLeft { get; }
 		IDictionary<string, Team> Teams { get; set; }
-		IList<IFixture> Fixtures { get; }
+		IList<IFixture> Fixtures { get; set; }
 
 		IFixture PlayFixtures(string teamName = "");
 		void CompleteRound();
