@@ -35,7 +35,7 @@ namespace Cm93.Model.Structures
 
 		public void ResetPlayerIndex()
 		{
-			lazyPlayerIndex = new Lazy<PlayerIndex>(() => new PlayerIndex(Number, Team.TeamName));
+			lazyPlayerIndex = new Lazy<PlayerIndex>(() => new PlayerIndex(Number, TeamName));
 		}
 
 		public PlayerIndex Index { get { return lazyPlayerIndex.Value; } }
@@ -47,10 +47,7 @@ namespace Cm93.Model.Structures
 		public int Number { get; set; }
 
 		[DataGridRowMetric(Order = 2)]
-		public string TeamName
-		{
-			get { return Team.TeamName; }
-		}
+		public string TeamName { get; set; }
 
 		[DataGridRowMetric(Order = 3)]
 		public string FullName
@@ -69,15 +66,15 @@ namespace Cm93.Model.Structures
 		[DataGridRowMetric(Order = 6)]
 		public int Goals { get; set; }
 
-		public Team Team { get; set; }
-
 		[DataGridRowMetric(Order = 7)]
 		public Position Position { get; set; }
-		public Coordinate Location { get; set; }
+		[DataGridRowMetric(Order = 8)]
+		public string Nationality { get; set; }
 
+		public Coordinate Location { get; set; }
 		public Instruction Instruction { get; set; }
 
-		[DataGridRowMetric(Order = 8)]
+		[DataGridRowMetric(Order = 9)]
 		public string Value
 		{
 			get { return string.Format(CultureInfo.CurrentCulture, "{0:c0}", NumericValue); }
@@ -112,9 +109,10 @@ namespace Cm93.Model.Structures
 					Number = this.Number,
 					NumericValue = this.NumericValue,
 					Position = this.Position,
+					Nationality = this.Nationality,
 					Rating = this.Rating,
 					ReleaseValue = this.ReleaseValue,
-					Team = this.Team
+					TeamName = this.TeamName
 				};
 		}
 	}

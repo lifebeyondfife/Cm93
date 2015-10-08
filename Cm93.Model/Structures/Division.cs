@@ -25,8 +25,6 @@ namespace Cm93.Model.Structures
 {
 	public class Division : Competition
 	{
-		public IList<Fixture> Fixtures { get; set; }
-
 		private IDictionary<Team, Place> places = default(IDictionary<Team, Place>);
 		public IDictionary<Team, Place> Places
 		{
@@ -46,7 +44,7 @@ namespace Cm93.Model.Structures
 			var orderPlaces = Places.Values.
 				OrderByDescending(p => p.Points).
 				ThenByDescending(p => p.GoalDifference).
-				ThenByDescending(p => p.ForAway).
+				ThenByDescending(p => p.For).
 				ThenBy(p => p.Team.TeamName);
 
 			foreach (var indexValue in orderPlaces.Select((value, index) => new { Index = index + 1, Value = value }))
@@ -72,7 +70,7 @@ namespace Cm93.Model.Structures
 					continue;
 				}
 
-				Configuration.Simulator.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null);
+				Configuration.GameEngine.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null);
 			}
 
 			return playerFixture;
@@ -85,7 +83,7 @@ namespace Cm93.Model.Structures
 
 			UpdatePositions();
 
-			Configuration.Simulator.ProcessTransfers();
+			Configuration.GameEngine.ProcessTransfers();
 		}
 
 		private void UpdatePointsAndGoals(IFixture fixture)
@@ -95,32 +93,32 @@ namespace Cm93.Model.Structures
 
 			if (fixture.GoalsHome > fixture.GoalsAway)
 			{
-				++homePlace.WinsHome;
-				++awayPlace.LossesAway;
+				++homePlace.Wins;
+				++awayPlace.Losses;
 
-				homePlace.PointsHome += 3;
+				homePlace.Points += 3;
 			}
 			else if (fixture.GoalsAway > fixture.GoalsHome)
 			{
-				++homePlace.LossesHome;
-				++awayPlace.WinsAway;
+				++homePlace.Losses;
+				++awayPlace.Wins;
 
-				awayPlace.PointsAway += 3;
+				awayPlace.Points += 3;
 			}
 			else
 			{
-				++homePlace.DrawsHome;
-				++awayPlace.DrawsAway;
+				++homePlace.Draws;
+				++awayPlace.Draws;
 
-				homePlace.PointsHome += 1;
-				awayPlace.PointsAway += 1;
+				++homePlace.Points;
+				++awayPlace.Points;
 			}
 
-			homePlace.ForHome += fixture.GoalsHome;
-			homePlace.AgainstHome += fixture.GoalsAway;
+			homePlace.For += fixture.GoalsHome;
+			homePlace.Against += fixture.GoalsAway;
 
-			awayPlace.ForAway += fixture.GoalsAway;
-			awayPlace.AgainstAway += fixture.GoalsHome;
+			awayPlace.For += fixture.GoalsAway;
+			awayPlace.Against += fixture.GoalsHome;
 		}
 	}
 }

@@ -49,13 +49,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cm93.Simulator\Cm93.Simulator.csproj">
+    <ProjectReference Include="..\Cm93.GameEngine\Cm93.GameEngine.csproj">
       <Project>{4e196610-7bba-4c9d-b546-51d174516799}</Project>
-      <Name>Cm93.Simulator</Name>
+      <Name>Cm93.GameEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cm93.Model\Cm93.Model.csproj">
       <Project>{f4fd474a-b62d-4540-929a-0ac98c414e2e}</Project>
-      <Name>Cm93.Structures</Name>
+      <Name>Cm93.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

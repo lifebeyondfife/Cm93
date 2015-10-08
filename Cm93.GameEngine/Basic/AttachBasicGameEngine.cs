@@ -15,24 +15,17 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Cm93.Model.Config;
+using Cm93.Model.Structures;
+using System.Collections.Generic;
 
-namespace Cm93.State.Sqlite.Tables
+namespace Cm93.GameEngine.Basic
 {
-	public class TeamBalance
+	public class AttachBasicGameEngine : IAttachGameEngine
 	{
-		[Key]
-		[Column(Order = 1)]
-		public long TeamId { get; set; }
-
-		[Key]
-		[Column(Order = 2)]
-		public long StateId { get; set; }
-
-		public long Balance { get; set; }
-
-		public virtual Team Team { get; set; }
-		public virtual State State { get; set; }
+		public void AttachGameEngine()
+		{
+			Configuration.GameEngine = new BasicGameEngine();
+		}
 	}
 }

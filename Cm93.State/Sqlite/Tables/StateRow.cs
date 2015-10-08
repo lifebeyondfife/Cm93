@@ -21,7 +21,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cm93.State.Sqlite.Tables
 {
-	public class State
+	[Table("States")]
+	public class StateRow
 	{
 		[Key]
 		public long StateId { get; set; }
@@ -37,6 +38,6 @@ namespace Cm93.State.Sqlite.Tables
 		public long Week { get; set; }
 		public long Season { get; set; }
 
-		public virtual Team SelectedTeam { get; set; }
+		public virtual TeamRow SelectedTeam { get; set; }
 	}
 }

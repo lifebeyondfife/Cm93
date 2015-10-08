@@ -18,6 +18,7 @@
 using Caliburn.Micro;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
+using Cm93.UI.Events;
 using Cm93.UI.Helpers;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
@@ -123,16 +124,10 @@ namespace Cm93.UI.Modules.LoadGame
 			if (SelectedGame == null)
 				return;
 
-			//	Here is where you interface with the IRepository classes and load a game instance. The
-			//	calls below are from the similar SelectTeam view model where the user starts a new game.
-
-			//	ALSO, while I'm thinking... make any calls to Cm93.State classes (that go to SQLite DB code)
-			//	async/await calls so you don't block the UI thread.
-
-			//Configuration.PlayerTeamName = SelectedTeam;
-
-			//this.eventAggregator.PublishOnUIThread(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam]));
-			//this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Team));
+			this.eventAggregator.BeginPublishOnUIThread(new LoadGameEvent
+				{
+					GameId = SelectedGame.GameId
+				});
 		}
 	}
 }

@@ -15,25 +15,22 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using Cm93.Model.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Cm93.Model.Structures;
 
-namespace Cm93.Model.Structures
+namespace Cm93.Model.Interfaces
 {
-	public class Cup : Competition
+	public interface IGameEngine
 	{
-		public override int MatchesLeft
-		{
-			get { throw new System.NotImplementedException(); }
-		}
+		ILookup<Team, Bid> TeamBids { get; }
 
-		public override void CompleteRound()
-		{
-			throw new System.NotImplementedException();
-		}
+		IList<ICompetition> Competitions { get; }
 
-		public override IFixture PlayFixtures(string playerTeamName = "")
-		{
-			throw new System.NotImplementedException();
-		}
+		void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi);
+		void SubmitBid(Bid bid);
+		void ProcessTransfers();
+		void TeamsAndCompetitions(IList<Team> teams);
 	}
 }

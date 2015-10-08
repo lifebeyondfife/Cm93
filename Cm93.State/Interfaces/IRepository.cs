@@ -24,8 +24,8 @@ namespace Cm93.State.Interfaces
 {
 	public interface IRepository
 	{
-		void DeleteGame(Guid key);
+		void RetrieveGame(IState state);
 		void UpdateGame(ModuleType moduleType, IState state);
-		IState LoadGame(Guid key);
+		void DeleteGame(Guid key);
 	}
 }

@@ -23,13 +23,15 @@ namespace Cm93.Model.Modules
 {
 	public class PlayersModule : IPlayersModule
 	{
+		public IDictionary<string, Team> Teams { get; private set; }
 		public IList<Player> Players { get; private set; }
-		public ISimulator Simulator { get; private set; }
+		public IGameEngine GameEngine { get; private set; }
 
-		public PlayersModule(ISimulator simulator, IList<Player> players)
+		public PlayersModule(IGameEngine gameEngine, IList<Player> players, IDictionary<string, Team> teams)
 		{
-			Simulator = simulator;
+			GameEngine = gameEngine;
 			Players = players;
+			Teams = teams;
 		}
 	}
 }

@@ -7,8 +7,8 @@
     <ProjectGuid>{4E196610-7BBA-4C9D-B546-51D174516799}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cm93.Simulator</RootNamespace>
-    <AssemblyName>Cm93.Simulator</AssemblyName>
+    <RootNamespace>Cm93.GameEngine</RootNamespace>
+    <AssemblyName>Cm93.GameEngine</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Decider.Csp.BaseTypes, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Decider.0.3.0\lib\net45\Decider.Csp.BaseTypes.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Decider.Csp.Global.AllDifferentInteger, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Decider.0.3.0\lib\net45\Decider.Csp.Global.AllDifferentInteger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Decider.Csp.Integer, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Decider.0.3.0\lib\net45\Decider.Csp.Integer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,16 +51,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Basic\AttachBasicSimulator.cs" />
-    <Compile Include="Basic\BasicSimulator.cs" />
-    <Compile Include="IAttachSimulator.cs" />
+    <Compile Include="Basic\AttachBasicGameEngine.cs" />
+    <Compile Include="Basic\BasicGameEngine.cs" />
+    <Compile Include="Basic\CompetitionImpl.cs" />
+    <Compile Include="Basic\FixtureImpl.cs" />
+    <Compile Include="Basic\LeagueGeneration.cs" />
+    <Compile Include="Basic\MatchSimulator.cs" />
+    <Compile Include="Basic\PlayerBids.cs" />
+    <Compile Include="IAttachGameEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cm93.Model\Cm93.Model.csproj">
       <Project>{f4fd474a-b62d-4540-929a-0ac98c414e2e}</Project>
-      <Name>Cm93.Structures</Name>
+      <Name>Cm93.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

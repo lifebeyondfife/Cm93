@@ -15,21 +15,33 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Cm93.Model.Config;
+using Cm93.Model.Enumerations;
+using Cm93.Model.Interfaces;
+using Cm93.Model.Modules;
+using Cm93.Model.Structures;
+using Cm93.State.Interfaces;
+using Cm93.State.Sqlite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using GameModel = Cm93.Model.Structures.Game;
 
-namespace Cm93.State.Sqlite.Tables
+namespace Cm93.State.Game
 {
-	public class Rating
+	public class State : IState
 	{
-		[Key]
-		[Column(Order = 1)]
-		[ForeignKey("PlayerStat")]
-		public long PlayerStatId { get; set; }
+		public string Name { get; set; }
+		public Guid Key { get; set; }
+		public DateTime Created { get; set; }
+		public DateTime LastSaved { get; set; }
 
-		[Column("Rating")]
-		public float RatingValue { get; set; }
+		public IDictionary<ModuleType, IModule> Modules { get; set; }
 
-		public virtual PlayerStat PlayerStat { get; set; }
+		public State()
+		{
+			Created = DateTime.Now;
+			Key = Guid.NewGuid();
+		}
 	}
 }

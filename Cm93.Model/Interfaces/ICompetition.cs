@@ -23,9 +23,12 @@ namespace Cm93.Model.Interfaces
 	public interface ICompetition
 	{
 		string CompetitionName { get; }
+		string Country { get; }
+		int WeekStart { get; }
 		int Week { get; }
 		int MatchesLeft { get; }
 		IDictionary<string, Team> Teams { get; set; }
+		IList<IFixture> Fixtures { get; set; }
 
 		IFixture PlayFixtures(string teamName = "");
 		void CompleteRound();

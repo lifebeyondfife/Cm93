@@ -43,6 +43,7 @@ namespace Cm93.UI.Modules.Players
 
 		private readonly IEventAggregator eventAggregator;
 		private IPlayersModule PlayersModel { get; set; }
+		private IDictionary<string, Cm93.Model.Structures.Team> Teams { get; set; }
 		private IDictionary<PlayerIndex, Player> Players { get; set; }
 		private IDictionary<string, Player> PlayerAb { get; set; }
 
@@ -281,7 +282,7 @@ namespace Cm93.UI.Modules.Players
 
 		public double NumericAvailable
 		{
-			get { return this.Team.Balance - PlayersModel.Simulator.TeamBids[this.Team].Sum(b => b.BidAmount); }
+			get { return this.Team.Balance - PlayersModel.GameEngine.TeamBids[this.Team].Sum(b => b.BidAmount); }
 		}
 
 		public string Available
@@ -336,6 +337,7 @@ namespace Cm93.UI.Modules.Players
 		{
 			PlayersModel = (IPlayersModule) model;
 			Players = PlayersModel.Players.ToDictionary(p => p.Index);
+			Teams = PlayersModel.Teams;
 		}
 
 		public void Handle(ModuleSelectedEvent message)
@@ -357,7 +359,7 @@ namespace Cm93.UI.Modules.Players
 			foreach (var player in PlayersModel.Players.Where(p =>
 				(SelectedPositionFilter == Position.All ||
 				p.Position == SelectedPositionFilter) &&
-				(!ShowOnlyMyTeam || p.Team.TeamName == Team.TeamName)))
+				(!ShowOnlyMyTeam || p.TeamName == Team.TeamName)))
 				this.playerGrid.Add(new PlayerRow
 					{
 						Name = string.Format(CultureInfo.CurrentCulture, "{0}, {1}", player.LastName, player.FirstName),
@@ -366,7 +368,7 @@ namespace Cm93.UI.Modules.Players
 						Goals = player.Goals,
 						Position = Enum.GetName(typeof(Position), player.Position),
 						Rating = player.Rating,
-						Team = player.Team.TeamName
+						Team = player.TeamName
 					});
 
 			NotifyOfPropertyChange(() => PlayerGrid);
@@ -406,8 +408,8 @@ namespace Cm93.UI.Modules.Players
 			ATitle = PlayerAb[PlayerA].LastName;
 			BTitle = PlayerAb[PlayerB].LastName;
 
-			PlayerAColour = PlayerAb[PlayerA].Team.PrimaryColour;
-			PlayerBColour = PlayerAb[PlayerB].Team.PrimaryColour;
+			PlayerAColour = Teams[PlayerAb[PlayerA].TeamName].PrimaryColour;
+			PlayerBColour = Teams[PlayerAb[PlayerB].TeamName].PrimaryColour;
 
 			var playerAMetrics = PlayerAb[PlayerA].GetGridRows();
 			var playerBMetrics = PlayerAb[PlayerB].GetGridRows();
@@ -461,10 +463,10 @@ namespace Cm93.UI.Modules.Players
 
 		private void UpdateBidRelease(Player player, ICollection<MetricRow> playerMetricRows)
 		{
-			MaxBidValue = player.Team == Team ? player.NumericValue * 3 : Math.Min(player.NumericValue * 2, NumericAvailable);
-			Bid = player.Team == Team ? player.ReleaseValue : Math.Min(player.NumericValue, NumericAvailable);
+			MaxBidValue = player.TeamName == Team.TeamName ? player.NumericValue * 3 : Math.Min(player.NumericValue * 2, NumericAvailable);
+			Bid = player.TeamName == Team.TeamName ? player.ReleaseValue : Math.Min(player.NumericValue, NumericAvailable);
 
-			if (player.Team == Team)
+			if (player.TeamName == Team.TeamName)
 			{
 				ShirtNumberVisible = false;
 				ContractButtonLabel = "Release";
@@ -481,11 +483,11 @@ namespace Cm93.UI.Modules.Players
 				ContractButtonLabel = "Bid";
 				var smallestFreeNumber = 1;
 				while (Team.Players.Any(p => p.Number == smallestFreeNumber) ||
-					PlayersModel.Simulator.TeamBids[Team].Any(b => b.PlayerNumber == smallestFreeNumber))
+					PlayersModel.GameEngine.TeamBids[Team].Any(b => b.PlayerNumber == smallestFreeNumber))
 					++smallestFreeNumber;
 				PlayerNumber = smallestFreeNumber;
 
-				var previousBid = PlayersModel.Simulator.TeamBids[Team].SingleOrDefault(b => b.Player == player);
+				var previousBid = PlayersModel.GameEngine.TeamBids[Team].SingleOrDefault(b => b.Player == player);
 
 				if (previousBid != null)
 				{
@@ -526,7 +528,7 @@ namespace Cm93.UI.Modules.Players
 
 				var player = Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
 
-				return player.Team == Team || PlayersModel.Simulator.TeamBids[Team].All(b => b.Player != player);
+				return player.TeamName == Team.TeamName || PlayersModel.GameEngine.TeamBids[Team].All(b => b.Player != player);
 			}
 		}
 
@@ -534,16 +536,23 @@ namespace Cm93.UI.Modules.Players
 		{
 			var player = Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
 
-			if (player.Team == Team)
+			if (player.TeamName == Team.TeamName)
 			{
 				player.ReleaseValue = (int) Bid;
 				UpdatePlayerSelected();
 				return;
 			}
 
-			var playerBid = new Bid { BidAmount = (int) Bid, Player = player, PlayerNumber = PlayerNumber, PurchasingTeam = Team };
+			var playerBid = new Bid
+				{
+					BidAmount = (int) Bid,
+					Player = player,
+					PlayerNumber = PlayerNumber,
+					PurchasingTeam = Team,
+					SellingTeam = Teams[player.TeamName]
+				};
 
-			PlayersModel.Simulator.SubmitBid(playerBid);
+			PlayersModel.GameEngine.SubmitBid(playerBid);
 
 			NotifyOfPropertyChange(() => CanContractBidRelease);
 			NotifyOfPropertyChange(() => Available);
@@ -562,7 +571,7 @@ namespace Cm93.UI.Modules.Players
 			var raisedPlayerNumber = PlayerNumber + 1;
 
 			while ((Team.Players.Any(p => p.Number == raisedPlayerNumber) ||
-				PlayersModel.Simulator.TeamBids[Team].Any(b => b.PlayerNumber == raisedPlayerNumber)) &&
+				PlayersModel.GameEngine.TeamBids[Team].Any(b => b.PlayerNumber == raisedPlayerNumber)) &&
 				raisedPlayerNumber < 50)
 				++raisedPlayerNumber;
 
@@ -583,7 +592,7 @@ namespace Cm93.UI.Modules.Players
 			var loweredPlayerNumber = PlayerNumber - 1;
 
 			while ((Team.Players.Any(p => p.Number == loweredPlayerNumber) ||
-				PlayersModel.Simulator.TeamBids[Team].Any(b => b.PlayerNumber == loweredPlayerNumber)) &&
+				PlayersModel.GameEngine.TeamBids[Team].Any(b => b.PlayerNumber == loweredPlayerNumber)) &&
 				loweredPlayerNumber > 0)
 				--loweredPlayerNumber;
 

@@ -22,8 +22,8 @@ namespace Cm93.Model.Interfaces
 {
 	public interface IFixture
 	{
-		Team TeamHome { get; }
-		Team TeamAway { get; }
+		Team TeamHome { get; set; }
+		Team TeamAway { get; set; }
 
 		int Week { get; }
 
@@ -37,5 +37,8 @@ namespace Cm93.Model.Interfaces
 		int MinutesAddedOn { get; set; }
 		int Minutes { get; set; }
 		PlayingPeriod PlayingPeriod { get; set; }
+
+		Fixture DependentHome { get; set; }
+		Fixture DependentAway { get; set; }
 	}
 }

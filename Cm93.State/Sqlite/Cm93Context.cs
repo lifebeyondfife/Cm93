@@ -17,20 +17,20 @@
 */
 using Cm93.State.Sqlite.Tables;
 using System.Data.Entity;
-using TableState = Cm93.State.Sqlite.Tables.State;
+using TableState = Cm93.State.Sqlite.Tables.StateRow;
 
 namespace Cm93.State.Sqlite
 {
 	public class Cm93Context : DbContext
 	{
-		public DbSet<Competition> Competitions { get; set; }
-		public DbSet<TeamBalance> TeamBalances { get; set; }
-		public DbSet<PlayerStat> PlayerStats { get; set; }
+		public DbSet<CompetitionRow> Competitions { get; set; }
+		public DbSet<TeamStateRow> TeamStates { get; set; }
+		public DbSet<PlayerStatRow> PlayerStats { get; set; }
 		public DbSet<TableState> States { get; set; }
-		public DbSet<Division> Divisions { get; set; }
-		public DbSet<Fixture> Fixtures { get; set; }
-		public DbSet<Player> Players { get; set; }
-		public DbSet<Rating> Ratings { get; set; }
-		public DbSet<Team> Teams { get; set; }
+		public DbSet<DivisionRow> Divisions { get; set; }
+		public DbSet<FixtureRow> Fixtures { get; set; }
+		public DbSet<PlayerRow> Players { get; set; }
+		public DbSet<RatingRow> Ratings { get; set; }
+		public DbSet<TeamRow> Teams { get; set; }
 	}
 }

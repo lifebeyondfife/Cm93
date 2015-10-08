@@ -19,6 +19,7 @@ namespace Cm93.Model.Structures
 {
 	public class Bid
 	{
+		public Team SellingTeam { get; set; }
 		public Team PurchasingTeam { get; set; }
 		public Player Player { get; set; }
 		public int PlayerNumber { get; set; }

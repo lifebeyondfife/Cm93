@@ -15,10 +15,19 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-namespace Cm93.Simulator
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Cm93.State.Sqlite.Tables
 {
-	public interface IAttachSimulator
+	[Table("Competitions")]
+	public class CompetitionRow
 	{
-		void AttachSimulator();
+		[Key]
+		public long CompetitionId { get; set; }
+
+		public string CompetitionType { get; set; }
+		public string CompetitionName { get; set; }
+		public string Country { get; set; }
 	}
 }

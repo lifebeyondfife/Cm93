@@ -15,39 +15,10 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using Cm93.Model.Interfaces;
-using Cm93.Model.Modules;
-using Cm93.State.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using GameModel = Cm93.Model.Structures.Game;
-
-namespace Cm93.State.Repository
+namespace Cm93.UI.Events
 {
-	public class Memory : IRepository
+	public class LoadGameEvent
 	{
-		private IDictionary<Guid, IState> GameLookup { get; set; }
-
-		public Memory()
-		{
-			GameLookup = new Dictionary<Guid, IState>();
-		}
-
-		public void DeleteGame(Guid key)
-		{
-			GameLookup.Remove(key);
-		}
-
-		public void UpdateGame(ModuleType moduleType, IState state)
-		{
-			GameLookup[state.Key] = state;
-		}
-
-		public IState LoadGame(Guid key)
-		{
-			return GameLookup[key];
-		}
+		public string GameId { get; set; }
 	}
 }

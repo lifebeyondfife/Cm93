@@ -17,13 +17,14 @@
 */
 using System.Collections.Generic;
 using System.Windows.Media;
+using Cm93.Model.Interfaces;
 
 namespace Cm93.Model.Structures
 {
 	public class Team
 	{
 		public string TeamName { get; set; }
-		public double Balance { get; set; }
+		public long Balance { get; set; }
 
 		public Color PrimaryColour { get { return FromUInt32(PrimaryColourInt); } }
 		public Color SecondaryColour { get { return FromUInt32(SecondaryColourInt); } }
@@ -38,7 +39,7 @@ namespace Cm93.Model.Structures
 		public int Captain { get; set; }
 		public int PenaltyTaker { get; set; }
 
-		public IList<Competition> Competitions { get; set; }
+		public IList<string> Competitions { get; set; }
 
 		//	This function allows a separation so that System.Windows.Media doesn't pollute other non-UI DLLs
 		private static Color FromUInt32(uint argb)

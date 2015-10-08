@@ -20,6 +20,14 @@ using System;
 
 namespace Cm93.Model.Config
 {
+	/*
+	 * This is a very important class. It is also most likely a design anti-pattern
+	 * as it's essentially a random assortment of global variables. Anywhere that
+	 * requires communication and accessibility across the codebase, this hack is used.
+	 *
+	 * Some of it is genuine configuration e.g. the AsideSize. However, GameEngine
+	 * should really be using some sort of IoC.
+	 */
 	public static class Configuration
 	{
 		public const int AsideSize = 2;
@@ -35,6 +43,6 @@ namespace Cm93.Model.Config
 		public static Func<int> GlobalWeek { get; set; }
 		public static int Season { get; set; }
 
-		public static ISimulator Simulator { get; set; }
+		public static IGameEngine GameEngine { get; set; }
 	}
 }

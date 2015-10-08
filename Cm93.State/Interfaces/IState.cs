@@ -25,11 +25,11 @@ namespace Cm93.State.Interfaces
 	public interface IState
 	{
 		string Name { get; set; }
-		Guid Key { get; }
-		
-		DateTime Created { get; }
+		Guid Key { get; set; }
+
+		DateTime Created { get; set; }
 		DateTime LastSaved { get; set; }
 
-		IDictionary<ModuleType, IModule> Modules { get; }
+		IDictionary<ModuleType, IModule> Modules { get; set; }
 	}
 }

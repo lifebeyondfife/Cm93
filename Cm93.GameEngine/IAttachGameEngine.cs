@@ -16,15 +16,12 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using Cm93.Model.Structures;
-using Cm93.Model.Config;
+using System.Collections.Generic;
 
-namespace Cm93.Simulator.Basic
+namespace Cm93.GameEngine
 {
-	public class AttachBasicSimulator : IAttachSimulator
+	public interface IAttachGameEngine
 	{
-		public void AttachSimulator()
-		{
-			Configuration.Simulator = new BasicSimulator();
-		}
+		void AttachGameEngine();
 	}
 }

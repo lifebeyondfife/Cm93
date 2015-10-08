@@ -22,7 +22,7 @@ using Cm93.Model;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
-using Cm93.Simulator.Basic;
+using Cm93.GameEngine.Basic;
 using Cm93.Model.Config;
 using NUnit.Framework;
 
@@ -35,7 +35,7 @@ namespace Cm93.UnitTests
 		[SetUp]
 		public void SetupCmcl()
 		{
-			new AttachBasicSimulator().AttachSimulator();
+			new AttachBasicGameEngine().AttachGameEngine();
 			Modules = new MockCreateModules().CreateModules();
 		}
 
@@ -56,12 +56,12 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Configuration.Simulator.SubmitBid(bid);
+			Configuration.GameEngine.SubmitBid(bid);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
 
-			Assert.AreEqual("Caddington City FC", player.Team.TeamName);
+			Assert.AreEqual("Caddington City FC", player.TeamName);
 			Assert.AreEqual(99, player.Number);
 
 			Assert.AreEqual(3462412d, teams["Caddington City FC"].Balance);
@@ -85,12 +85,12 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Configuration.Simulator.SubmitBid(bid);
+			Configuration.GameEngine.SubmitBid(bid);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
 
-			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
+			Assert.AreEqual("Sothbury Wanderers FC", player.TeamName);
 			Assert.AreEqual(9, player.Number);
 
 			Assert.AreEqual(43462412d, teams["Caddington City FC"].Balance);
@@ -130,14 +130,14 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Configuration.Simulator.SubmitBid(bid1);
-			Configuration.Simulator.SubmitBid(bid2);
-			Configuration.Simulator.SubmitBid(bid3);
+			Configuration.GameEngine.SubmitBid(bid1);
+			Configuration.GameEngine.SubmitBid(bid2);
+			Configuration.GameEngine.SubmitBid(bid3);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
 
-			Assert.AreEqual("Bicester Royals FC", player.Team.TeamName);
+			Assert.AreEqual("Bicester Royals FC", player.TeamName);
 			Assert.AreEqual(44, player.Number);
 
 			Assert.AreEqual(4734794d, teams["Bicester Royals FC"].Balance);
@@ -169,13 +169,13 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Configuration.Simulator.SubmitBid(bidUnder);
-			Configuration.Simulator.SubmitBid(bidOver);
+			Configuration.GameEngine.SubmitBid(bidUnder);
+			Configuration.GameEngine.SubmitBid(bidOver);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
 
-			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
+			Assert.AreEqual("Sothbury Wanderers FC", player.TeamName);
 			Assert.AreEqual(9, player.Number);
 
 			Assert.AreEqual(43462412d, teams["Caddington City FC"].Balance);
@@ -199,12 +199,12 @@ namespace Cm93.UnitTests
 
 			var cmcl = ((ICompetitionsModule) this.Modules[ModuleType.Competitions]).Competitions.First();
 
-			Configuration.Simulator.SubmitBid(bid);
+			Configuration.GameEngine.SubmitBid(bid);
 
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
 
-			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
+			Assert.AreEqual("Sothbury Wanderers FC", player.TeamName);
 			Assert.AreEqual(9, player.Number);
 
 			Assert.AreEqual(12734794d, teams["Bicester Royals FC"].Balance);

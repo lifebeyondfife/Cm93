@@ -15,6 +15,7 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -26,7 +27,8 @@ using Cm93.UI.Modules;
 namespace Cm93.UI.Shell
 {
 	[Export(typeof(ShellViewModel))]
-	public class ShellViewModel : Conductor<ModuleViewModelBase>.Collection.OneActive, IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>, IHandle<MatchCompleteEvent>
+	public class ShellViewModel : Conductor<ModuleViewModelBase>.Collection.OneActive,
+		IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>, IHandle<MatchCompleteEvent>, IHandle<LoadGameEvent>
 	{
 		private readonly IEventAggregator eventAggregator;
 		private readonly ICreateModel model;
@@ -203,6 +205,22 @@ namespace Cm93.UI.Shell
 			//this.model.StateManager.RefreshState();
 
 			//SetModels();
+		}
+
+		public void Handle(LoadGameEvent message)
+		{
+			var guid = default(Guid);
+
+			if (Guid.TryParse(message.GameId, out guid))
+			{
+				//"don't think this is not creating the models correctly"
+				this.model.StateManager.LoadGame(guid);
+				IsGameLive = true;
+
+				//"is Configuration.PlayerTeamName set now?"
+
+				SetModels();
+			}
 		}
 	}
 }

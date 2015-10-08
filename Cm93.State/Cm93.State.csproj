@@ -61,33 +61,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sqlite\State.cs" />
+    <Compile Include="Game\State.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IState.cs" />
     <Compile Include="Interfaces\IStateManager.cs" />
-    <Compile Include="Repository\Memory.cs" />
     <Compile Include="Repository\Sqlite.cs" />
     <Compile Include="Game\StateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sqlite\Cm93Context.cs" />
-    <Compile Include="Sqlite\Tables\Competition.cs" />
-    <Compile Include="Sqlite\Tables\Division.cs" />
-    <Compile Include="Sqlite\Tables\Fixture.cs" />
-    <Compile Include="Sqlite\Tables\Player.cs" />
-    <Compile Include="Sqlite\Tables\PlayerStat.cs" />
-    <Compile Include="Sqlite\Tables\Rating.cs" />
-    <Compile Include="Sqlite\Tables\State.cs" />
-    <Compile Include="Sqlite\Tables\Team.cs" />
-    <Compile Include="Sqlite\Tables\TeamBalance.cs" />
+    <Compile Include="Sqlite\Tables\CompetitionRow.cs" />
+    <Compile Include="Sqlite\Tables\DivisionRow.cs" />
+    <Compile Include="Sqlite\Tables\FixtureRow.cs" />
+    <Compile Include="Sqlite\Tables\PlayerRow.cs" />
+    <Compile Include="Sqlite\Tables\PlayerStatRow.cs" />
+    <Compile Include="Sqlite\Tables\RatingRow.cs" />
+    <Compile Include="Sqlite\Tables\StateRow.cs" />
+    <Compile Include="Sqlite\Tables\TeamRow.cs" />
+    <Compile Include="Sqlite\Tables\TeamStateRow.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cm93.Model\Cm93.Model.csproj">
       <Project>{f4fd474a-b62d-4540-929a-0ac98c414e2e}</Project>
       <Name>Cm93.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cm93.Simulator\Cm93.Simulator.csproj">
-      <Project>{4e196610-7bba-4c9d-b546-51d174516799}</Project>
-      <Name>Cm93.Simulator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -24,9 +24,12 @@ namespace Cm93.Model.Structures
 	public abstract class Competition : ICompetition
 	{
 		public string CompetitionName { get; set; }
+		public string Country { get; set; }
 		public int Week { get; set; }
+		public int WeekStart { get; set; }
 		public abstract int MatchesLeft { get; }
 		public IDictionary<string, Team> Teams { get; set; }
+		public IList<IFixture> Fixtures { get; set; }
 
 		public abstract IFixture PlayFixtures(string playerTeamName = "");
 		public abstract void CompleteRound();

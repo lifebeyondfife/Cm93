@@ -22,8 +22,8 @@ using Cm93.Model.Structures;
 using Cm93.State.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SqliteRepo = Cm93.State.Repository.Sqlite;
-using SqliteState = Cm93.State.Sqlite.State;
 
 namespace Cm93.State.Game
 {
@@ -40,7 +40,12 @@ namespace Cm93.State.Game
 		public StateManager()
 		{
 			Repository = new SqliteRepo();
-			State = new SqliteState();
+			State = new State();
+
+			Repository.RetrieveGame(State);
+
+			Configuration.GameEngine.TeamsAndCompetitions(((TeamModule) State.Modules[ModuleType.Team]).Teams.Values.ToList());
+			ReunifyFixtures();
 		}
 
 		public void RefreshState()
@@ -70,13 +75,32 @@ namespace Cm93.State.Game
 
 		public void LoadGame(Guid key)
 		{
-			State = Repository.LoadGame(key);
+			State.Key = key;
+			Repository.RetrieveGame(State);
+
+			Configuration.GameEngine.TeamsAndCompetitions(((TeamModule) State.Modules[ModuleType.Team]).Teams.Values.ToList());
+			ReunifyFixtures();
 		}
 
-		//	TODO: StateManager needs to synchronise Cm93.State accessing the DB, with Cm93.Model objects that are used by the UI.
-		//	In order to do so, this class has to retain some kind of exact object reference to the Cm93.Model objects it creates
-		//	instead of creating them in this function, returning them, and forgetting about them.
-		//	It needs to have a reference to these objects so that when the ShellViewModel gets a command to update something, it
-		//	can use its instance of StateManager (which it already has) to get Cm93.State to do the necessary work.
+		private void ReunifyFixtures()
+		{
+			var stateFixtures = ((FixturesModule) State.Modules[ModuleType.Fixtures]).Fixtures;
+			var competitions = Configuration.GameEngine.Competitions;
+
+			var loadScores = stateFixtures.Join(competitions.Select(c => c.Fixtures).SelectMany(a => a),
+				f => new { f.Week, f.Competition.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
+				f => new { f.Week, f.Competition.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
+				(sf, gf) => new { StateFixture = sf, GeneratedFixture = gf });
+
+			foreach (var score in loadScores)
+			{
+				score.GeneratedFixture.GoalsHome = score.StateFixture.ChancesAway;
+				score.GeneratedFixture.GoalsAway = score.StateFixture.ChancesAway;
+			}
+
+			State.Modules[ModuleType.Competitions] = new CompetitionsModule(competitions);
+			State.Modules[ModuleType.Fixtures] = new FixturesModule(competitions);
+			State.Modules[ModuleType.Match] = new MatchModule(competitions);
+		}
 	}
 }

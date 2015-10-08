@@ -15,19 +15,22 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Cm93.Model.Structures;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Cm93.Model.Interfaces
+namespace Cm93.State.Sqlite.Tables
 {
-	public interface ISimulator
+	[Table("Ratings")]
+	public class RatingRow
 	{
-		ILookup<Team, Bid> TeamBids { get; }
+		[Key]
+		[Column(Order = 1)]
+		[ForeignKey("PlayerStat")]
+		public long PlayerStatId { get; set; }
 
-		void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi);
-		void SubmitBid(Bid bid);
-		void ProcessTransfers();
+		[Column("Rating")]
+		public float RatingValue { get; set; }
+
+		public virtual PlayerStatRow PlayerStat { get; set; }
 	}
 }
