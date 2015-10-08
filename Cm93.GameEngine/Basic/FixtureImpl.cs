@@ -120,10 +120,9 @@ namespace Cm93.GameEngine.Basic
 		{
 			var random = new Random(Seed(division.CompetitionName));
 
-			yield return new Fixture
-				{
-					"fill this in"
-				};
+			var leagueGeneration = new LeagueGeneration(division);
+
+			return leagueGeneration.GenerateFixtures(random);
 		}
 	}
 }

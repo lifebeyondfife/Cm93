@@ -16,6 +16,7 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using Cm93.Model.Interfaces;
+using Cm93.Model.Structures;
 using Decider.Csp.BaseTypes;
 using Decider.Csp.Global;
 using Decider.Csp.Integer;
@@ -45,15 +46,48 @@ namespace Cm93.GameEngine.Basic
 
 		public IEnumerable<IFixture> GenerateFixtures(Random random)
 		{
-			//	reflect half solution with second half of the season
+			var randomiseWeeks = Enumerable.Range(1, (LeagueSize - 1) * 2).
+				OrderBy(i => random.Next()).
+				Select((e, i) => Tuple.Create(i + 1, e)).
+				ToDictionary(i => i.Item1, w => w.Item2);
 
-			//	use random to create mapping of weeks data e.g. week 1 --> week 8, week 2 --> week 15 etc.
+			var randomiseTeams = Competition.Teams.Values.
+				OrderBy(i => random.Next()).
+				Select((t, i) => Tuple.Create(i, t)).
+				ToDictionary(i => i.Item1, t => t.Item2);
 
-			//	fill in the creation of the Fixture objects (should I randomise Teams as well?)
+			var fixtureWeeks = FullSeason(randomiseWeeks);
 
-			"start here"
+			for (var i = 0; i < fixtureWeeks.Length; ++i)
+				for (var j = 0; j < fixtureWeeks[i].Length; ++j)
+				{
+					if (i == j)
+						continue;
 
-			throw new System.NotImplementedException();
+					yield return new Fixture
+						{
+							Competition = Competition,
+							TeamHome = randomiseTeams[i],
+							TeamAway = randomiseTeams[j],
+							Week = fixtureWeeks[i][j]
+						};
+				}
+		}
+
+		private int[][] FullSeason(IDictionary<int, int> randomiseWeeks)
+		{
+			var fixtureWeeks = new int[LeagueSize][];
+			for (var i = 0; i < fixtureWeeks.Length; ++i)
+				fixtureWeeks[i] = new int[LeagueSize];
+
+			for (int i = 0; i < Variables.Length; ++i)
+				for (int j = 0; j < Variables[i].Length; ++j)
+				{
+					fixtureWeeks[i + 1][j] = randomiseWeeks[Variables[i][j].Value];
+					fixtureWeeks[j][i + 1] = randomiseWeeks[Variables[i][j].Value + LeagueSize - 1];
+				}
+
+			return fixtureWeeks;
 		}
 
 		private void Model()
