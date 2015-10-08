@@ -48,7 +48,7 @@ namespace Cm93.GameEngine.Basic
 			{
 				return CompetitionImpl.Countries.
 					Select(c => c.Cups.
-						Zip(Enumerable.Repeat(c.Name, c.Cups.Count), (b, a) => new { Name = a, Country = b }).
+						Zip(Enumerable.Repeat(c.Name, c.Cups.Count), (a, b) => new { Name = a, Country = b }).
 						Select(cn => new Cup
 							{
 								CompetitionName = cn.Name,
@@ -60,7 +60,7 @@ namespace Cm93.GameEngine.Basic
 					Cast<ICompetition>().
 					Concat(CompetitionImpl.Countries.
 						Select(c => c.Leagues.
-							Zip(Enumerable.Repeat(c.Name, c.Leagues.Count), (b, a) => new { Name = a, Country = b }).
+							Zip(Enumerable.Repeat(c.Name, c.Leagues.Count), (a, b) => new { Name = a, Country = b }).
 							Select(cn => new Division
 								{
 									CompetitionName = cn.Name,
@@ -77,7 +77,7 @@ namespace Cm93.GameEngine.Basic
 		public CompetitionImpl(IList<Team> teams)
 		{
 			CompetitionTeams = teams.Select(t => t.Competitions.
-				Zip(Enumerable.Repeat(t, t.Competitions.Count), (b, a) => new { Team = a, b.CompetitionName })).
+				Zip(Enumerable.Repeat(t, t.Competitions.Count), (a, b) => new { a.CompetitionName, Team = b })).
 				SelectMany(a => a).
 				GroupBy(x => x.CompetitionName).
 				ToDictionary(ct => ct.Key, ct => ct.Select(t => t.Team).ToList());

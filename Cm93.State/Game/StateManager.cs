@@ -45,7 +45,7 @@ namespace Cm93.State.Game
 			Repository.RetrieveGame(State);
 
 			Configuration.GameEngine.TeamsAndCompetitions(((TeamModule) State.Modules[ModuleType.Team]).Teams.Values.ToList());
-			"Here and below..."
+			ReunifyFixtures();
 		}
 
 		public void RefreshState()
@@ -79,7 +79,26 @@ namespace Cm93.State.Game
 			Repository.RetrieveGame(State);
 
 			Configuration.GameEngine.TeamsAndCompetitions(((TeamModule) State.Modules[ModuleType.Team]).Teams.Values.ToList());
-			"...yeah here. We need to get Fixture objects from the GameEngine to give to the Fixtures Module. Of course, adding past Fixtures from the DB."
+			ReunifyFixtures();
+		}
+
+		private void ReunifyFixtures()
+		{
+			var stateFixtures = ((FixturesModule) State.Modules[ModuleType.Fixtures]).Fixtures;
+			var generatedFixtures = Configuration.GameEngine.Fixtures;
+
+			State.Modules[ModuleType.Fixtures] = new FixturesModule(generatedFixtures);
+
+			var loadScores = stateFixtures.Join(generatedFixtures,
+				f => new { f.Week, f.Competition.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
+				f => new { f.Week, f.Competition.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
+				(sf, gf) => new { StateFixture = sf, GeneratedFixture = gf });
+
+			foreach (var score in loadScores)
+			{
+				score.GeneratedFixture.GoalsHome = score.StateFixture.ChancesAway;
+				score.GeneratedFixture.GoalsAway = score.StateFixture.ChancesAway;
+			}
 		}
 	}
 }

@@ -82,7 +82,10 @@ namespace Cm93.GameEngine.Basic
 
 		public IList<IFixture> Fixtures
 		{
-			get { return FixtureImpl.GetFixtures(CompetitionImpl).ToList(); }
+			get { return FixtureImpl.
+				GetFixtures(CompetitionImpl).
+				OrderBy(f => f.Week).
+				ToList(); }
 		}
 
 		#endregion
