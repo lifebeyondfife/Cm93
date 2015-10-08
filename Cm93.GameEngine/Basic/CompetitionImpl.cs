@@ -77,7 +77,7 @@ namespace Cm93.GameEngine.Basic
 		public CompetitionImpl(IList<Team> teams)
 		{
 			CompetitionTeams = teams.Select(t => t.Competitions.
-				Zip(Enumerable.Repeat(t, t.Competitions.Count), (a, b) => new { a.CompetitionName, Team = b })).
+				Zip(Enumerable.Repeat(t, t.Competitions.Count), (a, b) => new { CompetitionName = a, Team = b })).
 				SelectMany(a => a).
 				GroupBy(x => x.CompetitionName).
 				ToDictionary(ct => ct.Key, ct => ct.Select(t => t.Team).ToList());

@@ -39,7 +39,7 @@ namespace Cm93.Model.Structures
 		public int Captain { get; set; }
 		public int PenaltyTaker { get; set; }
 
-		public IList<ICompetition> Competitions { get; set; }
+		public IList<string> Competitions { get; set; }
 
 		//	This function allows a separation so that System.Windows.Media doesn't pollute other non-UI DLLs
 		private static Color FromUInt32(uint argb)

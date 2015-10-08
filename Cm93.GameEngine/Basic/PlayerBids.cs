@@ -75,12 +75,12 @@ namespace Cm93.GameEngine.Basic
 
 				//	TODO: purchased players still existing in other team's match days.
 				highestBid.PurchasingTeam.Balance -= highestBid.BidAmount;
-				player.Team.Balance += highestBid.BidAmount;
+				highestBid.SellingTeam.Balance += highestBid.BidAmount;
 
-				player.Team.Players.Remove(player);
+				highestBid.SellingTeam.Players.Remove(player);
 				highestBid.PurchasingTeam.Players.Add(player);
 
-				player.Team = highestBid.PurchasingTeam;
+				player.TeamName = highestBid.PurchasingTeam.TeamName;
 				player.Number = highestBid.PlayerNumber;
 				player.ResetPlayerIndex();
 			}

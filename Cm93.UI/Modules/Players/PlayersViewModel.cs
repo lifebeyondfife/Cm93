@@ -43,6 +43,7 @@ namespace Cm93.UI.Modules.Players
 
 		private readonly IEventAggregator eventAggregator;
 		private IPlayersModule PlayersModel { get; set; }
+		private IDictionary<string, Cm93.Model.Structures.Team> Teams { get; set; }
 		private IDictionary<PlayerIndex, Player> Players { get; set; }
 		private IDictionary<string, Player> PlayerAb { get; set; }
 
@@ -336,6 +337,7 @@ namespace Cm93.UI.Modules.Players
 		{
 			PlayersModel = (IPlayersModule) model;
 			Players = PlayersModel.Players.ToDictionary(p => p.Index);
+			Teams = PlayersModel.Teams;
 		}
 
 		public void Handle(ModuleSelectedEvent message)
@@ -357,7 +359,7 @@ namespace Cm93.UI.Modules.Players
 			foreach (var player in PlayersModel.Players.Where(p =>
 				(SelectedPositionFilter == Position.All ||
 				p.Position == SelectedPositionFilter) &&
-				(!ShowOnlyMyTeam || p.Team.TeamName == Team.TeamName)))
+				(!ShowOnlyMyTeam || p.TeamName == Team.TeamName)))
 				this.playerGrid.Add(new PlayerRow
 					{
 						Name = string.Format(CultureInfo.CurrentCulture, "{0}, {1}", player.LastName, player.FirstName),
@@ -366,7 +368,7 @@ namespace Cm93.UI.Modules.Players
 						Goals = player.Goals,
 						Position = Enum.GetName(typeof(Position), player.Position),
 						Rating = player.Rating,
-						Team = player.Team.TeamName
+						Team = player.TeamName
 					});
 
 			NotifyOfPropertyChange(() => PlayerGrid);
@@ -406,8 +408,8 @@ namespace Cm93.UI.Modules.Players
 			ATitle = PlayerAb[PlayerA].LastName;
 			BTitle = PlayerAb[PlayerB].LastName;
 
-			PlayerAColour = PlayerAb[PlayerA].Team.PrimaryColour;
-			PlayerBColour = PlayerAb[PlayerB].Team.PrimaryColour;
+			PlayerAColour = Teams[PlayerAb[PlayerA].TeamName].PrimaryColour;
+			PlayerBColour = Teams[PlayerAb[PlayerB].TeamName].PrimaryColour;
 
 			var playerAMetrics = PlayerAb[PlayerA].GetGridRows();
 			var playerBMetrics = PlayerAb[PlayerB].GetGridRows();
@@ -461,10 +463,10 @@ namespace Cm93.UI.Modules.Players
 
 		private void UpdateBidRelease(Player player, ICollection<MetricRow> playerMetricRows)
 		{
-			MaxBidValue = player.Team == Team ? player.NumericValue * 3 : Math.Min(player.NumericValue * 2, NumericAvailable);
-			Bid = player.Team == Team ? player.ReleaseValue : Math.Min(player.NumericValue, NumericAvailable);
+			MaxBidValue = player.TeamName == Team.TeamName ? player.NumericValue * 3 : Math.Min(player.NumericValue * 2, NumericAvailable);
+			Bid = player.TeamName == Team.TeamName ? player.ReleaseValue : Math.Min(player.NumericValue, NumericAvailable);
 
-			if (player.Team == Team)
+			if (player.TeamName == Team.TeamName)
 			{
 				ShirtNumberVisible = false;
 				ContractButtonLabel = "Release";
@@ -526,7 +528,7 @@ namespace Cm93.UI.Modules.Players
 
 				var player = Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
 
-				return player.Team == Team || PlayersModel.GameEngine.TeamBids[Team].All(b => b.Player != player);
+				return player.TeamName == Team.TeamName || PlayersModel.GameEngine.TeamBids[Team].All(b => b.Player != player);
 			}
 		}
 
@@ -534,7 +536,7 @@ namespace Cm93.UI.Modules.Players
 		{
 			var player = Players[new PlayerIndex(SelectedPlayer.Number, SelectedPlayer.Team)];
 
-			if (player.Team == Team)
+			if (player.TeamName == Team.TeamName)
 			{
 				player.ReleaseValue = (int) Bid;
 				UpdatePlayerSelected();

@@ -17,6 +17,10 @@
 */
 namespace Cm93.UI.Modules.Players
 {
+	/*
+	 * IF YOU'RE CHANGING THIS enum...
+	 * Read the comments in PlayersView.xaml.cs
+	 */
 	public enum PlayerFilter
 	{
 		Position,

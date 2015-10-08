@@ -57,7 +57,7 @@ namespace Cm93.State.Repository
 
 			foreach (var team in teams.Values)
 			{
-				team.Players = new List<Player>(players.Where(p => p.Team == team));
+				team.Players = new List<Player>(players.Where(p => p.TeamName == team.TeamName));
 				foreach (var playerIndex in team.Players.
 						Select((p, i) => new { Player = p, Index = i }).
 						Where(pi => pi.Index < Configuration.AsideSize))
@@ -72,20 +72,20 @@ namespace Cm93.State.Repository
 			{
 				division.Fixtures = fixtures.ContainsKey(division) ?
 					fixtures[division] :
-					Enumerable.Empty<Fixture>().ToList();
+					Enumerable.Empty<IFixture>().ToList();
 				division.Places = places[division];
 
 				foreach (var place in division.Places)
 					if (place.Key.Competitions == null)
-						place.Key.Competitions = new List<ICompetition> { division };
+						place.Key.Competitions = new List<string> { division.CompetitionName };
 					else
-						place.Key.Competitions.Add(division);
+						place.Key.Competitions.Add(division.CompetitionName);
 			}
 
 			var modules = new Dictionary<ModuleType, IModule>();
 
 			modules[ModuleType.LoadGame] = modules[ModuleType.StartScreen] = new GameModule(games);
-			modules[ModuleType.Players] = new PlayersModule(Configuration.GameEngine, players);
+			modules[ModuleType.Players] = new PlayersModule(Configuration.GameEngine, players, teams);
 			modules[ModuleType.Team] = modules[ModuleType.SelectTeam] = new TeamModule(teams);
 			modules[ModuleType.Competitions] = new CompetitionsModule(divisions.Cast<ICompetition>().ToList());
 			modules[ModuleType.Fixtures] = new FixturesModule(fixtures.Cast<IFixture>().ToList());
@@ -339,7 +339,7 @@ namespace Cm93.State.Repository
 							Number = (int) p.Number,
 							Position = (Position) p.PlayerStat.Position,
 							Nationality = p.PlayerStat.Nationality,
-							Team = teams[p.Team.TeamName],
+							TeamName = p.Team.TeamName,
 							Location = new Coordinate { X = p.LocationX, Y = p.LocationY },
 							Id = (int) p.PlayerStatId,
 							Goals = (int) p.Goals
@@ -372,7 +372,7 @@ namespace Cm93.State.Repository
 			}
 		}
 
-		private static IDictionary<Division, List<Fixture>> Fixtures(long stateId, IDictionary<string, Team> teams, IList<Division> divisions)
+		private static IDictionary<Division, List<IFixture>> Fixtures(long stateId, IDictionary<string, Team> teams, IList<Division> divisions)
 		{
 			using (var context = new Cm93Context())
 			{
@@ -388,6 +388,7 @@ namespace Cm93.State.Repository
 								Week = (int) f.Week,
 								Competition = divisions.Single(d => d.CompetitionName == cf.Key)
 							}).
+						Cast<IFixture>().
 						ToList());
 			}
 		}

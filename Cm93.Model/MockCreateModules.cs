@@ -30,7 +30,7 @@ namespace Cm93.Model
 		private IDictionary<string, Team> Teams { get; set; }
 		private IList<Player> Players { get; set; }
 		private Division Cmcl { get; set; }
-		private IList<Fixture> CmclFixtures { get; set; }
+		private IList<IFixture> CmclFixtures { get; set; }
 		private IDictionary<Team, Place> CmclPlaces { get; set; }
 
 		public MockCreateModules()
@@ -46,18 +46,18 @@ namespace Cm93.Model
 
 			Players = new List<Player>
 				{
-					new Player { Age = 21, ReleaseValue = 40000000, NumericValue = 23000000, FirstName = "John", LastName = "McMasterson", Rating = 92.4, Number = 9, Position = Position.CB, Team = Teams["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.13d, Y = 0.2d } },
-					new Player { Age = 24, ReleaseValue = 4000000, NumericValue = 6000000, FirstName = "Ted", LastName = "Eddington", Rating = 60.3, Number = 3, Position = Position.CMF, Team = Teams["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.5d, Y = 0.4d } },
-					new Player { Age = 27, ReleaseValue = 15000000, NumericValue = 13000000, FirstName = "Bill", LastName = "Formica", Rating = 79.3, Number = 1, Position = Position.LDM, Team = Teams["Sothbury Wanderers FC"], Location = new Coordinate { X = 0.7d, Y = 0.7d } },
-					new Player { Age = 22, ReleaseValue = 20000000, NumericValue = 19000000, FirstName = "Sam", LastName = "Cosmic", Rating = 83.5, Number = 10, Position = Position.RDM, Team = Teams["Bicester Royals FC"], Location = new Coordinate { X = 0.2d, Y = 0.3d } },
-					new Player { Age = 28, ReleaseValue = 2000000, NumericValue = 3000000, FirstName = "Tarquin", LastName = "Frederick", Rating = 41.2, Number = 8, Position = Position.CF, Team = Teams["Bicester Royals FC"], Location = new Coordinate { X = 0.8d, Y = 0.3d } },
-					new Player { Age = 27, ReleaseValue = 750000, NumericValue = 1000000, FirstName = "Philip", LastName = "Thomas", Rating = 28.5, Number = 2, Position = Position.D, Team = Teams["Bicester Royals FC"], Location = new Coordinate { X = 0.5, Y = 0.6d } },
-					new Player { Age = 24, ReleaseValue = 2000000, NumericValue = 2500000, FirstName = "Elliot", LastName = "Cloud", Rating = 55.7, Number = 23, Position = Position.MF, Team = Teams["Caddington City FC"], Location = new Coordinate { X = 0.13d, Y = 0.2d } },
-					new Player { Age = 20, ReleaseValue = 5000000, NumericValue = 4500000, FirstName = "Bob", LastName = "Spire", Rating = 66.4, Number = 4, Position = Position.GK, Team = Teams["Caddington City FC"], Location = new Coordinate { X = 0.34d, Y = 0.4d } },
-					new Player { Age = 33, ReleaseValue = 500000, NumericValue = 850000, FirstName = "Terrence", LastName = "Nottingham", Rating = 26.5, Number = 1, Position = Position.F, Team = Teams["Caddington City FC"], Location = new Coordinate { X = 0.54d, Y = 0.7d } },
-					new Player { Age = 36, ReleaseValue = 15000000, NumericValue = 11000000, FirstName = "Bastion", LastName = "Rockton", Rating = 86.9, Number = 5, Position = Position.CM, Team = Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.2d, Y = 0.4d } },
-					new Player { Age = 19, ReleaseValue = 3000000, NumericValue = 2000000, FirstName = "Huppert", LastName = "Strafer", Rating = 47.7, Number = 6, Position = Position.CB, Team = Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.5d } },
-					new Player { Age = 17, ReleaseValue = 3000000, NumericValue = 2500000, FirstName = "Fergus", LastName = "Mystic", Rating = 56.3, Number = 2, Position = Position.LDM, Team = Teams["Uthmalton Town FC"], Location = new Coordinate { X = 0.7d, Y = 0.75d } },
+					new Player { Age = 21, ReleaseValue = 40000000, NumericValue = 23000000, FirstName = "John", LastName = "McMasterson", Rating = 92.4, Number = 9, Position = Position.CB, TeamName = "Sothbury Wanderers FC", Location = new Coordinate { X = 0.13d, Y = 0.2d } },
+					new Player { Age = 24, ReleaseValue = 4000000, NumericValue = 6000000, FirstName = "Ted", LastName = "Eddington", Rating = 60.3, Number = 3, Position = Position.CMF, TeamName = "Sothbury Wanderers FC", Location = new Coordinate { X = 0.5d, Y = 0.4d } },
+					new Player { Age = 27, ReleaseValue = 15000000, NumericValue = 13000000, FirstName = "Bill", LastName = "Formica", Rating = 79.3, Number = 1, Position = Position.LDM, TeamName = "Sothbury Wanderers FC", Location = new Coordinate { X = 0.7d, Y = 0.7d } },
+					new Player { Age = 22, ReleaseValue = 20000000, NumericValue = 19000000, FirstName = "Sam", LastName = "Cosmic", Rating = 83.5, Number = 10, Position = Position.RDM, TeamName = "Bicester Royals FC", Location = new Coordinate { X = 0.2d, Y = 0.3d } },
+					new Player { Age = 28, ReleaseValue = 2000000, NumericValue = 3000000, FirstName = "Tarquin", LastName = "Frederick", Rating = 41.2, Number = 8, Position = Position.CF, TeamName = "Bicester Royals FC", Location = new Coordinate { X = 0.8d, Y = 0.3d } },
+					new Player { Age = 27, ReleaseValue = 750000, NumericValue = 1000000, FirstName = "Philip", LastName = "Thomas", Rating = 28.5, Number = 2, Position = Position.D, TeamName = "Bicester Royals FC", Location = new Coordinate { X = 0.5, Y = 0.6d } },
+					new Player { Age = 24, ReleaseValue = 2000000, NumericValue = 2500000, FirstName = "Elliot", LastName = "Cloud", Rating = 55.7, Number = 23, Position = Position.MF, TeamName = "Caddington City FC", Location = new Coordinate { X = 0.13d, Y = 0.2d } },
+					new Player { Age = 20, ReleaseValue = 5000000, NumericValue = 4500000, FirstName = "Bob", LastName = "Spire", Rating = 66.4, Number = 4, Position = Position.GK, TeamName = "Caddington City FC", Location = new Coordinate { X = 0.34d, Y = 0.4d } },
+					new Player { Age = 33, ReleaseValue = 500000, NumericValue = 850000, FirstName = "Terrence", LastName = "Nottingham", Rating = 26.5, Number = 1, Position = Position.F, TeamName = "Caddington City FC", Location = new Coordinate { X = 0.54d, Y = 0.7d } },
+					new Player { Age = 36, ReleaseValue = 15000000, NumericValue = 11000000, FirstName = "Bastion", LastName = "Rockton", Rating = 86.9, Number = 5, Position = Position.CM, TeamName = "Uthmalton Town FC", Location = new Coordinate { X = 0.2d, Y = 0.4d } },
+					new Player { Age = 19, ReleaseValue = 3000000, NumericValue = 2000000, FirstName = "Huppert", LastName = "Strafer", Rating = 47.7, Number = 6, Position = Position.CB, TeamName = "Uthmalton Town FC", Location = new Coordinate { X = 0.7d, Y = 0.5d } },
+					new Player { Age = 17, ReleaseValue = 3000000, NumericValue = 2500000, FirstName = "Fergus", LastName = "Mystic", Rating = 56.3, Number = 2, Position = Position.LDM, TeamName = "Uthmalton Town FC", Location = new Coordinate { X = 0.7d, Y = 0.75d } },
 				};
 
 			Cmcl = new Division
@@ -67,7 +67,7 @@ namespace Cm93.Model
 					Teams = Teams
 				};
 
-			CmclFixtures = new List<Fixture>
+			CmclFixtures = new List<IFixture>
 				{
 					new Fixture { TeamHome = Teams["Sothbury Wanderers FC"], TeamAway = Teams["Bicester Royals FC"], Week = 1, Competition = Cmcl },
 					new Fixture { TeamHome = Teams["Caddington City FC"], TeamAway = Teams["Uthmalton Town FC"], Week = 1, Competition = Cmcl },
@@ -91,12 +91,12 @@ namespace Cm93.Model
 			Cmcl.Fixtures = CmclFixtures;
 			Cmcl.Places = CmclPlaces;
 
-			var playersModule = new PlayersModule(Configuration.GameEngine, Players);
+			var playersModule = new PlayersModule(Configuration.GameEngine, Players, Teams);
 			
 			//	Need to create just a Teams list object. Selecting the Teams Module has to refresh the potentially changed team.
 			foreach (var team in Teams.Values)
 			{
-				team.Players = new List<Player>(Players.Where(p => p.Team == team));
+				team.Players = new List<Player>(Players.Where(p => p.TeamName == team.TeamName));
 				team.Formation[0] = team.Players[0];
 				team.Formation[1] = team.Players[1];
 			}

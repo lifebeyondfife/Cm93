@@ -31,7 +31,7 @@ namespace Cm93.Model.Interfaces
 
 	public interface IFixturesModule : IModule
 	{
-		IList<IFixture> Fixtures { get; }
+		IList<ICompetition> Competitions { get; }
 	}
 
 	public interface ITeamModule : IModule
@@ -42,6 +42,7 @@ namespace Cm93.Model.Interfaces
 	public interface IPlayersModule : IModule
 	{
 		IList<Player> Players { get; }
+		IDictionary<string, Team> Teams { get; }
 		IGameEngine GameEngine { get; }
 	}
 

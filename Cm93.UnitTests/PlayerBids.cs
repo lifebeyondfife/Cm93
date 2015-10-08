@@ -61,7 +61,7 @@ namespace Cm93.UnitTests
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
 
-			Assert.AreEqual("Caddington City FC", player.Team.TeamName);
+			Assert.AreEqual("Caddington City FC", player.TeamName);
 			Assert.AreEqual(99, player.Number);
 
 			Assert.AreEqual(3462412d, teams["Caddington City FC"].Balance);
@@ -90,7 +90,7 @@ namespace Cm93.UnitTests
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
 
-			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
+			Assert.AreEqual("Sothbury Wanderers FC", player.TeamName);
 			Assert.AreEqual(9, player.Number);
 
 			Assert.AreEqual(43462412d, teams["Caddington City FC"].Balance);
@@ -137,7 +137,7 @@ namespace Cm93.UnitTests
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
 
-			Assert.AreEqual("Bicester Royals FC", player.Team.TeamName);
+			Assert.AreEqual("Bicester Royals FC", player.TeamName);
 			Assert.AreEqual(44, player.Number);
 
 			Assert.AreEqual(4734794d, teams["Bicester Royals FC"].Balance);
@@ -175,7 +175,7 @@ namespace Cm93.UnitTests
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
 
-			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
+			Assert.AreEqual("Sothbury Wanderers FC", player.TeamName);
 			Assert.AreEqual(9, player.Number);
 
 			Assert.AreEqual(43462412d, teams["Caddington City FC"].Balance);
@@ -204,7 +204,7 @@ namespace Cm93.UnitTests
 			cmcl.PlayFixtures();
 			cmcl.CompleteRound();
 
-			Assert.AreEqual("Sothbury Wanderers FC", player.Team.TeamName);
+			Assert.AreEqual("Sothbury Wanderers FC", player.TeamName);
 			Assert.AreEqual(9, player.Number);
 
 			Assert.AreEqual(12734794d, teams["Bicester Royals FC"].Balance);

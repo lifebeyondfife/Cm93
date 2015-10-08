@@ -29,6 +29,7 @@ namespace Cm93.Model.Structures
 		public int WeekStart { get; set; }
 		public abstract int MatchesLeft { get; }
 		public IDictionary<string, Team> Teams { get; set; }
+		public IList<IFixture> Fixtures { get; set; }
 
 		public abstract IFixture PlayFixtures(string playerTeamName = "");
 		public abstract void CompleteRound();

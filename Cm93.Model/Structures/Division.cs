@@ -25,8 +25,6 @@ namespace Cm93.Model.Structures
 {
 	public class Division : Competition
 	{
-		public IList<Fixture> Fixtures { get; set; }
-
 		private IDictionary<Team, Place> places = default(IDictionary<Team, Place>);
 		public IDictionary<Team, Place> Places
 		{
