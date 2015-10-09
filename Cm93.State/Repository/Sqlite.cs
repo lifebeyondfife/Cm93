@@ -185,7 +185,11 @@ namespace Cm93.State.Repository
 							Balance = tb.Balance,
 							PrimaryColourInt = Convert.ToUInt32(tb.Team.PrimaryColour),
 							SecondaryColourInt = Convert.ToUInt32(tb.Team.SecondaryColour),
-							TeamName = tb.Team.TeamName
+							TeamName = tb.Team.TeamName,
+							Competitions = context.Divisions.
+								Where(d => d.StateId == stateId && d.TeamId == tb.TeamId).
+								Select(d => d.Competition.CompetitionName).
+								ToList()
 						}).
 					ToDictionary(t => t.TeamName);
 			}
