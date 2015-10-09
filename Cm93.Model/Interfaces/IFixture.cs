@@ -24,6 +24,7 @@ namespace Cm93.Model.Interfaces
 	{
 		Team TeamHome { get; set; }
 		Team TeamAway { get; set; }
+		string CompetitionName { get; set; }
 
 		int Week { get; }
 
@@ -31,8 +32,6 @@ namespace Cm93.Model.Interfaces
 		int GoalsAway { get; set; }
 		int ChancesHome { get; set; }
 		int ChancesAway { get; set; }
-
-		ICompetition Competition { get; }
 
 		int MinutesAddedOn { get; set; }
 		int Minutes { get; set; }

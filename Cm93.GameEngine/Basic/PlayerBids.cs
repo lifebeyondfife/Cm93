@@ -38,7 +38,6 @@ namespace Cm93.GameEngine.Basic
 			Bids = new Dictionary<PlayerIndex, IList<Bid>>();
 		}
 
-		//	TODO: game simulation *and* player bidding in one class violates SOLID principles... fix it!
 		public void SubmitBid(Bid bid)
 		{
 			if (bid.BidAmount > bid.PurchasingTeam.Balance - TeamBids[bid.PurchasingTeam].Sum(b => b.BidAmount))

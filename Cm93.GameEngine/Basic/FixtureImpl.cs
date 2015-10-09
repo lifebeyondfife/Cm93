@@ -94,7 +94,7 @@ namespace Cm93.GameEngine.Basic
 
 			for (int i = 0; i < count; ++i)
 			{
-				var match = new Fixture { Competition = cup, Week = (int) Math.Log(cupSize, 2) };
+				var match = new Fixture { CompetitionName = cup.CompetitionName, Week = (int) Math.Log(cupSize, 2) };
 
 				if (i % 2 == 0)
 					fixtures[i / 2 + index].DependentHome = match;

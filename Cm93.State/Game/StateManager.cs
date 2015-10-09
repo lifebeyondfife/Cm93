@@ -42,7 +42,7 @@ namespace Cm93.State.Game
 			Repository = new SqliteRepo();
 			State = new State();
 
-			Repository.RetrieveGame(State);
+			//Repository.RetrieveGame(State);
 
 			Configuration.GameEngine.TeamsAndCompetitions(((TeamModule) State.Modules[ModuleType.Team]).Teams.Values.ToList());
 			ReunifyFixtures();
@@ -76,7 +76,7 @@ namespace Cm93.State.Game
 		public void LoadGame(Guid key)
 		{
 			State.Key = key;
-			Repository.RetrieveGame(State);
+			//Repository.RetrieveGame(State);
 
 			Configuration.GameEngine.TeamsAndCompetitions(((TeamModule) State.Modules[ModuleType.Team]).Teams.Values.ToList());
 			ReunifyFixtures();
@@ -88,8 +88,8 @@ namespace Cm93.State.Game
 			var competitions = Configuration.GameEngine.Competitions;
 
 			var loadScores = stateFixtures.Join(competitions.Select(c => c.Fixtures).SelectMany(a => a),
-				f => new { f.Week, f.Competition.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
-				f => new { f.Week, f.Competition.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
+				f => new { f.Week, f.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
+				f => new { f.Week, f.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
 				(sf, gf) => new { StateFixture = sf, GeneratedFixture = gf });
 
 			foreach (var score in loadScores)
