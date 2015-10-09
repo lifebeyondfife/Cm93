@@ -31,7 +31,6 @@ namespace Cm93.GameEngine.Basic
 	{
 		private PlayerBids PlayerBids { get; set; }
 		private MatchSimulator MatchSimulator { get; set; }
-		private CompetitionImpl CompetitionImpl { get; set; }
 
 		public BasicGameEngine()
 		{
@@ -69,17 +68,9 @@ namespace Cm93.GameEngine.Basic
 
 		#region Competitions
 
-		public void TeamsAndCompetitions(IList<Team> teams)
+		public IList<ICompetition> Competitions(IList<Team> teams, IDictionary<string, Dictionary<Team, Place>> places)
 		{
-			CompetitionImpl = new CompetitionImpl(teams);
-		}
-
-		public IList<ICompetition> Competitions
-		{
-			get
-			{
-				return CompetitionImpl.CompetitionsWithFixtures();
-			}
+			return new CompetitionImpl(teams, places).CompetitionsWithFixtures();
 		}
 
 		#endregion

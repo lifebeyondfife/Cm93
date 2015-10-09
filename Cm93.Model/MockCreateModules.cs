@@ -69,12 +69,12 @@ namespace Cm93.Model
 
 			CmclFixtures = new List<IFixture>
 				{
-					new Fixture { TeamHome = Teams["Sothbury Wanderers FC"], TeamAway = Teams["Bicester Royals FC"], Week = 1, Competition = Cmcl },
-					new Fixture { TeamHome = Teams["Caddington City FC"], TeamAway = Teams["Uthmalton Town FC"], Week = 1, Competition = Cmcl },
-					new Fixture { TeamHome = Teams["Sothbury Wanderers FC"], TeamAway = Teams["Caddington City FC"], Week = 2, Competition = Cmcl },
-					new Fixture { TeamHome = Teams["Uthmalton Town FC"], TeamAway = Teams["Bicester Royals FC"], Week = 2, Competition = Cmcl },
-					new Fixture { TeamHome = Teams["Bicester Royals FC"], TeamAway = Teams["Caddington City FC"], Week = 3, Competition = Cmcl },
-					new Fixture { TeamHome = Teams["Uthmalton Town FC"], TeamAway = Teams["Sothbury Wanderers FC"], Week = 3, Competition = Cmcl },
+					new Fixture { TeamHome = Teams["Sothbury Wanderers FC"], TeamAway = Teams["Bicester Royals FC"], Week = 1, CompetitionName = Cmcl.CompetitionName },
+					new Fixture { TeamHome = Teams["Caddington City FC"], TeamAway = Teams["Uthmalton Town FC"], Week = 1, CompetitionName = Cmcl.CompetitionName },
+					new Fixture { TeamHome = Teams["Sothbury Wanderers FC"], TeamAway = Teams["Caddington City FC"], Week = 2, CompetitionName = Cmcl.CompetitionName },
+					new Fixture { TeamHome = Teams["Uthmalton Town FC"], TeamAway = Teams["Bicester Royals FC"], Week = 2, CompetitionName = Cmcl.CompetitionName },
+					new Fixture { TeamHome = Teams["Bicester Royals FC"], TeamAway = Teams["Caddington City FC"], Week = 3, CompetitionName = Cmcl.CompetitionName },
+					new Fixture { TeamHome = Teams["Uthmalton Town FC"], TeamAway = Teams["Sothbury Wanderers FC"], Week = 3, CompetitionName = Cmcl.CompetitionName },
 				};
 
 			CmclPlaces = new Dictionary<Team, Place>

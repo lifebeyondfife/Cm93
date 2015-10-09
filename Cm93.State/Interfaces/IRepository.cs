@@ -17,6 +17,7 @@
 */
 using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
+using Cm93.Model.Structures;
 using System;
 using System.Collections.Generic;
 
@@ -24,7 +25,12 @@ namespace Cm93.State.Interfaces
 {
 	public interface IRepository
 	{
-		void RetrieveGame(IState state);
+		IList<IGame> Games();
+		IList<Player> Players(IState state);
+		IDictionary<string, Team> Teams(IState state);
+		IDictionary<string, Dictionary<Team, Place>> Places(IState state, IDictionary<string, Team> teams);
+		IDictionary<string, List<IFixture>> Fixtures(IState state, IDictionary<string, Team> teams);
+
 		void UpdateGame(ModuleType moduleType, IState state);
 		void DeleteGame(Guid key);
 	}

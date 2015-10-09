@@ -32,6 +32,7 @@ namespace Cm93.GameEngine.Basic
 	public class CompetitionImpl
 	{
 		private IDictionary<string, List<Team>> CompetitionTeams { get; set; }
+		private IDictionary<string, Dictionary<Team, Place>> Places { get; set; }
 
 		public static readonly IList<Country> Countries = new List<Country>
 			{
@@ -66,7 +67,7 @@ namespace Cm93.GameEngine.Basic
 								CompetitionName = cn.Name,
 								Country = cn.Country,
 								Teams = CompetitionTeams[cn.Name].ToDictionary(ct => ct.TeamName, ct => ct),
-								Places = CompetitionTeams[cn.Name].ToDictionary(ct => ct, ct => new Place { Team = ct })
+								Places = Places[cn.Name]
 							}
 						)).
 					SelectMany(a => a).
@@ -81,13 +82,15 @@ namespace Cm93.GameEngine.Basic
 			return competitions;
 		}
 
-		public CompetitionImpl(IList<Team> teams)
+		public CompetitionImpl(IList<Team> teams, IDictionary<string, Dictionary<Team, Place>> places)
 		{
 			CompetitionTeams = teams.Select(t => t.Competitions.
 				Zip(Enumerable.Repeat(t, t.Competitions.Count), (a, b) => new { CompetitionName = a, Team = b })).
 				SelectMany(a => a).
 				GroupBy(x => x.CompetitionName).
 				ToDictionary(ct => ct.Key, ct => ct.Select(t => t.Team).ToList());
+
+			Places = places;
 		}
 	}
 }

@@ -24,6 +24,7 @@ namespace Cm93.Model.Structures
 	{
 		public Team TeamHome { get; set; }
 		public Team TeamAway { get; set; }
+		public string CompetitionName { get; set; }
 
 		public int Week { get; set; }
 
@@ -31,8 +32,6 @@ namespace Cm93.Model.Structures
 		public int GoalsAway { get; set; }
 		public int ChancesHome { get; set; }
 		public int ChancesAway { get; set; }
-
-		public ICompetition Competition { get; set; }
 
 		public int MinutesAddedOn { get; set; }
 		public int Minutes { get; set; }

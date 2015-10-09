@@ -66,7 +66,7 @@ namespace Cm93.GameEngine.Basic
 
 					yield return new Fixture
 						{
-							Competition = Competition,
+							CompetitionName = Competition.CompetitionName,
 							TeamHome = randomiseTeams[i],
 							TeamAway = randomiseTeams[j],
 							Week = fixtureWeeks[i][j]

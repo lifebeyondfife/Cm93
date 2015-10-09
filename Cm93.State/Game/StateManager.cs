@@ -42,10 +42,9 @@ namespace Cm93.State.Game
 			Repository = new SqliteRepo();
 			State = new State();
 
-			Repository.RetrieveGame(State);
+			State.Modules = new Dictionary<ModuleType, IModule>();
 
-			Configuration.GameEngine.TeamsAndCompetitions(((TeamModule) State.Modules[ModuleType.Team]).Teams.Values.ToList());
-			ReunifyFixtures();
+			CreateModules();
 		}
 
 		public void RefreshState()
@@ -76,31 +75,59 @@ namespace Cm93.State.Game
 		public void LoadGame(Guid key)
 		{
 			State.Key = key;
-			Repository.RetrieveGame(State);
-
-			Configuration.GameEngine.TeamsAndCompetitions(((TeamModule) State.Modules[ModuleType.Team]).Teams.Values.ToList());
-			ReunifyFixtures();
+			CreateModules();
 		}
 
-		private void ReunifyFixtures()
+		private void CreateModules()
 		{
-			var stateFixtures = ((FixturesModule) State.Modules[ModuleType.Fixtures]).Fixtures;
-			var competitions = Configuration.GameEngine.Competitions;
+			var games = Repository.Games();
+			var teams = Repository.Teams(State);
+			var places = Repository.Places(State, teams);
+			var players = Repository.Players(State);
+			var fixtures = Repository.Fixtures(State, teams);
 
-			var loadScores = stateFixtures.Join(competitions.Select(c => c.Fixtures).SelectMany(a => a),
-				f => new { f.Week, f.Competition.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
-				f => new { f.Week, f.Competition.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
-				(sf, gf) => new { StateFixture = sf, GeneratedFixture = gf });
+			var competitions = Configuration.GameEngine.Competitions(teams.Values.ToList(), places);
 
-			foreach (var score in loadScores)
-			{
-				score.GeneratedFixture.GoalsHome = score.StateFixture.ChancesAway;
-				score.GeneratedFixture.GoalsAway = score.StateFixture.ChancesAway;
-			}
+			AssignPlayers(teams, players);
+			UnifyFixtures(fixtures, competitions);
 
+			State.Modules[ModuleType.LoadGame] = State.Modules[ModuleType.StartScreen] = new GameModule(games);
+			State.Modules[ModuleType.Players] = new PlayersModule(Configuration.GameEngine, players, teams);
+			State.Modules[ModuleType.Team] = State.Modules[ModuleType.SelectTeam] = new TeamModule(teams);
 			State.Modules[ModuleType.Competitions] = new CompetitionsModule(competitions);
 			State.Modules[ModuleType.Fixtures] = new FixturesModule(competitions);
 			State.Modules[ModuleType.Match] = new MatchModule(competitions);
+		}
+
+		private static void AssignPlayers(IDictionary<string, Team> teams, IList<Player> players)
+		{
+			foreach (var team in teams.Values)
+			{
+				team.Players = new List<Player>(players.Where(p => p.TeamName == team.TeamName));
+				foreach (var playerIndex in team.Players.
+						Select((p, i) => new { Player = p, Index = i }).
+						Where(pi => pi.Index < Configuration.AsideSize))
+					team.Formation[playerIndex.Index] = playerIndex.Player;
+			}
+		}
+
+		private static void UnifyFixtures(IDictionary<string, List<IFixture>> fixtures, IList<ICompetition> competitions)
+		{
+			var generatedFixtures = competitions.ToDictionary(c => c.CompetitionName, c => c.Fixtures);
+
+			foreach (var competitionName in fixtures.Keys)
+			{
+				var loadScores = fixtures[competitionName].Join(generatedFixtures[competitionName],
+					f => new { f.Week, f.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
+					f => new { f.Week, f.CompetitionName, Home = f.TeamHome.TeamName, Away = f.TeamAway.TeamName },
+					(sf, gf) => new { StateFixture = sf, GeneratedFixture = gf });
+
+				foreach (var score in loadScores)
+				{
+					score.GeneratedFixture.GoalsHome = score.StateFixture.ChancesAway;
+					score.GeneratedFixture.GoalsAway = score.StateFixture.ChancesAway;
+				}
+			}
 		}
 	}
 }

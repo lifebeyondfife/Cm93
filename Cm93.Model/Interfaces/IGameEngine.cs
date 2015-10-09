@@ -26,11 +26,9 @@ namespace Cm93.Model.Interfaces
 	{
 		ILookup<Team, Bid> TeamBids { get; }
 
-		IList<ICompetition> Competitions { get; }
-
 		void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi);
 		void SubmitBid(Bid bid);
 		void ProcessTransfers();
-		void TeamsAndCompetitions(IList<Team> teams);
+		IList<ICompetition> Competitions(IList<Team> teams, IDictionary<string, Dictionary<Team, Place>> places);
 	}
 }
