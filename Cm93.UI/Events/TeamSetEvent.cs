@@ -23,11 +23,13 @@ namespace Cm93.UI.Events
 	{
 		public Team Team { get; set; }
 		public string GameTitle { get; set; }
+		public bool NewGame { get; set; }
 
-		public TeamSetEvent(Team team, string gameTitle)
+		public TeamSetEvent(Team team, string gameTitle, bool newGame = false)
 		{
 			Team = team;
 			GameTitle = gameTitle;
+			NewGame = newGame;
 		}
 	}
 }

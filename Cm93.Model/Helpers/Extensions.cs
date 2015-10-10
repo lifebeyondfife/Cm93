@@ -25,7 +25,7 @@ namespace Cm93.Model.Helpers
 {
 	public static class Extensions
 	{
-		public static void Do<T>(this IEnumerable<T> items, Action<T> action)
+		public static void Execute<T>(this IEnumerable<T> items, Action<T> action)
 		{
 			foreach (var item in items)
 				action(item);

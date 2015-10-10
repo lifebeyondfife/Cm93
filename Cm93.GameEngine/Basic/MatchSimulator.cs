@@ -122,13 +122,13 @@ namespace Cm93.GameEngine.Basic
 			}
 
 			coordinateList.Where(t => t.Item1 > 0 && t.Item1 < 14 && t.Item2 > 0 && t.Item2 < 19).
-				Do(t => ballPositions[t.Item1, t.Item2] += 0.5d);
+				Execute(t => ballPositions[t.Item1, t.Item2] += 0.5d);
 		}
 
 		private void UpdateNpcTeams(IDictionary<int, Player> teamFormation)
 		{
-			teamFormation.Values.Do(p => p.Location.X = Random.NextDouble() * 0.84d);
-			teamFormation.Values.Do(p => p.Location.Y = Random.NextDouble() * 0.84d);
+			teamFormation.Values.Execute(p => p.Location.X = Random.NextDouble() * 0.84d);
+			teamFormation.Values.Execute(p => p.Location.Y = Random.NextDouble() * 0.84d);
 		}
 	}
 }

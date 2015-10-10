@@ -194,17 +194,7 @@ namespace Cm93.UI.Shell
 		{
 			IsMatch = false;
 
-			this.model.StateManager.UpdateGame(ModuleType.Fixtures);
-			this.model.StateManager.UpdateGame(ModuleType.Players);
-
-			//	TODO: Once LoadGame is working, uncomment these lines
-			//	Updating post match details requires a new set of model
-			//	objects. Could be done more granularly if performance
-			//	becomes an issue but for v0.1, try it and see.
-
-			//this.model.StateManager.RefreshState();
-
-			//SetModels();
+			this.model.StateManager.UpdateGame(ModuleType.Match);
 		}
 
 		public void Handle(LoadGameEvent message)
@@ -213,13 +203,12 @@ namespace Cm93.UI.Shell
 
 			if (Guid.TryParse(message.GameId, out guid))
 			{
-				//"don't think this is not creating the models correctly"
 				this.model.StateManager.LoadGame(guid);
-				IsGameLive = true;
-
-				//"is Configuration.PlayerTeamName set now?"
+				this.eventAggregator.PublishOnUIThread(new TeamSetEvent(this.model.StateManager.Team, this.model.StateManager.GameTitle));
 
 				SetModels();
+
+				this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Team));
 			}
 		}
 	}

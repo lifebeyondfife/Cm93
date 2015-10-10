@@ -445,7 +445,7 @@ namespace Cm93.UI.Modules.Match
 			plotModel.Axes.Add(linearXAxis);
 			plotModel.Axes.Add(linearYAxis);
 			plotModel.PlotAreaBorderThickness = 0;
-			plotModel.Axes.Do(a => a.IsAxisVisible = false);
+			plotModel.Axes.Execute(a => a.IsAxisVisible = false);
 
 			HeatMapModel = plotModel;
 		}
