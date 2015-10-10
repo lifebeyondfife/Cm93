@@ -20,20 +20,20 @@ Cm93 isn't quite playable (well, enjoyable) at present, but a fairly well thrash
 - ~~Create a player module for looking at detailed stats (team filter like the results page).~~
 	- ~~Also allows bids for players (for first 4 weeks of season and midpoint)~~
 
-- Match module screen
+- ~~Match module screen~~
 	- ~~Show both team formations~~
 	- ~~Visualise game simulation (nothing too spectacular)~~
 	- ~~Allow for half-time formation change~~
 	- ~~Allow three substitutions~~
 
-- Persist state of game (immediate and continuous auto-save)
-	- Make all the game model structures serialisable
-	- Read/write from an SQLite instance
-	- Allow a Simulator hash for verification i.e. so the game state can't be edited manually
+- ~~Persist state of game (immediate and continuous auto-save)~~
+	- ~~Make all the game model structures serialisable~~
+	- ~~Read/write from an SQLite instance~~
+	- ~~Add ability to have multiple save games~~
 
 - Playable datasets (more teams, 11-a-side formations)
 	- Create large number of teams and players
-	- Automate construction of fixtures
+	- ~~Automate construction of fixtures~~
 	- Add non-league competitions (league cup, xfa cup, euro cups)
 	- Add multiple divisions
 
@@ -48,5 +48,4 @@ Cm93 isn't quite playable (well, enjoyable) at present, but a fairly well thrash
 	- Highlight player's team in league table
 	- Add concept of Manager name
 	- Show extra info on team selection screen (shirt, ground name + capacity, budget)
-	- Add ability to have multiple save games
 	- Nicer shirt icons and pitch graphic
