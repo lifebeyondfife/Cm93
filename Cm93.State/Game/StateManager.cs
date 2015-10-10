@@ -32,6 +32,16 @@ namespace Cm93.State.Game
 		private IRepository Repository { get; set; }
 		private IState State { get; set; }
 
+		public string GameTitle
+		{
+			get { return State.Name; }
+		}
+
+		public Team Team
+		{
+			get { return ((TeamModule) State.Modules[ModuleType.Team]).Teams[Configuration.PlayerTeamName]; }
+		}
+
 		public IDictionary<ModuleType, IModule> Modules
 		{
 			get { return State.Modules; }
@@ -64,7 +74,15 @@ namespace Cm93.State.Game
 
 		public void UpdateGame(ModuleType moduleType)
 		{
-			Repository.UpdateGame(moduleType, State);
+			if (moduleType == ModuleType.Match)
+			{
+				Repository.UpdateGame(ModuleType.Players, State);
+				Repository.UpdateGame(ModuleType.Team, State);
+				Repository.UpdateGame(ModuleType.Fixtures, State);
+				Repository.UpdateGame(ModuleType.Match, State);
+			}
+			else
+				Repository.UpdateGame(moduleType, State);
 		}
 
 		public void DeleteGame(Guid key)
@@ -124,8 +142,8 @@ namespace Cm93.State.Game
 
 				foreach (var score in loadScores)
 				{
-					score.GeneratedFixture.GoalsHome = score.StateFixture.ChancesAway;
-					score.GeneratedFixture.GoalsAway = score.StateFixture.ChancesAway;
+					score.GeneratedFixture.GoalsHome = score.StateFixture.GoalsHome;
+					score.GeneratedFixture.GoalsAway = score.StateFixture.GoalsAway;
 				}
 			}
 		}

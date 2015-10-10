@@ -32,6 +32,7 @@ namespace Cm93.Model.Modules
 				return Competitions.
 					Select(d => d.Fixtures).
 					SelectMany(f => f).
+					OrderBy(f => f.Week).
 					Cast<IFixture>().
 					ToList();
 			}

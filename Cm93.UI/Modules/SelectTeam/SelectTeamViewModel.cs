@@ -102,7 +102,7 @@ namespace Cm93.UI.Modules.SelectTeam
 
 			Configuration.PlayerTeamName = SelectedTeam;
 
-			this.eventAggregator.PublishOnUIThread(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam], GameTitle));
+			this.eventAggregator.PublishOnUIThread(new TeamSetEvent(SelectPlayerModel.Teams[SelectedTeam], GameTitle, true));
 			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Team));
 		}
 	}

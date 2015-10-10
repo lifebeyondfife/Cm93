@@ -43,83 +43,44 @@ namespace Cm93.State.Repository
 					{ ModuleType.Fixtures, state => UpdateFixtures(state) },
 					{ ModuleType.Players, state => UpdatePlayers(state) },
 					{ ModuleType.SelectTeam, state => UpdateSelectedTeam(state) },
-					{ ModuleType.Team, state => UpdateTeam(state) }
+					{ ModuleType.Team, state => UpdateTeam(state) },
+					{ ModuleType.Match, state => UpdateMatch(state) }
 				};
 		}
 
-		/*
-		public void RetrieveGame(IState state)
+		public void UpdateGame(ModuleType moduleType, IState state)
 		{
-			var stateId = GetStateId(state);
-			var games = Games();
+			if (UpdateActions.ContainsKey(moduleType))
+				UpdateActions[moduleType](state);
 
-			var teams = Teams(stateId);
-			var players = Players(stateId, teams);
-
-			foreach (var team in teams.Values)
-			{
-				team.Players = new List<Player>(players.Where(p => p.TeamName == team.TeamName));
-				foreach (var playerIndex in team.Players.
-						Select((p, i) => new { Player = p, Index = i }).
-						Where(pi => pi.Index < Configuration.AsideSize))
-					team.Formation[playerIndex.Index] = playerIndex.Player;
-			}
-
-			var divisions = Divisions(stateId, teams);
-			var fixtures = Fixtures(stateId, teams, divisions);
-			var places = Places(stateId, teams, divisions);
-
-			foreach (var division in divisions.OfType<Division>())
-			{
-				division.Fixtures = fixtures.ContainsKey(division) ?
-					fixtures[division] :
-					Enumerable.Empty<IFixture>().ToList();
-				division.Places = places[division];
-
-				foreach (var place in division.Places)
-					if (place.Key.Competitions == null)
-						place.Key.Competitions = new List<string> { division.CompetitionName };
-					else
-						place.Key.Competitions.Add(division.CompetitionName);
-			}
-
-			var modules = new Dictionary<ModuleType, IModule>();
-
-			modules[ModuleType.LoadGame] = modules[ModuleType.StartScreen] = new GameModule(games);
-			modules[ModuleType.Players] = new PlayersModule(Configuration.GameEngine, players, teams);
-			modules[ModuleType.Team] = modules[ModuleType.SelectTeam] = new TeamModule(teams);
-			modules[ModuleType.Competitions] = new CompetitionsModule(divisions);
-			modules[ModuleType.Fixtures] = new FixturesModule(divisions);
-			modules[ModuleType.Match] = new MatchModule(divisions);
-
-			state.Modules = modules;
+			UpdateBalances(state);
 		}
 
-		private static IList<ICompetition> Divisions(long stateId, IDictionary<string, Team> teams)
+		public void DeleteGame(Guid key)
+		{
+			throw new NotImplementedException();
+		}
+
+		private long GetStateId(IState state)
 		{
 			using (var context = new Cm93Context())
 			{
-				var leagues = context.Competitions.
-					Where(c => c.CompetitionType == "League").
-					ToDictionary(c => c.CompetitionId, c => c);
+				var stateRow = context.States.
+					SingleOrDefault(s => s.StateGuid == state.Key.ToString());
 
-				return context.Divisions.
-					Where(d => d.StateId == stateId).
-					ToList(). // Need an in memory structure for some of the following LINQ code
-					GroupBy(d => d.CompetitionId).
-					Select(gd => new Division
-						{
-							CompetitionName = leagues[gd.Key].CompetitionName,
-							Country = leagues[gd.Key].Country,
-							Teams = gd.
-								Select(d => teams[d.Team.TeamName]).
-								ToDictionary(t => t.TeamName, t => t)
-						}).
-					Cast<ICompetition>().
-					ToList();
+				if (stateRow == null)
+					return 0L;
+
+				state.Created = stateRow.Created;
+				state.LastSaved = stateRow.LastSaved;
+
+				//	Ouch. This code is so nasty it hurts my eyes.
+				Configuration.PlayerTeamName = stateRow.SelectedTeam.TeamName;
+				Configuration.Season = (int) stateRow.Season;
+
+				return stateRow.StateId;
 			}
 		}
-		*/
 
 		public IList<IGame> Games()
 		{
@@ -236,44 +197,12 @@ namespace Cm93.State.Repository
 								TeamHome = teams[f.HomeTeam.TeamName],
 								TeamAway = teams[f.AwayTeam.TeamName],
 								Week = (int) f.Week,
-								CompetitionName = cf.Key
+								CompetitionName = cf.Key,
+								GoalsAway = (int) f.AwayGoals,
+								GoalsHome = (int) f.HomeGoals
 							}).
 						Cast<IFixture>().
 						ToList());
-			}
-		}
-
-		public void UpdateGame(ModuleType moduleType, IState state)
-		{
-			if (UpdateActions.ContainsKey(moduleType))
-				UpdateActions[moduleType](state);
-
-			UpdateBalances(state);
-		}
-
-		public void DeleteGame(Guid key)
-		{
-			throw new NotImplementedException();
-		}
-
-		private long GetStateId(IState state)
-		{
-			using (var context = new Cm93Context())
-			{
-				var stateRow = context.States.
-					SingleOrDefault(s => s.StateGuid == state.Key.ToString());
-
-				if (stateRow == null)
-					return 0L;
-
-				state.Created = stateRow.Created;
-				state.LastSaved = stateRow.LastSaved;
-
-				//	Ouch. This code is so nasty it hurts my eyes.
-				Configuration.PlayerTeamName = stateRow.SelectedTeam.TeamName;
-				Configuration.Season = (int) stateRow.Season;
-
-				return stateRow.StateId;
 			}
 		}
 
@@ -381,6 +310,7 @@ namespace Cm93.State.Repository
 					var playerRow = context.Players.Single(p => p.StateId == stateRow.StateId && p.PlayerStatId == player.Id);
 
 					playerRow.ReleaseValue = player.ReleaseValue;
+					playerRow.Goals = player.Goals;
 				}
 
 				context.SaveChangesAsync();
@@ -397,6 +327,7 @@ namespace Cm93.State.Repository
 						Name = state.Name,
 						Created = state.Created,
 						StateGuid = state.Key.ToString(),
+						Season = Configuration.Season,
 
 						TeamId = context.Teams.
 								Single(t => t.TeamName == Configuration.PlayerTeamName).
@@ -446,6 +377,40 @@ namespace Cm93.State.Repository
 					playerRow.LocationX = (float) player.Location.X;
 					playerRow.LocationY = (float) player.Location.Y;
 					playerRow.Number = player.Number;
+				}
+
+				context.SaveChangesAsync();
+			}
+		}
+
+		private void UpdateMatch(IState state)
+		{
+			using (var context = new Cm93Context())
+			{
+				var stateRow = context.States.Single(s => s.StateGuid == state.Key.ToString());
+
+				stateRow.LastSaved = DateTime.Now;
+				stateRow.Week = Configuration.GlobalWeek();
+				stateRow.Season = Configuration.Season;
+
+				var competitions = ((IMatchModule) state.Modules[ModuleType.Match]).Competitions;
+
+				foreach (var competition in competitions.OfType<Division>())
+				{
+					context.Divisions.AddRange(competition.Places.
+						Select(p => new DivisionRow
+							{
+								StateId = stateRow.StateId,
+								CompetitionId = context.Competitions.Single(c => c.CompetitionName == competition.CompetitionName).CompetitionId,
+								TeamId = context.Teams.Single(t => t.TeamName == p.Key.TeamName).TeamId,
+								Draws = p.Value.Draws,
+								GoalDifference = p.Value.GoalDifference,
+								GoalsAgainst = p.Value.Against,
+								GoalsFor = p.Value.For,
+								Losses = p.Value.Losses,
+								Points = p.Value.Points,
+								Wins = p.Value.Wins
+							}));
 				}
 
 				context.SaveChangesAsync();
