@@ -354,6 +354,26 @@ namespace Cm93.State.Repository
 					)
 				);
 
+				var competitions = ((IMatchModule) state.Modules[ModuleType.Match]).Competitions;
+
+				foreach (var competition in competitions.OfType<Division>())
+				{
+					context.Divisions.AddRange(competition.Places.
+						Select(p => new DivisionRow
+						{
+							StateId = stateRow.StateId,
+							CompetitionId = context.Competitions.Single(c => c.CompetitionName == competition.CompetitionName).CompetitionId,
+							TeamId = context.Teams.Single(t => t.TeamName == p.Key.TeamName).TeamId,
+							Draws = p.Value.Draws,
+							GoalDifference = p.Value.GoalDifference,
+							GoalsAgainst = p.Value.Against,
+							GoalsFor = p.Value.For,
+							Losses = p.Value.Losses,
+							Points = p.Value.Points,
+							Wins = p.Value.Wins
+						}));
+				}
+
 				context.SaveChangesAsync();
 			}
 		}
@@ -397,20 +417,23 @@ namespace Cm93.State.Repository
 
 				foreach (var competition in competitions.OfType<Division>())
 				{
-					context.Divisions.AddRange(competition.Places.
-						Select(p => new DivisionRow
-							{
-								StateId = stateRow.StateId,
-								CompetitionId = context.Competitions.Single(c => c.CompetitionName == competition.CompetitionName).CompetitionId,
-								TeamId = context.Teams.Single(t => t.TeamName == p.Key.TeamName).TeamId,
-								Draws = p.Value.Draws,
-								GoalDifference = p.Value.GoalDifference,
-								GoalsAgainst = p.Value.Against,
-								GoalsFor = p.Value.For,
-								Losses = p.Value.Losses,
-								Points = p.Value.Points,
-								Wins = p.Value.Wins
-							}));
+					var competitionId = context.Competitions.Single(c => c.CompetitionName == competition.CompetitionName).CompetitionId;
+
+					foreach (var place in competition.Places)
+					{
+						var teamId = context.Teams.Single(t => t.TeamName == place.Value.Team.TeamName).TeamId;
+
+						var divisionRow = context.Divisions.
+							Single(d => d.StateId == stateRow.StateId && d.CompetitionId == competitionId && d.TeamId == teamId);
+
+						divisionRow.Draws = place.Value.Draws;
+						divisionRow.GoalDifference = place.Value.GoalDifference;
+						divisionRow.GoalsAgainst = place.Value.Against;
+						divisionRow.GoalsFor = place.Value.For;
+						divisionRow.Losses = place.Value.Losses;
+						divisionRow.Points = place.Value.Points;
+						divisionRow.Wins = place.Value.Wins;
+					}
 				}
 
 				context.SaveChangesAsync();

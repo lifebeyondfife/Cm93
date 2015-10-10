@@ -25,8 +25,8 @@ namespace Cm93.Model.Interfaces
 		string CompetitionName { get; }
 		string Country { get; }
 		int WeekStart { get; }
-		int Week { get; }
 		int MatchesLeft { get; }
+		int Week { get; set; }
 		IDictionary<string, Team> Teams { get; set; }
 		IList<IFixture> Fixtures { get; set; }
 

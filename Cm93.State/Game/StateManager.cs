@@ -133,6 +133,11 @@ namespace Cm93.State.Game
 		{
 			var generatedFixtures = competitions.ToDictionary(c => c.CompetitionName, c => c.Fixtures);
 
+			foreach (var competition in competitions)
+				competition.Week = fixtures.ContainsKey(competition.CompetitionName) ?
+					fixtures[competition.CompetitionName].Max(f => f.Week) :
+					0;
+
 			foreach (var competitionName in fixtures.Keys)
 			{
 				var loadScores = fixtures[competitionName].Join(generatedFixtures[competitionName],

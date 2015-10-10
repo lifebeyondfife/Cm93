@@ -195,8 +195,6 @@ namespace Cm93.UI.Shell
 			IsMatch = false;
 
 			this.model.StateManager.UpdateGame(ModuleType.Match);
-
-			//SetModels();
 		}
 
 		public void Handle(LoadGameEvent message)
@@ -209,6 +207,8 @@ namespace Cm93.UI.Shell
 				this.eventAggregator.PublishOnUIThread(new TeamSetEvent(this.model.StateManager.Team, this.model.StateManager.GameTitle));
 
 				SetModels();
+
+				this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Team));
 			}
 		}
 	}
