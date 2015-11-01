@@ -56,6 +56,8 @@ namespace Cm93.UI
 			container.Compose(batch);
 
 			this.AppDispatcher = Dispatcher.CurrentDispatcher;
+
+			AppDomain.CurrentDomain.SetData("DataDirectory", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
 		}
 
 		protected override object GetInstance(Type serviceType, string key)
