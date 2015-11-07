@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cm93.DatabaseBootstrap", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cm93.GameEngine", "Cm93.GameEngine\Cm93.GameEngine.csproj", "{4E196610-7BBA-4C9D-B546-51D174516799}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Cm93.Installer", "Cm93.Installer\Cm93.Installer.wixproj", "{59502505-948A-4FDB-BF46-ADC6EAEFDE36}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Cm93.Installer", "Cm93.Installer\Cm93.Installer.vdproj", "{69EE4229-7E2A-4ED4-8E69-88265F931CC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,16 +87,12 @@ Global
 		{4E196610-7BBA-4C9D-B546-51D174516799}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4E196610-7BBA-4C9D-B546-51D174516799}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4E196610-7BBA-4C9D-B546-51D174516799}.Release|x86.ActiveCfg = Release|Any CPU
-		{59502505-948A-4FDB-BF46-ADC6EAEFDE36}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{59502505-948A-4FDB-BF46-ADC6EAEFDE36}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{59502505-948A-4FDB-BF46-ADC6EAEFDE36}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{59502505-948A-4FDB-BF46-ADC6EAEFDE36}.Debug|x86.ActiveCfg = Debug|x86
-		{59502505-948A-4FDB-BF46-ADC6EAEFDE36}.Debug|x86.Build.0 = Debug|x86
-		{59502505-948A-4FDB-BF46-ADC6EAEFDE36}.Release|Any CPU.ActiveCfg = Release|x86
-		{59502505-948A-4FDB-BF46-ADC6EAEFDE36}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{59502505-948A-4FDB-BF46-ADC6EAEFDE36}.Release|Mixed Platforms.Build.0 = Release|x86
-		{59502505-948A-4FDB-BF46-ADC6EAEFDE36}.Release|x86.ActiveCfg = Release|x86
-		{59502505-948A-4FDB-BF46-ADC6EAEFDE36}.Release|x86.Build.0 = Release|x86
+		{69EE4229-7E2A-4ED4-8E69-88265F931CC4}.Debug|Any CPU.ActiveCfg = Debug
+		{69EE4229-7E2A-4ED4-8E69-88265F931CC4}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{69EE4229-7E2A-4ED4-8E69-88265F931CC4}.Debug|x86.ActiveCfg = Debug
+		{69EE4229-7E2A-4ED4-8E69-88265F931CC4}.Release|Any CPU.ActiveCfg = Release
+		{69EE4229-7E2A-4ED4-8E69-88265F931CC4}.Release|Mixed Platforms.ActiveCfg = Release
+		{69EE4229-7E2A-4ED4-8E69-88265F931CC4}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

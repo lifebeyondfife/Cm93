@@ -28,7 +28,7 @@ namespace Cm93.UI.Modules.Team
 	public partial class TeamView
 	{
 		private static int depthCounter = 1;
-		private readonly Cursor customCursor = new Cursor(new FileStream("..\\..\\Images\\Shirt.cur", FileMode.Open));
+		private readonly Cursor customCursor = new Cursor(new FileStream(".\\Images\\Shirt.cur", FileMode.Open));
 		
 		public TeamView()
 		{
