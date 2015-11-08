@@ -87,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Sqlite\Cm93.sqlite">
+    <Content Include="Cm93\Cm93.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
