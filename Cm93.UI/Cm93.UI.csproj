@@ -268,11 +268,6 @@
       <Name>Cm93.State</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Shirt.cur">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\StartScreen.png" />
