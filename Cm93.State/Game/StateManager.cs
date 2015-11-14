@@ -122,10 +122,9 @@ namespace Cm93.State.Game
 			foreach (var team in teams.Values)
 			{
 				team.Players = new List<Player>(players.Where(p => p.TeamName == team.TeamName));
-				foreach (var playerIndex in team.Players.
-						Select((p, i) => new { Player = p, Index = i }).
-						Where(pi => pi.Index < Configuration.AsideSize))
-					team.Formation[playerIndex.Index] = playerIndex.Player;
+				foreach (var player in team.Players)
+					if (player.Formation < Configuration.AsideSize)
+						team.Formation[player.Formation] = player;
 			}
 		}
 

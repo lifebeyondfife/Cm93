@@ -82,13 +82,15 @@ namespace Cm93.Model.Structures
 
 		public int NumericValue { get; set; }
 
-		//	This is a very important field to keep secret. At some point change to internal
-		//	and alter assembly attributes to allow the UI project access.
+		//	TODO: This is a very important field to keep secret. At some point change
+		//	to internal and alter assembly attributes to allow the UI project access.
 		public int ReleaseValue { get; set; }
 
 		//	Cannot guarantee uniqueness of player based on any union of player fields
-		//	therefore, have to include the DB index within this class
+		//	therefore, have to include the DB index within this class.
 		public int Id { get; set; }
+
+		public int Formation { get; set; }
 
 		public override string ToString()
 		{
@@ -112,7 +114,8 @@ namespace Cm93.Model.Structures
 					Nationality = this.Nationality,
 					Rating = this.Rating,
 					ReleaseValue = this.ReleaseValue,
-					TeamName = this.TeamName
+					TeamName = this.TeamName,
+					Formation = this.Formation
 				};
 		}
 	}

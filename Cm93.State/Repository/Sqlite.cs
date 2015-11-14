@@ -126,7 +126,8 @@ namespace Cm93.State.Repository
 							TeamName = p.Team.TeamName,
 							Location = new Coordinate { X = p.LocationX, Y = p.LocationY },
 							Id = (int) p.PlayerStatId,
-							Goals = (int) p.Goals
+							Goals = (int) p.Goals,
+							Formation = (int) p.Formation
 						}).
 					ToList();
 			}
@@ -349,7 +350,8 @@ namespace Cm93.State.Repository
 							PlayerStatId = p.Id,
 							ReleaseValue = p.ReleaseValue,
 							StateId = stateRow.StateId,
-							TeamId = context.Teams.Single(t => t.TeamName == p.TeamName).TeamId
+							TeamId = context.Teams.Single(t => t.TeamName == p.TeamName).TeamId,
+							Formation = p.Formation
 						}
 					)
 				);
@@ -397,6 +399,7 @@ namespace Cm93.State.Repository
 					playerRow.LocationX = (float) player.Location.X;
 					playerRow.LocationY = (float) player.Location.Y;
 					playerRow.Number = player.Number;
+					playerRow.Formation = player.Formation;
 				}
 
 				context.SaveChangesAsync();
