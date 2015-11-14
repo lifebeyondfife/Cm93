@@ -80,6 +80,7 @@ namespace Cm93.UI.Shell
 
 			this.children = children.ToDictionary(c => c.ModuleType);
 
+			this.DisplayName = "Cm93";
 			SetModels();
 
 			this.ActiveItem = this.children[ModuleType.StartScreen];
