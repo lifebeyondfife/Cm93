@@ -39,6 +39,14 @@ namespace Cm93.UI.Modules.Team
 			DragPlayerIcon(this.Player1);
 			DragPlayerIcon(this.Player2);
 			DragPlayerIcon(this.Player3);
+			DragPlayerIcon(this.Player4);
+			DragPlayerIcon(this.Player5);
+			DragPlayerIcon(this.Player6);
+			DragPlayerIcon(this.Player7);
+			DragPlayerIcon(this.Player8);
+			DragPlayerIcon(this.Player9);
+			DragPlayerIcon(this.Player10);
+			DragPlayerIcon(this.Player11);
 		}
 
 		private void DragPlayerIcon(FrameworkElement playerIcon)
@@ -106,6 +114,22 @@ namespace Cm93.UI.Modules.Team
 				index = 1;
 			else if (element.IsDescendantOf(Player3))
 				index = 2;
+			else if (element.IsDescendantOf(Player4))
+				index = 3;
+			else if (element.IsDescendantOf(Player5))
+				index = 4;
+			else if (element.IsDescendantOf(Player6))
+				index = 5;
+			else if (element.IsDescendantOf(Player7))
+				index = 6;
+			else if (element.IsDescendantOf(Player8))
+				index = 7;
+			else if (element.IsDescendantOf(Player9))
+				index = 8;
+			else if (element.IsDescendantOf(Player10))
+				index = 9;
+			else if (element.IsDescendantOf(Player11))
+				index = 10;
 			else
 				return;
 

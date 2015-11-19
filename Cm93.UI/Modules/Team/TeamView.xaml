@@ -63,8 +63,40 @@
 						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player2Shirt}" />
 					</Viewbox>
 
-					<Viewbox x:Name="Player3" Visibility="Collapsed" Width="50" Height="60" Canvas.Top="{Binding Player3Top, Mode=TwoWay}" Canvas.Left="{Binding Player3Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(2)]">
+					<Viewbox x:Name="Player3" Width="50" Height="60" Canvas.Top="{Binding Player3Top, Mode=TwoWay}" Canvas.Left="{Binding Player3Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(2)]">
 						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player3Shirt}" />
+					</Viewbox>
+
+					<Viewbox x:Name="Player4" Width="50" Height="60" Canvas.Top="{Binding Player4Top, Mode=TwoWay}" Canvas.Left="{Binding Player4Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(3)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player4Shirt}" />
+					</Viewbox>
+
+					<Viewbox x:Name="Player5" Width="50" Height="60" Canvas.Top="{Binding Player5Top, Mode=TwoWay}" Canvas.Left="{Binding Player5Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(4)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player5Shirt}" />
+					</Viewbox>
+
+					<Viewbox x:Name="Player6" Width="50" Height="60" Canvas.Top="{Binding Player6Top, Mode=TwoWay}" Canvas.Left="{Binding Player6Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(5)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player6Shirt}" />
+					</Viewbox>
+
+					<Viewbox x:Name="Player7" Width="50" Height="60" Canvas.Top="{Binding Player7Top, Mode=TwoWay}" Canvas.Left="{Binding Player7Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(6)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player7Shirt}" />
+					</Viewbox>
+
+					<Viewbox x:Name="Player8" Width="50" Height="60" Canvas.Top="{Binding Player8Top, Mode=TwoWay}" Canvas.Left="{Binding Player8Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(7)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player8Shirt}" />
+					</Viewbox>
+
+					<Viewbox x:Name="Player9" Width="50" Height="60" Canvas.Top="{Binding Player9Top, Mode=TwoWay}" Canvas.Left="{Binding Player9Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(8)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player9Shirt}" />
+					</Viewbox>
+
+					<Viewbox x:Name="Player10" Width="50" Height="60" Canvas.Top="{Binding Player10Top, Mode=TwoWay}" Canvas.Left="{Binding Player10Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(9)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player10Shirt}" />
+					</Viewbox>
+
+					<Viewbox x:Name="Player11" Width="50" Height="60" Canvas.Top="{Binding Player11Top, Mode=TwoWay}" Canvas.Left="{Binding Player11Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(10)]">
+						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player11Shirt}" />
 					</Viewbox>
 				</Canvas>
 			</Viewbox>
