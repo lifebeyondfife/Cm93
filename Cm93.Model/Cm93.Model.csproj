@@ -45,6 +45,7 @@
     <Compile Include="Enumerations\Instruction.cs" />
     <Compile Include="Enumerations\PlayingPeriod.cs" />
     <Compile Include="Enumerations\Position.cs" />
+    <Compile Include="Enumerations\ShirtType.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Interfaces\ICompetition.cs" />
     <Compile Include="Interfaces\ICreateModules.cs" />

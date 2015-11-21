@@ -147,6 +147,7 @@ namespace Cm93.State.Repository
 							Balance = tb.Balance,
 							PrimaryColourInt = Convert.ToUInt32(tb.Team.PrimaryColour),
 							SecondaryColourInt = Convert.ToUInt32(tb.Team.SecondaryColour),
+							ShirtType = ShirtType.Hoops,	// Add this to the database
 							TeamName = tb.Team.TeamName,
 							Competitions = context.Divisions.
 								Where(d => d.StateId == stateId && d.TeamId == tb.TeamId).

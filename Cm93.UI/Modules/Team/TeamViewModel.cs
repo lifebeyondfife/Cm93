@@ -75,6 +75,17 @@ namespace Cm93.UI.Modules.Team
 			}
 		}
 
+		private ShirtType shirtType;
+		public ShirtType ShirtType
+		{
+			get { return this.shirtType; }
+			set
+			{
+				this.shirtType = value;
+				NotifyOfPropertyChange(() => ShirtType);
+			}
+		}
+
 		#region Player Coordinates
 
 		private int pitchHeight;
@@ -614,6 +625,7 @@ namespace Cm93.UI.Modules.Team
 
 			PrimaryColour = Team.PrimaryColour;
 			SecondaryColour = Team.SecondaryColour;
+			ShirtType = Team.ShirtType;
 		}
 
 		private void SetPlayerNames()
