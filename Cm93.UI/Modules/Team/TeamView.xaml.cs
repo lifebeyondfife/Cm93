@@ -46,7 +46,6 @@ namespace Cm93.UI.Modules.Team
 			DragPlayerIcon(this.Player8);
 			DragPlayerIcon(this.Player9);
 			DragPlayerIcon(this.Player10);
-			DragPlayerIcon(this.Player11);
 		}
 
 		private void DragPlayerIcon(FrameworkElement playerIcon)
@@ -128,8 +127,6 @@ namespace Cm93.UI.Modules.Team
 				index = 8;
 			else if (element.IsDescendantOf(Player10))
 				index = 9;
-			else if (element.IsDescendantOf(Player11))
-				index = 10;
 			else
 				return;
 

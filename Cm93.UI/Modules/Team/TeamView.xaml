@@ -94,10 +94,6 @@
 					<Viewbox x:Name="Player10" Width="50" Height="60" Canvas.Top="{Binding Player10Top, Mode=TwoWay}" Canvas.Left="{Binding Player10Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(9)]">
 						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player10Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ShirtType}" />
 					</Viewbox>
-
-					<Viewbox x:Name="Player11" Width="50" Height="60" Canvas.Top="{Binding Player11Top, Mode=TwoWay}" Canvas.Left="{Binding Player11Left, Mode=TwoWay}" cal:Message.Attach="[Event MouseDown] = [Action SelectPlayerRow(10)]">
-						<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player11Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ShirtType}" />
-					</Viewbox>
 				</Canvas>
 			</Viewbox>
 		</Grid>

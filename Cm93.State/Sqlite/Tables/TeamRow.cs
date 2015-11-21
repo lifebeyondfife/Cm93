@@ -29,5 +29,6 @@ namespace Cm93.State.Sqlite.Tables
 		public string TeamName { get; set; }
 		public long PrimaryColour { get; set; }
 		public long SecondaryColour { get; set; }
+		public long ShirtType { get; set; }
 	}
 }

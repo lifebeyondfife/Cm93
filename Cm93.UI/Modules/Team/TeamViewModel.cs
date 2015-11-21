@@ -479,43 +479,6 @@ namespace Cm93.UI.Modules.Team
 				UpdatePlayerLeftCoordinate(0, Player10Left);
 			}
 		}
-
-		private string player11Shirt;
-		public string Player11Shirt
-		{
-			get { return this.player11Shirt; }
-			set
-			{
-				this.player11Shirt = value;
-				NotifyOfPropertyChange(() => Player11Shirt);
-			}
-		}
-
-		private double player11Top;
-		public double Player11Top
-		{
-			get { return this.player11Top; }
-			set
-			{
-				this.player11Top = value;
-				NotifyOfPropertyChange(() => Player11Top);
-
-				UpdatePlayerTopCoordinate(0, Player11Top);
-			}
-		}
-
-		private double player11Left;
-		public double Player11Left
-		{
-			get { return this.player11Left; }
-			set
-			{
-				this.player11Left = value;
-				NotifyOfPropertyChange(() => Player11Left);
-
-				UpdatePlayerLeftCoordinate(0, Player11Left);
-			}
-		}
 		#endregion
 
 		private void SetTeam(IEnumerable<Player> players)
@@ -679,11 +642,6 @@ namespace Cm93.UI.Modules.Team
 				Player10Shirt = Team.Formation[9].Number != 0 ?
 					Team.Formation[9].Number.ToString(CultureInfo.CurrentCulture) :
 					string.Empty;
-
-			if (Team.Formation.ContainsKey(10))
-				Player11Shirt = Team.Formation[10].Number != 0 ?
-					Team.Formation[10].Number.ToString(CultureInfo.CurrentCulture) :
-					string.Empty;
 		}
 
 		private void SetPlayerLocations()
@@ -746,12 +704,6 @@ namespace Cm93.UI.Modules.Team
 			{
 				Player10Left = PitchWidth * Team.Formation[9].Location.X;
 				Player10Top = PitchHeight * Team.Formation[9].Location.Y;
-			}
-
-			if (Team.Formation.ContainsKey(10))
-			{
-				Player11Left = PitchWidth * Team.Formation[10].Location.X;
-				Player11Top = PitchHeight * Team.Formation[10].Location.Y;
 			}
 		}
 

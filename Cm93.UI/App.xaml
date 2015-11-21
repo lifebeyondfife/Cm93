@@ -36,7 +36,7 @@
 						<Path Stroke="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.SecondaryColour), Converter={StaticResource ColourToBrush}}" StrokeThickness="4" Data="M30,70L5,45 M175,45 L150,70" />
 					</Grid>
 					<helpers:CustomText Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.ShirtNumber)}"
-						Fill="White" Stroke="Black" FontSize="66" FontFamily="Segoe UI Bold" StrokeThickness="5" VerticalAlignment="Center" HorizontalAlignment="Center" />
+						Fill="Black" Stroke="White" FontSize="66" FontFamily="Segoe UI Bold" StrokeThickness="5" VerticalAlignment="Center" HorizontalAlignment="Center" />
 				</Grid>
 			</ControlTemplate>
 
