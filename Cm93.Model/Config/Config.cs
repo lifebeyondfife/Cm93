@@ -30,7 +30,7 @@ namespace Cm93.Model.Config
 	 */
 	public static class Configuration
 	{
-		public const int AsideSize = 11;
+		public const int AsideSize = 10;
 		public const int MaxSquadSize = 22;
 
 		public static Tuple<int, int> HeatMapDimensions

@@ -241,7 +241,7 @@ namespace Cm93.UI.Modules.Team
 				this.player4Top = value;
 				NotifyOfPropertyChange(() => Player4Top);
 
-				UpdatePlayerTopCoordinate(0, Player4Top);
+				UpdatePlayerTopCoordinate(3, Player4Top);
 			}
 		}
 
@@ -254,7 +254,7 @@ namespace Cm93.UI.Modules.Team
 				this.player4Left = value;
 				NotifyOfPropertyChange(() => Player4Left);
 
-				UpdatePlayerLeftCoordinate(0, Player4Left);
+				UpdatePlayerLeftCoordinate(3, Player4Left);
 			}
 		}
 
@@ -278,7 +278,7 @@ namespace Cm93.UI.Modules.Team
 				this.player5Top = value;
 				NotifyOfPropertyChange(() => Player5Top);
 
-				UpdatePlayerTopCoordinate(0, Player5Top);
+				UpdatePlayerTopCoordinate(4, Player5Top);
 			}
 		}
 
@@ -291,7 +291,7 @@ namespace Cm93.UI.Modules.Team
 				this.player5Left = value;
 				NotifyOfPropertyChange(() => Player5Left);
 
-				UpdatePlayerLeftCoordinate(0, Player5Left);
+				UpdatePlayerLeftCoordinate(4, Player5Left);
 			}
 		}
 
@@ -315,7 +315,7 @@ namespace Cm93.UI.Modules.Team
 				this.player6Top = value;
 				NotifyOfPropertyChange(() => Player6Top);
 
-				UpdatePlayerTopCoordinate(0, Player6Top);
+				UpdatePlayerTopCoordinate(5, Player6Top);
 			}
 		}
 
@@ -328,7 +328,7 @@ namespace Cm93.UI.Modules.Team
 				this.player6Left = value;
 				NotifyOfPropertyChange(() => Player6Left);
 
-				UpdatePlayerLeftCoordinate(0, Player6Left);
+				UpdatePlayerLeftCoordinate(5, Player6Left);
 			}
 		}
 
@@ -352,7 +352,7 @@ namespace Cm93.UI.Modules.Team
 				this.player7Top = value;
 				NotifyOfPropertyChange(() => Player7Top);
 
-				UpdatePlayerTopCoordinate(0, Player7Top);
+				UpdatePlayerTopCoordinate(6, Player7Top);
 			}
 		}
 
@@ -365,7 +365,7 @@ namespace Cm93.UI.Modules.Team
 				this.player7Left = value;
 				NotifyOfPropertyChange(() => Player7Left);
 
-				UpdatePlayerLeftCoordinate(0, Player7Left);
+				UpdatePlayerLeftCoordinate(6, Player7Left);
 			}
 		}
 
@@ -389,7 +389,7 @@ namespace Cm93.UI.Modules.Team
 				this.player8Top = value;
 				NotifyOfPropertyChange(() => Player8Top);
 
-				UpdatePlayerTopCoordinate(0, Player8Top);
+				UpdatePlayerTopCoordinate(7, Player8Top);
 			}
 		}
 
@@ -402,7 +402,7 @@ namespace Cm93.UI.Modules.Team
 				this.player8Left = value;
 				NotifyOfPropertyChange(() => Player8Left);
 
-				UpdatePlayerLeftCoordinate(0, Player8Left);
+				UpdatePlayerLeftCoordinate(7, Player8Left);
 			}
 		}
 
@@ -426,7 +426,7 @@ namespace Cm93.UI.Modules.Team
 				this.player9Top = value;
 				NotifyOfPropertyChange(() => Player9Top);
 
-				UpdatePlayerTopCoordinate(0, Player9Top);
+				UpdatePlayerTopCoordinate(8, Player9Top);
 			}
 		}
 
@@ -439,7 +439,7 @@ namespace Cm93.UI.Modules.Team
 				this.player9Left = value;
 				NotifyOfPropertyChange(() => Player9Left);
 
-				UpdatePlayerLeftCoordinate(0, Player9Left);
+				UpdatePlayerLeftCoordinate(8, Player9Left);
 			}
 		}
 
@@ -463,7 +463,7 @@ namespace Cm93.UI.Modules.Team
 				this.player10Top = value;
 				NotifyOfPropertyChange(() => Player10Top);
 
-				UpdatePlayerTopCoordinate(0, Player10Top);
+				UpdatePlayerTopCoordinate(9, Player10Top);
 			}
 		}
 
@@ -476,7 +476,7 @@ namespace Cm93.UI.Modules.Team
 				this.player10Left = value;
 				NotifyOfPropertyChange(() => Player10Left);
 
-				UpdatePlayerLeftCoordinate(0, Player10Left);
+				UpdatePlayerLeftCoordinate(9, Player10Left);
 			}
 		}
 		#endregion
