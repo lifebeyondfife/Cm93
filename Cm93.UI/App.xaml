@@ -26,17 +26,17 @@
 						<Path StrokeThickness="10" Stroke="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.SecondaryColour), Converter={StaticResource ColourToBrush}}" Data="M40,40L140,40 M40,70L140,70 M40,100L140,100 M40,130L140,130" />
 					</Grid>
 					<Grid Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.ShirtType), Converter={StaticResource StandardConverter}}">
-						<Path StrokeThickness="10"
-							Stroke="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.SecondaryColour), Converter={StaticResource ColourToBrush}}"
-							Data="M0,50 L40,10 40,10 70,0 C70,0 90,20 110,0 L140,10 180,50 155,75 140,60 140,150 40,150 40,60 25,75 z" />
+						<Path Fill="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.SecondaryColour), Converter={StaticResource ColourToBrush}}" Data="M40,60 L25,75 0,50 40,10" />
+						<Path Fill="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.SecondaryColour), Converter={StaticResource ColourToBrush}}" Data="M140,60 L155,75 180,50 140,10" />
+						<Path Stroke="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.SecondaryColour), Converter={StaticResource ColourToBrush}}" StrokeThickness="10" Data="M40,145 L 140,145" />
 					</Grid>
 					<Grid Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.ShirtType), Converter={StaticResource StripesConverter}}">
-						<Path StrokeThickness="10"
-							Stroke="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.SecondaryColour), Converter={StaticResource ColourToBrush}}"
-							Data="M0,50 L40,10 40,10 70,0 C70,0 90,20 110,0 L140,10 180,50 155,75 140,60 140,150 40,150 40,60 25,75 z" />
+						<Path Stroke="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.SecondaryColour), Converter={StaticResource ColourToBrush}}" StrokeThickness="10" Data="M60,4 L60,150 M90,10 L90,150 M120,4 L120,150" />
+						<Path Stroke="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.SecondaryColour), Converter={StaticResource ColourToBrush}}" StrokeThickness="4" Data="M40,10 70,0 C70,0 90,20 110,0 L140,10" />
+						<Path Stroke="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.SecondaryColour), Converter={StaticResource ColourToBrush}}" StrokeThickness="4" Data="M30,70L5,45 M175,45 L150,70" />
 					</Grid>
-					<helpers:CustomText Fill="White" Stroke="Black" FontSize="66" FontFamily="Segoe UI Bold" StrokeThickness="5" VerticalAlignment="Center" HorizontalAlignment="Center"
-						Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.ShirtNumber)}" />
+					<helpers:CustomText Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:PlayerShirtProperties.ShirtNumber)}"
+						Fill="White" Stroke="Black" FontSize="66" FontFamily="Segoe UI Bold" StrokeThickness="5" VerticalAlignment="Center" HorizontalAlignment="Center" />
 				</Grid>
 			</ControlTemplate>
 
