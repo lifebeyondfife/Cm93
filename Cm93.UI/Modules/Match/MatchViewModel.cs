@@ -37,6 +37,7 @@ using Cm93.UI.Events;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using Cm93.Model.Enumerations;
 
 namespace Cm93.UI.Modules.Match
 {
@@ -122,6 +123,28 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
+		private ShirtType playerShirtType;
+		public ShirtType PlayerShirtType
+		{
+			get { return this.playerShirtType; }
+			set
+			{
+				this.playerShirtType = value;
+				NotifyOfPropertyChange(() => PlayerShirtType);
+			}
+		}
+
+		private ShirtType computerPlayerShirtType;
+		public ShirtType ComputerPlayerShirtType
+		{
+			get { return this.computerPlayerShirtType; }
+			set
+			{
+				this.computerPlayerShirtType = value;
+				NotifyOfPropertyChange(() => ComputerPlayerShirtType);
+			}
+		}
+
 		public double Player1Top
 		{
 			get { return TeamFormation[0].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
@@ -144,12 +167,81 @@ namespace Cm93.UI.Modules.Match
 
 		public double Player3Top
 		{
-			get { return 0d; }
-			//get { return TeamFormation[2].Location.Y * PlayerCoordinates.GetPitchHeight(PlayerCoordinates); }
+			get { return TeamFormation[2].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
 				TeamFormation[2].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player3Top);
+			}
+		}
+
+		public double Player4Top
+		{
+			get { return TeamFormation[3].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			set
+			{
+				TeamFormation[3].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				NotifyOfPropertyChange(() => Player4Top);
+			}
+		}
+
+		public double Player5Top
+		{
+			get { return TeamFormation[4].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			set
+			{
+				TeamFormation[4].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				NotifyOfPropertyChange(() => Player5Top);
+			}
+		}
+
+		public double Player6Top
+		{
+			get { return TeamFormation[5].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			set
+			{
+				TeamFormation[5].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				NotifyOfPropertyChange(() => Player6Top);
+			}
+		}
+
+		public double Player7Top
+		{
+			get { return TeamFormation[6].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			set
+			{
+				TeamFormation[6].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				NotifyOfPropertyChange(() => Player7Top);
+			}
+		}
+
+		public double Player8Top
+		{
+			get { return TeamFormation[7].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			set
+			{
+				TeamFormation[7].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				NotifyOfPropertyChange(() => Player8Top);
+			}
+		}
+
+		public double Player9Top
+		{
+			get { return TeamFormation[8].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			set
+			{
+				TeamFormation[8].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				NotifyOfPropertyChange(() => Player9Top);
+			}
+		}
+
+		public double Player10Top
+		{
+			get { return TeamFormation[9].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			set
+			{
+				TeamFormation[9].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				NotifyOfPropertyChange(() => Player10Top);
 			}
 		}
 
@@ -159,7 +251,7 @@ namespace Cm93.UI.Modules.Match
 			set
 			{
 				TeamFormation[0].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
-				NotifyOfPropertyChange(() => Player1Top);
+				NotifyOfPropertyChange(() => Player1Left);
 			}
 		}
 
@@ -169,18 +261,87 @@ namespace Cm93.UI.Modules.Match
 			set
 			{
 				TeamFormation[1].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
-				NotifyOfPropertyChange(() => Player2Top);
+				NotifyOfPropertyChange(() => Player2Left);
 			}
 		}
 
 		public double Player3Left
 		{
-			get { return 0d; }
-			//get { return TeamFormation[2].Location.X * PlayerCoordinates.GetPitchWidth(PlayerCoordinates); }
+			get { return TeamFormation[2].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
 				TeamFormation[2].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player3Left);
+			}
+		}
+
+		public double Player4Left
+		{
+			get { return TeamFormation[3].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			set
+			{
+				TeamFormation[3].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				NotifyOfPropertyChange(() => Player4Left);
+			}
+		}
+
+		public double Player5Left
+		{
+			get { return TeamFormation[4].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			set
+			{
+				TeamFormation[4].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				NotifyOfPropertyChange(() => Player5Left);
+			}
+		}
+
+		public double Player6Left
+		{
+			get { return TeamFormation[5].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			set
+			{
+				TeamFormation[5].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				NotifyOfPropertyChange(() => Player6Left);
+			}
+		}
+
+		public double Player7Left
+		{
+			get { return TeamFormation[6].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			set
+			{
+				TeamFormation[6].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				NotifyOfPropertyChange(() => Player7Left);
+			}
+		}
+
+		public double Player8Left
+		{
+			get { return TeamFormation[7].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			set
+			{
+				TeamFormation[7].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				NotifyOfPropertyChange(() => Player8Left);
+			}
+		}
+
+		public double Player9Left
+		{
+			get { return TeamFormation[8].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			set
+			{
+				TeamFormation[8].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				NotifyOfPropertyChange(() => Player9Left);
+			}
+		}
+
+		public double Player10Left
+		{
+			get { return TeamFormation[9].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			set
+			{
+				TeamFormation[9].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				NotifyOfPropertyChange(() => Player10Left);
 			}
 		}
 
@@ -213,13 +374,79 @@ namespace Cm93.UI.Modules.Match
 			}
 		}
 
+		public string Player4Shirt
+		{
+			get
+			{
+				return TeamFormation.ContainsKey(3) && TeamFormation[3].Number != 0 ?
+					TeamFormation[3].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+			}
+		}
+
+		public string Player5Shirt
+		{
+			get
+			{
+				return TeamFormation.ContainsKey(4) && TeamFormation[4].Number != 0 ?
+					TeamFormation[4].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string Player6Shirt
+		{
+			get
+			{
+				return TeamFormation.ContainsKey(5) && TeamFormation[5].Number != 0 ?
+					TeamFormation[5].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string Player7Shirt
+		{
+			get
+			{
+				return TeamFormation.ContainsKey(6) && TeamFormation[6].Number != 0 ?
+					TeamFormation[6].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+			}
+		}
+
+		public string Player8Shirt
+		{
+			get
+			{
+				return TeamFormation.ContainsKey(7) && TeamFormation[7].Number != 0 ?
+					TeamFormation[7].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string Player9Shirt
+		{
+			get
+			{
+				return TeamFormation.ContainsKey(8) && TeamFormation[8].Number != 0 ?
+					TeamFormation[8].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string Player10Shirt
+		{
+			get
+			{
+				return TeamFormation.ContainsKey(9) && TeamFormation[9].Number != 0 ?
+					TeamFormation[9].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+			}
+		}
+
 		public string ComputerPlayer1Shirt
 		{
 			get
 			{
 				return ComputerTeamFormation.ContainsKey(0) && ComputerTeamFormation[0].Number != 0 ?
 					ComputerTeamFormation[0].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
-
 			}
 		}
 
@@ -240,6 +467,73 @@ namespace Cm93.UI.Modules.Match
 				return ComputerTeamFormation.ContainsKey(2) && ComputerTeamFormation[2].Number != 0 ?
 					ComputerTeamFormation[2].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
 
+			}
+		}
+
+		public string ComputerPlayer4Shirt
+		{
+			get
+			{
+				return ComputerTeamFormation.ContainsKey(3) && ComputerTeamFormation[3].Number != 0 ?
+					ComputerTeamFormation[3].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+			}
+		}
+
+		public string ComputerPlayer5Shirt
+		{
+			get
+			{
+				return ComputerTeamFormation.ContainsKey(4) && ComputerTeamFormation[4].Number != 0 ?
+					ComputerTeamFormation[4].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string ComputerPlayer6Shirt
+		{
+			get
+			{
+				return ComputerTeamFormation.ContainsKey(5) && ComputerTeamFormation[5].Number != 0 ?
+					ComputerTeamFormation[5].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string ComputerPlayer7Shirt
+		{
+			get
+			{
+				return ComputerTeamFormation.ContainsKey(6) && ComputerTeamFormation[6].Number != 0 ?
+					ComputerTeamFormation[6].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+			}
+		}
+
+		public string ComputerPlayer8Shirt
+		{
+			get
+			{
+				return ComputerTeamFormation.ContainsKey(7) && ComputerTeamFormation[7].Number != 0 ?
+					ComputerTeamFormation[7].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string ComputerPlayer9Shirt
+		{
+			get
+			{
+				return ComputerTeamFormation.ContainsKey(8) && ComputerTeamFormation[8].Number != 0 ?
+					ComputerTeamFormation[8].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
+
+			}
+		}
+
+		public string ComputerPlayer10Shirt
+		{
+			get
+			{
+				return ComputerTeamFormation.ContainsKey(9) && ComputerTeamFormation[9].Number != 0 ?
+					ComputerTeamFormation[9].Number.ToString(CultureInfo.CurrentCulture) : string.Empty;
 			}
 		}
 
@@ -497,6 +791,22 @@ namespace Cm93.UI.Modules.Match
 					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[0].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer1TopProperty);
 					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer2LeftProperty);
 					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[1].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer2TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[2].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer3LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[2].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer3TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[3].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer4LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[3].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer4TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[4].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer5LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[4].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer5TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[5].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer6LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[5].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer6TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[6].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer7LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[6].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer7TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[7].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer8LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[7].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer8TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[8].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer9LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[8].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer9TopProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[9].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer10LeftProperty);
+					AnimateComputerPlayer(storyBoard, ComputerTeamFormation[9].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer10TopProperty);
 					AnimatePossessionBar(storyBoard, 1000 * possession, MatchAnimations.HomePossessionProperty);
 					AnimatePossessionBar(storyBoard, 1000 * (1 - possession), MatchAnimations.AwayPossessionProperty);
 
@@ -569,6 +879,20 @@ namespace Cm93.UI.Modules.Match
 			NotifyOfPropertyChange(() => Player2Top);
 			NotifyOfPropertyChange(() => Player3Left);
 			NotifyOfPropertyChange(() => Player3Top);
+			NotifyOfPropertyChange(() => Player4Left);
+			NotifyOfPropertyChange(() => Player4Top);
+			NotifyOfPropertyChange(() => Player5Left);
+			NotifyOfPropertyChange(() => Player5Top);
+			NotifyOfPropertyChange(() => Player6Left);
+			NotifyOfPropertyChange(() => Player6Top);
+			NotifyOfPropertyChange(() => Player7Left);
+			NotifyOfPropertyChange(() => Player7Top);
+			NotifyOfPropertyChange(() => Player8Left);
+			NotifyOfPropertyChange(() => Player8Top);
+			NotifyOfPropertyChange(() => Player9Left);
+			NotifyOfPropertyChange(() => Player9Top);
+			NotifyOfPropertyChange(() => Player10Left);
+			NotifyOfPropertyChange(() => Player10Top);
 
 			NotifyOfPropertyChange(() => Score);
 			NotifyOfPropertyChange(() => Minutes);
@@ -588,6 +912,9 @@ namespace Cm93.UI.Modules.Match
 
 			PrimaryComputerColour = computerTeam.PrimaryColour;
 			SecondaryComputerColour = computerTeam.SecondaryColour;
+
+			PlayerShirtType = Team.ShirtType;
+			ComputerPlayerShirtType = computerTeam.ShirtType;
 		}
 
 		private void UpdateComputerShirts()
@@ -595,6 +922,13 @@ namespace Cm93.UI.Modules.Match
 			NotifyOfPropertyChange(() => ComputerPlayer1Shirt);
 			NotifyOfPropertyChange(() => ComputerPlayer2Shirt);
 			NotifyOfPropertyChange(() => ComputerPlayer3Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer4Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer5Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer6Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer7Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer8Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer9Shirt);
+			NotifyOfPropertyChange(() => ComputerPlayer10Shirt);
 		}
 
 		private void UpdatePlayerShirts()
@@ -602,6 +936,13 @@ namespace Cm93.UI.Modules.Match
 			NotifyOfPropertyChange(() => Player1Shirt);
 			NotifyOfPropertyChange(() => Player2Shirt);
 			NotifyOfPropertyChange(() => Player3Shirt);
+			NotifyOfPropertyChange(() => Player4Shirt);
+			NotifyOfPropertyChange(() => Player5Shirt);
+			NotifyOfPropertyChange(() => Player6Shirt);
+			NotifyOfPropertyChange(() => Player7Shirt);
+			NotifyOfPropertyChange(() => Player8Shirt);
+			NotifyOfPropertyChange(() => Player9Shirt);
+			NotifyOfPropertyChange(() => Player10Shirt);
 		}
 
 		public bool CanSubstitute
