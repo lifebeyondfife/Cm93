@@ -790,6 +790,8 @@ namespace Cm93.UI.Modules.Team
 
 			if (Team.Formation.Values.All(p => !string.IsNullOrEmpty(p.TeamName)))
 				this.eventAggregator.PublishOnUIThread(new ButtonsEvent { ButtonsDisabled = false });
+			else if (Team.Formation.Values.Any(p => string.IsNullOrEmpty(p.TeamName)))
+				this.eventAggregator.PublishOnUIThread(new ButtonsEvent { ButtonsDisabled = true });
 		}
 
 		private Player GetPlayerFromLabel(string playerLabel)

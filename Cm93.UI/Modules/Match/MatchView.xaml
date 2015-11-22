@@ -87,7 +87,7 @@
 				<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="4" Margin="149,37,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="4"/>
 				<ed:Arc ArcThickness="1" EndAngle="-110" Fill="Transparent" HorizontalAlignment="Left" Height="52" Margin="124,24,0,0" Stretch="None" Stroke="White" StrokeThickness="2" StartAngle="110" VerticalAlignment="Top" Width="54"/>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player1" Width="50" Height="60" Canvas.Top="{Binding Player1Top, Mode=TwoWay}" Canvas.Left="{Binding Player1Left, Mode=TwoWay}" Opacity="0.5">
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player1" Width="50" Height="60" Canvas.Top="{Binding Player1Top, Mode=TwoWay}" Canvas.Left="{Binding Player1Left, Mode=TwoWay}">
 					<!--  Opacity="{Binding Player1Touches}" />  etc. -->
 					<Viewbox.RenderTransform>
 						<TransformGroup>
@@ -118,7 +118,7 @@
 					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player3Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
 				</Viewbox>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player4" Width="50" Height="60" Canvas.Top="{Binding Player4Top, Mode=TwoWay}" Canvas.Left="{Binding Player4Left, Mode=TwoWay}" Opacity="0.5">
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player4" Width="50" Height="60" Canvas.Top="{Binding Player4Top, Mode=TwoWay}" Canvas.Left="{Binding Player4Left, Mode=TwoWay}">
 					<Viewbox.RenderTransform>
 						<TransformGroup>
 							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
@@ -148,7 +148,7 @@
 					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player6Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
 				</Viewbox>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player7" Width="50" Height="60" Canvas.Top="{Binding Player7Top, Mode=TwoWay}" Canvas.Left="{Binding Player7Left, Mode=TwoWay}" Opacity="0.5">
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player7" Width="50" Height="60" Canvas.Top="{Binding Player7Top, Mode=TwoWay}" Canvas.Left="{Binding Player7Left, Mode=TwoWay}">
 					<Viewbox.RenderTransform>
 						<TransformGroup>
 							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
