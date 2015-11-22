@@ -28,6 +28,7 @@ using Cm93.Model.Interfaces;
 using Cm93.Model.Modules;
 using Cm93.Model.Structures;
 using Cm93.UI.Events;
+using Cm93.Model.Config;
 
 namespace Cm93.UI.Modules.Team
 {
@@ -37,6 +38,7 @@ namespace Cm93.UI.Modules.Team
 		private readonly IEventAggregator eventAggregator;
 		private ITeamModule TeamModule { get; set; }
 		private Cm93.Model.Structures.Team Team { get; set; }
+		private bool resetFormation = false;
 
 		private string teamName;
 		public string TeamName
@@ -572,6 +574,33 @@ namespace Cm93.UI.Modules.Team
 			TeamName = message.Team.TeamName;
 		}
 
+		private void BlankTeamFormation()
+		{
+			if (resetFormation)
+				return;
+
+			foreach (var player in Team.Players)
+				player.Formation = -1;
+
+			Team.Formation.Clear();
+			Team.Formation[0] = new Player { Location = new Coordinate { X = 0.12, Y = 0.65 } };
+			Team.Formation[1] = new Player { Location = new Coordinate { X = 0.32, Y = 0.65 } };
+			Team.Formation[2] = new Player { Location = new Coordinate { X = 0.52, Y = 0.65 } };
+			Team.Formation[3] = new Player { Location = new Coordinate { X = 0.72, Y = 0.65 } };
+			Team.Formation[4] = new Player { Location = new Coordinate { X = 0.12, Y = 0.41 } };
+			Team.Formation[5] = new Player { Location = new Coordinate { X = 0.32, Y = 0.41 } };
+			Team.Formation[6] = new Player { Location = new Coordinate { X = 0.52, Y = 0.41 } };
+			Team.Formation[7] = new Player { Location = new Coordinate { X = 0.72, Y = 0.41 } };
+			Team.Formation[8] = new Player { Location = new Coordinate { X = 0.27, Y = 0.15 } };
+			Team.Formation[9] = new Player { Location = new Coordinate { X = 0.57, Y = 0.15 } };
+
+			SetPlayerNames();
+			SetPlayerLocations();
+
+			resetFormation = true;
+			this.eventAggregator.PublishOnUIThread(new ButtonsEvent { ButtonsDisabled = true });
+		}
+
 		public void Handle(ModuleSelectedEvent message)
 		{
 			if (message.Module != ModuleType.Team)
@@ -589,6 +618,9 @@ namespace Cm93.UI.Modules.Team
 			PrimaryColour = Team.PrimaryColour;
 			SecondaryColour = Team.SecondaryColour;
 			ShirtType = Team.ShirtType;
+
+			if (Configuration.GlobalWeek() == 0)
+				BlankTeamFormation();
 		}
 
 		private void SetPlayerNames()
@@ -755,6 +787,9 @@ namespace Cm93.UI.Modules.Team
 			player.Formation = firstElevenFormation;
 
 			SetPlayerNames();
+
+			if (Team.Formation.Values.All(p => !string.IsNullOrEmpty(p.TeamName)))
+				this.eventAggregator.PublishOnUIThread(new ButtonsEvent { ButtonsDisabled = false });
 		}
 
 		private Player GetPlayerFromLabel(string playerLabel)
