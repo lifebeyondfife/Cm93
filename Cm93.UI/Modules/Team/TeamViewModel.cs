@@ -780,11 +780,9 @@ namespace Cm93.UI.Modules.Team
 
 			player.Location.X = Team.Formation[formationIndex].Location.X;
 			player.Location.Y = Team.Formation[formationIndex].Location.Y;
+			player.Formation = formationIndex;
 
-			var firstElevenFormation = Team.Formation[formationIndex].Formation;
-			Team.Formation[formationIndex].Formation = player.Formation;
 			Team.Formation[formationIndex] = player;
-			player.Formation = firstElevenFormation;
 
 			SetPlayerNames();
 

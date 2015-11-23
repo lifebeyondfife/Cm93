@@ -974,6 +974,8 @@ namespace Cm93.UI.Modules.Match
 
 			SelectedNumber = 0;
 			SelectedSubstitute = null;
+
+			++SubstitutesUsed;
 		}
 	}
 }

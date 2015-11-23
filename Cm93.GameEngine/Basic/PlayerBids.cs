@@ -65,7 +65,10 @@ namespace Cm93.GameEngine.Basic
 				var highestBid = playerBidList.
 					Where(b => b.PurchasingTeam.Players.Count < Configuration.MaxSquadSize).
 					OrderByDescending(b => b.BidAmount).
-					First();
+					FirstOrDefault();
+
+				if (highestBid == null)
+					continue;
 
 				var player = highestBid.Player;
 
