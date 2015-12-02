@@ -74,7 +74,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestDatabase\Data.sql">
+    <Content Include="TestDatabase\TestData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestDatabase\SplData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestDatabase\Tables.sql">

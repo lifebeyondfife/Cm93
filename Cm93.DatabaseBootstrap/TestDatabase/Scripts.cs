@@ -24,12 +24,14 @@ namespace Cm93.DatabaseBootstrap.TestDatabase
 	static class Scripts
 	{
 		internal static IList<string> Tables { get; private set; }
-		internal static IList<string> Data { get; private set; }
+		internal static IList<string> TestData { get; private set; }
+		internal static IList<string> SplData { get; private set; }
 
 		static Scripts()
 		{
 			Tables = GetSql(".\\TestDatabase\\Tables.sql").ToList();
-			Data = GetSql(".\\TestDatabase\\Data.sql").ToList();
+			TestData = GetSql(".\\TestDatabase\\TestData.sql").ToList();
+			SplData = GetSql(".\\TestDatabase\\SplData.sql").ToList();
 		}
 
 		static IEnumerable<string> GetSql(string path)

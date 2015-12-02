@@ -34,7 +34,7 @@ namespace Cm93.DatabaseBootstrap
 			{
 				Console.WriteLine("Select an option database to build:\n");
 				Console.WriteLine("(1) Test database");
-				Console.WriteLine("(2) Production database");
+				Console.WriteLine("(2) Spl database");
 				Console.WriteLine("(q) Quit\n");
 
 				option = Console.ReadKey().KeyChar;
@@ -49,7 +49,7 @@ namespace Cm93.DatabaseBootstrap
 					break;
 
 				case '2':
-					CreateProductionDatabase();
+					CreateSplDatabase();
 					break;
 
 				default: break;
@@ -78,14 +78,25 @@ namespace Cm93.DatabaseBootstrap
 				foreach (var table in Scripts.Tables)
 					context.Database.ExecuteSqlCommand(table);
 
-				foreach (var data in Scripts.Data)
+				foreach (var data in Scripts.TestData)
 					context.Database.ExecuteSqlCommand(data);
 			}
 		}
 
-		private static void CreateProductionDatabase()
+		private static void CreateSplDatabase()
 		{
-			Console.WriteLine("Production");
+			AppDomain.CurrentDomain.SetData("DataDirectory", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+
+			WriteResourceToFile("Cm93.DatabaseBootstrap.Empty.sqlite", Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Cm93.sqlite");
+
+			using (var context = new Cm93Context())
+			{
+				foreach (var table in Scripts.Tables)
+					context.Database.ExecuteSqlCommand(table);
+
+				foreach (var data in Scripts.SplData)
+					context.Database.ExecuteSqlCommand(data);
+			}
 		}
 	}
 }
