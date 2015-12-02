@@ -22,9 +22,18 @@ namespace Cm93.Model.Structures
 		public double X { get; set; }
 		public double Y { get; set; }
 
+		private double shirtWidthDelta = 0.08333d;
+		private double shirtHeightDelta = 0.075d;
+
 		public override string ToString()
 		{
 			return string.Format("({0}, {1})", X, Y);
+		}
+
+		public void Invert()
+		{
+			X = 1d - this.X - 2 * shirtWidthDelta;
+			Y = 1d - this.Y - 2 * shirtHeightDelta;
 		}
 	}
 }

@@ -39,8 +39,6 @@ namespace Cm93.GameEngine.Basic
 		public void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation,
 			IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi)
 		{
-			// update home / away here
-
 			for (var i = 0; i < 10; ++i)
 			{
 				var ballPositions = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
