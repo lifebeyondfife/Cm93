@@ -123,11 +123,14 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Compile Include="Converters\ColourToBrushConverter.cs" />
+    <Compile Include="Converters\ShirtTypeConverters.cs" />
     <Compile Include="CreateModel.cs" />
+    <Compile Include="Events\ButtonsEvent.cs" />
     <Compile Include="Events\LoadGameEvent.cs" />
     <Compile Include="Events\MatchCompleteEvent.cs" />
     <Compile Include="Events\ModuleSelectedEvent.cs" />
     <Compile Include="Events\TeamSetEvent.cs" />
+    <Compile Include="Helpers\CustomText.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\PlayerShirtProperties.cs" />
     <Compile Include="Modules\Competitions\CompetitionsView.xaml.cs">

@@ -17,6 +17,7 @@
 */
 using System.Windows;
 using System.Windows.Media;
+using Cm93.Model.Enumerations;
 
 namespace Cm93.UI.Helpers
 {
@@ -52,16 +53,30 @@ namespace Cm93.UI.Helpers
 			obj.SetValue(ShirtNumberProperty, number);
 		}
 
+		public static ShirtType GetShirtType(DependencyObject obj)
+		{
+			return (ShirtType) obj.GetValue(ShirtTypeProperty);
+		}
+
+		public static void SetShirtType(DependencyObject obj, ShirtType shirtType)
+		{
+			obj.SetValue(ShirtTypeProperty, shirtType);
+		}
+
+		public static readonly DependencyProperty ShirtTypeProperty =
+			DependencyProperty.RegisterAttached("ShirtType", typeof(ShirtType),
+			typeof(PlayerShirtProperties));
+
 		public static readonly DependencyProperty PrimaryColourProperty =
 			DependencyProperty.RegisterAttached("PrimaryColour", typeof(Color),
-			typeof(PlayerShirtProperties));//, new PropertyMetadata((d, e) => SetPrimaryColour(d, (Color) e.NewValue)));
+			typeof(PlayerShirtProperties));
 
 		public static readonly DependencyProperty SecondaryColourProperty =
 			DependencyProperty.RegisterAttached("SecondaryColour", typeof(Color),
-			typeof(PlayerShirtProperties));//, new PropertyMetadata((d, e) => SetSecondaryColour(d, (Color) e.NewValue)));
+			typeof(PlayerShirtProperties));
 
 		public static readonly DependencyProperty ShirtNumberProperty =
 			DependencyProperty.RegisterAttached("ShirtNumber", typeof(string),
-			typeof(PlayerShirtProperties));//, new PropertyMetadata(string.Empty, (d, e) => SetShirtNumber(d, (string) e.NewValue)));
+			typeof(PlayerShirtProperties));
 	}
 }

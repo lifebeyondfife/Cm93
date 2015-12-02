@@ -17,6 +17,7 @@
 */
 using System.Collections.Generic;
 using System.Windows.Media;
+using Cm93.Model.Enumerations;
 using Cm93.Model.Interfaces;
 
 namespace Cm93.Model.Structures
@@ -28,6 +29,7 @@ namespace Cm93.Model.Structures
 
 		public Color PrimaryColour { get { return FromUInt32(PrimaryColourInt); } }
 		public Color SecondaryColour { get { return FromUInt32(SecondaryColourInt); } }
+		public ShirtType ShirtType { get; set; }
 
 		public uint PrimaryColourInt { get; set; }
 		public uint SecondaryColourInt { get; set; }

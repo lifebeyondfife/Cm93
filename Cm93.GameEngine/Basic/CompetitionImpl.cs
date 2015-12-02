@@ -36,7 +36,9 @@ namespace Cm93.GameEngine.Basic
 
 		public static readonly IList<Country> Countries = new List<Country>
 			{
-				new Country { Name = "Cm93istan", Cups = new List<string>(), Leagues = new List<string> { "Cm93 Competition League" } },
+				//new Country { Name = "Cm93istan", Cups = new List<string>(), Leagues = new List<string> { "Cm93 Competition League" } },
+
+				new Country { Name = "Scotland", Cups = new List<string>(), Leagues = new List<string> { "Scottish PL" } },
 				//new Country { Name = "Scotland", Cups = new List<string> { "Scottish League Cup", "Scottish Cup" }, Leagues = new List<string> { "SPFL Premier League", "SPFL Championship", "SPFL League One", "SPFL League Two" } },
 				//new Country { Name = "England", Cups = new List<string> { "Capital One Cup", "FA Cup" }, Leagues = new List<string> { "English Premier League", "English Championship", "English League One", "English League Two" } },
 				//new Country { Name = "Spain", Cups = new List<string> { "Copa del Rey" }, Leagues = new List<string> { "La Liga Primera División", "La Liga Segunda División" } },

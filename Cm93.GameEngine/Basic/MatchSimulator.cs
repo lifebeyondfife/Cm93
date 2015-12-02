@@ -60,7 +60,7 @@ namespace Cm93.GameEngine.Basic
 				else
 					++fixture.ChancesAway;
 
-				if (round > 3000)
+				if (round > 7000)
 				{
 					++fixture.GoalsHome;
 					++fixture.TeamHome.Formation[homeTeamScore.
@@ -68,7 +68,7 @@ namespace Cm93.GameEngine.Basic
 						OrderByDescending(m => m.Value).
 						First().Index].Goals;
 				}
-				else if (round < -3200)
+				else if (round < -9000)
 				{
 					++fixture.GoalsAway;
 					++fixture.TeamAway.Formation[awayTeamScore.

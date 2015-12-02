@@ -15,20 +15,12 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Cm93.State.Sqlite.Tables
+namespace Cm93.Model.Enumerations
 {
-	[Table("Teams")]
-	public class TeamRow
+	public enum ShirtType
 	{
-		[Key]
-		public long TeamId { get; set; }
-
-		public string TeamName { get; set; }
-		public long PrimaryColour { get; set; }
-		public long SecondaryColour { get; set; }
-		public long ShirtType { get; set; }
+		Hoops,
+		Standard,
+		Stripes
 	}
 }

@@ -36,6 +36,13 @@ namespace Cm93.UI.Modules.Match
 			DragPlayerIcon(this.Player1);
 			DragPlayerIcon(this.Player2);
 			DragPlayerIcon(this.Player3);
+			DragPlayerIcon(this.Player4);
+			DragPlayerIcon(this.Player5);
+			DragPlayerIcon(this.Player6);
+			DragPlayerIcon(this.Player7);
+			DragPlayerIcon(this.Player8);
+			DragPlayerIcon(this.Player9);
+			DragPlayerIcon(this.Player10);
 		}
 
 		private void DragPlayerIcon(FrameworkElement playerIcon)

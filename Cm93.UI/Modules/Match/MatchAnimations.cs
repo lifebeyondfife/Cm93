@@ -23,28 +23,131 @@ namespace Cm93.UI.Modules.Match
 {
 	public class MatchAnimations : DependencyObject
 	{
-		private IDictionary<int, Player> ComputerTeamFormation { get; set; }
+		public static IDictionary<int, Player> PlayerFormation { get; set; }
 
 		public void UpdateComputerTeamFormation(IDictionary<int, Player> computerTeamFormation)
 		{
-			ComputerTeamFormation = computerTeamFormation;
-
-			if (ComputerTeamFormation.ContainsKey(0))
+			if (computerTeamFormation.ContainsKey(0))
 			{
-				SetValue(ComputerPlayer1LeftProperty, GetPitchWidth(this) * ComputerTeamFormation[0].Location.X);
-				SetValue(ComputerPlayer1TopProperty, GetPitchHeight(this) * ComputerTeamFormation[0].Location.Y);
+				SetValue(ComputerPlayer1LeftProperty, GetPitchWidth(this) * computerTeamFormation[0].Location.X);
+				SetValue(ComputerPlayer1TopProperty, GetPitchHeight(this) * computerTeamFormation[0].Location.Y);
 			}
 
-			if (ComputerTeamFormation.ContainsKey(1))
+			if (computerTeamFormation.ContainsKey(1))
 			{
-				SetValue(ComputerPlayer2LeftProperty, GetPitchWidth(this) * ComputerTeamFormation[1].Location.X);
-				SetValue(ComputerPlayer2TopProperty, GetPitchHeight(this) * ComputerTeamFormation[1].Location.Y);
+				SetValue(ComputerPlayer2LeftProperty, GetPitchWidth(this) * computerTeamFormation[1].Location.X);
+				SetValue(ComputerPlayer2TopProperty, GetPitchHeight(this) * computerTeamFormation[1].Location.Y);
 			}
 
-			if (ComputerTeamFormation.ContainsKey(2))
+			if (computerTeamFormation.ContainsKey(2))
 			{
-				SetValue(ComputerPlayer3LeftProperty, GetPitchWidth(this) * ComputerTeamFormation[2].Location.X);
-				SetValue(ComputerPlayer3TopProperty, GetPitchHeight(this) * ComputerTeamFormation[2].Location.Y);
+				SetValue(ComputerPlayer3LeftProperty, GetPitchWidth(this) * computerTeamFormation[2].Location.X);
+				SetValue(ComputerPlayer3TopProperty, GetPitchHeight(this) * computerTeamFormation[2].Location.Y);
+			}
+
+			if (computerTeamFormation.ContainsKey(3))
+			{
+				SetValue(ComputerPlayer4LeftProperty, GetPitchWidth(this) * computerTeamFormation[3].Location.X);
+				SetValue(ComputerPlayer4TopProperty, GetPitchHeight(this) * computerTeamFormation[3].Location.Y);
+			}
+
+			if (computerTeamFormation.ContainsKey(4))
+			{
+				SetValue(ComputerPlayer5LeftProperty, GetPitchWidth(this) * computerTeamFormation[4].Location.X);
+				SetValue(ComputerPlayer5TopProperty, GetPitchHeight(this) * computerTeamFormation[4].Location.Y);
+			}
+
+			if (computerTeamFormation.ContainsKey(5))
+			{
+				SetValue(ComputerPlayer6LeftProperty, GetPitchWidth(this) * computerTeamFormation[5].Location.X);
+				SetValue(ComputerPlayer6TopProperty, GetPitchHeight(this) * computerTeamFormation[5].Location.Y);
+			}
+
+			if (computerTeamFormation.ContainsKey(6))
+			{
+				SetValue(ComputerPlayer7LeftProperty, GetPitchWidth(this) * computerTeamFormation[6].Location.X);
+				SetValue(ComputerPlayer7TopProperty, GetPitchHeight(this) * computerTeamFormation[6].Location.Y);
+			}
+
+			if (computerTeamFormation.ContainsKey(7))
+			{
+				SetValue(ComputerPlayer8LeftProperty, GetPitchWidth(this) * computerTeamFormation[7].Location.X);
+				SetValue(ComputerPlayer8TopProperty, GetPitchHeight(this) * computerTeamFormation[7].Location.Y);
+			}
+
+			if (computerTeamFormation.ContainsKey(8))
+			{
+				SetValue(ComputerPlayer9LeftProperty, GetPitchWidth(this) * computerTeamFormation[8].Location.X);
+				SetValue(ComputerPlayer9TopProperty, GetPitchHeight(this) * computerTeamFormation[8].Location.Y);
+			}
+
+			if (computerTeamFormation.ContainsKey(9))
+			{
+				SetValue(ComputerPlayer10LeftProperty, GetPitchWidth(this) * computerTeamFormation[9].Location.X);
+				SetValue(ComputerPlayer10TopProperty, GetPitchHeight(this) * computerTeamFormation[9].Location.Y);
+			}
+		}
+
+		public void UpdatePlayerTeamFormation(IDictionary<int, Player> playerTeamFormation)
+		{
+			if (playerTeamFormation.ContainsKey(0))
+			{
+				SetValue(Player1LeftProperty, GetPitchWidth(this) * playerTeamFormation[0].Location.X);
+				SetValue(Player1TopProperty, GetPitchHeight(this) * playerTeamFormation[0].Location.Y);
+			}
+
+			if (playerTeamFormation.ContainsKey(1))
+			{
+				SetValue(Player2LeftProperty, GetPitchWidth(this) * playerTeamFormation[1].Location.X);
+				SetValue(Player2TopProperty, GetPitchHeight(this) * playerTeamFormation[1].Location.Y);
+			}
+
+			if (playerTeamFormation.ContainsKey(2))
+			{
+				SetValue(Player3LeftProperty, GetPitchWidth(this) * playerTeamFormation[2].Location.X);
+				SetValue(Player3TopProperty, GetPitchHeight(this) * playerTeamFormation[2].Location.Y);
+			}
+
+			if (playerTeamFormation.ContainsKey(3))
+			{
+				SetValue(Player4LeftProperty, GetPitchWidth(this) * playerTeamFormation[3].Location.X);
+				SetValue(Player4TopProperty, GetPitchHeight(this) * playerTeamFormation[3].Location.Y);
+			}
+
+			if (playerTeamFormation.ContainsKey(4))
+			{
+				SetValue(Player5LeftProperty, GetPitchWidth(this) * playerTeamFormation[4].Location.X);
+				SetValue(Player5TopProperty, GetPitchHeight(this) * playerTeamFormation[4].Location.Y);
+			}
+
+			if (playerTeamFormation.ContainsKey(5))
+			{
+				SetValue(Player6LeftProperty, GetPitchWidth(this) * playerTeamFormation[5].Location.X);
+				SetValue(Player6TopProperty, GetPitchHeight(this) * playerTeamFormation[5].Location.Y);
+			}
+
+			if (playerTeamFormation.ContainsKey(6))
+			{
+				SetValue(Player7LeftProperty, GetPitchWidth(this) * playerTeamFormation[6].Location.X);
+				SetValue(Player7TopProperty, GetPitchHeight(this) * playerTeamFormation[6].Location.Y);
+			}
+
+			if (playerTeamFormation.ContainsKey(7))
+			{
+				SetValue(Player8LeftProperty, GetPitchWidth(this) * playerTeamFormation[7].Location.X);
+				SetValue(Player8TopProperty, GetPitchHeight(this) * playerTeamFormation[7].Location.Y);
+			}
+
+			if (playerTeamFormation.ContainsKey(8))
+			{
+				SetValue(Player9LeftProperty, GetPitchWidth(this) * playerTeamFormation[8].Location.X);
+				SetValue(Player9TopProperty, GetPitchHeight(this) * playerTeamFormation[8].Location.Y);
+			}
+
+			if (playerTeamFormation.ContainsKey(9))
+			{
+				SetValue(Player10LeftProperty, GetPitchWidth(this) * playerTeamFormation[9].Location.X);
+				SetValue(Player10TopProperty, GetPitchHeight(this) * playerTeamFormation[9].Location.Y);
 			}
 		}
 
@@ -116,6 +219,34 @@ namespace Cm93.UI.Modules.Match
 			DependencyProperty.RegisterAttached("ComputerPlayer3Top", typeof(double),
 			typeof(MatchAnimations));
 
+		public static readonly DependencyProperty ComputerPlayer4TopProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer4Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer5TopProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer5Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer6TopProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer6Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer7TopProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer7Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer8TopProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer8Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer9TopProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer9Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer10TopProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer10Top", typeof(double),
+			typeof(MatchAnimations));
+
 		public static readonly DependencyProperty ComputerPlayer1LeftProperty =
 			DependencyProperty.RegisterAttached("ComputerPlayer1Left", typeof(double),
 			typeof(MatchAnimations));
@@ -126,6 +257,114 @@ namespace Cm93.UI.Modules.Match
 
 		public static readonly DependencyProperty ComputerPlayer3LeftProperty =
 			DependencyProperty.RegisterAttached("ComputerPlayer3Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer4LeftProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer4Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer5LeftProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer5Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer6LeftProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer6Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer7LeftProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer7Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer8LeftProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer8Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer9LeftProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer9Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty ComputerPlayer10LeftProperty =
+			DependencyProperty.RegisterAttached("ComputerPlayer10Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player1TopProperty =
+			DependencyProperty.RegisterAttached("Player1Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player2TopProperty =
+			DependencyProperty.RegisterAttached("Player2Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player3TopProperty =
+			DependencyProperty.RegisterAttached("Player3Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player4TopProperty =
+			DependencyProperty.RegisterAttached("Player4Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player5TopProperty =
+			DependencyProperty.RegisterAttached("Player5Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player6TopProperty =
+			DependencyProperty.RegisterAttached("Player6Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player7TopProperty =
+			DependencyProperty.RegisterAttached("Player7Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player8TopProperty =
+			DependencyProperty.RegisterAttached("Player8Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player9TopProperty =
+			DependencyProperty.RegisterAttached("Player9Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player10TopProperty =
+			DependencyProperty.RegisterAttached("Player10Top", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player1LeftProperty =
+			DependencyProperty.RegisterAttached("Player1Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player2LeftProperty =
+			DependencyProperty.RegisterAttached("Player2Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player3LeftProperty =
+			DependencyProperty.RegisterAttached("Player3Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player4LeftProperty =
+			DependencyProperty.RegisterAttached("Player4Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player5LeftProperty =
+			DependencyProperty.RegisterAttached("Player5Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player6LeftProperty =
+			DependencyProperty.RegisterAttached("Player6Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player7LeftProperty =
+			DependencyProperty.RegisterAttached("Player7Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player8LeftProperty =
+			DependencyProperty.RegisterAttached("Player8Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player9LeftProperty =
+			DependencyProperty.RegisterAttached("Player9Left", typeof(double),
+			typeof(MatchAnimations));
+
+		public static readonly DependencyProperty Player10LeftProperty =
+			DependencyProperty.RegisterAttached("Player10Left", typeof(double),
 			typeof(MatchAnimations));
 	}
 }

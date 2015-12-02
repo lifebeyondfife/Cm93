@@ -80,6 +80,8 @@ namespace Cm93.State.Game
 				Repository.UpdateGame(ModuleType.Team, State);
 				Repository.UpdateGame(ModuleType.Fixtures, State);
 				Repository.UpdateGame(ModuleType.Match, State);
+
+				CreateModules();
 			}
 			else
 				Repository.UpdateGame(moduleType, State);

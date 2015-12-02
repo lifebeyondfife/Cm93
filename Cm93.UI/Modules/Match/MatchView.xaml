@@ -87,34 +87,206 @@
 				<Ellipse Fill="Transparent" HorizontalAlignment="Left" Height="4" Margin="149,37,0,0" Stroke="White" StrokeThickness="3" VerticalAlignment="Top" Width="4"/>
 				<ed:Arc ArcThickness="1" EndAngle="-110" Fill="Transparent" HorizontalAlignment="Left" Height="52" Margin="124,24,0,0" Stretch="None" Stroke="White" StrokeThickness="2" StartAngle="110" VerticalAlignment="Top" Width="54"/>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player1" Width="50" Height="60" Canvas.Top="{Binding Player1Top, Mode=TwoWay}" Canvas.Left="{Binding Player1Left, Mode=TwoWay}" Opacity="0.5"> <!--  Opacity="{Binding Player1Touches}" />  etc. -->
+				<Viewbox Visibility="{Binding IsPlayerControlled}" RenderTransformOrigin="0.5, 0.5" x:Name="Player1" Width="50" Height="60" Canvas.Top="{Binding Player1Top, Mode=TwoWay}" Canvas.Left="{Binding Player1Left, Mode=TwoWay}">
+					<!--  Opacity="{Binding Player1Touches}" />  etc. -->
 					<Viewbox.RenderTransform>
 						<TransformGroup>
 							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
 							<RotateTransform Angle="270"/>
 						</TransformGroup>
 					</Viewbox.RenderTransform>
-					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player1Shirt}" />
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player1Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
 				</Viewbox>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player2" Width="50" Height="60" Canvas.Top="{Binding Player2Top, Mode=TwoWay}" Canvas.Left="{Binding Player2Left, Mode=TwoWay}">
+				<Viewbox Visibility="{Binding IsPlayerControlled}" RenderTransformOrigin="0.5, 0.5" x:Name="Player2" Width="50" Height="60" Canvas.Top="{Binding Player2Top, Mode=TwoWay}" Canvas.Left="{Binding Player2Left, Mode=TwoWay}">
 					<Viewbox.RenderTransform>
 						<TransformGroup>
 							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
 							<RotateTransform Angle="270"/>
 						</TransformGroup>
 					</Viewbox.RenderTransform>
-					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player2Shirt}" />
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player2Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
 				</Viewbox>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="Player3" Visibility="Collapsed" Width="50" Height="60" Canvas.Top="{Binding Player3Top, Mode=TwoWay}" Canvas.Left="{Binding Player3Left, Mode=TwoWay}">
+				<Viewbox Visibility="{Binding IsPlayerControlled}" RenderTransformOrigin="0.5, 0.5" x:Name="Player3" Width="50" Height="60" Canvas.Top="{Binding Player3Top, Mode=TwoWay}" Canvas.Left="{Binding Player3Left, Mode=TwoWay}">
 					<Viewbox.RenderTransform>
 						<TransformGroup>
 							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
 							<RotateTransform Angle="270"/>
 						</TransformGroup>
 					</Viewbox.RenderTransform>
-					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player3Shirt}" />
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player3Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsPlayerControlled}" RenderTransformOrigin="0.5, 0.5" x:Name="Player4" Width="50" Height="60" Canvas.Top="{Binding Player4Top, Mode=TwoWay}" Canvas.Left="{Binding Player4Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player4Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsPlayerControlled}" RenderTransformOrigin="0.5, 0.5" x:Name="Player5" Width="50" Height="60" Canvas.Top="{Binding Player5Top, Mode=TwoWay}" Canvas.Left="{Binding Player5Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player5Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsPlayerControlled}" RenderTransformOrigin="0.5, 0.5" x:Name="Player6" Width="50" Height="60" Canvas.Top="{Binding Player6Top, Mode=TwoWay}" Canvas.Left="{Binding Player6Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player6Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsPlayerControlled}" RenderTransformOrigin="0.5, 0.5" x:Name="Player7" Width="50" Height="60" Canvas.Top="{Binding Player7Top, Mode=TwoWay}" Canvas.Left="{Binding Player7Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player7Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsPlayerControlled}" RenderTransformOrigin="0.5, 0.5" x:Name="Player8" Width="50" Height="60" Canvas.Top="{Binding Player8Top, Mode=TwoWay}" Canvas.Left="{Binding Player8Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player8Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsPlayerControlled}" RenderTransformOrigin="0.5, 0.5" x:Name="Player9" Width="50" Height="60" Canvas.Top="{Binding Player9Top, Mode=TwoWay}" Canvas.Left="{Binding Player9Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player9Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsPlayerControlled}" RenderTransformOrigin="0.5, 0.5" x:Name="Player10" Width="50" Height="60" Canvas.Top="{Binding Player10Top, Mode=TwoWay}" Canvas.Left="{Binding Player10Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player10Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsAnimated}" RenderTransformOrigin="0.5, 0.5" x:Name="AnimatedPlayer1" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.Player1Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.Player1Left, Mode=TwoWay}">
+					<!--  Opacity="{Binding Player1Touches}" />  etc. -->
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player1Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsAnimated}" RenderTransformOrigin="0.5, 0.5" x:Name="AnimatedPlayer2" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.Player2Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.Player2Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player2Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsAnimated}" RenderTransformOrigin="0.5, 0.5" x:Name="AnimatedPlayer3" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.Player3Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.Player3Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player3Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsAnimated}" RenderTransformOrigin="0.5, 0.5" x:Name="AnimatedPlayer4" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.Player4Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.Player4Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player4Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsAnimated}" RenderTransformOrigin="0.5, 0.5" x:Name="AnimatedPlayer5" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.Player5Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.Player5Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player5Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsAnimated}" RenderTransformOrigin="0.5, 0.5" x:Name="AnimatedPlayer6" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.Player6Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.Player6Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player6Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsAnimated}" RenderTransformOrigin="0.5, 0.5" x:Name="AnimatedPlayer7" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.Player7Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.Player7Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player7Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsAnimated}" RenderTransformOrigin="0.5, 0.5" x:Name="AnimatedPlayer8" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.Player8Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.Player8Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player8Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsAnimated}" RenderTransformOrigin="0.5, 0.5" x:Name="AnimatedPlayer9" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.Player9Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.Player9Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player9Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox Visibility="{Binding IsAnimated}" RenderTransformOrigin="0.5, 0.5" x:Name="AnimatedPlayer10" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.Player10Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.Player10Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding Player10Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding PlayerShirtType}" />
 				</Viewbox>
 
 				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer1" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer1Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer1Left, Mode=TwoWay}">
@@ -124,7 +296,7 @@
 							<RotateTransform Angle="270"/>
 						</TransformGroup>
 					</Viewbox.RenderTransform>
-					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer1Shirt}" />
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer1Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ComputerPlayerShirtType}" />
 				</Viewbox>
 
 				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer2" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer2Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer2Left, Mode=TwoWay}">
@@ -134,17 +306,87 @@
 							<RotateTransform Angle="270"/>
 						</TransformGroup>
 					</Viewbox.RenderTransform>
-					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer2Shirt}" />
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer2Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ComputerPlayerShirtType}" />
 				</Viewbox>
 
-				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer3" Visibility="Collapsed" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer3Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer3Left, Mode=TwoWay}">
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer3" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer3Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer3Left, Mode=TwoWay}">
 					<Viewbox.RenderTransform>
 						<TransformGroup>
 							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
 							<RotateTransform Angle="270"/>
 						</TransformGroup>
 					</Viewbox.RenderTransform>
-					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer3Shirt}" />
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer3Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ComputerPlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer4" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer4Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer4Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer4Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ComputerPlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer5" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer5Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer5Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer5Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ComputerPlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer6" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer6Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer6Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer6Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ComputerPlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer7" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer7Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer7Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer7Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ComputerPlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer8" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer8Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer8Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer8Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ComputerPlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer9" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer9Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer9Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer9Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ComputerPlayerShirtType}" />
+				</Viewbox>
+
+				<Viewbox RenderTransformOrigin="0.5, 0.5" x:Name="ComputerPlayer10" Width="50" Height="60" Canvas.Top="{Binding MatchAnimations.ComputerPlayer10Top, Mode=TwoWay}" Canvas.Left="{Binding MatchAnimations.ComputerPlayer10Left, Mode=TwoWay}">
+					<Viewbox.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform ScaleX="0.666666" ScaleY="1"/>
+							<RotateTransform Angle="270"/>
+						</TransformGroup>
+					</Viewbox.RenderTransform>
+					<Control Template="{StaticResource PlayerShirt}" helpers:PlayerShirtProperties.PrimaryColour="{Binding PrimaryComputerColour}" helpers:PlayerShirtProperties.SecondaryColour="{Binding SecondaryComputerColour}" helpers:PlayerShirtProperties.ShirtNumber="{Binding ComputerPlayer10Shirt}" helpers:PlayerShirtProperties.ShirtType="{Binding ComputerPlayerShirtType}" />
 				</Viewbox>
 			</Canvas>
 		</Viewbox>

@@ -28,7 +28,7 @@ namespace Cm93.UI.Shell
 {
 	[Export(typeof(ShellViewModel))]
 	public class ShellViewModel : Conductor<ModuleViewModelBase>.Collection.OneActive,
-		IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>, IHandle<MatchCompleteEvent>, IHandle<LoadGameEvent>
+		IHandle<ModuleSelectedEvent>, IHandle<TeamSetEvent>, IHandle<MatchCompleteEvent>, IHandle<LoadGameEvent>, IHandle<ButtonsEvent>
 	{
 		private readonly IEventAggregator eventAggregator;
 		private readonly ICreateModel model;
@@ -56,13 +56,13 @@ namespace Cm93.UI.Shell
 			}
 		}
 
-		private bool isMatch = false;
-		private bool IsMatch
+		private bool disableButtons = false;
+		private bool DisableButtons
 		{
-			get { return isMatch; }
+			get { return disableButtons; }
 			set
 			{
-				isMatch = value;
+				disableButtons = value;
 				NotifyOfPropertyChange(() => CanCompetitions);
 				NotifyOfPropertyChange(() => CanFixtures);
 				NotifyOfPropertyChange(() => CanMatch);
@@ -110,9 +110,14 @@ namespace Cm93.UI.Shell
 			this.ActiveItem = this.children[message.Module];
 		}
 
+		public void Handle(ButtonsEvent message)
+		{
+			DisableButtons = message.ButtonsDisabled;
+		}
+
 		public bool CanTeam
 		{
-			get { return !IsMatch; }
+			get { return !DisableButtons; }
 		}
 
 		public void Team()
@@ -122,7 +127,7 @@ namespace Cm93.UI.Shell
 
 		public bool CanPlayers
 		{
-			get { return !IsMatch; }
+			get { return !DisableButtons; }
 		}
 
 		public void Players()
@@ -132,7 +137,7 @@ namespace Cm93.UI.Shell
 
 		public bool CanFixtures
 		{
-			get { return !IsMatch; }
+			get { return !DisableButtons; }
 		}
 
 		public void Fixtures()
@@ -142,19 +147,19 @@ namespace Cm93.UI.Shell
 
 		public bool CanMatch
 		{
-			get { return !IsMatch; }
+			get { return !DisableButtons; }
 		}
 
 		public void Match()
 		{
-			IsMatch = true;
+			DisableButtons = true;
 
 			this.eventAggregator.PublishOnUIThread(new ModuleSelectedEvent(ModuleType.Match));
 		}
 
 		public bool CanCompetitions
 		{
-			get { return !IsMatch; }
+			get { return !DisableButtons; }
 		}
 
 		public void Competitions()
@@ -164,7 +169,7 @@ namespace Cm93.UI.Shell
 
 		public bool CanNewGame
 		{
-			get { return !IsMatch; }
+			get { return !DisableButtons; }
 		}
 
 		public void NewGame()
@@ -175,7 +180,7 @@ namespace Cm93.UI.Shell
 
 		public bool CanLoadGame
 		{
-			get { return !IsMatch; }
+			get { return !DisableButtons; }
 		}
 
 		public void LoadGame()
@@ -193,7 +198,7 @@ namespace Cm93.UI.Shell
 
 		public void Handle(MatchCompleteEvent message)
 		{
-			IsMatch = false;
+			DisableButtons = false;
 
 			this.model.StateManager.UpdateGame(ModuleType.Match);
 		}
