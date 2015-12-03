@@ -103,9 +103,15 @@ namespace Cm93.UI.Shell
 		public void Handle(ModuleSelectedEvent message)
 		{
 			if (this.ActiveItem == this.children[ModuleType.Team])
+			{
 				this.model.StateManager.UpdateGame(ModuleType.Team);
+				SetModels();
+			}
 			else if (this.ActiveItem == this.children[ModuleType.Players])
+			{
 				this.model.StateManager.UpdateGame(ModuleType.Players);
+				SetModels();
+			}
 
 			this.ActiveItem = this.children[message.Module];
 		}
@@ -201,6 +207,8 @@ namespace Cm93.UI.Shell
 			DisableButtons = false;
 
 			this.model.StateManager.UpdateGame(ModuleType.Match);
+
+			SetModels();
 		}
 
 		public void Handle(LoadGameEvent message)

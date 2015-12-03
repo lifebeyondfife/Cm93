@@ -774,6 +774,8 @@ namespace Cm93.UI.Modules.Match
 		public override void SetModel(IModule model)
 		{
 			this.MatchModule = (IMatchModule) model;
+
+			Configuration.GlobalWeek = () => Competition.GlobalWeek(MatchModule.Competitions);
 		}
 
 		public void Handle(TeamSetEvent message)
@@ -806,6 +808,7 @@ namespace Cm93.UI.Modules.Match
 			else
 			{
 				InvertFormation(TeamFormation.Values);
+				UpdatePlayerPositions();
 			}
 
 			Task.Factory.StartNew(() =>
