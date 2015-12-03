@@ -84,6 +84,8 @@ namespace Cm93.UI.Modules.Fixtures
 
 		private void SetFixtures(IEnumerable<IFixture> fixtures)
 		{
+			var globalWeek = Configuration.GlobalWeek();
+
 			this.fixturesGrid.Clear();
 
 			foreach (var fixture in fixtures)
@@ -91,9 +93,9 @@ namespace Cm93.UI.Modules.Fixtures
 					{
 						TeamHome = fixture.TeamHome.TeamName,
 						TeamAway = fixture.TeamAway.TeamName,
-						GoalsHome = Configuration.GlobalWeek() < fixture.Week ?
+						GoalsHome = globalWeek < fixture.Week ?
 							"-" : fixture.GoalsHome.ToString(CultureInfo.CurrentCulture),
-						GoalsAway = Configuration.GlobalWeek() < fixture.Week ?
+						GoalsAway = globalWeek < fixture.Week ?
 							"-" : fixture.GoalsAway.ToString(CultureInfo.CurrentCulture)
 					});
 		}
