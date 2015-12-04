@@ -24,6 +24,7 @@ using Cm93.Model.Enumerations;
 using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
+using Cm93.GameEngine.Basic.AI;
 
 namespace Cm93.GameEngine.Basic
 {
@@ -31,11 +32,13 @@ namespace Cm93.GameEngine.Basic
 	{
 		private PlayerBids PlayerBids { get; set; }
 		private MatchSimulator MatchSimulator { get; set; }
+		private IArtificialIntelligence ArtificialIntelligence { get; set; }
 
 		public BasicGameEngine()
 		{
 			PlayerBids = new PlayerBids();
 			MatchSimulator = new MatchSimulator();
+			ArtificialIntelligence = new ArtificialIntelligence();
 		}
 
 		#region Player Bids
@@ -61,6 +64,12 @@ namespace Cm93.GameEngine.Basic
 
 		public void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi)
 		{
+			if (fixture.TeamHome.TeamName != Configuration.PlayerTeamName)
+				ArtificialIntelligence.SelectStartingFormation(fixture.TeamHome, fixture.TeamAway);
+
+			if (fixture.TeamAway.TeamName != Configuration.PlayerTeamName)
+				ArtificialIntelligence.SelectStartingFormation(fixture.TeamAway, fixture.TeamHome);
+
 			MatchSimulator.Play(fixture, homeTeamFormation, awayTeamFormation, updateUi);
 		}
 
