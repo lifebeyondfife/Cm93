@@ -22,6 +22,7 @@ namespace Cm93.Model.Structures
 		public double X { get; set; }
 		public double Y { get; set; }
 
+		//	TODO: Make Coordinate abstract away the XAML shirt width / height baws
 		private double shirtWidthDelta = 0.08333d;
 		private double shirtHeightDelta = 0.075d;
 

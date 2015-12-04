@@ -24,9 +24,9 @@ namespace Cm93.GameEngine.Basic.AI
 {
 	public class ArtificialIntelligence : IArtificialIntelligence
 	{
-		public void SelectStartingFormation(Team team, Team opposition)
+		public void SelectStartingFormation(IDictionary<int, Player> formation, Team team, Team opposition)
 		{
-			StartingFormation.SelectStartingFormation(team, opposition);
+			StartingFormation.SelectStartingFormation(formation, team, opposition);
 		}
 
 		public void RealtimeFormationUpdates(Team team, Team opposition)

@@ -64,11 +64,21 @@ namespace Cm93.GameEngine.Basic
 
 		public void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi)
 		{
-			if (fixture.TeamHome.TeamName != Configuration.PlayerTeamName)
-				ArtificialIntelligence.SelectStartingFormation(fixture.TeamHome, fixture.TeamAway);
-
-			if (fixture.TeamAway.TeamName != Configuration.PlayerTeamName)
-				ArtificialIntelligence.SelectStartingFormation(fixture.TeamAway, fixture.TeamHome);
+			if (fixture.TeamHome.TeamName == Configuration.PlayerTeamName)
+			{
+				ArtificialIntelligence.SelectStartingFormation(awayTeamFormation, fixture.TeamAway, fixture.TeamHome);
+				awayTeamFormation.Values.Execute(p => p.Location.Invert());
+			}
+			else if (fixture.TeamAway.TeamName == Configuration.PlayerTeamName)
+			{
+				ArtificialIntelligence.SelectStartingFormation(homeTeamFormation, fixture.TeamHome, fixture.TeamAway);
+			}
+			else
+			{
+				ArtificialIntelligence.SelectStartingFormation(homeTeamFormation, fixture.TeamHome, fixture.TeamAway);
+				ArtificialIntelligence.SelectStartingFormation(awayTeamFormation, fixture.TeamAway, fixture.TeamHome);
+				awayTeamFormation.Values.Execute(p => p.Location.Invert());
+			}
 
 			MatchSimulator.Play(fixture, homeTeamFormation, awayTeamFormation, updateUi);
 		}

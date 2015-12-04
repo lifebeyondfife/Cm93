@@ -25,7 +25,7 @@ namespace Cm93.Model.Interfaces
 {
 	public interface IArtificialIntelligence
 	{
-		void SelectStartingFormation(Team team, Team opposition);
+		void SelectStartingFormation(IDictionary<int, Player> formation, Team team, Team opposition);
 		void RealtimeFormationUpdates(Team team, Team opposition);
 		void Transfers(Team team, Place place, IList<Player> players);
 	}
