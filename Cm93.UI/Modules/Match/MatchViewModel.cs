@@ -800,12 +800,7 @@ namespace Cm93.UI.Modules.Match
 			NotifyOfPropertyChange(() => TeamHomeName);
 			NotifyOfPropertyChange(() => TeamAwayName);
 
-			if (Fixture.TeamHome.TeamName == Team.TeamName)
-			{
-				InvertFormation(ComputerTeamFormation.Values);
-				MatchAnimations.UpdateComputerTeamFormation(ComputerTeamFormation);
-			}
-			else
+			if (Fixture.TeamAway.TeamName == Team.TeamName)
 			{
 				InvertFormation(TeamFormation.Values);
 				UpdatePlayerPositions();
@@ -836,6 +831,8 @@ namespace Cm93.UI.Modules.Match
 						AnimateComputerTeam(possession);
 
 					CreateHeatMapModel(ballUpdates);
+
+					UpdateComputerShirts();
 
 					NotifyOfPropertyChange(() => Score);
 					NotifyOfPropertyChange(() => Minutes);

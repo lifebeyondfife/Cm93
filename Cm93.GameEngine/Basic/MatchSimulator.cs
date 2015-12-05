@@ -127,8 +127,8 @@ namespace Cm93.GameEngine.Basic
 
 		private void UpdateNpcTeams(IDictionary<int, Player> teamFormation)
 		{
-			teamFormation.Values.Execute(p => p.Location.X = Random.NextDouble() * 0.84d);
-			teamFormation.Values.Execute(p => p.Location.Y = Random.NextDouble() * 0.84d);
+			//teamFormation.Values.Execute(p => p.Location.X = Random.NextDouble() * 0.84d);
+			//teamFormation.Values.Execute(p => p.Location.Y = Random.NextDouble() * 0.84d);
 		}
 	}
 }

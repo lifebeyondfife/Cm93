@@ -15,26 +15,18 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
-namespace Cm93.Model.Structures
+using Cm93.Model.Structures;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Cm93.Model.Interfaces
 {
-	public class Coordinate
+	public interface IArtificialIntelligence
 	{
-		public double X { get; set; }
-		public double Y { get; set; }
-
-		//	TODO: Make Coordinate abstract away the XAML shirt width / height baws
-		private double shirtWidthDelta = 0.08333d;
-		private double shirtHeightDelta = 0.075d;
-
-		public override string ToString()
-		{
-			return string.Format("({0}, {1})", X, Y);
-		}
-
-		public void Invert()
-		{
-			X = 1d - this.X - 2 * shirtWidthDelta;
-			Y = 1d - this.Y - 2 * shirtHeightDelta;
-		}
+		void SelectStartingFormation(IDictionary<int, Player> formation, Team team, Team opposition);
+		void RealtimeFormationUpdates(Team team, Team opposition);
+		void Transfers(Team team, Place place, IList<Player> players);
 	}
 }

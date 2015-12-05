@@ -582,17 +582,20 @@ namespace Cm93.UI.Modules.Team
 			foreach (var player in Team.Players)
 				player.Formation = -1;
 
+			var xOffset = 0.08333d;
+			var yOffset = 0.075d;
+
 			Team.Formation.Clear();
-			Team.Formation[0] = new Player { Location = new Coordinate { X = 0.1167, Y = 0.675 } };
-			Team.Formation[1] = new Player { Location = new Coordinate { X = 0.3167, Y = 0.675 } };
-			Team.Formation[2] = new Player { Location = new Coordinate { X = 0.5167, Y = 0.675 } };
-			Team.Formation[3] = new Player { Location = new Coordinate { X = 0.7167, Y = 0.675 } };
-			Team.Formation[4] = new Player { Location = new Coordinate { X = 0.1167, Y = 0.425 } };
-			Team.Formation[5] = new Player { Location = new Coordinate { X = 0.3167, Y = 0.425 } };
-			Team.Formation[6] = new Player { Location = new Coordinate { X = 0.5167, Y = 0.425 } };
-			Team.Formation[7] = new Player { Location = new Coordinate { X = 0.7167, Y = 0.425 } };
-			Team.Formation[8] = new Player { Location = new Coordinate { X = 0.2667, Y = 0.175 } };
-			Team.Formation[9] = new Player { Location = new Coordinate { X = 0.5667, Y = 0.175 } };
+			Team.Formation[0] = new Player { Location = new Coordinate { X = 0.1500 - xOffset, Y = 0.75 - yOffset } };
+			Team.Formation[1] = new Player { Location = new Coordinate { X = 0.3833 - xOffset, Y = 0.75 - yOffset } };
+			Team.Formation[2] = new Player { Location = new Coordinate { X = 0.6167 - xOffset, Y = 0.75 - yOffset } };
+			Team.Formation[3] = new Player { Location = new Coordinate { X = 0.8500 - xOffset, Y = 0.75 - yOffset } };
+			Team.Formation[4] = new Player { Location = new Coordinate { X = 0.1500 - xOffset, Y = 0.50 - yOffset } };
+			Team.Formation[5] = new Player { Location = new Coordinate { X = 0.3833 - xOffset, Y = 0.50 - yOffset } };
+			Team.Formation[6] = new Player { Location = new Coordinate { X = 0.6167 - xOffset, Y = 0.50 - yOffset } };
+			Team.Formation[7] = new Player { Location = new Coordinate { X = 0.8500 - xOffset, Y = 0.50 - yOffset } };
+			Team.Formation[8] = new Player { Location = new Coordinate { X = 0.3500 - xOffset, Y = 0.25 - yOffset } };
+			Team.Formation[9] = new Player { Location = new Coordinate { X = 0.6500 - xOffset, Y = 0.25 - yOffset } };
 
 			SetPlayerNames();
 			SetPlayerLocations();
