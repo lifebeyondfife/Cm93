@@ -29,62 +29,62 @@ namespace Cm93.UI.Modules.Match
 		{
 			if (computerTeamFormation.ContainsKey(0))
 			{
-				SetValue(ComputerPlayer1LeftProperty, GetPitchWidth(this) * computerTeamFormation[0].Location.X);
-				SetValue(ComputerPlayer1TopProperty, GetPitchHeight(this) * computerTeamFormation[0].Location.Y);
+				SetValue(ComputerPlayer1LeftProperty, GetPitchWidth(this) * computerTeamFormation[0].Location.XamlX);
+				SetValue(ComputerPlayer1TopProperty, GetPitchHeight(this) * computerTeamFormation[0].Location.XamlY);
 			}
 
 			if (computerTeamFormation.ContainsKey(1))
 			{
-				SetValue(ComputerPlayer2LeftProperty, GetPitchWidth(this) * computerTeamFormation[1].Location.X);
-				SetValue(ComputerPlayer2TopProperty, GetPitchHeight(this) * computerTeamFormation[1].Location.Y);
+				SetValue(ComputerPlayer2LeftProperty, GetPitchWidth(this) * computerTeamFormation[1].Location.XamlX);
+				SetValue(ComputerPlayer2TopProperty, GetPitchHeight(this) * computerTeamFormation[1].Location.XamlY);
 			}
 
 			if (computerTeamFormation.ContainsKey(2))
 			{
-				SetValue(ComputerPlayer3LeftProperty, GetPitchWidth(this) * computerTeamFormation[2].Location.X);
-				SetValue(ComputerPlayer3TopProperty, GetPitchHeight(this) * computerTeamFormation[2].Location.Y);
+				SetValue(ComputerPlayer3LeftProperty, GetPitchWidth(this) * computerTeamFormation[2].Location.XamlX);
+				SetValue(ComputerPlayer3TopProperty, GetPitchHeight(this) * computerTeamFormation[2].Location.XamlY);
 			}
 
 			if (computerTeamFormation.ContainsKey(3))
 			{
-				SetValue(ComputerPlayer4LeftProperty, GetPitchWidth(this) * computerTeamFormation[3].Location.X);
-				SetValue(ComputerPlayer4TopProperty, GetPitchHeight(this) * computerTeamFormation[3].Location.Y);
+				SetValue(ComputerPlayer4LeftProperty, GetPitchWidth(this) * computerTeamFormation[3].Location.XamlX);
+				SetValue(ComputerPlayer4TopProperty, GetPitchHeight(this) * computerTeamFormation[3].Location.XamlY);
 			}
 
 			if (computerTeamFormation.ContainsKey(4))
 			{
-				SetValue(ComputerPlayer5LeftProperty, GetPitchWidth(this) * computerTeamFormation[4].Location.X);
-				SetValue(ComputerPlayer5TopProperty, GetPitchHeight(this) * computerTeamFormation[4].Location.Y);
+				SetValue(ComputerPlayer5LeftProperty, GetPitchWidth(this) * computerTeamFormation[4].Location.XamlX);
+				SetValue(ComputerPlayer5TopProperty, GetPitchHeight(this) * computerTeamFormation[4].Location.XamlY);
 			}
 
 			if (computerTeamFormation.ContainsKey(5))
 			{
-				SetValue(ComputerPlayer6LeftProperty, GetPitchWidth(this) * computerTeamFormation[5].Location.X);
-				SetValue(ComputerPlayer6TopProperty, GetPitchHeight(this) * computerTeamFormation[5].Location.Y);
+				SetValue(ComputerPlayer6LeftProperty, GetPitchWidth(this) * computerTeamFormation[5].Location.XamlX);
+				SetValue(ComputerPlayer6TopProperty, GetPitchHeight(this) * computerTeamFormation[5].Location.XamlY);
 			}
 
 			if (computerTeamFormation.ContainsKey(6))
 			{
-				SetValue(ComputerPlayer7LeftProperty, GetPitchWidth(this) * computerTeamFormation[6].Location.X);
-				SetValue(ComputerPlayer7TopProperty, GetPitchHeight(this) * computerTeamFormation[6].Location.Y);
+				SetValue(ComputerPlayer7LeftProperty, GetPitchWidth(this) * computerTeamFormation[6].Location.XamlX);
+				SetValue(ComputerPlayer7TopProperty, GetPitchHeight(this) * computerTeamFormation[6].Location.XamlY);
 			}
 
 			if (computerTeamFormation.ContainsKey(7))
 			{
-				SetValue(ComputerPlayer8LeftProperty, GetPitchWidth(this) * computerTeamFormation[7].Location.X);
-				SetValue(ComputerPlayer8TopProperty, GetPitchHeight(this) * computerTeamFormation[7].Location.Y);
+				SetValue(ComputerPlayer8LeftProperty, GetPitchWidth(this) * computerTeamFormation[7].Location.XamlX);
+				SetValue(ComputerPlayer8TopProperty, GetPitchHeight(this) * computerTeamFormation[7].Location.XamlY);
 			}
 
 			if (computerTeamFormation.ContainsKey(8))
 			{
-				SetValue(ComputerPlayer9LeftProperty, GetPitchWidth(this) * computerTeamFormation[8].Location.X);
-				SetValue(ComputerPlayer9TopProperty, GetPitchHeight(this) * computerTeamFormation[8].Location.Y);
+				SetValue(ComputerPlayer9LeftProperty, GetPitchWidth(this) * computerTeamFormation[8].Location.XamlX);
+				SetValue(ComputerPlayer9TopProperty, GetPitchHeight(this) * computerTeamFormation[8].Location.XamlY);
 			}
 
 			if (computerTeamFormation.ContainsKey(9))
 			{
-				SetValue(ComputerPlayer10LeftProperty, GetPitchWidth(this) * computerTeamFormation[9].Location.X);
-				SetValue(ComputerPlayer10TopProperty, GetPitchHeight(this) * computerTeamFormation[9].Location.Y);
+				SetValue(ComputerPlayer10LeftProperty, GetPitchWidth(this) * computerTeamFormation[9].Location.XamlX);
+				SetValue(ComputerPlayer10TopProperty, GetPitchHeight(this) * computerTeamFormation[9].Location.XamlY);
 			}
 		}
 
@@ -92,62 +92,62 @@ namespace Cm93.UI.Modules.Match
 		{
 			if (playerTeamFormation.ContainsKey(0))
 			{
-				SetValue(Player1LeftProperty, GetPitchWidth(this) * playerTeamFormation[0].Location.X);
-				SetValue(Player1TopProperty, GetPitchHeight(this) * playerTeamFormation[0].Location.Y);
+				SetValue(Player1LeftProperty, GetPitchWidth(this) * playerTeamFormation[0].Location.XamlX);
+				SetValue(Player1TopProperty, GetPitchHeight(this) * playerTeamFormation[0].Location.XamlY);
 			}
 
 			if (playerTeamFormation.ContainsKey(1))
 			{
-				SetValue(Player2LeftProperty, GetPitchWidth(this) * playerTeamFormation[1].Location.X);
-				SetValue(Player2TopProperty, GetPitchHeight(this) * playerTeamFormation[1].Location.Y);
+				SetValue(Player2LeftProperty, GetPitchWidth(this) * playerTeamFormation[1].Location.XamlX);
+				SetValue(Player2TopProperty, GetPitchHeight(this) * playerTeamFormation[1].Location.XamlY);
 			}
 
 			if (playerTeamFormation.ContainsKey(2))
 			{
-				SetValue(Player3LeftProperty, GetPitchWidth(this) * playerTeamFormation[2].Location.X);
-				SetValue(Player3TopProperty, GetPitchHeight(this) * playerTeamFormation[2].Location.Y);
+				SetValue(Player3LeftProperty, GetPitchWidth(this) * playerTeamFormation[2].Location.XamlX);
+				SetValue(Player3TopProperty, GetPitchHeight(this) * playerTeamFormation[2].Location.XamlY);
 			}
 
 			if (playerTeamFormation.ContainsKey(3))
 			{
-				SetValue(Player4LeftProperty, GetPitchWidth(this) * playerTeamFormation[3].Location.X);
-				SetValue(Player4TopProperty, GetPitchHeight(this) * playerTeamFormation[3].Location.Y);
+				SetValue(Player4LeftProperty, GetPitchWidth(this) * playerTeamFormation[3].Location.XamlX);
+				SetValue(Player4TopProperty, GetPitchHeight(this) * playerTeamFormation[3].Location.XamlY);
 			}
 
 			if (playerTeamFormation.ContainsKey(4))
 			{
-				SetValue(Player5LeftProperty, GetPitchWidth(this) * playerTeamFormation[4].Location.X);
-				SetValue(Player5TopProperty, GetPitchHeight(this) * playerTeamFormation[4].Location.Y);
+				SetValue(Player5LeftProperty, GetPitchWidth(this) * playerTeamFormation[4].Location.XamlX);
+				SetValue(Player5TopProperty, GetPitchHeight(this) * playerTeamFormation[4].Location.XamlY);
 			}
 
 			if (playerTeamFormation.ContainsKey(5))
 			{
-				SetValue(Player6LeftProperty, GetPitchWidth(this) * playerTeamFormation[5].Location.X);
-				SetValue(Player6TopProperty, GetPitchHeight(this) * playerTeamFormation[5].Location.Y);
+				SetValue(Player6LeftProperty, GetPitchWidth(this) * playerTeamFormation[5].Location.XamlX);
+				SetValue(Player6TopProperty, GetPitchHeight(this) * playerTeamFormation[5].Location.XamlY);
 			}
 
 			if (playerTeamFormation.ContainsKey(6))
 			{
-				SetValue(Player7LeftProperty, GetPitchWidth(this) * playerTeamFormation[6].Location.X);
-				SetValue(Player7TopProperty, GetPitchHeight(this) * playerTeamFormation[6].Location.Y);
+				SetValue(Player7LeftProperty, GetPitchWidth(this) * playerTeamFormation[6].Location.XamlX);
+				SetValue(Player7TopProperty, GetPitchHeight(this) * playerTeamFormation[6].Location.XamlY);
 			}
 
 			if (playerTeamFormation.ContainsKey(7))
 			{
-				SetValue(Player8LeftProperty, GetPitchWidth(this) * playerTeamFormation[7].Location.X);
-				SetValue(Player8TopProperty, GetPitchHeight(this) * playerTeamFormation[7].Location.Y);
+				SetValue(Player8LeftProperty, GetPitchWidth(this) * playerTeamFormation[7].Location.XamlX);
+				SetValue(Player8TopProperty, GetPitchHeight(this) * playerTeamFormation[7].Location.XamlY);
 			}
 
 			if (playerTeamFormation.ContainsKey(8))
 			{
-				SetValue(Player9LeftProperty, GetPitchWidth(this) * playerTeamFormation[8].Location.X);
-				SetValue(Player9TopProperty, GetPitchHeight(this) * playerTeamFormation[8].Location.Y);
+				SetValue(Player9LeftProperty, GetPitchWidth(this) * playerTeamFormation[8].Location.XamlX);
+				SetValue(Player9TopProperty, GetPitchHeight(this) * playerTeamFormation[8].Location.XamlY);
 			}
 
 			if (playerTeamFormation.ContainsKey(9))
 			{
-				SetValue(Player10LeftProperty, GetPitchWidth(this) * playerTeamFormation[9].Location.X);
-				SetValue(Player10TopProperty, GetPitchHeight(this) * playerTeamFormation[9].Location.Y);
+				SetValue(Player10LeftProperty, GetPitchWidth(this) * playerTeamFormation[9].Location.XamlX);
+				SetValue(Player10TopProperty, GetPitchHeight(this) * playerTeamFormation[9].Location.XamlY);
 			}
 		}
 

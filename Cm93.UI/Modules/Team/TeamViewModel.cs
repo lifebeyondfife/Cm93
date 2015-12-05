@@ -582,20 +582,17 @@ namespace Cm93.UI.Modules.Team
 			foreach (var player in Team.Players)
 				player.Formation = -1;
 
-			var xOffset = 0.08333d;
-			var yOffset = 0.075d;
-
 			Team.Formation.Clear();
-			Team.Formation[0] = new Player { Location = new Coordinate { X = 0.1500 - xOffset, Y = 0.75 - yOffset } };
-			Team.Formation[1] = new Player { Location = new Coordinate { X = 0.3833 - xOffset, Y = 0.75 - yOffset } };
-			Team.Formation[2] = new Player { Location = new Coordinate { X = 0.6167 - xOffset, Y = 0.75 - yOffset } };
-			Team.Formation[3] = new Player { Location = new Coordinate { X = 0.8500 - xOffset, Y = 0.75 - yOffset } };
-			Team.Formation[4] = new Player { Location = new Coordinate { X = 0.1500 - xOffset, Y = 0.50 - yOffset } };
-			Team.Formation[5] = new Player { Location = new Coordinate { X = 0.3833 - xOffset, Y = 0.50 - yOffset } };
-			Team.Formation[6] = new Player { Location = new Coordinate { X = 0.6167 - xOffset, Y = 0.50 - yOffset } };
-			Team.Formation[7] = new Player { Location = new Coordinate { X = 0.8500 - xOffset, Y = 0.50 - yOffset } };
-			Team.Formation[8] = new Player { Location = new Coordinate { X = 0.3500 - xOffset, Y = 0.25 - yOffset } };
-			Team.Formation[9] = new Player { Location = new Coordinate { X = 0.6500 - xOffset, Y = 0.25 - yOffset } };
+			Team.Formation[0] = new Player { Location = new Coordinate { X = 0.1500, Y = 0.75 } };
+			Team.Formation[1] = new Player { Location = new Coordinate { X = 0.3833, Y = 0.75 } };
+			Team.Formation[2] = new Player { Location = new Coordinate { X = 0.6167, Y = 0.75 } };
+			Team.Formation[3] = new Player { Location = new Coordinate { X = 0.8500, Y = 0.75 } };
+			Team.Formation[4] = new Player { Location = new Coordinate { X = 0.1500, Y = 0.50 } };
+			Team.Formation[5] = new Player { Location = new Coordinate { X = 0.3833, Y = 0.50 } };
+			Team.Formation[6] = new Player { Location = new Coordinate { X = 0.6167, Y = 0.50 } };
+			Team.Formation[7] = new Player { Location = new Coordinate { X = 0.8500, Y = 0.50 } };
+			Team.Formation[8] = new Player { Location = new Coordinate { X = 0.3500, Y = 0.25 } };
+			Team.Formation[9] = new Player { Location = new Coordinate { X = 0.6500, Y = 0.25 } };
 
 			SetPlayerNames();
 			SetPlayerLocations();
@@ -683,62 +680,62 @@ namespace Cm93.UI.Modules.Team
 		{
 			if (Team.Formation.ContainsKey(0))
 			{
-				Player1Left = PitchWidth * Team.Formation[0].Location.X;
-				Player1Top = PitchHeight * Team.Formation[0].Location.Y;
+				Player1Left = PitchWidth * Team.Formation[0].Location.XamlX;
+				Player1Top = PitchHeight * Team.Formation[0].Location.XamlY;
 			}
 
 			if (Team.Formation.ContainsKey(1))
 			{
-				Player2Left = PitchWidth * Team.Formation[1].Location.X;
-				Player2Top = PitchHeight * Team.Formation[1].Location.Y;
+				Player2Left = PitchWidth * Team.Formation[1].Location.XamlX;
+				Player2Top = PitchHeight * Team.Formation[1].Location.XamlY;
 			}
 
 			if (Team.Formation.ContainsKey(2))
 			{
-				Player3Left = PitchWidth * Team.Formation[2].Location.X;
-				Player3Top = PitchHeight * Team.Formation[2].Location.Y;
+				Player3Left = PitchWidth * Team.Formation[2].Location.XamlX;
+				Player3Top = PitchHeight * Team.Formation[2].Location.XamlY;
 			}
 
 			if (Team.Formation.ContainsKey(3))
 			{
-				Player4Left = PitchWidth * Team.Formation[3].Location.X;
-				Player4Top = PitchHeight * Team.Formation[3].Location.Y;
+				Player4Left = PitchWidth * Team.Formation[3].Location.XamlX;
+				Player4Top = PitchHeight * Team.Formation[3].Location.XamlY;
 			}
 
 			if (Team.Formation.ContainsKey(4))
 			{
-				Player5Left = PitchWidth * Team.Formation[4].Location.X;
-				Player5Top = PitchHeight * Team.Formation[4].Location.Y;
+				Player5Left = PitchWidth * Team.Formation[4].Location.XamlX;
+				Player5Top = PitchHeight * Team.Formation[4].Location.XamlY;
 			}
 
 			if (Team.Formation.ContainsKey(5))
 			{
-				Player6Left = PitchWidth * Team.Formation[5].Location.X;
-				Player6Top = PitchHeight * Team.Formation[5].Location.Y;
+				Player6Left = PitchWidth * Team.Formation[5].Location.XamlX;
+				Player6Top = PitchHeight * Team.Formation[5].Location.XamlY;
 			}
 
 			if (Team.Formation.ContainsKey(6))
 			{
-				Player7Left = PitchWidth * Team.Formation[6].Location.X;
-				Player7Top = PitchHeight * Team.Formation[6].Location.Y;
+				Player7Left = PitchWidth * Team.Formation[6].Location.XamlX;
+				Player7Top = PitchHeight * Team.Formation[6].Location.XamlY;
 			}
 
 			if (Team.Formation.ContainsKey(7))
 			{
-				Player8Left = PitchWidth * Team.Formation[7].Location.X;
-				Player8Top = PitchHeight * Team.Formation[7].Location.Y;
+				Player8Left = PitchWidth * Team.Formation[7].Location.XamlX;
+				Player8Top = PitchHeight * Team.Formation[7].Location.XamlY;
 			}
 
 			if (Team.Formation.ContainsKey(8))
 			{
-				Player9Left = PitchWidth * Team.Formation[8].Location.X;
-				Player9Top = PitchHeight * Team.Formation[8].Location.Y;
+				Player9Left = PitchWidth * Team.Formation[8].Location.XamlX;
+				Player9Top = PitchHeight * Team.Formation[8].Location.XamlY;
 			}
 
 			if (Team.Formation.ContainsKey(9))
 			{
-				Player10Left = PitchWidth * Team.Formation[9].Location.X;
-				Player10Top = PitchHeight * Team.Formation[9].Location.Y;
+				Player10Left = PitchWidth * Team.Formation[9].Location.XamlX;
+				Player10Top = PitchHeight * Team.Formation[9].Location.XamlY;
 			}
 		}
 
@@ -747,7 +744,7 @@ namespace Cm93.UI.Modules.Team
 			if (!Team.Formation.ContainsKey(index))
 				return;
 
-			Team.Formation[index].Location.X = left / PitchWidth;
+			Team.Formation[index].Location.XamlX = left / PitchWidth;
 		}
 
 		private void UpdatePlayerTopCoordinate(int index, double top)
@@ -755,7 +752,7 @@ namespace Cm93.UI.Modules.Team
 			if (!Team.Formation.ContainsKey(index))
 				return;
 
-			Team.Formation[index].Location.Y = top / PitchHeight;
+			Team.Formation[index].Location.XamlY = top / PitchHeight;
 		}
 
 		//	Very bad, MVVM-violating synchronisation 
@@ -775,14 +772,13 @@ namespace Cm93.UI.Modules.Team
 			if (discardKeyValuePairs.Any())
 			{
 				var discardPlayer = discardKeyValuePairs[0].Value;
-				var blankPlayer = new Player { Location = new Coordinate
-					{ X = discardPlayer.Location.X, Y = discardPlayer.Location.Y } };
+				var blankPlayer = new Player { Location = new Coordinate { XamlX = discardPlayer.Location.XamlX, XamlY = discardPlayer.Location.XamlY }	};
 
 				Team.Formation[discardKeyValuePairs[0].Key] = blankPlayer;
 			}
 
-			player.Location.X = Team.Formation[formationIndex].Location.X;
-			player.Location.Y = Team.Formation[formationIndex].Location.Y;
+			player.Location.XamlX = Team.Formation[formationIndex].Location.XamlX;
+			player.Location.XamlY = Team.Formation[formationIndex].Location.XamlY;
 			player.Formation = formationIndex;
 
 			Team.Formation[formationIndex] = player;

@@ -20,6 +20,7 @@ using System.Linq;
 using Cm93.Model.Config;
 using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
+using System.Threading.Tasks;
 
 namespace Cm93.Model.Structures
 {
@@ -70,7 +71,7 @@ namespace Cm93.Model.Structures
 					continue;
 				}
 
-				Configuration.GameEngine.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null);
+				Task.Factory.StartNew(() => Configuration.GameEngine.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null));
 			}
 
 			return playerFixture;

@@ -27,56 +27,49 @@ namespace Cm93.GameEngine.Basic.AI
 {
 	public class StartingFormation
 	{
-		private const double XOffset = 0.08333d;
-		private const double YOffset = 0.075d;
 		private const double Adjust = 0.8d;
 
 		static IList<Coordinate> FormationFourFourTwo = new List<Coordinate>
 			{
-				new Coordinate { X = 0.1500 - XOffset, Y = 0.75 - YOffset },
-				new Coordinate { X = 0.3833 - XOffset, Y = 0.75 - YOffset },
-				new Coordinate { X = 0.6167 - XOffset, Y = 0.75 - YOffset },
-				new Coordinate { X = 0.8500 - XOffset, Y = 0.75 - YOffset },
-				new Coordinate { X = 0.1500 - XOffset, Y = 0.50 - YOffset },
-				new Coordinate { X = 0.3833 - XOffset, Y = 0.50 - YOffset },
-				new Coordinate { X = 0.6167 - XOffset, Y = 0.50 - YOffset },
-				new Coordinate { X = 0.8500 - XOffset, Y = 0.50 - YOffset },
-				new Coordinate { X = 0.3500 - XOffset, Y = 0.25 - YOffset },
-				new Coordinate { X = 0.6500 - XOffset, Y = 0.25 - YOffset }
+				new Coordinate { X = 0.1500, Y = 0.75 },
+				new Coordinate { X = 0.3833, Y = 0.75 },
+				new Coordinate { X = 0.6167, Y = 0.75 },
+				new Coordinate { X = 0.8500, Y = 0.75 },
+				new Coordinate { X = 0.1500, Y = 0.50 },
+				new Coordinate { X = 0.3833, Y = 0.50 },
+				new Coordinate { X = 0.6167, Y = 0.50 },
+				new Coordinate { X = 0.8500, Y = 0.50 },
+				new Coordinate { X = 0.3500, Y = 0.25 },
+				new Coordinate { X = 0.6500, Y = 0.25 }
 			};
 
 		static IList<Coordinate> FormationFiveFourOne = new List<Coordinate>
 			{
-				new Coordinate { X = 0.25 - XOffset, Y = 0.775 - YOffset },
-				new Coordinate { X = 0.50 - XOffset, Y = 0.775 - YOffset },
-				new Coordinate { X = 0.75 - XOffset, Y = 0.775 - YOffset },
-				new Coordinate { X = 0.10 - XOffset, Y = 0.650 - YOffset },
-				new Coordinate { X = 0.90 - XOffset, Y = 0.650 - YOffset },
-				new Coordinate { X = 0.50 - XOffset, Y = 0.550 - YOffset },
-				new Coordinate { X = 0.15 - XOffset, Y = 0.450 - YOffset },
-				new Coordinate { X = 0.85 - XOffset, Y = 0.450 - YOffset },
-				new Coordinate { X = 0.50 - XOffset, Y = 0.350 - YOffset },
-				new Coordinate { X = 0.50 - XOffset, Y = 0.150 - YOffset }
+				new Coordinate { X = 0.25, Y = 0.775 },
+				new Coordinate { X = 0.50, Y = 0.775 },
+				new Coordinate { X = 0.75, Y = 0.775 },
+				new Coordinate { X = 0.10, Y = 0.650 },
+				new Coordinate { X = 0.90, Y = 0.650 },
+				new Coordinate { X = 0.50, Y = 0.550 },
+				new Coordinate { X = 0.15, Y = 0.450 },
+				new Coordinate { X = 0.85, Y = 0.450 },
+				new Coordinate { X = 0.50, Y = 0.350 },
+				new Coordinate { X = 0.50, Y = 0.150 }
 			};
 
 		static IList<Coordinate> FormationFourThreeThree = new List<Coordinate>
 			{
-				new Coordinate { X = 0.5000 - XOffset, Y = 0.200 - YOffset },
-				new Coordinate { X = 0.1500 - XOffset, Y = 0.250 - YOffset },
-				new Coordinate { X = 0.8500 - XOffset, Y = 0.250 - YOffset },
-				new Coordinate { X = 0.3500 - XOffset, Y = 0.450 - YOffset },
-				new Coordinate { X = 0.6500 - XOffset, Y = 0.450 - YOffset },
-				new Coordinate { X = 0.5000 - XOffset, Y = 0.625 - YOffset },
-				new Coordinate { X = 0.1500 - XOffset, Y = 0.750 - YOffset },
-				new Coordinate { X = 0.3833 - XOffset, Y = 0.775 - YOffset },
-				new Coordinate { X = 0.6167 - XOffset, Y = 0.775 - YOffset },
-				new Coordinate { X = 0.8500 - XOffset, Y = 0.750 - YOffset }
+				new Coordinate { X = 0.5000, Y = 0.200 },
+				new Coordinate { X = 0.1500, Y = 0.250 },
+				new Coordinate { X = 0.8500, Y = 0.250 },
+				new Coordinate { X = 0.3500, Y = 0.450 },
+				new Coordinate { X = 0.6500, Y = 0.450 },
+				new Coordinate { X = 0.5000, Y = 0.625 },
+				new Coordinate { X = 0.1500, Y = 0.750 },
+				new Coordinate { X = 0.3833, Y = 0.775 },
+				new Coordinate { X = 0.6167, Y = 0.775 },
+				new Coordinate { X = 0.8500, Y = 0.750 }
 			};
-
-		//	*. Create these starting co-ordinates
-
-		//	*. Create a (time boxed) optimisation problem to find a few decent formations
-		//		(a) Run the CPU vs CPU games in parallel
 
 		internal static void SelectStartingFormation(IDictionary<int, Player> formation, Team team, Team opposition)
 		{
@@ -108,7 +101,6 @@ namespace Cm93.GameEngine.Basic.AI
 
 			foreach (var playerIndex in variables.Select((v, i) => new { Index = i, Player = team.Players.Single(p => p.Number == v.InstantiatedValue) }))
 			{
-				//"This isn't updating the shirt numbers back in the view model!"
 				formation[playerIndex.Index] = playerIndex.Player;
 				formation[playerIndex.Index].Location.X = templateFormation[playerIndex.Index].X;
 				formation[playerIndex.Index].Location.Y = templateFormation[playerIndex.Index].Y;
@@ -117,7 +109,7 @@ namespace Cm93.GameEngine.Basic.AI
 
 		private static double RatingForPosition(Player player, Coordinate location)
 		{
-			var adjustedlocation = new Coordinate { X = location.X + XOffset, Y = location.Y + YOffset };
+			var adjustedlocation = new Coordinate { X = location.X, Y = location.Y };
 			var sidePosition = (int) player.Position & 0x11;
 			var rolePosition = (int) player.Position & 0x11100;
 			var rating = player.Rating;
@@ -166,7 +158,7 @@ namespace Cm93.GameEngine.Basic.AI
 				if ((sidePosition & 0x1) > 0 && (sidePosition & 0x10) == 0)
 					deficit *= Adjust;
 			}
-			else if (adjustedlocation.Y < 0.75d)
+			else if (adjustedlocation.X < 0.75d)
 			{
 				if ((sidePosition & 0x10) > 0 && (sidePosition & 0x1) == 0)
 					deficit *= Adjust;
@@ -180,8 +172,17 @@ namespace Cm93.GameEngine.Basic.AI
 
 		private static IList<Coordinate> SelectTeamFormation(Team team, Team opposition)
 		{
-			var teamBestTenSum = team.Players.Select(p => p.Rating).OrderBy(r => r).Take(10).Sum();
-			var oppositionBestTenSum = opposition.Players.Select(p => p.Rating).OrderBy(r => r).Take(10).Sum();
+			var teamBestTenSum = team.Players.
+				Select(p => p.Rating).
+				OrderByDescending(r => r).
+				Take(10).
+				Sum();
+
+			var oppositionBestTenSum = opposition.Players.
+				Select(p => p.Rating).
+				OrderByDescending(r => r).
+				Take(10).
+				Sum();
 
 			if (teamBestTenSum * 1.05 < oppositionBestTenSum)
 				return FormationFiveFourOne;
