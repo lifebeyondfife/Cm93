@@ -84,7 +84,7 @@ namespace Cm93.GameEngine.Basic.AI
 
 			var domains = templateFormation.
 				Select(c => team.Players.
-					OrderBy(p => RatingForPosition(p, c)).
+					OrderByDescending(p => RatingForPosition(p, c)).
 					Take(5).
 					Select(p => p.Number).
 					ToList()
@@ -108,6 +108,7 @@ namespace Cm93.GameEngine.Basic.AI
 
 			foreach (var playerIndex in variables.Select((v, i) => new { Index = i, Player = team.Players.Single(p => p.Number == v.InstantiatedValue) }))
 			{
+				//"This isn't updating the shirt numbers back in the view model!"
 				formation[playerIndex.Index] = playerIndex.Player;
 				formation[playerIndex.Index].Location.X = templateFormation[playerIndex.Index].X;
 				formation[playerIndex.Index].Location.Y = templateFormation[playerIndex.Index].Y;

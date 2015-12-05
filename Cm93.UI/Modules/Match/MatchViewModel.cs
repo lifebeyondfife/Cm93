@@ -832,6 +832,8 @@ namespace Cm93.UI.Modules.Match
 
 					CreateHeatMapModel(ballUpdates);
 
+					UpdateComputerShirts();
+
 					NotifyOfPropertyChange(() => Score);
 					NotifyOfPropertyChange(() => Minutes);
 					NotifyOfPropertyChange(() => PlayingPeriod);
