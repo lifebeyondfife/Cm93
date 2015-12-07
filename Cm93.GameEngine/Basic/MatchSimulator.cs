@@ -33,6 +33,8 @@ namespace Cm93.GameEngine.Basic
 
 		public MatchSimulator()
 		{
+			//	Not thread safe now that the playing of fixtures has been parallelised
+			throw new NotImplementedException();
 			Random = new Random();
 		}
 

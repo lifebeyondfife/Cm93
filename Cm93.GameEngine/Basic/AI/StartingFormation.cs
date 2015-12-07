@@ -31,16 +31,16 @@ namespace Cm93.GameEngine.Basic.AI
 
 		static IList<Coordinate> FormationFourFourTwo = new List<Coordinate>
 			{
-				new Coordinate { X = 0.1500, Y = 0.75 },
-				new Coordinate { X = 0.3833, Y = 0.75 },
-				new Coordinate { X = 0.6167, Y = 0.75 },
-				new Coordinate { X = 0.8500, Y = 0.75 },
-				new Coordinate { X = 0.1500, Y = 0.50 },
-				new Coordinate { X = 0.3833, Y = 0.50 },
-				new Coordinate { X = 0.6167, Y = 0.50 },
-				new Coordinate { X = 0.8500, Y = 0.50 },
-				new Coordinate { X = 0.3500, Y = 0.25 },
-				new Coordinate { X = 0.6500, Y = 0.25 }
+				new Coordinate { X = 0.1500, Y = 0.85 },
+				new Coordinate { X = 0.3833, Y = 0.85 },
+				new Coordinate { X = 0.6167, Y = 0.85 },
+				new Coordinate { X = 0.8500, Y = 0.85 },
+				new Coordinate { X = 0.1500, Y = 0.55 },
+				new Coordinate { X = 0.3833, Y = 0.55 },
+				new Coordinate { X = 0.6167, Y = 0.55 },
+				new Coordinate { X = 0.8500, Y = 0.55 },
+				new Coordinate { X = 0.3500, Y = 0.20 },
+				new Coordinate { X = 0.6500, Y = 0.20 }
 			};
 
 		static IList<Coordinate> FormationFiveFourOne = new List<Coordinate>
@@ -109,32 +109,44 @@ namespace Cm93.GameEngine.Basic.AI
 
 		private static double RatingForPosition(Player player, Coordinate location)
 		{
-			var adjustedlocation = new Coordinate { X = location.X, Y = location.Y };
 			var sidePosition = (int) player.Position & 0x11;
 			var rolePosition = (int) player.Position & 0x11100;
 			var rating = player.Rating;
 
-			var deficit = 1d;
+			var multiplier = 1d;
 
-			SideDeficit(adjustedlocation, sidePosition, ref deficit);
-			RoleDeficit(adjustedlocation, rolePosition, ref deficit);
+			SideDeficit(location, sidePosition, ref multiplier);
+			RoleDeficit(location, rolePosition, ref multiplier);
 
-			return rating * deficit;
+			SideBonus(location, sidePosition, ref multiplier);
+			RoleBonus(location, sidePosition, ref multiplier);
+
+			return rating * multiplier;
 		}
 
-		private static void RoleDeficit(Coordinate adjustedlocation, int rolePosition, ref double deficit)
+		private static void RoleBonus(Coordinate location, int sidePosition, ref double multiplier)
 		{
-			if (adjustedlocation.Y > 0.75d)
+			throw new System.NotImplementedException();
+		}
+
+		private static void SideBonus(Coordinate location, int sidePosition, ref double multiplier)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		private static void RoleDeficit(Coordinate location, int rolePosition, ref double deficit)
+		{
+			if (location.Y > 0.75d)
 			{
 				if ((rolePosition & 0x100) == 0)
 					deficit *= Adjust;
 			}
-			else if (adjustedlocation.Y > 0.5d)
+			else if (location.Y > 0.5d)
 			{
 				if ((rolePosition & 0x1100) == 0)
 					deficit *= Adjust;
 			}
-			else if (adjustedlocation.Y > 0.25d)
+			else if (location.Y > 0.25d)
 			{
 				if ((rolePosition & 0x11000) == 0)
 					deficit *= Adjust;
@@ -146,19 +158,19 @@ namespace Cm93.GameEngine.Basic.AI
 			}
 		}
 
-		private static void SideDeficit(Coordinate adjustedlocation, int sidePosition, ref double deficit)
+		private static void SideDeficit(Coordinate location, int sidePosition, ref double deficit)
 		{
-			if (adjustedlocation.X < 0.25d)
+			if (location.X < 0.25d)
 			{
 				if ((sidePosition & 0x10) == 0)
 					deficit *= Adjust;
 			}
-			else if (adjustedlocation.X < 0.5d)
+			else if (location.X < 0.5d)
 			{
 				if ((sidePosition & 0x1) > 0 && (sidePosition & 0x10) == 0)
 					deficit *= Adjust;
 			}
-			else if (adjustedlocation.X < 0.75d)
+			else if (location.X < 0.75d)
 			{
 				if ((sidePosition & 0x10) > 0 && (sidePosition & 0x1) == 0)
 					deficit *= Adjust;

@@ -583,16 +583,16 @@ namespace Cm93.UI.Modules.Team
 				player.Formation = -1;
 
 			Team.Formation.Clear();
-			Team.Formation[0] = new Player { Location = new Coordinate { X = 0.1500, Y = 0.75 } };
-			Team.Formation[1] = new Player { Location = new Coordinate { X = 0.3833, Y = 0.75 } };
-			Team.Formation[2] = new Player { Location = new Coordinate { X = 0.6167, Y = 0.75 } };
-			Team.Formation[3] = new Player { Location = new Coordinate { X = 0.8500, Y = 0.75 } };
-			Team.Formation[4] = new Player { Location = new Coordinate { X = 0.1500, Y = 0.50 } };
-			Team.Formation[5] = new Player { Location = new Coordinate { X = 0.3833, Y = 0.50 } };
-			Team.Formation[6] = new Player { Location = new Coordinate { X = 0.6167, Y = 0.50 } };
-			Team.Formation[7] = new Player { Location = new Coordinate { X = 0.8500, Y = 0.50 } };
-			Team.Formation[8] = new Player { Location = new Coordinate { X = 0.3500, Y = 0.25 } };
-			Team.Formation[9] = new Player { Location = new Coordinate { X = 0.6500, Y = 0.25 } };
+			Team.Formation[0] = new Player { Location = new Coordinate { X = 0.1500, Y = 0.85 } };
+			Team.Formation[1] = new Player { Location = new Coordinate { X = 0.3833, Y = 0.85 } };
+			Team.Formation[2] = new Player { Location = new Coordinate { X = 0.6167, Y = 0.85 } };
+			Team.Formation[3] = new Player { Location = new Coordinate { X = 0.8500, Y = 0.85 } };
+			Team.Formation[4] = new Player { Location = new Coordinate { X = 0.1500, Y = 0.55 } };
+			Team.Formation[5] = new Player { Location = new Coordinate { X = 0.3833, Y = 0.55 } };
+			Team.Formation[6] = new Player { Location = new Coordinate { X = 0.6167, Y = 0.55 } };
+			Team.Formation[7] = new Player { Location = new Coordinate { X = 0.8500, Y = 0.55 } };
+			Team.Formation[8] = new Player { Location = new Coordinate { X = 0.3500, Y = 0.20 } };
+			Team.Formation[9] = new Player { Location = new Coordinate { X = 0.6500, Y = 0.20 } };
 
 			SetPlayerNames();
 			SetPlayerLocations();
