@@ -27,56 +27,49 @@ namespace Cm93.GameEngine.Basic.AI
 {
 	public class StartingFormation
 	{
-		private const double XOffset = 0.08333d;
-		private const double YOffset = 0.075d;
 		private const double Adjust = 0.8d;
 
 		static IList<Coordinate> FormationFourFourTwo = new List<Coordinate>
 			{
-				new Coordinate { X = 0.1500 - XOffset, Y = 0.75 - YOffset },
-				new Coordinate { X = 0.3833 - XOffset, Y = 0.75 - YOffset },
-				new Coordinate { X = 0.6167 - XOffset, Y = 0.75 - YOffset },
-				new Coordinate { X = 0.8500 - XOffset, Y = 0.75 - YOffset },
-				new Coordinate { X = 0.1500 - XOffset, Y = 0.50 - YOffset },
-				new Coordinate { X = 0.3833 - XOffset, Y = 0.50 - YOffset },
-				new Coordinate { X = 0.6167 - XOffset, Y = 0.50 - YOffset },
-				new Coordinate { X = 0.8500 - XOffset, Y = 0.50 - YOffset },
-				new Coordinate { X = 0.3500 - XOffset, Y = 0.25 - YOffset },
-				new Coordinate { X = 0.6500 - XOffset, Y = 0.25 - YOffset }
+				new Coordinate { X = 0.1500, Y = 0.85 },
+				new Coordinate { X = 0.3833, Y = 0.85 },
+				new Coordinate { X = 0.6167, Y = 0.85 },
+				new Coordinate { X = 0.8500, Y = 0.85 },
+				new Coordinate { X = 0.1500, Y = 0.55 },
+				new Coordinate { X = 0.3833, Y = 0.55 },
+				new Coordinate { X = 0.6167, Y = 0.55 },
+				new Coordinate { X = 0.8500, Y = 0.55 },
+				new Coordinate { X = 0.3500, Y = 0.20 },
+				new Coordinate { X = 0.6500, Y = 0.20 }
 			};
 
 		static IList<Coordinate> FormationFiveFourOne = new List<Coordinate>
 			{
-				new Coordinate { X = 0.25 - XOffset, Y = 0.775 - YOffset },
-				new Coordinate { X = 0.50 - XOffset, Y = 0.775 - YOffset },
-				new Coordinate { X = 0.75 - XOffset, Y = 0.775 - YOffset },
-				new Coordinate { X = 0.10 - XOffset, Y = 0.650 - YOffset },
-				new Coordinate { X = 0.90 - XOffset, Y = 0.650 - YOffset },
-				new Coordinate { X = 0.50 - XOffset, Y = 0.550 - YOffset },
-				new Coordinate { X = 0.15 - XOffset, Y = 0.450 - YOffset },
-				new Coordinate { X = 0.85 - XOffset, Y = 0.450 - YOffset },
-				new Coordinate { X = 0.50 - XOffset, Y = 0.350 - YOffset },
-				new Coordinate { X = 0.50 - XOffset, Y = 0.150 - YOffset }
+				new Coordinate { X = 0.25, Y = 0.775 },
+				new Coordinate { X = 0.50, Y = 0.775 },
+				new Coordinate { X = 0.75, Y = 0.775 },
+				new Coordinate { X = 0.10, Y = 0.650 },
+				new Coordinate { X = 0.90, Y = 0.650 },
+				new Coordinate { X = 0.50, Y = 0.550 },
+				new Coordinate { X = 0.15, Y = 0.450 },
+				new Coordinate { X = 0.85, Y = 0.450 },
+				new Coordinate { X = 0.50, Y = 0.350 },
+				new Coordinate { X = 0.50, Y = 0.150 }
 			};
 
 		static IList<Coordinate> FormationFourThreeThree = new List<Coordinate>
 			{
-				new Coordinate { X = 0.5000 - XOffset, Y = 0.200 - YOffset },
-				new Coordinate { X = 0.1500 - XOffset, Y = 0.250 - YOffset },
-				new Coordinate { X = 0.8500 - XOffset, Y = 0.250 - YOffset },
-				new Coordinate { X = 0.3500 - XOffset, Y = 0.450 - YOffset },
-				new Coordinate { X = 0.6500 - XOffset, Y = 0.450 - YOffset },
-				new Coordinate { X = 0.5000 - XOffset, Y = 0.625 - YOffset },
-				new Coordinate { X = 0.1500 - XOffset, Y = 0.750 - YOffset },
-				new Coordinate { X = 0.3833 - XOffset, Y = 0.775 - YOffset },
-				new Coordinate { X = 0.6167 - XOffset, Y = 0.775 - YOffset },
-				new Coordinate { X = 0.8500 - XOffset, Y = 0.750 - YOffset }
+				new Coordinate { X = 0.5000, Y = 0.200 },
+				new Coordinate { X = 0.1500, Y = 0.250 },
+				new Coordinate { X = 0.8500, Y = 0.250 },
+				new Coordinate { X = 0.3500, Y = 0.450 },
+				new Coordinate { X = 0.6500, Y = 0.450 },
+				new Coordinate { X = 0.5000, Y = 0.625 },
+				new Coordinate { X = 0.1500, Y = 0.750 },
+				new Coordinate { X = 0.3833, Y = 0.775 },
+				new Coordinate { X = 0.6167, Y = 0.775 },
+				new Coordinate { X = 0.8500, Y = 0.750 }
 			};
-
-		//	*. Create these starting co-ordinates
-
-		//	*. Create a (time boxed) optimisation problem to find a few decent formations
-		//		(a) Run the CPU vs CPU games in parallel
 
 		internal static void SelectStartingFormation(IDictionary<int, Player> formation, Team team, Team opposition)
 		{
@@ -108,7 +101,6 @@ namespace Cm93.GameEngine.Basic.AI
 
 			foreach (var playerIndex in variables.Select((v, i) => new { Index = i, Player = team.Players.Single(p => p.Number == v.InstantiatedValue) }))
 			{
-				//"This isn't updating the shirt numbers back in the view model!"
 				formation[playerIndex.Index] = playerIndex.Player;
 				formation[playerIndex.Index].Location.X = templateFormation[playerIndex.Index].X;
 				formation[playerIndex.Index].Location.Y = templateFormation[playerIndex.Index].Y;
@@ -117,71 +109,78 @@ namespace Cm93.GameEngine.Basic.AI
 
 		private static double RatingForPosition(Player player, Coordinate location)
 		{
-			var adjustedlocation = new Coordinate { X = location.X + XOffset, Y = location.Y + YOffset };
 			var sidePosition = (int) player.Position & 0x11;
 			var rolePosition = (int) player.Position & 0x11100;
 			var rating = player.Rating;
 
-			var deficit = 1d;
+			var multiplier = 1d;
 
-			SideDeficit(adjustedlocation, sidePosition, ref deficit);
-			RoleDeficit(adjustedlocation, rolePosition, ref deficit);
+			SideDeficit(location, sidePosition, ref multiplier);
+			RoleDeficit(location, rolePosition, ref multiplier);
 
-			return rating * deficit;
+			SideBonus(location, sidePosition, ref multiplier);
+			RoleBonus(location, sidePosition, ref multiplier);
+
+			return rating * multiplier;
 		}
 
-		private static void RoleDeficit(Coordinate adjustedlocation, int rolePosition, ref double deficit)
+		private static void RoleBonus(Coordinate location, int sidePosition, ref double multiplier)
 		{
-			if (adjustedlocation.Y > 0.75d)
-			{
-				if ((rolePosition & 0x100) == 0)
-					deficit *= Adjust;
-			}
-			else if (adjustedlocation.Y > 0.5d)
-			{
-				if ((rolePosition & 0x1100) == 0)
-					deficit *= Adjust;
-			}
-			else if (adjustedlocation.Y > 0.25d)
-			{
-				if ((rolePosition & 0x11000) == 0)
-					deficit *= Adjust;
-			}
-			else
-			{
-				if ((rolePosition & 0x10000) == 0)
-					deficit *= Adjust;
-			}
+			if (location.Y < 0.3d && (sidePosition & 0x10000) > 0)
+				multiplier /= Adjust;
+			else if (location.Y > 0.3d && location.Y < 0.7d && (sidePosition & 0x1000) > 0)
+				multiplier /= Adjust;
+			else if (location.Y < 0.7d && (sidePosition & 0x100) > 0)
+				multiplier /= Adjust;
 		}
 
-		private static void SideDeficit(Coordinate adjustedlocation, int sidePosition, ref double deficit)
+		private static void SideBonus(Coordinate location, int sidePosition, ref double multiplier)
 		{
-			if (adjustedlocation.X < 0.25d)
-			{
-				if ((sidePosition & 0x10) == 0)
-					deficit *= Adjust;
-			}
-			else if (adjustedlocation.X < 0.5d)
-			{
-				if ((sidePosition & 0x1) > 0 && (sidePosition & 0x10) == 0)
-					deficit *= Adjust;
-			}
-			else if (adjustedlocation.Y < 0.75d)
-			{
-				if ((sidePosition & 0x10) > 0 && (sidePosition & 0x1) == 0)
-					deficit *= Adjust;
-			}
-			else
-			{
-				if ((sidePosition & 0x1) == 0)
-					deficit *= Adjust;
-			}
+			if (location.X < 0.3d && ((sidePosition & 0x10) > 0 || (sidePosition & 0x11) == 0x11))
+				multiplier /= Adjust;
+			else if (location.X > 0.3d && location.X < 0.7d && ((sidePosition & 0x11) == 0  || (sidePosition & 0x11) == 0x11))
+				multiplier /= Adjust;
+			else if (location.X > 0.7d && ((sidePosition & 0x1) > 0 || (sidePosition & 0x11) == 0x11))
+				multiplier /= Adjust;
+		}
+
+		private static void RoleDeficit(Coordinate location, int rolePosition, ref double deficit)
+		{
+			if (location.Y > 0.75d && (rolePosition & 0x100) == 0)
+				deficit *= Adjust;
+			else if (location.Y < 0.75d && location.Y > 0.5d && (rolePosition & 0x1100) == 0)
+				deficit *= Adjust;
+			else if (location.Y < 0.5d && location.Y > 0.25d && (rolePosition & 0x11000) == 0)
+				deficit *= Adjust;
+			else if (location.Y < 0.25d && (rolePosition & 0x10000) == 0)
+				deficit *= Adjust;
+		}
+
+		private static void SideDeficit(Coordinate location, int sidePosition, ref double deficit)
+		{
+			if (location.X < 0.25d && (sidePosition & 0x10) == 0)
+				deficit *= Adjust;
+			else if (location.X < 0.5d && (sidePosition & 0x1) > 0 && (sidePosition & 0x10) == 0)
+				deficit *= Adjust;
+			else if (location.X < 0.75d && (sidePosition & 0x10) > 0 && (sidePosition & 0x1) == 0)
+				deficit *= Adjust;
+			else if ((sidePosition & 0x1) == 0)
+				deficit *= Adjust;
 		}
 
 		private static IList<Coordinate> SelectTeamFormation(Team team, Team opposition)
 		{
-			var teamBestTenSum = team.Players.Select(p => p.Rating).OrderBy(r => r).Take(10).Sum();
-			var oppositionBestTenSum = opposition.Players.Select(p => p.Rating).OrderBy(r => r).Take(10).Sum();
+			var teamBestTenSum = team.Players.
+				Select(p => p.Rating).
+				OrderByDescending(r => r).
+				Take(10).
+				Sum();
+
+			var oppositionBestTenSum = opposition.Players.
+				Select(p => p.Rating).
+				OrderByDescending(r => r).
+				Take(10).
+				Sum();
 
 			if (teamBestTenSum * 1.05 < oppositionBestTenSum)
 				return FormationFiveFourOne;

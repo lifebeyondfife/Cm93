@@ -122,7 +122,7 @@ namespace Cm93.State.Game
 			{
 				team.Players = new List<Player>(players.Where(p => p.TeamName == team.TeamName));
 				foreach (var player in team.Players)
-					if (player.Formation < Configuration.AsideSize)
+					if (player.Formation >= 0 && player.Formation < Configuration.AsideSize)
 						team.Formation[player.Formation] = player;
 			}
 		}

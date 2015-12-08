@@ -171,200 +171,200 @@ namespace Cm93.UI.Modules.Match
 
 		public double Player1Top
 		{
-			get { return TeamFormation[0].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			get { return TeamFormation[0].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[0].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				TeamFormation[0].Location.XamlY = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player1Top);
 			}
 		}
 
 		public double Player2Top
 		{
-			get { return TeamFormation[1].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			get { return TeamFormation[1].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[1].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				TeamFormation[1].Location.XamlY = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player2Top);
 			}
 		}
 
 		public double Player3Top
 		{
-			get { return TeamFormation[2].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			get { return TeamFormation[2].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[2].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				TeamFormation[2].Location.XamlY = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player3Top);
 			}
 		}
 
 		public double Player4Top
 		{
-			get { return TeamFormation[3].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			get { return TeamFormation[3].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[3].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				TeamFormation[3].Location.XamlY = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player4Top);
 			}
 		}
 
 		public double Player5Top
 		{
-			get { return TeamFormation[4].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			get { return TeamFormation[4].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[4].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				TeamFormation[4].Location.XamlY = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player5Top);
 			}
 		}
 
 		public double Player6Top
 		{
-			get { return TeamFormation[5].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			get { return TeamFormation[5].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[5].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				TeamFormation[5].Location.XamlY = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player6Top);
 			}
 		}
 
 		public double Player7Top
 		{
-			get { return TeamFormation[6].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			get { return TeamFormation[6].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[6].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				TeamFormation[6].Location.XamlY = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player7Top);
 			}
 		}
 
 		public double Player8Top
 		{
-			get { return TeamFormation[7].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			get { return TeamFormation[7].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[7].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				TeamFormation[7].Location.XamlY = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player8Top);
 			}
 		}
 
 		public double Player9Top
 		{
-			get { return TeamFormation[8].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			get { return TeamFormation[8].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[8].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				TeamFormation[8].Location.XamlY = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player9Top);
 			}
 		}
 
 		public double Player10Top
 		{
-			get { return TeamFormation[9].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations); }
+			get { return TeamFormation[9].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations); }
 			set
 			{
-				TeamFormation[9].Location.Y = value / MatchAnimations.GetPitchHeight(MatchAnimations);
+				TeamFormation[9].Location.XamlY = value / MatchAnimations.GetPitchHeight(MatchAnimations);
 				NotifyOfPropertyChange(() => Player10Top);
 			}
 		}
 
 		public double Player1Left
 		{
-			get { return TeamFormation[0].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			get { return TeamFormation[0].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[0].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				TeamFormation[0].Location.XamlX = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player1Left);
 			}
 		}
 
 		public double Player2Left
 		{
-			get { return TeamFormation[1].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			get { return TeamFormation[1].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[1].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				TeamFormation[1].Location.XamlX = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player2Left);
 			}
 		}
 
 		public double Player3Left
 		{
-			get { return TeamFormation[2].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			get { return TeamFormation[2].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[2].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				TeamFormation[2].Location.XamlX = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player3Left);
 			}
 		}
 
 		public double Player4Left
 		{
-			get { return TeamFormation[3].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			get { return TeamFormation[3].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[3].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				TeamFormation[3].Location.XamlX = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player4Left);
 			}
 		}
 
 		public double Player5Left
 		{
-			get { return TeamFormation[4].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			get { return TeamFormation[4].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[4].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				TeamFormation[4].Location.XamlX = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player5Left);
 			}
 		}
 
 		public double Player6Left
 		{
-			get { return TeamFormation[5].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			get { return TeamFormation[5].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[5].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				TeamFormation[5].Location.XamlX = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player6Left);
 			}
 		}
 
 		public double Player7Left
 		{
-			get { return TeamFormation[6].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			get { return TeamFormation[6].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[6].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				TeamFormation[6].Location.XamlX = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player7Left);
 			}
 		}
 
 		public double Player8Left
 		{
-			get { return TeamFormation[7].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			get { return TeamFormation[7].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[7].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				TeamFormation[7].Location.XamlX = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player8Left);
 			}
 		}
 
 		public double Player9Left
 		{
-			get { return TeamFormation[8].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			get { return TeamFormation[8].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[8].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				TeamFormation[8].Location.XamlX = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player9Left);
 			}
 		}
 
 		public double Player10Left
 		{
-			get { return TeamFormation[9].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations); }
+			get { return TeamFormation[9].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations); }
 			set
 			{
-				TeamFormation[9].Location.X = value / MatchAnimations.GetPitchWidth(MatchAnimations);
+				TeamFormation[9].Location.XamlX = value / MatchAnimations.GetPitchWidth(MatchAnimations);
 				NotifyOfPropertyChange(() => Player10Left);
 			}
 		}
@@ -847,26 +847,26 @@ namespace Cm93.UI.Modules.Match
 		{
 			var storyBoard = new Storyboard();
 
-			AnimatePlayer(storyBoard, ComputerTeamFormation[0].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer1LeftProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[0].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer1TopProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[1].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer2LeftProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[1].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer2TopProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[2].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer3LeftProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[2].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer3TopProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[3].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer4LeftProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[3].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer4TopProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[4].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer5LeftProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[4].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer5TopProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[5].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer6LeftProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[5].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer6TopProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[6].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer7LeftProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[6].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer7TopProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[7].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer8LeftProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[7].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer8TopProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[8].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer9LeftProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[8].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer9TopProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[9].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer10LeftProperty);
-			AnimatePlayer(storyBoard, ComputerTeamFormation[9].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer10TopProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[0].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer1LeftProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[0].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer1TopProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[1].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer2LeftProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[1].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer2TopProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[2].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer3LeftProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[2].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer3TopProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[3].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer4LeftProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[3].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer4TopProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[4].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer5LeftProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[4].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer5TopProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[5].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer6LeftProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[5].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer6TopProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[6].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer7LeftProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[6].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer7TopProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[7].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer8LeftProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[7].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer8TopProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[8].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer9LeftProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[8].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer9TopProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[9].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.ComputerPlayer10LeftProperty);
+			AnimatePlayer(storyBoard, ComputerTeamFormation[9].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.ComputerPlayer10TopProperty);
 
 			if (Math.Abs(possession) > 1E-6)
 			{
@@ -881,26 +881,26 @@ namespace Cm93.UI.Modules.Match
 		{
 			var storyBoard = new Storyboard();
 
-			AnimatePlayer(storyBoard, TeamFormation[0].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player1LeftProperty);
-			AnimatePlayer(storyBoard, TeamFormation[0].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player1TopProperty);
-			AnimatePlayer(storyBoard, TeamFormation[1].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player2LeftProperty);
-			AnimatePlayer(storyBoard, TeamFormation[1].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player2TopProperty);
-			AnimatePlayer(storyBoard, TeamFormation[2].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player3LeftProperty);
-			AnimatePlayer(storyBoard, TeamFormation[2].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player3TopProperty);
-			AnimatePlayer(storyBoard, TeamFormation[3].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player4LeftProperty);
-			AnimatePlayer(storyBoard, TeamFormation[3].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player4TopProperty);
-			AnimatePlayer(storyBoard, TeamFormation[4].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player5LeftProperty);
-			AnimatePlayer(storyBoard, TeamFormation[4].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player5TopProperty);
-			AnimatePlayer(storyBoard, TeamFormation[5].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player6LeftProperty);
-			AnimatePlayer(storyBoard, TeamFormation[5].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player6TopProperty);
-			AnimatePlayer(storyBoard, TeamFormation[6].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player7LeftProperty);
-			AnimatePlayer(storyBoard, TeamFormation[6].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player7TopProperty);
-			AnimatePlayer(storyBoard, TeamFormation[7].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player8LeftProperty);
-			AnimatePlayer(storyBoard, TeamFormation[7].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player8TopProperty);
-			AnimatePlayer(storyBoard, TeamFormation[8].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player9LeftProperty);
-			AnimatePlayer(storyBoard, TeamFormation[8].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player9TopProperty);
-			AnimatePlayer(storyBoard, TeamFormation[9].Location.X * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player10LeftProperty);
-			AnimatePlayer(storyBoard, TeamFormation[9].Location.Y * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player10TopProperty);
+			AnimatePlayer(storyBoard, TeamFormation[0].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player1LeftProperty);
+			AnimatePlayer(storyBoard, TeamFormation[0].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player1TopProperty);
+			AnimatePlayer(storyBoard, TeamFormation[1].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player2LeftProperty);
+			AnimatePlayer(storyBoard, TeamFormation[1].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player2TopProperty);
+			AnimatePlayer(storyBoard, TeamFormation[2].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player3LeftProperty);
+			AnimatePlayer(storyBoard, TeamFormation[2].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player3TopProperty);
+			AnimatePlayer(storyBoard, TeamFormation[3].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player4LeftProperty);
+			AnimatePlayer(storyBoard, TeamFormation[3].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player4TopProperty);
+			AnimatePlayer(storyBoard, TeamFormation[4].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player5LeftProperty);
+			AnimatePlayer(storyBoard, TeamFormation[4].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player5TopProperty);
+			AnimatePlayer(storyBoard, TeamFormation[5].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player6LeftProperty);
+			AnimatePlayer(storyBoard, TeamFormation[5].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player6TopProperty);
+			AnimatePlayer(storyBoard, TeamFormation[6].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player7LeftProperty);
+			AnimatePlayer(storyBoard, TeamFormation[6].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player7TopProperty);
+			AnimatePlayer(storyBoard, TeamFormation[7].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player8LeftProperty);
+			AnimatePlayer(storyBoard, TeamFormation[7].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player8TopProperty);
+			AnimatePlayer(storyBoard, TeamFormation[8].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player9LeftProperty);
+			AnimatePlayer(storyBoard, TeamFormation[8].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player9TopProperty);
+			AnimatePlayer(storyBoard, TeamFormation[9].Location.XamlX * MatchAnimations.GetPitchWidth(MatchAnimations), MatchAnimations.Player10LeftProperty);
+			AnimatePlayer(storyBoard, TeamFormation[9].Location.XamlY * MatchAnimations.GetPitchHeight(MatchAnimations), MatchAnimations.Player10TopProperty);
 
 			storyBoard.Begin();
 		}
@@ -1064,8 +1064,8 @@ namespace Cm93.UI.Modules.Match
 
 			SubstitutedPlayers.Add(subbedPlayer);
 
-			substitutePlayer.Location.X = subbedPlayer.Location.X;
-			substitutePlayer.Location.Y = subbedPlayer.Location.Y;
+			substitutePlayer.Location.XamlX = subbedPlayer.Location.XamlX;
+			substitutePlayer.Location.XamlY = subbedPlayer.Location.XamlY;
 
 			TeamFormation[TeamFormation.
 				Where(kvp => kvp.Value.Number == subbedPlayer.Number).

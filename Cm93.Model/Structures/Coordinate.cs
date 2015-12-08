@@ -19,10 +19,21 @@ namespace Cm93.Model.Structures
 {
 	public class Coordinate
 	{
+		public double XamlX
+		{
+			get { return X - shirtWidthDelta; }
+			set { X = value + shirtWidthDelta; }
+		}
+
+		public double XamlY
+		{
+			get { return Y - shirtHeightDelta; }
+			set { Y = value + shirtHeightDelta; }
+		}
+
 		public double X { get; set; }
 		public double Y { get; set; }
 
-		//	TODO: Make Coordinate abstract away the XAML shirt width / height baws
 		private double shirtWidthDelta = 0.08333d;
 		private double shirtHeightDelta = 0.075d;
 
@@ -33,8 +44,8 @@ namespace Cm93.Model.Structures
 
 		public void Invert()
 		{
-			X = 1d - this.X - 2 * shirtWidthDelta;
-			Y = 1d - this.Y - 2 * shirtHeightDelta;
+			X = 1d - this.X;
+			Y = 1d - this.Y;
 		}
 	}
 }
