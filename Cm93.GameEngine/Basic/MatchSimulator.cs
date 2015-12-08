@@ -29,23 +29,16 @@ namespace Cm93.GameEngine.Basic
 {
 	public class MatchSimulator
 	{
-		private Random Random { get; set; }
-
-		public MatchSimulator()
-		{
-			//	Not thread safe now that the playing of fixtures has been parallelised
-			throw new NotImplementedException();
-			Random = new Random();
-		}
-
 		public void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation,
 			IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi)
 		{
+			var random = new Random();
+
 			for (var i = 0; i < 10; ++i)
 			{
 				var ballPositions = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
-				var homeTeamScore = homeTeamFormation.Values.Select(p => p.Rating * Random.NextDouble()).ToList();
-				var awayTeamScore = awayTeamFormation.Values.Select(p => p.Rating * Random.NextDouble()).ToList();
+				var homeTeamScore = homeTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
+				var awayTeamScore = awayTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
 
 				var round = homeTeamScore.Zip(awayTeamScore, (home, away) => (home * home) - (away * away)).Sum();
 
@@ -109,6 +102,7 @@ namespace Cm93.GameEngine.Basic
 
 		private void ColourPositionsAround(IEnumerable<Player> players, double[,] ballPositions)
 		{
+			var random = new Random();
 			var coordinateList = new List<Tuple<int, int>>();
 
 			foreach (var location in players.Select(p => p.Location))
@@ -116,8 +110,8 @@ namespace Cm93.GameEngine.Basic
 				coordinateList.AddRange(Enumerable.Range(1, 100).Select(i =>
 					new Tuple<int, int>
 						(
-							(int) (location.X * Configuration.HeatMapDimensions.Item1) + Random.Next(-4, 4),
-							(int) (Configuration.HeatMapDimensions.Item2 - location.Y * Configuration.HeatMapDimensions.Item2) + Random.Next(-4, 4)
+							(int) (location.X * Configuration.HeatMapDimensions.Item1) + random.Next(-4, 4),
+							(int) (Configuration.HeatMapDimensions.Item2 - location.Y * Configuration.HeatMapDimensions.Item2) + random.Next(-4, 4)
 						)
 					)
 				);
