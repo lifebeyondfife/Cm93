@@ -123,6 +123,10 @@ namespace Cm93.GameEngine.Basic
 
 		private void UpdateNpcTeams(IDictionary<int, Player> teamFormation)
 		{
+			//	TODO: Get AI routine to update formation positions
+
+			//	TODO: AI routine to look at home vs away, scoreline and minutes passed etc.
+
 			//teamFormation.Values.Execute(p => p.Location.X = Random.NextDouble() * 0.84d);
 			//teamFormation.Values.Execute(p => p.Location.Y = Random.NextDouble() * 0.84d);
 		}
