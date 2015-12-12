@@ -31,13 +31,11 @@ namespace Cm93.GameEngine.Basic
 	public class BasicGameEngine : IGameEngine
 	{
 		private PlayerBids PlayerBids { get; set; }
-		private MatchSimulator MatchSimulator { get; set; }
 		private IArtificialIntelligence ArtificialIntelligence { get; set; }
 
 		public BasicGameEngine()
 		{
 			PlayerBids = new PlayerBids();
-			MatchSimulator = new MatchSimulator();
 			ArtificialIntelligence = new ArtificialIntelligence();
 		}
 
@@ -80,7 +78,9 @@ namespace Cm93.GameEngine.Basic
 				awayTeamFormation.Values.Execute(p => p.Location.Invert());
 			}
 
-			MatchSimulator.Play(fixture, homeTeamFormation, awayTeamFormation, updateUi);
+			var matchSimulator = new MatchSimulator(homeTeamFormation, awayTeamFormation);
+
+			matchSimulator.Play(fixture, updateUi);
 		}
 
 		#endregion

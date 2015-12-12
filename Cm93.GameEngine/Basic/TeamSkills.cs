@@ -26,8 +26,8 @@ namespace Cm93.GameEngine.Basic
 	{
 		private const double Flatten = 1d;
 
-		private IList<Player> HomeTeamFormation { get; set; }
-		private IList<Player> AwayTeamFormation { get; set; }
+		private IList<Player> HomeTeamPlayers { get; set; }
+		private IList<Player> AwayTeamPlayers { get; set; }
 
 		private static readonly Func<Coordinate, Coordinate, double, double> Distribution = (position, player, rating) =>
 			rating * (Math.Exp(-((player.X - position.X) * (player.X - position.X) + (player.Y - position.Y) * (player.Y - position.Y)) / Flatten));
@@ -44,27 +44,27 @@ namespace Cm93.GameEngine.Basic
 		public Func<Coordinate, double> AwayTeamShooting { get; private set; }
 		public Func<Coordinate, double> AwayTeamDribbling { get; private set; }
 
-		public TeamSkills(IList<Player> homeTeamFormation, IList<Player> awayTeamFormation)
+		public TeamSkills(IList<Player> homeTeamPlayers, IList<Player> awayTeamPlayers)
 		{
-			HomeTeamFormation = homeTeamFormation;
-			AwayTeamFormation = awayTeamFormation;
+			HomeTeamPlayers = homeTeamPlayers;
+			AwayTeamPlayers = awayTeamPlayers;
 
 			CreateSkillLambdaFunctions();
 		}
 
 		private void CreateSkillLambdaFunctions()
 		{
-			HomeTeamPace = coordinate => HomeTeamFormation.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
-			HomeTeamPassing = coordinate => HomeTeamFormation.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
-			HomeTeamTackling = coordinate => HomeTeamFormation.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
-			HomeTeamShooting = coordinate => HomeTeamFormation.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
-			HomeTeamDribbling = coordinate => HomeTeamFormation.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			HomeTeamPace = coordinate => HomeTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			HomeTeamPassing = coordinate => HomeTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			HomeTeamTackling = coordinate => HomeTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			HomeTeamShooting = coordinate => HomeTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			HomeTeamDribbling = coordinate => HomeTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
 
-			AwayTeamPace = coordinate => AwayTeamFormation.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
-			AwayTeamPassing = coordinate => AwayTeamFormation.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
-			AwayTeamTackling = coordinate => AwayTeamFormation.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
-			AwayTeamShooting = coordinate => AwayTeamFormation.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
-			AwayTeamDribbling = coordinate => AwayTeamFormation.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			AwayTeamPace = coordinate => AwayTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			AwayTeamPassing = coordinate => AwayTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			AwayTeamTackling = coordinate => AwayTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			AwayTeamShooting = coordinate => AwayTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			AwayTeamDribbling = coordinate => AwayTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
 		}
 	}
 }

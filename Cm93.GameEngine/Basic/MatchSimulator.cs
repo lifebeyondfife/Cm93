@@ -29,96 +29,76 @@ namespace Cm93.GameEngine.Basic
 {
 	public class MatchSimulator
 	{
-		public void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation,
-			IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi)
+		public enum Side
 		{
-			var random = new Random();
+			Home,
+			Away
+		}
 
-			for (var i = 0; i < 10; ++i)
+		private Random Random { get; set; }
+		private IDictionary<int, Player> HomeTeamFormation { get; set; }
+		private IDictionary<int, Player> AwayTeamFormation { get; set; }
+
+
+
+		public MatchSimulator(IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation)
+		{
+			Random = new Random();
+			HomeTeamFormation = homeTeamFormation;
+			AwayTeamFormation = awayTeamFormation;
+		}
+
+		public void Play(IFixture fixture, Action<double, double[,]> updateUi)
+		{
+			var heatMap = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
+			var teamSkills = new TeamSkills(HomeTeamFormation.Values.ToList(), AwayTeamFormation.Values.ToList());
+
+			var ballPosition = new Coordinate { X = 0.5d, Y = 0.5d };
+			var kickoff = DateTime.Now;
+			var side = default(Side);
+
+			//	some kind of loop - introduce the ball into play
+			while (DateTime.Now - kickoff < TimeSpan.FromMinutes(5))
 			{
-				var ballPositions = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
-				var homeTeamScore = homeTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
-				var awayTeamScore = awayTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
+			//		battle (some constant amount random variability) of tackling vs tackling
+				var ballPossessor = TackleBattle(teamSkills, ballPosition, out side);
 
-				var round = homeTeamScore.Zip(awayTeamScore, (home, away) => (home * home) - (away * away)).Sum();
+			//		some kind of loop - one team in possession
 
-				if (Configuration.PlayerTeamName != fixture.TeamHome.TeamName)
-					UpdateNpcTeams(homeTeamFormation);
+			//			dribble as far as player is skilled and accounting for opposition players tackling [add to heatmap]
 
-				if (Configuration.PlayerTeamName != fixture.TeamAway.TeamName)
-					UpdateNpcTeams(awayTeamFormation);
+			//			pass the ball or shoot depending on what's most appropriate [add to heatmap]
 
-				ColourPositionsAround(round > 0 ? homeTeamFormation.Values : awayTeamFormation.Values, ballPositions);
+			//			some kind of loop - ball moving across the pitch freely
 
-				if (round > 0)
-					++fixture.ChancesHome;
-				else
-					++fixture.ChancesAway;
+			//				each moment see if the ball can be gained by a player according to speed and a test for, hmmm, pace?
 
-				if (round > 5000)
-				{
-					++fixture.GoalsHome;
-					++fixture.TeamHome.Formation[homeTeamScore.
-						Select((value, index) => new { Index = index, Value = value }).
-						OrderByDescending(m => m.Value).
-						First().Index].Goals;
-				}
-				else if (round < -7500)
-				{
-					++fixture.GoalsAway;
-					++fixture.TeamAway.Formation[awayTeamScore.
-						Select((value, index) => new { Index = index, Value = value }).
-						OrderByDescending(m => m.Value).
-						First().Index].Goals;
-				}
 
-				if (updateUi == null)
-					continue;
 
-				fixture.Minutes += 9;
 
-				if (i == 9)
-					fixture.PlayingPeriod = PlayingPeriod.FullTime;
-				else if (i == 4)
-					fixture.PlayingPeriod = PlayingPeriod.HalfTime;
-				else if (i < 5)
-					fixture.PlayingPeriod = PlayingPeriod.FirstHalf;
-				else
-					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
-
-				var possession = homeTeamScore.Sum() / (homeTeamScore.Sum() + awayTeamScore.Sum());
-				updateUi(possession, ballPositions);
-
-				Thread.Sleep(1500);
-
-				if (i == 4)
-				{
-					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
-					updateUi(possession, null);
-					Thread.Sleep(3500);
-				}
 			}
 		}
 
-		private void ColourPositionsAround(IEnumerable<Player> players, double[,] ballPositions)
+		private Player TackleBattle(TeamSkills teamSkills, Coordinate ballPosition, out Side side)
 		{
-			var random = new Random();
-			var coordinateList = new List<Tuple<int, int>>();
+			var homeTeamScore = teamSkills.HomeTeamTackling(ballPosition);
+			var awayTeamScore = teamSkills.AwayTeamTackling(ballPosition);
 
-			foreach (var location in players.Select(p => p.Location))
-			{
-				coordinateList.AddRange(Enumerable.Range(1, 100).Select(i =>
-					new Tuple<int, int>
-						(
-							(int) (location.X * Configuration.HeatMapDimensions.Item1) + random.Next(-4, 4),
-							(int) (Configuration.HeatMapDimensions.Item2 - location.Y * Configuration.HeatMapDimensions.Item2) + random.Next(-4, 4)
-						)
-					)
-				);
-			}
+			if (homeTeamScore * (1d + Random.NextDouble() / 10d) > awayTeamScore * (1d + Random.NextDouble() / 10d))
+				side = Side.Home;
+			else
+				side = Side.Away;
 
-			coordinateList.Where(t => t.Item1 > 0 && t.Item1 < 14 && t.Item2 > 0 && t.Item2 < 19).
-				Execute(t => ballPositions[t.Item1, t.Item2] += 0.5d);
+			return GetNearestPlayer(ballPosition, side);
+		}
+
+		private Player GetNearestPlayer(Coordinate ballPosition, Side side)
+		{
+			var formation = side == Side.Home ? HomeTeamFormation : AwayTeamFormation;
+
+			return HomeTeamFormation.Values.
+				OrderBy(p => Math.Sqrt(((p.Location.X - ballPosition.X) * (p.Location.X - ballPosition.X)) + ((p.Location.Y - ballPosition.Y) * (p.Location.Y - ballPosition.Y)))).
+				First();
 		}
 
 		private void UpdateNpcTeams(IDictionary<int, Player> teamFormation)
