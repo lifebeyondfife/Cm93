@@ -39,7 +39,8 @@ namespace Cm93.GameEngine.Basic
 		{
 			Goal,
 			Attack,
-			OutOfPlay
+			OutOfPlay,
+			Player
 		}
 
 		private Random Random { get; set; }
@@ -78,7 +79,9 @@ namespace Cm93.GameEngine.Basic
 			{
 				var ballPossessor = TackleBattle(ballPosition, out side);
 
-				var possessionResult = TeamPossession(ref ballPossessor, ref ballPosition, ref side);
+				var possessionResult = PossessionResult.Player;
+				while (possessionResult == PossessionResult.Player)
+					possessionResult = TeamPossession(ref ballPossessor, ref ballPosition, ref side);
 
 				UpdateFixtureStats(fixture, ballPosition, side, ballPossessor, possessionResult);
 				BallPositionForRestart(ballPosition, side, possessionResult);
@@ -126,18 +129,60 @@ namespace Cm93.GameEngine.Basic
 		{
 			var dribblePosition = DribblePosition(ballPossessor, side);
 
-			DribbleBattle(ballPossessor, dribblePosition, side);
+			DribbleBattle(ref ballPossessor, dribblePosition, ref side);
 
-			//	pass the ball or shoot depending on what's most appropriate [add to heatmap]
+			var target = SelectPlayerOrGoal(ballPossessor, dribblePosition, side);
 
-			//	some kind of loop - ball moving across the pitch freely
+			//	ball moving across the pitch freely according to the ballPossessor's Shoot or Pass skill
+			
+			//	each moment see if the ball can be gained by a player according to speed and a test for pace while fast, tackling while slow?
 
-			//	each moment see if the ball can be gained by a player according to speed and a test for, hmmm, pace?
+			//	update PossessionResult to be (a) outofplay (b) attack, and by inference also outofplay (c) goal or (d) with another player
 
 			return default(PossessionResult);
 		}
 
-		private void DribbleBattle(Player ballPossessor, Coordinate dribblePosition, Side side)
+		private Coordinate SelectPlayerOrGoal(Player ballPossessor, Coordinate dribblePosition, Side side)
+		{
+			var players = side == Side.Home ? HomeTeamPlayers : AwayTeamPlayers;
+
+			var bound = default(Func<double, bool>);
+			if ((side == Side.Home && AwayGoal.Y == 0) || (side == Side.Away && HomeGoal.Y == 0))
+				bound = playerPositionY => dribblePosition.Y > playerPositionY;
+			else
+				bound = playerPositionY => dribblePosition.Y < playerPositionY;
+
+			var potentialPassTo = players.
+				Where(p => bound(p.Location.Y)).
+				OrderBy(p => Math.Sqrt(
+					((p.Location.X - dribblePosition.X) * (p.Location.X - dribblePosition.X)) +
+					((p.Location.Y - dribblePosition.Y) * (p.Location.Y - dribblePosition.Y))
+				)).
+				Take(3).
+				ToList();
+
+			if (!potentialPassTo.Any())
+				return side == Side.Home ? AwayGoal : HomeGoal;
+
+			var passTo = potentialPassTo[Random.Next(0, potentialPassTo.Count)];
+
+			if (side == Side.Home)
+			{
+				if (GetDistance(dribblePosition, AwayGoal) < GetDistance(dribblePosition, passTo.Location))
+					return AwayGoal;
+				else
+					return passTo.Location;
+			}
+			else
+			{
+				if (GetDistance(dribblePosition, HomeGoal) < GetDistance(dribblePosition, passTo.Location))
+					return HomeGoal;
+				else
+					return passTo.Location;
+			}
+		}
+
+		private void DribbleBattle(ref Player ballPossessor, Coordinate dribblePosition, ref Side side)
 		{
 			var tackleScore = side == Side.Home ? TeamSkills.AwayTeamTackling(dribblePosition) : TeamSkills.HomeTeamTackling(dribblePosition);
 
@@ -182,10 +227,15 @@ namespace Cm93.GameEngine.Basic
 
 			return players.
 				OrderBy(p => Math.Sqrt(
-					((p.Location.X - ballPosition.X) * (p.Location.X - ballPosition.X)) +
-					((p.Location.Y - ballPosition.Y) * (p.Location.Y - ballPosition.Y))
+					(p.Location.X - ballPosition.X) * (p.Location.X - ballPosition.X) +
+					(p.Location.Y - ballPosition.Y) * (p.Location.Y - ballPosition.Y)
 				)).
 				First();
+		}
+
+		private double GetDistance(Coordinate first, Coordinate second)
+		{
+			return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
 		}
 
 		private void UpdateNpcTeams(IDictionary<int, Player> teamFormation)
