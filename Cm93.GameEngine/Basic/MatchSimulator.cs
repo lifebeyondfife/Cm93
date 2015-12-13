@@ -29,62 +29,141 @@ namespace Cm93.GameEngine.Basic
 {
 	public class MatchSimulator
 	{
-		public enum Side
+		private enum Side
 		{
 			Home,
 			Away
 		}
 
+		private enum PossessionResult
+		{
+			Goal,
+			Attack,
+			OutOfPlay
+		}
+
 		private Random Random { get; set; }
-		private IDictionary<int, Player> HomeTeamFormation { get; set; }
-		private IDictionary<int, Player> AwayTeamFormation { get; set; }
+		//private IDictionary<int, Player> HomeTeamFormation { get; set; }
+		//private IDictionary<int, Player> AwayTeamFormation { get; set; }
 
+		private IList<Player> HomeTeamPlayers { get; set; }
+		private IList<Player> AwayTeamPlayers { get; set; }
+		private TeamSkills TeamSkills { get; set; }
 
+		private Coordinate HomeGoal { get; set; }
+		private Coordinate AwayGoal { get; set; }
 
 		public MatchSimulator(IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation)
 		{
 			Random = new Random();
-			HomeTeamFormation = homeTeamFormation;
-			AwayTeamFormation = awayTeamFormation;
+			//HomeTeamFormation = homeTeamFormation;
+			//AwayTeamFormation = awayTeamFormation;
+			HomeTeamPlayers = homeTeamFormation.Values.ToList();
+			AwayTeamPlayers = awayTeamFormation.Values.ToList();
+			TeamSkills = new TeamSkills(HomeTeamPlayers, AwayTeamPlayers);
+
+			HomeGoal = new Coordinate { X = 0.5d, Y = 0d };
+			AwayGoal = new Coordinate { X = 0.5d, Y = 1d };
 		}
 
 		public void Play(IFixture fixture, Action<double, double[,]> updateUi)
 		{
 			var heatMap = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
-			var teamSkills = new TeamSkills(HomeTeamFormation.Values.ToList(), AwayTeamFormation.Values.ToList());
 
 			var ballPosition = new Coordinate { X = 0.5d, Y = 0.5d };
 			var kickoff = DateTime.Now;
 			var side = default(Side);
 
-			//	some kind of loop - introduce the ball into play
 			while (DateTime.Now - kickoff < TimeSpan.FromMinutes(5))
 			{
-			//		battle (some constant amount random variability) of tackling vs tackling
-				var ballPossessor = TackleBattle(teamSkills, ballPosition, out side);
+				var ballPossessor = TackleBattle(ballPosition, out side);
 
-			//		some kind of loop - one team in possession
+				var possessionResult = TeamPossession(ref ballPossessor, ref ballPosition, ref side);
 
-			//			dribble as far as player is skilled and accounting for opposition players tackling [add to heatmap]
-
-			//			pass the ball or shoot depending on what's most appropriate [add to heatmap]
-
-			//			some kind of loop - ball moving across the pitch freely
-
-			//				each moment see if the ball can be gained by a player according to speed and a test for, hmmm, pace?
-
-
-
-
+				UpdateFixtureStats(fixture, ballPosition, side, ballPossessor, possessionResult);
+				BallPositionForRestart(ballPosition, side, possessionResult);
 			}
 		}
 
-		private Player TackleBattle(TeamSkills teamSkills, Coordinate ballPosition, out Side side)
+		private void BallPositionForRestart(Coordinate ballPosition, Side side, PossessionResult possessionResult)
 		{
-			var homeTeamScore = teamSkills.HomeTeamTackling(ballPosition);
-			var awayTeamScore = teamSkills.AwayTeamTackling(ballPosition);
+			if (possessionResult == PossessionResult.Goal)
+			{
+				ballPosition.X = ballPosition.Y = 0.5d;
+			}
+			else
+			{
+				var restartPlayer = GetNearestPlayer(ballPosition, side == Side.Home ? Side.Away : Side.Home);
 
-			if (homeTeamScore * (1d + Random.NextDouble() / 10d) > awayTeamScore * (1d + Random.NextDouble() / 10d))
+				ballPosition.X = restartPlayer.Location.X;
+				ballPosition.Y = restartPlayer.Location.Y;
+			}
+		}
+
+		private static void UpdateFixtureStats(IFixture fixture, Coordinate ballPosition, Side side, Player ballPossessor, PossessionResult possessionResult)
+		{
+			if (possessionResult == PossessionResult.Attack || possessionResult == PossessionResult.Goal)
+			{
+				if (side == Side.Home)
+					++fixture.ChancesHome;
+				else
+					++fixture.ChancesAway;
+			}
+
+			if (possessionResult == PossessionResult.Goal)
+			{
+				ballPosition.X = ballPosition.Y = 0.5d;
+				if (side == Side.Home)
+					++fixture.GoalsHome;
+				else
+					++fixture.GoalsAway;
+
+				++ballPossessor.Goals;
+			}
+		}
+
+		private PossessionResult TeamPossession(ref Player ballPossessor, ref Coordinate ballPosition, ref Side side)
+		{
+			var dribblePosition = DribblePosition(ballPossessor, side);
+
+			DribbleBattle(ballPosition, dribblePosition);
+
+			//	pass the ball or shoot depending on what's most appropriate [add to heatmap]
+
+			//	some kind of loop - ball moving across the pitch freely
+
+			//	each moment see if the ball can be gained by a player according to speed and a test for, hmmm, pace?
+
+			return default(PossessionResult);
+		}
+
+		private void DribbleBattle(Coordinate ballPosition, Coordinate dribblePosition)
+		{
+			''
+			throw new NotImplementedException();
+		}
+
+		private Coordinate DribblePosition(Player ballPossessor, Side side)
+		{
+			var goal = side == Side.Home ? AwayGoal : HomeGoal;
+
+			var theta = Math.Atan((goal.Y - ballPossessor.Location.Y) / (goal.X - ballPossessor.Location.X));
+			var dribbleDistance = 0.1d * (ballPossessor.Rating / 100d);
+			var dribblePosition = new Coordinate
+				{
+					X = ballPossessor.Location.X + dribbleDistance * Math.Cos(theta),
+					Y = ballPossessor.Location.Y + dribbleDistance * Math.Sin(theta)
+				};
+
+			return dribblePosition;
+		}
+
+		private Player TackleBattle(Coordinate ballPosition, out Side side)
+		{
+			var homeTeamScore = TeamSkills.HomeTeamTackling(ballPosition);
+			var awayTeamScore = TeamSkills.AwayTeamTackling(ballPosition);
+
+			if (homeTeamScore * (1d + Random.NextDouble() / 8d) > awayTeamScore * (1d + Random.NextDouble() / 10d))
 				side = Side.Home;
 			else
 				side = Side.Away;
@@ -94,10 +173,13 @@ namespace Cm93.GameEngine.Basic
 
 		private Player GetNearestPlayer(Coordinate ballPosition, Side side)
 		{
-			var formation = side == Side.Home ? HomeTeamFormation : AwayTeamFormation;
+			var players = side == Side.Home ? HomeTeamPlayers : AwayTeamPlayers;
 
-			return HomeTeamFormation.Values.
-				OrderBy(p => Math.Sqrt(((p.Location.X - ballPosition.X) * (p.Location.X - ballPosition.X)) + ((p.Location.Y - ballPosition.Y) * (p.Location.Y - ballPosition.Y)))).
+			return players.
+				OrderBy(p => Math.Sqrt(
+					((p.Location.X - ballPosition.X) * (p.Location.X - ballPosition.X)) +
+					((p.Location.Y - ballPosition.Y) * (p.Location.Y - ballPosition.Y))
+				)).
 				First();
 		}
 
