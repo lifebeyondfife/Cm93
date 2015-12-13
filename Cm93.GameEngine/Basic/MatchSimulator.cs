@@ -126,7 +126,7 @@ namespace Cm93.GameEngine.Basic
 		{
 			var dribblePosition = DribblePosition(ballPossessor, side);
 
-			DribbleBattle(ballPosition, dribblePosition);
+			DribbleBattle(ballPossessor, dribblePosition, side);
 
 			//	pass the ball or shoot depending on what's most appropriate [add to heatmap]
 
@@ -137,10 +137,15 @@ namespace Cm93.GameEngine.Basic
 			return default(PossessionResult);
 		}
 
-		private void DribbleBattle(Coordinate ballPosition, Coordinate dribblePosition)
+		private void DribbleBattle(Player ballPossessor, Coordinate dribblePosition, Side side)
 		{
-			''
-			throw new NotImplementedException();
+			var tackleScore = side == Side.Home ? TeamSkills.AwayTeamTackling(dribblePosition) : TeamSkills.HomeTeamTackling(dribblePosition);
+
+			if (tackleScore * (1d + Random.NextDouble() / 10d) > 30d)
+			{
+				side = side == Side.Home ? Side.Away : Side.Home;
+				ballPossessor = GetNearestPlayer(dribblePosition, side);
+			}
 		}
 
 		private Coordinate DribblePosition(Player ballPossessor, Side side)
