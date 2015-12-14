@@ -127,13 +127,20 @@ namespace Cm93.GameEngine.Basic
 
 		private PossessionResult TeamPossession(ref Player ballPossessor, ref Coordinate ballPosition, ref Side side)
 		{
-			var dribblePosition = DribblePosition(ballPossessor, side);
+			ballPosition = DribblePosition(ballPossessor, side);
 
-			DribbleBattle(ref ballPossessor, dribblePosition, ref side);
+			DribbleBattle(ref ballPossessor, ballPosition, ref side);
 
-			var target = SelectPlayerOrGoal(ballPossessor, dribblePosition, side);
+			var target = SelectPlayerOrGoal(ballPossessor, ballPosition, side);
 
 			//	ball moving across the pitch freely according to the ballPossessor's Shoot or Pass skill
+
+			//	var ballVelocity = proportional to distance between target and ballPosition weighted by ballPossessor passing skill and a small random variation
+
+			while (ballPosition.X > 0 && ballPosition.X < 1 && ballPosition.Y > 0 && ballPosition.Y < 1)
+			{
+
+			}
 			
 			//	each moment see if the ball can be gained by a player according to speed and a test for pace while fast, tackling while slow?
 
