@@ -54,6 +54,10 @@ namespace Cm93.GameEngine.Basic
 		private Coordinate HomeGoal { get; set; }
 		private Coordinate AwayGoal { get; set; }
 
+		private const double VelocityDecay = 0.5d;
+		private const double PassArrivalVelocity = 25d;
+
+
 		public MatchSimulator(IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation)
 		{
 			Random = new Random();
@@ -135,18 +139,46 @@ namespace Cm93.GameEngine.Basic
 
 			//	ball moving across the pitch freely according to the ballPossessor's Shoot or Pass skill
 
+			double xDelta, yDelta;
+			var ballVelocity = PassVelocity(ballPossessor, ballPosition, target, out xDelta, out yDelta);
+
 			//	var ballVelocity = proportional to distance between target and ballPosition weighted by ballPossessor passing skill and a small random variation
 
 			while (ballPosition.X > 0 && ballPosition.X < 1 && ballPosition.Y > 0 && ballPosition.Y < 1)
 			{
+				//	update ballPosition
+
+				ballVelocity = ballVelocity * Math.Exp(-1d);
+
+				//	test if it's a goal?
+
+				//	test if ball is intercepted vs player pace for fast ball
+				//		break;
+
+				//	test if ball is intercepted vs player tackling for slow ball
+				//		break;
+
+				//	update PossessionResult to be (a) outofplay (b) attack, and by inference also outofplay (c) goal or (d) with another player
 
 			}
 			
-			//	each moment see if the ball can be gained by a player according to speed and a test for pace while fast, tackling while slow?
-
-			//	update PossessionResult to be (a) outofplay (b) attack, and by inference also outofplay (c) goal or (d) with another player
-
 			return default(PossessionResult);
+		}
+
+		private double PassVelocity(Player ballPossessor, Coordinate ballPosition, Coordinate target, out double xDelta, out double yDelta)
+		{
+			var targetAdjustedForPassSkill = new Coordinate
+				{
+					X = target.X + Random.Next(-300, 300) / ballPossessor.Rating,
+					Y = target.Y + Random.Next(-300, 300) / ballPossessor.Rating
+				};
+
+			var theta = Math.Atan((targetAdjustedForPassSkill.Y - ballPosition.Y) / (targetAdjustedForPassSkill.X - ballPosition.X));
+
+			xDelta = 10 * Math.Sin(theta);
+			yDelta = 10 * Math.Cos(theta);
+
+			return PassArrivalVelocity / Math.Exp(-0.1 * GetDistance(ballPosition, target));
 		}
 
 		private Coordinate SelectPlayerOrGoal(Player ballPossessor, Coordinate dribblePosition, Side side)
@@ -162,8 +194,8 @@ namespace Cm93.GameEngine.Basic
 			var potentialPassTo = players.
 				Where(p => bound(p.Location.Y)).
 				OrderBy(p => Math.Sqrt(
-					((p.Location.X - dribblePosition.X) * (p.Location.X - dribblePosition.X)) +
-					((p.Location.Y - dribblePosition.Y) * (p.Location.Y - dribblePosition.Y))
+					(p.Location.X - dribblePosition.X) * (p.Location.X - dribblePosition.X) +
+					(p.Location.Y - dribblePosition.Y) * (p.Location.Y - dribblePosition.Y)
 				)).
 				Take(3).
 				ToList();
