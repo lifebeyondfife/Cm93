@@ -47,5 +47,23 @@ namespace Cm93.Model.Structures
 			X = 1d - this.X;
 			Y = 1d - this.Y;
 		}
+
+		public override bool Equals(object obj)
+		{
+			var otherCoordinate = obj as Coordinate;
+
+			if (otherCoordinate == null)
+				return false;
+
+			return X == otherCoordinate.X && Y == otherCoordinate.Y;
+		}
+
+		public override int GetHashCode()
+		{
+			var hash = 13;
+			hash = (hash * 7) + X.GetHashCode();
+			
+			return (hash * 7) + Y.GetHashCode();
+		}
 	}
 }

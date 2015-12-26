@@ -29,100 +29,411 @@ namespace Cm93.GameEngine.Basic
 {
 	public class MatchSimulator
 	{
-		public void Play(IFixture fixture, IDictionary<int, Player> homeTeamFormation,
-			IDictionary<int, Player> awayTeamFormation, Action<double, double[,]> updateUi)
+		private enum Side
 		{
-			var random = new Random();
+			Home,
+			Away
+		}
 
-			for (var i = 0; i < 10; ++i)
+		private enum PossessionResult
+		{
+			Goal,
+			Attack,
+			OutOfPlay,
+			Player
+		}
+
+		private Random Random { get; set; }
+
+		private IList<Player> HomeTeamPlayers { get; set; }
+		private IList<Player> AwayTeamPlayers { get; set; }
+		private TeamSkills TeamSkills { get; set; }
+
+		private Coordinate HomeGoal { get; set; }
+		private Coordinate AwayGoal { get; set; }
+
+		private const double VelocityDecay = 0.5d;
+		private const double PassArrivalVelocity = 25d;
+		private const double ShotArrivalVelocity = 50d;
+
+		private double HomeTouches { get; set; }
+		private double AwayTouches { get; set; }
+
+		private double PhasesOfPlay { get; set; }
+		private bool PlayerMatch { get; set; }
+
+		private double[,] HeatMap { get; set; }
+
+		public MatchSimulator(IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation)
+		{
+			Random = new Random();
+			HomeTeamPlayers = homeTeamFormation.Values.ToList();
+			AwayTeamPlayers = awayTeamFormation.Values.ToList();
+			TeamSkills = new TeamSkills(HomeTeamPlayers, AwayTeamPlayers);
+
+			HomeGoal = new Coordinate { X = 0.5d, Y = 0d };
+			AwayGoal = new Coordinate { X = 0.5d, Y = 1d };
+		}
+
+		public void Play(IFixture fixture, Action<double, double[,]> updateUi)
+		{
+			HeatMap = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
+
+			var ballPosition = new Coordinate { X = 0.5d, Y = 0.5d };
+			var kickoff = DateTime.Now;
+			var side = default(Side);
+
+			PlayerMatch = updateUi != null;
+			PhasesOfPlay = 0;
+
+			if (PlayerMatch)
 			{
-				var ballPositions = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
-				var homeTeamScore = homeTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
-				var awayTeamScore = awayTeamFormation.Values.Select(p => p.Rating * random.NextDouble()).ToList();
+				updateUi(0.5d, HeatMap);
+				Thread.Sleep(5000);
+				updateUi(0.5d, HeatMap);
+			}
 
-				var round = homeTeamScore.Zip(awayTeamScore, (home, away) => (home * home) - (away * away)).Sum();
+			fixture.PlayingPeriod = PlayingPeriod.FirstHalf;
+			PlayHalf(fixture, updateUi, ref ballPosition, ref side);
 
-				if (Configuration.PlayerTeamName != fixture.TeamHome.TeamName)
-					UpdateNpcTeams(homeTeamFormation);
+			fixture.PlayingPeriod = PlayingPeriod.HalfTime;
+			HeatMap = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
 
-				if (Configuration.PlayerTeamName != fixture.TeamAway.TeamName)
-					UpdateNpcTeams(awayTeamFormation);
+			if (PlayerMatch)
+			{
+				updateUi(HomeTouches / (HomeTouches + AwayTouches), null);
+				Thread.Sleep(5000);
+			}
 
-				ColourPositionsAround(round > 0 ? homeTeamFormation.Values : awayTeamFormation.Values, ballPositions);
+			PhasesOfPlay = 0;
+			fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
+			PlayHalf(fixture, updateUi, ref ballPosition, ref side);
 
-				if (round > 0)
-					++fixture.ChancesHome;
-				else
-					++fixture.ChancesAway;
+			fixture.PlayingPeriod = PlayingPeriod.FullTime;
+		}
 
-				if (round > 5000)
+		private void PlayHalf(IFixture fixture, Action<double, double[,]> updateUi, ref Coordinate ballPosition, ref Side side)
+		{
+			var minutes = fixture.PlayingPeriod == PlayingPeriod.FirstHalf ? 1 : 46;
+
+			while (PhasesOfPlay < 1500)
+			{
+				var ballPossessor = default(Player);
+
+				TackleBattle(ref ballPossessor, ballPosition, ref side);
+
+				var possessionResult = PossessionResult.Player;
+				while (possessionResult == PossessionResult.Player)
 				{
-					++fixture.GoalsHome;
-					++fixture.TeamHome.Formation[homeTeamScore.
-						Select((value, index) => new { Index = index, Value = value }).
-						OrderByDescending(m => m.Value).
-						First().Index].Goals;
-				}
-				else if (round < -7500)
-				{
-					++fixture.GoalsAway;
-					++fixture.TeamAway.Formation[awayTeamScore.
-						Select((value, index) => new { Index = index, Value = value }).
-						OrderByDescending(m => m.Value).
-						First().Index].Goals;
+					if (updateUi != null)
+						updateUi(HomeTouches / (HomeTouches + AwayTouches), HeatMap);
+
+					fixture.Minutes = (int) (90 * (PhasesOfPlay / 3000)) + minutes;
+					possessionResult = TeamPossession(ref ballPossessor, ref ballPosition, ref side);
 				}
 
-				if (updateUi == null)
-					continue;
-
-				fixture.Minutes += 9;
-
-				if (i == 9)
-					fixture.PlayingPeriod = PlayingPeriod.FullTime;
-				else if (i == 4)
-					fixture.PlayingPeriod = PlayingPeriod.HalfTime;
-				else if (i < 5)
-					fixture.PlayingPeriod = PlayingPeriod.FirstHalf;
-				else
-					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
-
-				var possession = homeTeamScore.Sum() / (homeTeamScore.Sum() + awayTeamScore.Sum());
-				updateUi(possession, ballPositions);
-
-				Thread.Sleep(1500);
-
-				if (i == 4)
-				{
-					fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
-					updateUi(possession, null);
-					Thread.Sleep(3500);
-				}
+				UpdateFixtureStats(fixture, ballPosition, side, ballPossessor, possessionResult);
+				BallPositionForRestart(ballPosition, side, possessionResult);
 			}
 		}
 
-		private void ColourPositionsAround(IEnumerable<Player> players, double[,] ballPositions)
+		private void BallPositionForRestart(Coordinate ballPosition, Side side, PossessionResult possessionResult)
 		{
-			var random = new Random();
-			var coordinateList = new List<Tuple<int, int>>();
-
-			foreach (var location in players.Select(p => p.Location))
+			if (possessionResult == PossessionResult.Goal)
 			{
-				coordinateList.AddRange(Enumerable.Range(1, 100).Select(i =>
-					new Tuple<int, int>
-						(
-							(int) (location.X * Configuration.HeatMapDimensions.Item1) + random.Next(-4, 4),
-							(int) (Configuration.HeatMapDimensions.Item2 - location.Y * Configuration.HeatMapDimensions.Item2) + random.Next(-4, 4)
-						)
-					)
-				);
+				ballPosition.X = ballPosition.Y = 0.5d;
+			}
+			else
+			{
+				var restartPlayer = GetNearestPlayer(ballPosition, side == Side.Home ? Side.Away : Side.Home);
+
+				ballPosition.X = restartPlayer.Location.X;
+				ballPosition.Y = restartPlayer.Location.Y;
+			}
+		}
+
+		private static void UpdateFixtureStats(IFixture fixture, Coordinate ballPosition, Side side, Player ballPossessor, PossessionResult possessionResult)
+		{
+			if (possessionResult == PossessionResult.Attack || possessionResult == PossessionResult.Goal)
+			{
+				if (side == Side.Home)
+					++fixture.ChancesHome;
+				else
+					++fixture.ChancesAway;
 			}
 
-			coordinateList.Where(t => t.Item1 > 0 && t.Item1 < 14 && t.Item2 > 0 && t.Item2 < 19).
-				Execute(t => ballPositions[t.Item1, t.Item2] += 0.5d);
+			if (possessionResult == PossessionResult.Goal)
+			{
+				ballPosition.X = ballPosition.Y = 0.5d;
+				if (side == Side.Home)
+					++fixture.GoalsHome;
+				else
+					++fixture.GoalsAway;
+
+				++ballPossessor.Goals;
+			}
+		}
+
+		private PossessionResult TeamPossession(ref Player ballPossessor, ref Coordinate ballPosition, ref Side side)
+		{
+			ballPosition = DribblePosition(ballPossessor, side);
+
+			DribbleBattle(ref ballPossessor, ballPosition, ref side);
+
+			var target = SelectPlayerOrGoal(ballPossessor, ballPosition, side);
+
+			double xDelta, yDelta;
+			var ballVelocity = BallVelocity(ballPossessor, ballPosition, target, out xDelta, out yDelta);
+
+			while (ballPosition.X > 0 && ballPosition.X < 1 && ballPosition.Y > 0 && ballPosition.Y < 1)
+			{
+				if (side == Side.Home)
+					++HomeTouches;
+				else
+					++AwayTouches;
+
+				ColourHeatMap(ballPosition);
+
+				++PhasesOfPlay;
+
+				if (PlayerMatch)
+					Thread.Sleep(25);
+
+				ballPosition.X += xDelta;
+				ballPosition.Y += yDelta;
+
+				ballVelocity = ballVelocity * Math.Exp(-1d);
+
+				if (ballPosition.Y > 0 || ballPosition.Y < 0)
+				{
+					if (Math.Abs(ballPosition.X - 0.5d) < 0.1d && ballVelocity > 40d)
+						return PossessionResult.Goal;
+					else if (Math.Abs(ballPosition.X - 0.5d) < 0.2d && ballVelocity > 30d)
+						return PossessionResult.Attack;
+					else
+						return PossessionResult.OutOfPlay;
+				}
+
+				if (InterceptBattle(ref ballPossessor, ballPosition, ref side, ballVelocity))
+					return PossessionResult.Player;
+
+				if (TackleBattle(ref ballPossessor, ballPosition, ref side, ballVelocity))
+					return PossessionResult.Player;
+			}
+
+			return PossessionResult.OutOfPlay;
+		}
+
+		private double BallVelocity(Player ballPossessor, Coordinate ballPosition, Coordinate target, out double xDelta, out double yDelta)
+		{
+			if (target.Equals(HomeGoal) || target.Equals(AwayGoal))
+				return ShootVelocity(ballPossessor, ballPosition, target, out xDelta, out yDelta);
+			else
+				return PassVelocity(ballPossessor, ballPosition, target, out xDelta, out yDelta);
+		}
+
+		private double PassVelocity(Player ballPossessor, Coordinate ballPosition, Coordinate target, out double xDelta, out double yDelta)
+		{
+			var targetAdjustedForPassSkill = new Coordinate
+				{
+					X = target.X + Random.Next(-30, 30) / ballPossessor.Rating,	//	Pass Rating
+					Y = target.Y + Random.Next(-30, 30) / ballPossessor.Rating	//	Pass Rating
+				};
+
+			var theta = Math.Atan((targetAdjustedForPassSkill.Y - ballPosition.Y) / (targetAdjustedForPassSkill.X - ballPosition.X));
+
+			xDelta = 0.1d * Math.Sin(theta);
+			yDelta = 0.1d * Math.Cos(theta);
+
+			return PassArrivalVelocity / Math.Exp(-0.1 * GetDistance(ballPosition, targetAdjustedForPassSkill));
+		}
+
+		private double ShootVelocity(Player ballPossessor, Coordinate ballPosition, Coordinate target, out double xDelta, out double yDelta)
+		{
+			var targetAdjustedForShootingSkill = new Coordinate
+				{
+					X = target.X + Random.Next(-10, 10) / ballPossessor.Rating,	//	Shoot Rating
+					Y = target.Y
+				};
+
+			var theta = Math.Atan((targetAdjustedForShootingSkill.Y - ballPosition.Y) / (targetAdjustedForShootingSkill.X - ballPosition.X));
+
+			xDelta = 0.1d * Math.Sin(theta);
+			yDelta = 0.1d * Math.Cos(theta);
+
+			var distance = GetDistance(ballPosition, target);
+
+			return (ShotArrivalVelocity * ballPossessor.Rating * 0.1d / distance) / Math.Exp(-0.1 * distance);	//	Shoot Rating
+		}
+
+		private Coordinate SelectPlayerOrGoal(Player ballPossessor, Coordinate dribblePosition, Side side)
+		{
+			var players = side == Side.Home ? HomeTeamPlayers : AwayTeamPlayers;
+
+			var bound = default(Func<double, bool>);
+			if ((side == Side.Home && AwayGoal.Y == 0) || (side == Side.Away && HomeGoal.Y == 0))
+				bound = playerPositionY => dribblePosition.Y > playerPositionY;
+			else
+				bound = playerPositionY => dribblePosition.Y < playerPositionY;
+
+			var potentialPassTo = players.
+				Where(p => bound(p.Location.Y)).
+				OrderBy(p => Math.Sqrt(
+					(p.Location.X - dribblePosition.X) * (p.Location.X - dribblePosition.X) +
+					(p.Location.Y - dribblePosition.Y) * (p.Location.Y - dribblePosition.Y)
+				)).
+				Take(3).
+				ToList();
+
+			if (!potentialPassTo.Any())
+				return side == Side.Home ? AwayGoal : HomeGoal;
+
+			var passTo = potentialPassTo[Random.Next(0, potentialPassTo.Count)];
+
+			if (side == Side.Home)
+			{
+				if (GetDistance(dribblePosition, AwayGoal) < GetDistance(dribblePosition, passTo.Location))
+					return AwayGoal;
+				else
+					return passTo.Location;
+			}
+			else
+			{
+				if (GetDistance(dribblePosition, HomeGoal) < GetDistance(dribblePosition, passTo.Location))
+					return HomeGoal;
+				else
+					return passTo.Location;
+			}
+		}
+
+		private void DribbleBattle(ref Player ballPossessor, Coordinate dribblePosition, ref Side side)
+		{
+			var tackleScore = side == Side.Home ? TeamSkills.AwayTeamTackling(dribblePosition) : TeamSkills.HomeTeamTackling(dribblePosition);
+
+			if (tackleScore * (1d + Random.NextDouble() / 10d) > 30d)
+			{
+				side = side == Side.Home ? Side.Away : Side.Home;
+				ballPossessor = GetNearestPlayer(dribblePosition, side);
+			}
+		}
+
+		private bool InterceptBattle(ref Player ballPossessor, Coordinate ballPosition, ref Side side, double ballVelocity)
+		{
+			var homeTeamScore = TeamSkills.HomeTeamPace(ballPosition);
+			var awayTeamScore = TeamSkills.AwayTeamPace(ballPosition);
+
+			if (homeTeamScore * (1d + Random.NextDouble() / 8d) > awayTeamScore * (1d + Random.NextDouble() / 10d))
+			{
+				if (homeTeamScore > ballVelocity)
+				{
+					side = Side.Home;
+					ballPossessor = GetNearestPlayer(ballPosition, side);
+
+					return true;
+				}
+			}
+			else
+			{
+				if (awayTeamScore > ballVelocity)
+				{
+					side = Side.Away;
+					ballPossessor = GetNearestPlayer(ballPosition, side);
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private Coordinate DribblePosition(Player ballPossessor, Side side)
+		{
+			var goal = side == Side.Home ? AwayGoal : HomeGoal;
+
+			var theta = Math.Atan((goal.Y - ballPossessor.Location.Y) / (goal.X - ballPossessor.Location.X));
+			var dribbleDistance = 0.1d * (ballPossessor.Rating / 100d);	// Dribble Rating
+			var dribblePosition = new Coordinate
+				{
+					X = ballPossessor.Location.X + dribbleDistance * Math.Cos(theta),
+					Y = ballPossessor.Location.Y + dribbleDistance * Math.Sin(theta)
+				};
+
+			ColourHeatMap(ballPossessor.Location);
+			ColourHeatMap(dribblePosition);
+
+			return dribblePosition;
+		}
+
+		private bool TackleBattle(ref Player ballPossessor, Coordinate ballPosition, ref Side side, double ballVelocity = 0d)
+		{
+			var homeTeamScore = TeamSkills.HomeTeamTackling(ballPosition);
+			var awayTeamScore = TeamSkills.AwayTeamTackling(ballPosition);
+
+			if (homeTeamScore * (1d + Random.NextDouble() / 8d) > awayTeamScore * (1d + Random.NextDouble() / 10d))
+			{
+				if (homeTeamScore > ballVelocity)
+				{
+					side = Side.Home;
+					ballPossessor = GetNearestPlayer(ballPosition, side);
+
+					return true;
+				}
+			}
+			else
+			{
+				if (awayTeamScore > ballVelocity)
+				{
+					side = Side.Away;
+					ballPossessor = GetNearestPlayer(ballPosition, side);
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private Player GetNearestPlayer(Coordinate ballPosition, Side side)
+		{
+			var players = side == Side.Home ? HomeTeamPlayers : AwayTeamPlayers;
+
+			return players.
+				OrderBy(p => Math.Sqrt(
+					(p.Location.X - ballPosition.X) * (p.Location.X - ballPosition.X) +
+					(p.Location.Y - ballPosition.Y) * (p.Location.Y - ballPosition.Y)
+				)).
+				First();
+		}
+
+		private double GetDistance(Coordinate first, Coordinate second)
+		{
+			return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
+		}
+
+		private void ColourHeatMap(Coordinate ballPosition)
+		{
+			var x = (int) (ballPosition.X * Configuration.HeatMapDimensions.Item1);
+			var y = (int) (ballPosition.Y * Configuration.HeatMapDimensions.Item2);
+
+			new[] { Tuple.Create(x - 1, y - 1), Tuple.Create(x + 1, y - 1), Tuple.Create(x - 1, y + 1), Tuple.Create(x + 1, y + 1) }.
+				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Execute(p => HeatMap[p.Item1, p.Item2] += 0.1d);
+
+			new[] { Tuple.Create(x, y - 1), Tuple.Create(x - 1, y), Tuple.Create(x + 1, y), Tuple.Create(x, y + 1) }.
+				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Execute(p => HeatMap[p.Item1, p.Item2] += 0.25d);
+
+			new[] { Tuple.Create(x, y) }.
+				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Execute(p => HeatMap[p.Item1, p.Item2] += 0.5d);
 		}
 
 		private void UpdateNpcTeams(IDictionary<int, Player> teamFormation)
 		{
+			//	TODO: Get AI routine to update formation positions
+
+			//	TODO: AI routine to look at home vs away, scoreline and minutes passed etc.
+
 			//teamFormation.Values.Execute(p => p.Location.X = Random.NextDouble() * 0.84d);
 			//teamFormation.Values.Execute(p => p.Location.Y = Random.NextDouble() * 0.84d);
 		}
