@@ -44,8 +44,6 @@ namespace Cm93.GameEngine.Basic
 		}
 
 		private Random Random { get; set; }
-		//private IDictionary<int, Player> HomeTeamFormation { get; set; }
-		//private IDictionary<int, Player> AwayTeamFormation { get; set; }
 
 		private IList<Player> HomeTeamPlayers { get; set; }
 		private IList<Player> AwayTeamPlayers { get; set; }
@@ -56,13 +54,12 @@ namespace Cm93.GameEngine.Basic
 
 		private const double VelocityDecay = 0.5d;
 		private const double PassArrivalVelocity = 25d;
+		private const double ShotArrivalVelocity = 50d;
 
 
 		public MatchSimulator(IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation)
 		{
 			Random = new Random();
-			//HomeTeamFormation = homeTeamFormation;
-			//AwayTeamFormation = awayTeamFormation;
 			HomeTeamPlayers = homeTeamFormation.Values.ToList();
 			AwayTeamPlayers = awayTeamFormation.Values.ToList();
 			TeamSkills = new TeamSkills(HomeTeamPlayers, AwayTeamPlayers);
@@ -81,7 +78,9 @@ namespace Cm93.GameEngine.Basic
 
 			while (DateTime.Now - kickoff < TimeSpan.FromMinutes(5))
 			{
-				var ballPossessor = TackleBattle(ballPosition, out side);
+				var ballPossessor = default(Player);
+				
+				TackleBattle(ref ballPossessor, ballPosition, ref side);
 
 				var possessionResult = PossessionResult.Player;
 				while (possessionResult == PossessionResult.Player)
@@ -137,48 +136,76 @@ namespace Cm93.GameEngine.Basic
 
 			var target = SelectPlayerOrGoal(ballPossessor, ballPosition, side);
 
-			//	ball moving across the pitch freely according to the ballPossessor's Shoot or Pass skill
-
 			double xDelta, yDelta;
-			var ballVelocity = PassVelocity(ballPossessor, ballPosition, target, out xDelta, out yDelta);
-
-			//	var ballVelocity = proportional to distance between target and ballPosition weighted by ballPossessor passing skill and a small random variation
+			var ballVelocity = BallVelocity(ballPossessor, ballPosition, target, out xDelta, out yDelta);
 
 			while (ballPosition.X > 0 && ballPosition.X < 1 && ballPosition.Y > 0 && ballPosition.Y < 1)
 			{
-				//	update ballPosition
+				ballPosition.X += xDelta;
+				ballPosition.Y += yDelta;
 
 				ballVelocity = ballVelocity * Math.Exp(-1d);
 
-				//	test if it's a goal?
+				if (ballPosition.Y > 0 || ballPosition.Y < 0)
+				{
+					if (Math.Abs(ballPosition.X - 0.5d) < 0.1d && ballVelocity > 40d)
+						return PossessionResult.Goal;
+					else if (Math.Abs(ballPosition.X - 0.5d) < 0.2d && ballVelocity > 30d)
+						return PossessionResult.Attack;
+					else
+						return PossessionResult.OutOfPlay;
+				}
 
-				//	test if ball is intercepted vs player pace for fast ball
-				//		break;
+				if (InterceptBattle(ref ballPossessor, ballPosition, ref side, ballVelocity))
+					return PossessionResult.Player;
 
-				//	test if ball is intercepted vs player tackling for slow ball
-				//		break;
-
-				//	update PossessionResult to be (a) outofplay (b) attack, and by inference also outofplay (c) goal or (d) with another player
-
+				if (TackleBattle(ref ballPossessor, ballPosition, ref side, ballVelocity))
+					return PossessionResult.Player;
 			}
-			
-			return default(PossessionResult);
+
+			return PossessionResult.OutOfPlay;
+		}
+
+		private double BallVelocity(Player ballPossessor, Coordinate ballPosition, Coordinate target, out double xDelta, out double yDelta)
+		{
+			if (target.Equals(HomeGoal) || target.Equals(AwayGoal))
+				return ShootVelocity(ballPossessor, ballPosition, target, out xDelta, out yDelta);
+			else
+				return PassVelocity(ballPossessor, ballPosition, target, out xDelta, out yDelta);
 		}
 
 		private double PassVelocity(Player ballPossessor, Coordinate ballPosition, Coordinate target, out double xDelta, out double yDelta)
 		{
 			var targetAdjustedForPassSkill = new Coordinate
 				{
-					X = target.X + Random.Next(-300, 300) / ballPossessor.Rating,
-					Y = target.Y + Random.Next(-300, 300) / ballPossessor.Rating
+					X = target.X + Random.Next(-30, 30) / ballPossessor.Rating,	//	Pass Rating
+					Y = target.Y + Random.Next(-30, 30) / ballPossessor.Rating	//	Pass Rating
 				};
 
 			var theta = Math.Atan((targetAdjustedForPassSkill.Y - ballPosition.Y) / (targetAdjustedForPassSkill.X - ballPosition.X));
 
-			xDelta = 10 * Math.Sin(theta);
-			yDelta = 10 * Math.Cos(theta);
+			xDelta = 0.1d * Math.Sin(theta);
+			yDelta = 0.1d * Math.Cos(theta);
 
-			return PassArrivalVelocity / Math.Exp(-0.1 * GetDistance(ballPosition, target));
+			return PassArrivalVelocity / Math.Exp(-0.1 * GetDistance(ballPosition, targetAdjustedForPassSkill));
+		}
+
+		private double ShootVelocity(Player ballPossessor, Coordinate ballPosition, Coordinate target, out double xDelta, out double yDelta)
+		{
+			var targetAdjustedForShootingSkill = new Coordinate
+				{
+					X = target.X + Random.Next(-10, 10) / ballPossessor.Rating,	//	Shoot Rating
+					Y = target.Y
+				};
+
+			var theta = Math.Atan((targetAdjustedForShootingSkill.Y - ballPosition.Y) / (targetAdjustedForShootingSkill.X - ballPosition.X));
+
+			xDelta = 0.1d * Math.Sin(theta);
+			yDelta = 0.1d * Math.Cos(theta);
+
+			var distance = GetDistance(ballPosition, target);
+
+			return (ShotArrivalVelocity * ballPossessor.Rating * 0.1d / distance) / Math.Exp(-0.1 * distance);	//	Shoot Rating
 		}
 
 		private Coordinate SelectPlayerOrGoal(Player ballPossessor, Coordinate dribblePosition, Side side)
@@ -232,12 +259,41 @@ namespace Cm93.GameEngine.Basic
 			}
 		}
 
+		private bool InterceptBattle(ref Player ballPossessor, Coordinate ballPosition, ref Side side, double ballVelocity)
+		{
+			var homeTeamScore = TeamSkills.HomeTeamPace(ballPosition);
+			var awayTeamScore = TeamSkills.AwayTeamPace(ballPosition);
+
+			if (homeTeamScore * (1d + Random.NextDouble() / 8d) > awayTeamScore * (1d + Random.NextDouble() / 10d))
+			{
+				if (homeTeamScore > ballVelocity)
+				{
+					side = Side.Home;
+					ballPossessor = GetNearestPlayer(ballPosition, side);
+
+					return true;
+				}
+			}
+			else
+			{
+				if (awayTeamScore > ballVelocity)
+				{
+					side = Side.Away;
+					ballPossessor = GetNearestPlayer(ballPosition, side);
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		private Coordinate DribblePosition(Player ballPossessor, Side side)
 		{
 			var goal = side == Side.Home ? AwayGoal : HomeGoal;
 
 			var theta = Math.Atan((goal.Y - ballPossessor.Location.Y) / (goal.X - ballPossessor.Location.X));
-			var dribbleDistance = 0.1d * (ballPossessor.Rating / 100d);
+			var dribbleDistance = 0.1d * (ballPossessor.Rating / 100d);	// Dribble Rating
 			var dribblePosition = new Coordinate
 				{
 					X = ballPossessor.Location.X + dribbleDistance * Math.Cos(theta),
@@ -247,17 +303,33 @@ namespace Cm93.GameEngine.Basic
 			return dribblePosition;
 		}
 
-		private Player TackleBattle(Coordinate ballPosition, out Side side)
+		private bool TackleBattle(ref Player ballPossessor, Coordinate ballPosition, ref Side side, double ballVelocity = 0d)
 		{
 			var homeTeamScore = TeamSkills.HomeTeamTackling(ballPosition);
 			var awayTeamScore = TeamSkills.AwayTeamTackling(ballPosition);
 
 			if (homeTeamScore * (1d + Random.NextDouble() / 8d) > awayTeamScore * (1d + Random.NextDouble() / 10d))
-				side = Side.Home;
-			else
-				side = Side.Away;
+			{
+				if (homeTeamScore > ballVelocity)
+				{
+					side = Side.Home;
+					ballPossessor = GetNearestPlayer(ballPosition, side);
 
-			return GetNearestPlayer(ballPosition, side);
+					return true;
+				}
+			}
+			else
+			{
+				if (awayTeamScore > ballVelocity)
+				{
+					side = Side.Away;
+					ballPossessor = GetNearestPlayer(ballPosition, side);
+
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private Player GetNearestPlayer(Coordinate ballPosition, Side side)
