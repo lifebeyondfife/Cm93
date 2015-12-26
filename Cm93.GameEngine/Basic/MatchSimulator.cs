@@ -56,6 +56,13 @@ namespace Cm93.GameEngine.Basic
 		private const double PassArrivalVelocity = 25d;
 		private const double ShotArrivalVelocity = 50d;
 
+		private double HomeTouches { get; set; }
+		private double AwayTouches { get; set; }
+
+		private double PhasesOfPlay { get; set; }
+		private bool PlayerMatch { get; set; }
+
+		private double[,] HeatMap { get; set; }
 
 		public MatchSimulator(IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation)
 		{
@@ -70,21 +77,60 @@ namespace Cm93.GameEngine.Basic
 
 		public void Play(IFixture fixture, Action<double, double[,]> updateUi)
 		{
-			var heatMap = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
+			HeatMap = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
 
 			var ballPosition = new Coordinate { X = 0.5d, Y = 0.5d };
 			var kickoff = DateTime.Now;
 			var side = default(Side);
 
-			while (DateTime.Now - kickoff < TimeSpan.FromMinutes(5))
+			PlayerMatch = updateUi != null;
+			PhasesOfPlay = 0;
+
+			if (PlayerMatch)
+			{
+				updateUi(0.5d, HeatMap);
+				Thread.Sleep(5000);
+				updateUi(0.5d, HeatMap);
+			}
+
+			fixture.PlayingPeriod = PlayingPeriod.FirstHalf;
+			PlayHalf(fixture, updateUi, ref ballPosition, ref side);
+
+			fixture.PlayingPeriod = PlayingPeriod.HalfTime;
+			HeatMap = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
+
+			if (PlayerMatch)
+			{
+				updateUi(HomeTouches / (HomeTouches + AwayTouches), null);
+				Thread.Sleep(5000);
+			}
+
+			PhasesOfPlay = 0;
+			fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
+			PlayHalf(fixture, updateUi, ref ballPosition, ref side);
+
+			fixture.PlayingPeriod = PlayingPeriod.FullTime;
+		}
+
+		private void PlayHalf(IFixture fixture, Action<double, double[,]> updateUi, ref Coordinate ballPosition, ref Side side)
+		{
+			var minutes = fixture.PlayingPeriod == PlayingPeriod.FirstHalf ? 1 : 46;
+
+			while (PhasesOfPlay < 1500)
 			{
 				var ballPossessor = default(Player);
-				
+
 				TackleBattle(ref ballPossessor, ballPosition, ref side);
 
 				var possessionResult = PossessionResult.Player;
 				while (possessionResult == PossessionResult.Player)
+				{
+					if (updateUi != null)
+						updateUi(HomeTouches / (HomeTouches + AwayTouches), HeatMap);
+
+					fixture.Minutes = (int) (90 * (PhasesOfPlay / 3000)) + minutes;
 					possessionResult = TeamPossession(ref ballPossessor, ref ballPosition, ref side);
+				}
 
 				UpdateFixtureStats(fixture, ballPosition, side, ballPossessor, possessionResult);
 				BallPositionForRestart(ballPosition, side, possessionResult);
@@ -141,6 +187,18 @@ namespace Cm93.GameEngine.Basic
 
 			while (ballPosition.X > 0 && ballPosition.X < 1 && ballPosition.Y > 0 && ballPosition.Y < 1)
 			{
+				if (side == Side.Home)
+					++HomeTouches;
+				else
+					++AwayTouches;
+
+				ColourHeatMap(ballPosition);
+
+				++PhasesOfPlay;
+
+				if (PlayerMatch)
+					Thread.Sleep(25);
+
 				ballPosition.X += xDelta;
 				ballPosition.Y += yDelta;
 
@@ -300,6 +358,9 @@ namespace Cm93.GameEngine.Basic
 					Y = ballPossessor.Location.Y + dribbleDistance * Math.Sin(theta)
 				};
 
+			ColourHeatMap(ballPossessor.Location);
+			ColourHeatMap(dribblePosition);
+
 			return dribblePosition;
 		}
 
@@ -347,6 +408,24 @@ namespace Cm93.GameEngine.Basic
 		private double GetDistance(Coordinate first, Coordinate second)
 		{
 			return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
+		}
+
+		private void ColourHeatMap(Coordinate ballPosition)
+		{
+			var x = (int) (ballPosition.X * Configuration.HeatMapDimensions.Item1);
+			var y = (int) (ballPosition.Y * Configuration.HeatMapDimensions.Item2);
+
+			new[] { Tuple.Create(x - 1, y - 1), Tuple.Create(x + 1, y - 1), Tuple.Create(x - 1, y + 1), Tuple.Create(x + 1, y + 1) }.
+				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Execute(p => HeatMap[p.Item1, p.Item2] += 0.1d);
+
+			new[] { Tuple.Create(x, y - 1), Tuple.Create(x - 1, y), Tuple.Create(x + 1, y), Tuple.Create(x, y + 1) }.
+				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Execute(p => HeatMap[p.Item1, p.Item2] += 0.25d);
+
+			new[] { Tuple.Create(x, y) }.
+				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Execute(p => HeatMap[p.Item1, p.Item2] += 0.5d);
 		}
 
 		private void UpdateNpcTeams(IDictionary<int, Player> teamFormation)
