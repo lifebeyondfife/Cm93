@@ -24,6 +24,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace Cm93.GameEngine.Basic
@@ -97,7 +98,11 @@ namespace Cm93.GameEngine.Basic
 			PlayerMatch = updateUi != null;
 			PhasesOfPlay = 0;
 
-			Log("Logging test");
+			LogTeam(Side.Home);
+			LogTeam(Side.Away);
+			LogRatingBattle(Side.Home);
+			LogRatingBattle(Side.Away);
+			LogRatingBattle();
 
 			if (PlayerMatch)
 			{
@@ -455,6 +460,134 @@ namespace Cm93.GameEngine.Basic
 
 			//teamFormation.Values.Execute(p => p.Location.X = Random.NextDouble() * 0.84d);
 			//teamFormation.Values.Execute(p => p.Location.Y = Random.NextDouble() * 0.84d);
+		}
+
+		private void LogTeam(Side side)
+		{
+			var height = 120;
+			var width = 25;
+
+			var players = new int?[width, height];
+
+			var team = side == Side.Home ? HomeTeamPlayers : AwayTeamPlayers;
+
+			team.Execute(p => players[(int) (p.Location.X * width), (int) (p.Location.Y * height)] = p.Number);
+
+			var stringBuilder = new StringBuilder("\n");
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", players.GetLength(1)).ToArray()));
+
+			for (var i = 0; i < players.GetLength(0); ++i)
+			{
+				for (var j = 0; j < players.GetLength(1); ++j)
+				{
+					if (j == 0 || j == players.GetLength(1) - 1)
+						stringBuilder.Append("|");
+
+					if (!players[i, j].HasValue)
+					{
+						stringBuilder.Append(" ");
+						continue;
+					}
+
+					stringBuilder.Append(players[i, j]);
+
+					if (players[i, j] >= 10)
+						++j;
+				}
+
+				stringBuilder.AppendLine();
+			}
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", players.GetLength(1)).ToArray()));
+
+			Log(stringBuilder.ToString());
+		}
+
+		private void LogRatingBattle(Side side)
+		{
+			var height = 120;
+			var width = 25;
+
+			var stringBuilder = new StringBuilder("\n");
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", height).ToArray()));
+
+			for (var i = 1; i < width; ++i)
+			{
+				for (var j = 0; j < height; ++j)
+				{
+					if (j == 0 || j == height - 1)
+					{
+						stringBuilder.Append("|");
+						continue;
+					}
+
+					if (j == 1 && i % 2 == 0)
+						continue;
+
+					var rating = side == Side.Home ?
+						(int) (TeamSkills.HomeTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height })) :
+						(int) (TeamSkills.AwayTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height }));
+
+					stringBuilder.Append(rating + " ");
+
+					j += (int) Math.Log10(rating) + 1;
+
+					if (j == height - 1)
+						stringBuilder.Append("|");
+				}
+
+				stringBuilder.AppendLine();
+			}
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", height).ToArray()));
+
+			Log(stringBuilder.ToString());
+		}
+
+		private void LogRatingBattle()
+		{
+			var height = 120;
+			var width = 25;
+
+			var stringBuilder = new StringBuilder("\n");
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", height).ToArray()));
+
+			for (var i = 1; i < width; ++i)
+			{
+				for (var j = 0; j < height; ++j)
+				{
+					if (j == 0 || j == height - 1)
+					{
+						stringBuilder.Append("|");
+						continue;
+					}
+
+					if (j == 1 && i % 2 == 0)
+						continue;
+
+					var rating = (int) (TeamSkills.HomeTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height }) -
+						TeamSkills.AwayTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height }));
+
+					stringBuilder.Append(rating + " ");
+
+					j += (int) Math.Log10(rating) + 1;
+
+					if (rating < 1)
+						++j;
+
+					if (j == height - 1)
+						stringBuilder.Append("|");
+				}
+
+				stringBuilder.AppendLine();
+			}
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", height).ToArray()));
+
+			Log(stringBuilder.ToString());
 		}
 	}
 }
