@@ -20,6 +20,7 @@ using Cm93.Model.Enumerations;
 using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,8 @@ namespace Cm93.GameEngine.Basic
 			Player
 		}
 
+		private static readonly ILog logger = LogManager.GetLogger(typeof(MatchSimulator));
+
 		private Random Random { get; set; }
 
 		private IList<Player> HomeTeamPlayers { get; set; }
@@ -64,8 +67,16 @@ namespace Cm93.GameEngine.Basic
 
 		private double[,] HeatMap { get; set; }
 
+		private Action<string> Log { get; set; }
+
 		public MatchSimulator(IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation)
 		{
+			Log = s =>
+				{
+					if (this.PlayerMatch)
+						logger.Debug(s);
+				};
+
 			Random = new Random();
 			HomeTeamPlayers = homeTeamFormation.Values.ToList();
 			AwayTeamPlayers = awayTeamFormation.Values.ToList();
@@ -85,6 +96,8 @@ namespace Cm93.GameEngine.Basic
 
 			PlayerMatch = updateUi != null;
 			PhasesOfPlay = 0;
+
+			Log("Logging test");
 
 			if (PlayerMatch)
 			{
@@ -415,16 +428,22 @@ namespace Cm93.GameEngine.Basic
 			var x = (int) (ballPosition.X * Configuration.HeatMapDimensions.Item1);
 			var y = (int) (ballPosition.Y * Configuration.HeatMapDimensions.Item2);
 
+			Func<Tuple<int, int>, bool> withinBounds = p =>
+				p.Item1 > 0 &&
+				p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 &&
+				p.Item2 > 0 &&
+				p.Item2 < Configuration.HeatMapDimensions.Item2 - 1;
+
 			new[] { Tuple.Create(x - 1, y - 1), Tuple.Create(x + 1, y - 1), Tuple.Create(x - 1, y + 1), Tuple.Create(x + 1, y + 1) }.
-				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Where(withinBounds).
 				Execute(p => HeatMap[p.Item1, p.Item2] += 0.1d);
 
 			new[] { Tuple.Create(x, y - 1), Tuple.Create(x - 1, y), Tuple.Create(x + 1, y), Tuple.Create(x, y + 1) }.
-				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Where(withinBounds).
 				Execute(p => HeatMap[p.Item1, p.Item2] += 0.25d);
 
 			new[] { Tuple.Create(x, y) }.
-				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Where(withinBounds).
 				Execute(p => HeatMap[p.Item1, p.Item2] += 0.5d);
 		}
 
