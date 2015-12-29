@@ -102,7 +102,6 @@ namespace Cm93.GameEngine.Basic
 			{
 				updateUi(0.5d, HeatMap);
 				Thread.Sleep(5000);
-				updateUi(0.5d, HeatMap);
 			}
 
 			LogTeam(Side.Home);
@@ -394,6 +393,7 @@ namespace Cm93.GameEngine.Basic
 					side = Side.Home;
 					ballPossessor = GetNearestPlayer(ballPosition, side);
 
+					Log(string.Format("Tackle won. Phase: {0}\tSide: {1}\tBall Position: {2}, Ball Possessor: {3}\tBall Velocity: {4}", PhasesOfPlay, side, ballPosition, ballPossessor.Number, ballVelocity));
 					return true;
 				}
 			}
@@ -404,6 +404,7 @@ namespace Cm93.GameEngine.Basic
 					side = Side.Away;
 					ballPossessor = GetNearestPlayer(ballPosition, side);
 
+					Log(string.Format("Tackle won. Phase: {0}\tSide: {1}\tBall Position: {2}, Ball Possessor: {3}\tBall Velocity: {4}", PhasesOfPlay, side, ballPosition, ballPossessor.Number, ballVelocity));
 					return true;
 				}
 			}
