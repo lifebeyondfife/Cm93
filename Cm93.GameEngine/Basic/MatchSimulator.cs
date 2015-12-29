@@ -98,18 +98,18 @@ namespace Cm93.GameEngine.Basic
 			PlayerMatch = updateUi != null;
 			PhasesOfPlay = 0;
 
-			LogTeam(Side.Home);
-			LogTeam(Side.Away);
-			LogRatingBattle(Side.Home);
-			LogRatingBattle(Side.Away);
-			LogRatingBattle();
-
 			if (PlayerMatch)
 			{
 				updateUi(0.5d, HeatMap);
 				Thread.Sleep(5000);
 				updateUi(0.5d, HeatMap);
 			}
+
+			LogTeam(Side.Home);
+			LogRatingBattle(Side.Home);
+			LogTeam(Side.Away);
+			LogRatingBattle(Side.Away);
+			LogRatingBattle();
 
 			fixture.PlayingPeriod = PlayingPeriod.FirstHalf;
 			PlayHalf(fixture, updateUi, ref ballPosition, ref side);
@@ -524,18 +524,30 @@ namespace Cm93.GameEngine.Basic
 					}
 
 					if (j == 1 && i % 2 == 0)
+					{
+						stringBuilder.Append(" ");
 						continue;
+					}
 
 					var rating = side == Side.Home ?
 						(int) (TeamSkills.HomeTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height })) :
 						(int) (TeamSkills.AwayTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height }));
 
-					stringBuilder.Append(rating + " ");
+					stringBuilder.Append(rating);
 
-					j += (int) Math.Log10(rating) + 1;
+					j += (int) rating == 0 ? 1 : (int) Math.Log10(Math.Abs(rating)) + 1;
 
-					if (j == height - 1)
+					if (j == height)
 						stringBuilder.Append("|");
+					else if (j == height - 1)
+						stringBuilder.Append(" |");
+					else if (j == height - 2)
+					{
+						stringBuilder.Append("  |");
+						j += 2;
+					}
+					else
+						stringBuilder.Append(" ");
 				}
 
 				stringBuilder.AppendLine();
@@ -566,14 +578,17 @@ namespace Cm93.GameEngine.Basic
 					}
 
 					if (j == 1 && i % 2 == 0)
+					{
+						stringBuilder.Append(" ");
 						continue;
+					}
 
 					var rating = (int) (TeamSkills.HomeTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height }) -
 						TeamSkills.AwayTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height }));
 
 					stringBuilder.Append(rating);
 
-					j += (int) Math.Log10(Math.Abs(rating)) + 1;
+					j += (int) rating == 0 ? 1 : (int) Math.Log10(Math.Abs(rating)) + 1;
 
 					if (rating < 0)
 						++j;
