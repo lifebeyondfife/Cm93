@@ -211,7 +211,7 @@ namespace Cm93.UnitTests
 			Assert.AreEqual(10032412d, teams["Sothbury Wanderers FC"].Balance);
 		}
 
-		[Ignore]
+		[Ignore("Not implemented")]
 		[Test]
 		public void IgnoreBidIfTeamAtMaximumSquadSize()
 		{
