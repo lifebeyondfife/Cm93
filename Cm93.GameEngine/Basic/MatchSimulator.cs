@@ -20,9 +20,11 @@ using Cm93.Model.Enumerations;
 using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace Cm93.GameEngine.Basic
@@ -42,6 +44,8 @@ namespace Cm93.GameEngine.Basic
 			OutOfPlay,
 			Player
 		}
+
+		private static readonly ILog logger = LogManager.GetLogger(typeof(MatchSimulator));
 
 		private Random Random { get; set; }
 
@@ -64,8 +68,16 @@ namespace Cm93.GameEngine.Basic
 
 		private double[,] HeatMap { get; set; }
 
+		private Action<string> Log { get; set; }
+
 		public MatchSimulator(IDictionary<int, Player> homeTeamFormation, IDictionary<int, Player> awayTeamFormation)
 		{
+			Log = s =>
+				{
+					if (this.PlayerMatch)
+						logger.Debug(s);
+				};
+
 			Random = new Random();
 			HomeTeamPlayers = homeTeamFormation.Values.ToList();
 			AwayTeamPlayers = awayTeamFormation.Values.ToList();
@@ -90,8 +102,13 @@ namespace Cm93.GameEngine.Basic
 			{
 				updateUi(0.5d, HeatMap);
 				Thread.Sleep(5000);
-				updateUi(0.5d, HeatMap);
 			}
+
+			LogTeam(Side.Home);
+			LogRatingBattle(Side.Home);
+			LogTeam(Side.Away);
+			LogRatingBattle(Side.Away);
+			LogRatingBattle();
 
 			fixture.PlayingPeriod = PlayingPeriod.FirstHalf;
 			PlayHalf(fixture, updateUi, ref ballPosition, ref side);
@@ -118,6 +135,8 @@ namespace Cm93.GameEngine.Basic
 
 			while (PhasesOfPlay < 1500)
 			{
+				LogTeams(ballPosition);
+
 				var ballPossessor = default(Player);
 
 				TackleBattle(ref ballPossessor, ballPosition, ref side);
@@ -376,6 +395,7 @@ namespace Cm93.GameEngine.Basic
 					side = Side.Home;
 					ballPossessor = GetNearestPlayer(ballPosition, side);
 
+					Log(string.Format("Tackle won. Phase: {0}\tSide: {1}\tBall Position: {2}, Ball Possessor: {3}\tBall Velocity: {4}", PhasesOfPlay, side, ballPosition, ballPossessor.Number, ballVelocity));
 					return true;
 				}
 			}
@@ -386,6 +406,7 @@ namespace Cm93.GameEngine.Basic
 					side = Side.Away;
 					ballPossessor = GetNearestPlayer(ballPosition, side);
 
+					Log(string.Format("Tackle won. Phase: {0}\tSide: {1}\tBall Position: {2}, Ball Possessor: {3}\tBall Velocity: {4}", PhasesOfPlay, side, ballPosition, ballPossessor.Number, ballVelocity));
 					return true;
 				}
 			}
@@ -415,16 +436,22 @@ namespace Cm93.GameEngine.Basic
 			var x = (int) (ballPosition.X * Configuration.HeatMapDimensions.Item1);
 			var y = (int) (ballPosition.Y * Configuration.HeatMapDimensions.Item2);
 
+			Func<Tuple<int, int>, bool> withinBounds = p =>
+				p.Item1 > 0 &&
+				p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 &&
+				p.Item2 > 0 &&
+				p.Item2 < Configuration.HeatMapDimensions.Item2 - 1;
+
 			new[] { Tuple.Create(x - 1, y - 1), Tuple.Create(x + 1, y - 1), Tuple.Create(x - 1, y + 1), Tuple.Create(x + 1, y + 1) }.
-				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Where(withinBounds).
 				Execute(p => HeatMap[p.Item1, p.Item2] += 0.1d);
 
 			new[] { Tuple.Create(x, y - 1), Tuple.Create(x - 1, y), Tuple.Create(x + 1, y), Tuple.Create(x, y + 1) }.
-				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Where(withinBounds).
 				Execute(p => HeatMap[p.Item1, p.Item2] += 0.25d);
 
 			new[] { Tuple.Create(x, y) }.
-				Where(p => p.Item1 > 0 && p.Item1 < Configuration.HeatMapDimensions.Item1 - 1 && p.Item2 > 0 && p.Item2 < Configuration.HeatMapDimensions.Item2 - 1).
+				Where(withinBounds).
 				Execute(p => HeatMap[p.Item1, p.Item2] += 0.5d);
 		}
 
@@ -436,6 +463,204 @@ namespace Cm93.GameEngine.Basic
 
 			//teamFormation.Values.Execute(p => p.Location.X = Random.NextDouble() * 0.84d);
 			//teamFormation.Values.Execute(p => p.Location.Y = Random.NextDouble() * 0.84d);
+		}
+
+		private void LogTeam(Side side)
+		{
+			var height = 120;
+			var width = 25;
+
+			var players = new int?[width, height];
+
+			var team = side == Side.Home ? HomeTeamPlayers : AwayTeamPlayers;
+
+			team.Execute(p => players[(int) (p.Location.X * width), (int) (p.Location.Y * height)] = p.Number);
+
+			var stringBuilder = new StringBuilder("\n");
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", players.GetLength(1)).ToArray()));
+
+			for (var i = 0; i < players.GetLength(0); ++i)
+			{
+				for (var j = 0; j < players.GetLength(1); ++j)
+				{
+					if (j == 0 || j == players.GetLength(1) - 1)
+						stringBuilder.Append("|");
+
+					if (!players[i, j].HasValue)
+					{
+						stringBuilder.Append(" ");
+						continue;
+					}
+
+					stringBuilder.Append(players[i, j]);
+
+					if (players[i, j] >= 10)
+						++j;
+				}
+
+				stringBuilder.AppendLine();
+			}
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", players.GetLength(1)).ToArray()));
+
+			Log(stringBuilder.ToString());
+		}
+
+		private void LogTeams(Coordinate ballPosition)
+		{
+			var height = 120;
+			var width = 25;
+
+			var players = new int?[width, height];
+
+			HomeTeamPlayers.Execute(p => players[(int) (p.Location.X * width), (int) (p.Location.Y * height)] = p.Number);
+			AwayTeamPlayers.Execute(p => players[(int) (p.Location.X * width), (int) (p.Location.Y * height)] = p.Number);
+
+			players[(int) (ballPosition.X * width), (int) (ballPosition.Y * height)] = -1;
+
+			var stringBuilder = new StringBuilder("\n");
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", players.GetLength(1)).ToArray()));
+
+			for (var i = 0; i < players.GetLength(0); ++i)
+			{
+				for (var j = 0; j < players.GetLength(1); ++j)
+				{
+					if (j == 0 || j == players.GetLength(1) - 1)
+						stringBuilder.Append("|");
+
+					if (!players[i, j].HasValue)
+					{
+						stringBuilder.Append(" ");
+						continue;
+					}
+
+					if (players[i, j] < 0)
+						stringBuilder.Append("*");
+					else
+						stringBuilder.Append(players[i, j]);
+
+					if (players[i, j] >= 10)
+						++j;
+				}
+
+				stringBuilder.AppendLine();
+			}
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", players.GetLength(1)).ToArray()));
+
+			Log(stringBuilder.ToString());
+		}
+
+		private void LogRatingBattle(Side side)
+		{
+			var height = 120;
+			var width = 25;
+
+			var stringBuilder = new StringBuilder("\n");
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", height).ToArray()));
+
+			for (var i = 1; i < width; ++i)
+			{
+				for (var j = 0; j < height; ++j)
+				{
+					if (j == 0 || j == height - 1)
+					{
+						stringBuilder.Append("|");
+						continue;
+					}
+
+					if (j == 1 && i % 2 == 0)
+					{
+						stringBuilder.Append(" ");
+						continue;
+					}
+
+					var rating = side == Side.Home ?
+						(int) (TeamSkills.HomeTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height })) :
+						(int) (TeamSkills.AwayTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height }));
+
+					stringBuilder.Append(rating);
+
+					j += (int) rating == 0 ? 1 : (int) Math.Log10(Math.Abs(rating)) + 1;
+
+					if (j == height)
+						stringBuilder.Append("|");
+					else if (j == height - 1)
+						stringBuilder.Append(" |");
+					else if (j == height - 2)
+					{
+						stringBuilder.Append("  |");
+						j += 2;
+					}
+					else
+						stringBuilder.Append(" ");
+				}
+
+				stringBuilder.AppendLine();
+			}
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", height).ToArray()));
+
+			Log(stringBuilder.ToString());
+		}
+
+		private void LogRatingBattle()
+		{
+			var height = 120;
+			var width = 25;
+
+			var stringBuilder = new StringBuilder("\n");
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", height).ToArray()));
+
+			for (var i = 1; i < width; ++i)
+			{
+				for (var j = 0; j < height; ++j)
+				{
+					if (j == 0 || j == height - 1)
+					{
+						stringBuilder.Append("|");
+						continue;
+					}
+
+					if (j == 1 && i % 2 == 0)
+					{
+						stringBuilder.Append(" ");
+						continue;
+					}
+
+					var rating = (int) (TeamSkills.HomeTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height }) -
+						TeamSkills.AwayTeamDribbling(new Coordinate { X = (double) i / width, Y = (double) j / height }));
+
+					stringBuilder.Append(rating);
+
+					j += (int) rating == 0 ? 1 : (int) Math.Log10(Math.Abs(rating)) + 1;
+
+					if (rating < 0)
+						++j;
+
+					if (j == height)
+						stringBuilder.Append("|");
+					else if (j == height - 1)
+						stringBuilder.Append(" |");
+					else if (j == height - 2)
+					{
+						stringBuilder.Append("  |");
+						j += 2;
+					}
+					else
+						stringBuilder.Append(" ");
+				}
+
+				stringBuilder.AppendLine();
+			}
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", height).ToArray()));
+
+			Log(stringBuilder.ToString());
 		}
 	}
 }

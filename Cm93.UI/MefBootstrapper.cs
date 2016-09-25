@@ -58,6 +58,8 @@ namespace Cm93.UI
 			this.AppDispatcher = Dispatcher.CurrentDispatcher;
 
 			AppDomain.CurrentDomain.SetData("DataDirectory", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+
+			log4net.Config.XmlConfigurator.Configure();
 		}
 
 		protected override object GetInstance(Type serviceType, string key)
