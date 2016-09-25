@@ -71,7 +71,9 @@ namespace Cm93.Model.Structures
 					continue;
 				}
 
-				Task.Factory.StartNew(() => Configuration.GameEngine.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null));
+				//	TODO: while debugging the match simulation, keep it single threaded. Eventually though, reintroduce multi-threaded simulations.
+				//Task.Factory.StartNew(() => Configuration.GameEngine.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null));
+				Configuration.GameEngine.Play(fixture, fixture.TeamHome.FormationClone(), fixture.TeamAway.FormationClone(), null);
 			}
 
 			return playerFixture;

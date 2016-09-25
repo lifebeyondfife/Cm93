@@ -135,6 +135,8 @@ namespace Cm93.GameEngine.Basic
 
 			while (PhasesOfPlay < 1500)
 			{
+				LogTeams(ballPosition);
+
 				var ballPossessor = default(Player);
 
 				TackleBattle(ref ballPossessor, ballPosition, ref side);
@@ -492,6 +494,52 @@ namespace Cm93.GameEngine.Basic
 					}
 
 					stringBuilder.Append(players[i, j]);
+
+					if (players[i, j] >= 10)
+						++j;
+				}
+
+				stringBuilder.AppendLine();
+			}
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", players.GetLength(1)).ToArray()));
+
+			Log(stringBuilder.ToString());
+		}
+
+		private void LogTeams(Coordinate ballPosition)
+		{
+			var height = 120;
+			var width = 25;
+
+			var players = new int?[width, height];
+
+			HomeTeamPlayers.Execute(p => players[(int) (p.Location.X * width), (int) (p.Location.Y * height)] = p.Number);
+			AwayTeamPlayers.Execute(p => players[(int) (p.Location.X * width), (int) (p.Location.Y * height)] = p.Number);
+
+			players[(int) (ballPosition.X * width), (int) (ballPosition.Y * height)] = -1;
+
+			var stringBuilder = new StringBuilder("\n");
+
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", players.GetLength(1)).ToArray()));
+
+			for (var i = 0; i < players.GetLength(0); ++i)
+			{
+				for (var j = 0; j < players.GetLength(1); ++j)
+				{
+					if (j == 0 || j == players.GetLength(1) - 1)
+						stringBuilder.Append("|");
+
+					if (!players[i, j].HasValue)
+					{
+						stringBuilder.Append(" ");
+						continue;
+					}
+
+					if (players[i, j] < 0)
+						stringBuilder.Append("*");
+					else
+						stringBuilder.Append(players[i, j]);
 
 					if (players[i, j] >= 10)
 						++j;
