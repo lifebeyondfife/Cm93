@@ -512,43 +512,56 @@ namespace Cm93.GameEngine.Basic
 			var height = 120;
 			var width = 25;
 
-			var players = new int?[width, height];
+			var homePlayers = new int?[width, height];
+			var awayPlayers = new int?[width, height];
 
-			HomeTeamPlayers.Execute(p => players[(int) (p.Location.X * width), (int) (p.Location.Y * height)] = p.Number);
-			AwayTeamPlayers.Execute(p => players[(int) (p.Location.X * width), (int) (p.Location.Y * height)] = p.Number);
+			HomeTeamPlayers.Execute(p => homePlayers[(int) (p.Location.X * width), (int) (p.Location.Y * height)] = p.Number);
+			AwayTeamPlayers.Execute(p => awayPlayers[(int) (p.Location.X * width), (int) (p.Location.Y * height)] = p.Number);
 
-			players[(int) (ballPosition.X * width), (int) (ballPosition.Y * height)] = -1;
+			var ballX = (int) (ballPosition.X * width);
+			var ballY = (int) (ballPosition.Y * height);
 
 			var stringBuilder = new StringBuilder("\n");
 
-			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", players.GetLength(1)).ToArray()));
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", homePlayers.GetLength(1)).ToArray()));
 
-			for (var i = 0; i < players.GetLength(0); ++i)
+			for (var i = 0; i < homePlayers.GetLength(0); ++i)
 			{
-				for (var j = 0; j < players.GetLength(1); ++j)
+				for (var j = 0; j < homePlayers.GetLength(1); ++j)
 				{
-					if (j == 0 || j == players.GetLength(1) - 1)
+					if (j == 0 || j == homePlayers.GetLength(1) - 1)
 						stringBuilder.Append("|");
 
-					if (!players[i, j].HasValue)
+					if (i == ballX && j == ballY)
 					{
-						stringBuilder.Append(" ");
+						stringBuilder.Append("*");
 						continue;
 					}
 
-					if (players[i, j] < 0)
-						stringBuilder.Append("*");
-					else
-						stringBuilder.Append(players[i, j]);
+					if (homePlayers[i, j].HasValue)
+					{
+						stringBuilder.Append("_" + homePlayers[i, j]);
 
-					if (players[i, j] >= 10)
-						++j;
+						j = homePlayers[i, j] >= 10 ? j + 2 : j + 1;
+
+						continue;
+					}
+					else if (awayPlayers[i, j].HasValue)
+					{
+						stringBuilder.Append("|" + awayPlayers[i, j]);
+
+						j = awayPlayers[i, j] >= 10 ? j + 2 : j + 1;
+
+						continue;
+					}
+
+					stringBuilder.Append(" ");
 				}
 
 				stringBuilder.AppendLine();
 			}
 
-			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", players.GetLength(1)).ToArray()));
+			stringBuilder.AppendLine(string.Join("", Enumerable.Repeat("_", homePlayers.GetLength(1)).ToArray()));
 
 			Log(stringBuilder.ToString());
 		}
