@@ -532,25 +532,26 @@ namespace Cm93.GameEngine.Basic
 					if (j == 0 || j == homePlayers.GetLength(1) - 1)
 						stringBuilder.Append("|");
 
-					if (i == ballX && j == ballY)
-					{
-						stringBuilder.Append("*");
-						continue;
-					}
 
 					if (homePlayers[i, j].HasValue)
 					{
-						stringBuilder.Append("_" + homePlayers[i, j]);
+						var adjust = i == ballX && j == ballY ? 1 : 0;
+						var prepend = i == ballX && j == ballY ? "*_" : "_";
 
-						j = homePlayers[i, j] >= 10 ? j + 2 : j + 1;
+						stringBuilder.Append(prepend + homePlayers[i, j]);
+
+						j = homePlayers[i, j] >= 10 ? j + 2 + adjust : j + 1 + adjust;
 
 						continue;
 					}
 					else if (awayPlayers[i, j].HasValue)
 					{
+						var adjust = i == ballX && j == ballY ? 1 : 0;
+						var prepend = i == ballX && j == ballY ? "*|" : "|";
+
 						stringBuilder.Append("|" + awayPlayers[i, j]);
 
-						j = awayPlayers[i, j] >= 10 ? j + 2 : j + 1;
+						j = awayPlayers[i, j] >= 10 ? j + 2 + adjust : j + 1 + adjust;
 
 						continue;
 					}
