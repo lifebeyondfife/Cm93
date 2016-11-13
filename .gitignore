@@ -108,5 +108,4 @@ Backup*/
 UpgradeLog*.XML
 
 # Project specific
-logs/
-
+logs

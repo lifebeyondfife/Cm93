@@ -64,6 +64,7 @@
     <Compile Include="Basic\LeagueGeneration.cs" />
     <Compile Include="Basic\MatchSimulator.cs" />
     <Compile Include="Basic\PlayerBids.cs" />
+    <Compile Include="Basic\TeamFormationAttributes.cs" />
     <Compile Include="Basic\TeamSkills.cs" />
     <Compile Include="IAttachGameEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
