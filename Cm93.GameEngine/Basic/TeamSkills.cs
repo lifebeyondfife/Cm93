@@ -24,13 +24,13 @@ namespace Cm93.GameEngine.Basic
 {
 	public class TeamSkills
 	{
-		private const double Flatten = 1d;
+		private const double Flatten = 100d;
 
 		private IList<Player> HomeTeamPlayers { get; set; }
 		private IList<Player> AwayTeamPlayers { get; set; }
 
 		private static readonly Func<Coordinate, Coordinate, double, double> Distribution = (position, player, rating) =>
-			rating * (Math.Exp(-((player.X - position.X) * (player.X - position.X) + (player.Y - position.Y) * (player.Y - position.Y)) / Flatten));
+			rating * (Math.Exp(-((player.X - position.X) * (player.X - position.X) + (player.Y - position.Y) * (player.Y - position.Y)) * Flatten));
 
 		public Func<Coordinate, double> HomeTeamPace { get; private set; }
 		public Func<Coordinate, double> HomeTeamPassing { get; private set; }
