@@ -16,9 +16,13 @@
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
 using Cm93.Model.Structures;
+using Cm93.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KdTree;
+using KdTree.Math;
+using MathNet.Numerics.Statistics;
 
 namespace Cm93.GameEngine.Basic
 {
@@ -59,6 +63,21 @@ namespace Cm93.GameEngine.Basic
 			AwayTeamPlayers = awayTeamPlayers;
 		}
 
+		//	Calculate scalar metric for positional balance. If metric is bad, a penalty occurs to passing and ball retention.
+		//	Metric should be biggest distance
+		public double PositionalBalance(IEnumerable<Player> players)
+		{
+			var tree = new KdTree<double, Player>(2, new DoubleMath(), AddDuplicateBehavior.Error);
 
+			players.Execute(p => tree.Add(new double[] { p.Location.X, p.Location.Y }, p));
+
+			return players.
+				Select(p => tree.GetNearestNeighbours(new double[] { p.Location.X, p.Location.Y }, 2)).
+				Select(ps => Math.Sqrt(
+					((ps.First().Value.Location.X - ps.Last().Value.Location.X) * (ps.First().Value.Location.X - ps.Last().Value.Location.X)) +
+					((ps.First().Value.Location.Y - ps.Last().Value.Location.Y) * (ps.First().Value.Location.Y - ps.Last().Value.Location.Y)))
+				).
+				StandardDeviation();
+		}
 	}
 }
