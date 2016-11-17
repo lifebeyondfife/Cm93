@@ -266,7 +266,7 @@ namespace Cm93.GameEngine.Basic
 			xDelta = 0.1d * Math.Sin(theta);
 			yDelta = 0.1d * Math.Cos(theta);
 
-			return PassArrivalVelocity / Math.Exp(-0.1 * GetDistance(ballPosition, targetAdjustedForPassSkill));
+			return PassArrivalVelocity / Math.Exp(-0.1 * ballPosition.Distance(targetAdjustedForPassSkill));
 		}
 
 		private double ShootVelocity(Player ballPossessor, Coordinate ballPosition, Coordinate target, out double xDelta, out double yDelta)
@@ -282,7 +282,7 @@ namespace Cm93.GameEngine.Basic
 			xDelta = 0.1d * Math.Sin(theta);
 			yDelta = 0.1d * Math.Cos(theta);
 
-			var distance = GetDistance(ballPosition, target);
+			var distance = ballPosition.Distance(target);
 
 			return (ShotArrivalVelocity * ballPossessor.Rating * 0.1d / distance) / Math.Exp(-0.1 * distance);	//	Shoot Rating
 		}
@@ -313,14 +313,14 @@ namespace Cm93.GameEngine.Basic
 
 			if (side == Side.Home)
 			{
-				if (GetDistance(dribblePosition, AwayGoal) < GetDistance(dribblePosition, passTo.Location))
+				if (dribblePosition.Distance(AwayGoal) < dribblePosition.Distance(passTo.Location))
 					return AwayGoal;
 				else
 					return passTo.Location;
 			}
 			else
 			{
-				if (GetDistance(dribblePosition, HomeGoal) < GetDistance(dribblePosition, passTo.Location))
+				if (dribblePosition.Distance(HomeGoal) < dribblePosition.Distance(passTo.Location))
 					return HomeGoal;
 				else
 					return passTo.Location;
@@ -426,11 +426,6 @@ namespace Cm93.GameEngine.Basic
 					(p.Location.Y - ballPosition.Y) * (p.Location.Y - ballPosition.Y)
 				)).
 				First();
-		}
-
-		private double GetDistance(Coordinate first, Coordinate second)
-		{
-			return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
 		}
 
 		private void ColourHeatMap(Coordinate ballPosition)
