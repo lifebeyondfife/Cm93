@@ -61,11 +61,14 @@ namespace Cm93.GameEngine.Basic
 		{
 			HomeTeamPlayers = homeTeamPlayers;
 			AwayTeamPlayers = awayTeamPlayers;
+
+			Console.WriteLine("Home team positional balance:\t" + PositionalBalance(homeTeamPlayers));
+			Console.WriteLine("Away team positional balance:\t" + PositionalBalance(awayTeamPlayers));
 		}
 
 		//	Calculate scalar metric for positional balance. If metric is bad, a penalty occurs to passing and ball retention.
 		//	Metric should be biggest distance
-		public double PositionalBalance(IEnumerable<Player> players)
+		public double PositionalBalance(IList<Player> players)
 		{
 			var tree = new KdTree<double, Player>(2, new DoubleMath(), AddDuplicateBehavior.Error);
 
