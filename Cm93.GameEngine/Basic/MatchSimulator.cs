@@ -52,6 +52,7 @@ namespace Cm93.GameEngine.Basic
 		private IList<Player> HomeTeamPlayers { get; set; }
 		private IList<Player> AwayTeamPlayers { get; set; }
 		private TeamSkills TeamSkills { get; set; }
+		private TeamFormationAttributes TeamFormationAttributes { get; set; }
 
 		private Coordinate HomeGoal { get; set; }
 		private Coordinate AwayGoal { get; set; }
@@ -82,6 +83,7 @@ namespace Cm93.GameEngine.Basic
 			HomeTeamPlayers = homeTeamFormation.Values.ToList();
 			AwayTeamPlayers = awayTeamFormation.Values.ToList();
 			TeamSkills = new TeamSkills(HomeTeamPlayers, AwayTeamPlayers);
+			TeamFormationAttributes = new TeamFormationAttributes(HomeTeamPlayers, AwayTeamPlayers);
 
 			HomeGoal = new Coordinate { X = 0.5d, Y = 0d };
 			AwayGoal = new Coordinate { X = 0.5d, Y = 1d };
