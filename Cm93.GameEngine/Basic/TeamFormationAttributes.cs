@@ -1,5 +1,5 @@
 ﻿/*
-        Copyright © Iain McDonald 2013-2015
+        Copyright © Iain McDonald 2013-2016
         This file is part of Cm93.
 
         Cm93 is free software: you can redistribute it and/or modify
@@ -36,8 +36,8 @@ namespace Cm93.GameEngine.Basic
 		private static readonly Func<Coordinate, Coordinate, double, double> Distribution = (position, player, rating) =>
 			rating * (Math.Exp(-((player.X - position.X) * (player.X - position.X) + (player.Y - position.Y) * (player.Y - position.Y)) * Flatten));
 
-		public Func<Coordinate, double> HomeTeamPositionalBalance { get; private set; }
-		public Func<Coordinate, double> HomeTeamOffsideLine { get; private set; }
+		public Func<double> HomeTeamPositionalBalance { get; private set; }
+		public Func<Tuple<double, double>> HomeTeamOffsideLine { get; private set; }
 		public Func<Coordinate, double> HomeTeamPossessionRetention { get; private set; }
 		public Func<Coordinate, double> HomeTeamDefensiveShape { get; private set; }
 		public Func<Coordinate, double> HomeTeamAttackingShape { get; private set; }
@@ -45,8 +45,8 @@ namespace Cm93.GameEngine.Basic
 		public Func<Coordinate, double> HomeTeamTacklingDisruption { get; private set; }
 		public Func<Coordinate, double> HomeTeamPowerAndPace { get; private set; }
 
-		public Func<Coordinate, double> AwayTeamPositionalBalance { get; private set; }
-		public Func<Coordinate, double> AwayTeamOffsideLine { get; private set; }
+		public Func<double> AwayTeamPositionalBalance { get; private set; }
+		public Func<Tuple<double, double>> AwayTeamOffsideLine { get; private set; }
 		public Func<Coordinate, double> AwayTeamPossessionRetention { get; private set; }
 		public Func<Coordinate, double> AwayTeamDefensiveShape { get; private set; }
 		public Func<Coordinate, double> AwayTeamAttackingShape { get; private set; }
@@ -62,13 +62,20 @@ namespace Cm93.GameEngine.Basic
 			HomeTeamPlayers = homeTeamPlayers;
 			AwayTeamPlayers = awayTeamPlayers;
 
-			Console.WriteLine("Home team positional balance:\t" + PositionalBalance(homeTeamPlayers));
-			Console.WriteLine("Away team positional balance:\t" + PositionalBalance(awayTeamPlayers));
+			HomeTeamPositionalBalance = () => PositionalBalance(HomeTeamPlayers);
+			AwayTeamPositionalBalance = () => PositionalBalance(AwayTeamPlayers);
+
+			HomeTeamOffsideLine = () => OffsideLine(HomeTeamPlayers);
+			AwayTeamOffsideLine = () => OffsideLine(AwayTeamPlayers);
+
+			Console.WriteLine("Home team positional balance:\t" + HomeTeamPositionalBalance());
+			Console.WriteLine("Away team positional balance:\t" + AwayTeamPositionalBalance());
+
+			Console.WriteLine("Home team offside line:\t" + HomeTeamOffsideLine());
+			Console.WriteLine("Away team offside line:\t" + AwayTeamOffsideLine());
 		}
 
-		//	Calculate scalar metric for positional balance. If metric is bad, a penalty occurs to passing and ball retention.
-		//	Metric should be biggest distance
-		public double PositionalBalance(IList<Player> players)
+		public static double PositionalBalance(IList<Player> players)
 		{
 			var tree = new KdTree<double, Player>(2, new DoubleMath(), AddDuplicateBehavior.Error);
 
@@ -76,11 +83,27 @@ namespace Cm93.GameEngine.Basic
 
 			return players.
 				Select(p => tree.GetNearestNeighbours(new double[] { p.Location.X, p.Location.Y }, 2)).
-				Select(ps => Math.Sqrt(
-					((ps.First().Value.Location.X - ps.Last().Value.Location.X) * (ps.First().Value.Location.X - ps.Last().Value.Location.X)) +
-					((ps.First().Value.Location.Y - ps.Last().Value.Location.Y) * (ps.First().Value.Location.Y - ps.Last().Value.Location.Y)))
-				).
+				Select(ps => ps.First().Value.Location.Distance(ps.Last().Value.Location)).
 				StandardDeviation();
+		}
+
+		/*
+		 * Tuple.Item1 - the level of the offside line i.e. how deep or high it is
+		 * Tuple.Item2 - the strength of the offside line i.e. how good are the players, are they all in a line
+		 */
+		public static Tuple<double, double> OffsideLine(IList<Player> players)
+		{
+			//	TODO: does this take into account which direction the team are attacking?
+			var line = players.
+				Aggregate((a, b) => a.Location.Y < b.Location.Y ? a : b).
+				Location.Y;
+
+			//	TODO: make some kind of speed/defence test
+			var strength = players.
+				Where(p => p.Location.Y - line < 0.1d).
+				Sum(p => p.Rating);
+
+			return Tuple.Create(line, strength);
 		}
 	}
 }

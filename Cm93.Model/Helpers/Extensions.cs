@@ -31,6 +31,11 @@ namespace Cm93.Model.Helpers
 				action(item);
 		}
 
+		public static double Distance(this Coordinate first, Coordinate second)
+		{
+			return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
+		}
+
 		public static string PeriodString(this PlayingPeriod playingPeriod)
 		{
 			switch (playingPeriod)
