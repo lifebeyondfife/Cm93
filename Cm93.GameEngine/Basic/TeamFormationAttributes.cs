@@ -38,12 +38,12 @@ namespace Cm93.GameEngine.Basic
 
 		public Func<double> HomeTeamPositionalBalance { get; private set; }
 		public Func<Tuple<double, double>> HomeTeamOffsideLine { get; private set; }
-		public Func<Coordinate, double> HomeTeamPossessionRetention { get; private set; }
-		public Func<Coordinate, double> HomeTeamDefensiveShape { get; private set; }
-		public Func<Coordinate, double> HomeTeamAttackingShape { get; private set; }
-		public Func<Coordinate, double> HomeTeamCounterAttack { get; private set; }
-		public Func<Coordinate, double> HomeTeamTacklingDisruption { get; private set; }
-		public Func<Coordinate, double> HomeTeamPowerAndPace { get; private set; }
+		public Func<Coordinate, double> HomeTeamPossessionRetention { get; private set; }	// create a graph of players who have a reasonable path between them i.e. not blocked by opposition players
+		public Func<Coordinate, double> HomeTeamDefensiveShape { get; private set; }		// compact and deep
+		public Func<Coordinate, double> HomeTeamAttackingShape { get; private set; }		// forward and stretched
+		public Func<Coordinate, double> HomeTeamCounterAttack { get; private set; }			// one player to hold up well, fast and fit players joining from deep
+		public Func<Coordinate, double> HomeTeamTacklingDisruption { get; private set; }	// tackling players near opposition players
+		public Func<Coordinate, double> HomeTeamPowerAndPace { get; private set; }			// hmmmmm, weird one. have a rethink about objective measures
 
 		public Func<double> AwayTeamPositionalBalance { get; private set; }
 		public Func<Tuple<double, double>> AwayTeamOffsideLine { get; private set; }
@@ -65,8 +65,9 @@ namespace Cm93.GameEngine.Basic
 			HomeTeamPositionalBalance = () => PositionalBalance(HomeTeamPlayers);
 			AwayTeamPositionalBalance = () => PositionalBalance(AwayTeamPlayers);
 
-			HomeTeamOffsideLine = () => OffsideLine(HomeTeamPlayers);
-			AwayTeamOffsideLine = () => OffsideLine(AwayTeamPlayers);
+			//	TODO: will need to reverse the defendingZero parameter for the second half
+			HomeTeamOffsideLine = () => OffsideLine(HomeTeamPlayers, false);
+			AwayTeamOffsideLine = () => OffsideLine(AwayTeamPlayers, true);
 
 			Console.WriteLine("Home team positional balance:\t" + HomeTeamPositionalBalance());
 			Console.WriteLine("Away team positional balance:\t" + AwayTeamPositionalBalance());
@@ -91,16 +92,16 @@ namespace Cm93.GameEngine.Basic
 		 * Tuple.Item1 - the level of the offside line i.e. how deep or high it is
 		 * Tuple.Item2 - the strength of the offside line i.e. how good are the players, are they all in a line
 		 */
-		public static Tuple<double, double> OffsideLine(IList<Player> players)
+		public static Tuple<double, double> OffsideLine(IList<Player> players, bool defendingZero)
 		{
-			//	TODO: does this take into account which direction the team are attacking?
+			var ve = defendingZero ? 1 : -1;
 			var line = players.
-				Aggregate((a, b) => a.Location.Y < b.Location.Y ? a : b).
+				Aggregate((a, b) => ve * a.Location.Y < ve * b.Location.Y ? a : b).
 				Location.Y;
 
 			//	TODO: make some kind of speed/defence test
 			var strength = players.
-				Where(p => p.Location.Y - line < 0.1d).
+				Where(p => Math.Abs(p.Location.Y - line) < 0.1d).
 				Sum(p => p.Rating);
 
 			return Tuple.Create(line, strength);
