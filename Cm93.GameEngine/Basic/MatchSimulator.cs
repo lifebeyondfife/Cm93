@@ -155,20 +155,8 @@ namespace Cm93.GameEngine.Basic
 				else
 					++fixture.GoalsAway;
 
-				++ballPossessor.Goals;
+				//++ballPossessor.Goals;
 			}
-		}
-
-		private Player GetNearestPlayer(Coordinate ballPosition, Side side)
-		{
-			var players = side == Side.Home ? HomeTeamPlayers : AwayTeamPlayers;
-
-			return players.
-				OrderBy(p => Math.Sqrt(
-					(p.Location.X - ballPosition.X) * (p.Location.X - ballPosition.X) +
-					(p.Location.Y - ballPosition.Y) * (p.Location.Y - ballPosition.Y)
-				)).
-				First();
 		}
 
 		private void ColourHeatMap(Coordinate ballPosition)
