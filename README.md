@@ -41,7 +41,7 @@ Non-developers can download an installer from the Releases link above.
 
 - AI
 	- ~~Create some stock formations (4-4-2, 3-5-2, 4-3-3, 4-2-3-1 etc.)~~
-	- Algorithm for varying NPC teams' formations slightly
+	- ~~Algorithm for varying NPC teams' formations slightly~~
 	- ~~Algorithm for finding "best" starting lineup-formations~~
 	- Algorithm for responsive substitutions / formation changes
 	- Complex game simultator implementation
