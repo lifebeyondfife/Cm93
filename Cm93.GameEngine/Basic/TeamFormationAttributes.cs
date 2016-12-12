@@ -15,15 +15,16 @@
         You should have received a copy of the GNU General Public License
         along with Cm93. If not, see <http://www.gnu.org/licenses/>.
 */
+using Cm93.GameEngine.Basic.Structures;
 using Cm93.Model.Structures;
 using Cm93.Model.Helpers;
+using Cm93.Model.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using KdTree;
 using KdTree.Math;
 using MathNet.Numerics.Statistics;
-using QuickGraph;
 
 namespace Cm93.GameEngine.Basic
 {
@@ -41,26 +42,20 @@ namespace Cm93.GameEngine.Basic
 		public Func<Coordinate, double> HomeTeamStrength { get; private set; }
 		public Func<double> HomeTeamPositionalBalance { get; private set; }
 		public Func<Tuple<double, double>> HomeTeamOffsideLine { get; private set; }
+		public Func<double> HomeTeamDefendingShape { get; private set; }
+		public Func<double> HomeTeamAttackingShape { get; private set; }
 
 		// create a graph of players who have a reasonable path between them i.e. not blocked by opposition players
-		public Func<IGraph<Player, UndirectedEdge<Player>>> HomeTeamPossessionGraph { get; private set; }
-
-		// compact and deep, take median minimal distance between two players --> closer is better, nearer own goal is better
-		public Func<double> HomeTeamDefensiveShape { get; private set; }
-
-		// forward and stretched, as Defensive but further is better, nearer opposition goal is better
-		public Func<double> HomeTeamAttackingShape { get; private set; }
+		public Func<PossessionGraph<Player>> HomeTeamPossessionGraph { get; private set; }
 
 
 		public Func<Coordinate, double> AwayTeamStrength { get; private set; }
 		public Func<double> AwayTeamPositionalBalance { get; private set; }
 		public Func<Tuple<double, double>> AwayTeamOffsideLine { get; private set; }
-		public Func<IGraph<Player, UndirectedEdge<Player>>> AwayTeamPossessionGraph { get; private set; }
-		public Func<Coordinate, double> AwayTeamDefensiveShape { get; private set; }
-		public Func<Coordinate, double> AwayTeamAttackingShape { get; private set; }
+		public Func<double> AwayTeamDefendingShape { get; private set; }
+		public Func<double> AwayTeamAttackingShape { get; private set; }
+		public Func<PossessionGraph<Player>> AwayTeamPossessionGraph { get; private set; }
 
-
-		//	Fitness / exhaustion levels should be implicit. Weaker teams will struggle; teams lacking ball possession will struggle etc.
 
 		public TeamFormationAttributes(IList<Player> homeTeamPlayers, IList<Player> awayTeamPlayers)
 		{
@@ -76,17 +71,35 @@ namespace Cm93.GameEngine.Basic
 			HomeTeamOffsideLine = () => OffsideLine(HomeTeamPlayers, false);
 			AwayTeamOffsideLine = () => OffsideLine(AwayTeamPlayers, true);
 
+			HomeTeamDefendingShape = () => DefendingShape(HomeTeamPlayers, false);
+			AwayTeamDefendingShape = () => DefendingShape(AwayTeamPlayers, true);
+
+			HomeTeamAttackingShape = () => AttackingShape(HomeTeamPlayers, false);
+			AwayTeamAttackingShape = () => AttackingShape(AwayTeamPlayers, true);
+
 			Console.WriteLine("Home team positional balance:\t" + HomeTeamPositionalBalance());
 			Console.WriteLine("Away team positional balance:\t" + AwayTeamPositionalBalance());
 
 			Console.WriteLine("Home team offside line:\t" + HomeTeamOffsideLine());
 			Console.WriteLine("Away team offside line:\t" + AwayTeamOffsideLine());
+
+			Console.WriteLine("Home team defending shape:\t" + HomeTeamDefendingShape());
+			Console.WriteLine("Away team defending shape:\t" + AwayTeamDefendingShape());
+
+			Console.WriteLine("Home team attacking shape:\t" + HomeTeamAttackingShape());
+			Console.WriteLine("Away team attacking shape:\t" + AwayTeamAttackingShape());
 		}
 
 		public void SecondHalf()
 		{
 			HomeTeamOffsideLine = () => OffsideLine(HomeTeamPlayers, true);
 			AwayTeamOffsideLine = () => OffsideLine(AwayTeamPlayers, false);
+
+			HomeTeamDefendingShape = () => DefendingShape(HomeTeamPlayers, true);
+			AwayTeamDefendingShape = () => DefendingShape(AwayTeamPlayers, false);
+
+			HomeTeamAttackingShape = () => AttackingShape(HomeTeamPlayers, true);
+			AwayTeamAttackingShape = () => AttackingShape(AwayTeamPlayers, false);
 		}
 
 		public static double PositionalBalance(IList<Player> players)
@@ -117,6 +130,51 @@ namespace Cm93.GameEngine.Basic
 				Sum(p => p.Rating);
 
 			return Tuple.Create(line, strength);
+		}
+
+		private static Player GetNearestPlayer(IEnumerable<Player> players, Coordinate location)
+		{
+			return players.
+				OrderBy(p => Math.Sqrt(
+					(p.Location.X - location.X) * (p.Location.X - location.X) +
+					(p.Location.Y - location.Y) * (p.Location.Y - location.Y)
+				)).
+				First();
+		}
+
+		private static double DefendingShape(IList<Player> players, bool isDefendingZero)
+		{
+			var medianDistance = players.
+				Select(p => GetNearestPlayer(players.Except(Enumerable.Repeat(p, 1)), p.Location).Location.Distance(p.Location)).
+				Median();
+
+			var distanceFromDefendingGoalLine = players.
+				Select(p => isDefendingZero ? p.Location.Y : 1 - p.Location.Y).
+				Average();
+
+			return 1d / (Math.Sqrt(medianDistance) * distanceFromDefendingGoalLine);
+		}
+
+		private static double AttackingShape(IList<Player> players, bool isDefendingZero)
+		{
+			var medianDistance = players.
+				Select(p => GetNearestPlayer(players.Except(Enumerable.Repeat(p, 1)), p.Location).Location.Distance(p.Location)).
+				Median();
+
+			var distanceFromAttackingGoalLine = players.
+				Select(p => isDefendingZero ? 1 - p.Location.Y : p.Location.Y).
+				Average();
+
+			return (Math.Sqrt(medianDistance) * 10d) / distanceFromAttackingGoalLine;
+		}
+
+		private static PossessionGraph<Player> PossessionGraph(IList<Player> players)
+		{
+			var graph = new PossessionGraph<Player>(players);
+
+			throw new NotImplementedException();
+
+			return graph;
 		}
 	}
 }
