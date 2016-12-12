@@ -168,9 +168,9 @@ namespace Cm93.GameEngine.Basic
 			return (Math.Sqrt(medianDistance) * 10d) / distanceFromAttackingGoalLine;
 		}
 
-		private static PossessionGraph<Player> PossessionGraph(IList<Player> players)
+		private static PossessionGraph<Player> PossessionGraph(IList<Player> players, IList<Player> opposition, bool isDefendingZero)
 		{
-			var graph = new PossessionGraph<Player>(players);
+			var graph = new PossessionGraph<Player>(players, opposition, isDefendingZero);
 
 			throw new NotImplementedException();
 
