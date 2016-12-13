@@ -38,16 +38,14 @@ namespace Cm93.GameEngine.Basic
 		private static readonly Func<Coordinate, Coordinate, double, double> Distribution = (position, player, rating) =>
 			rating * (Math.Exp(-((player.X - position.X) * (player.X - position.X) + (player.Y - position.Y) * (player.Y - position.Y)) * Flatten));
 
+		public Func<Coordinate, bool, double> MatchFunction { get; private set; }
 
 		public Func<Coordinate, double> HomeTeamStrength { get; private set; }
 		public Func<double> HomeTeamPositionalBalance { get; private set; }
 		public Func<Tuple<double, double>> HomeTeamOffsideLine { get; private set; }
 		public Func<double> HomeTeamDefendingShape { get; private set; }
 		public Func<double> HomeTeamAttackingShape { get; private set; }
-
-		// create a graph of players who have a reasonable path between them i.e. not blocked by opposition players
 		public Func<PossessionGraph<Player>> HomeTeamPossessionGraph { get; private set; }
-
 
 		public Func<Coordinate, double> AwayTeamStrength { get; private set; }
 		public Func<double> AwayTeamPositionalBalance { get; private set; }
@@ -64,6 +62,9 @@ namespace Cm93.GameEngine.Basic
 
 			HomeTeamStrength = coordinate => HomeTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
 			AwayTeamStrength = coordinate => AwayTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
+			MatchFunction = (coordinate, isHome) => isHome ?
+				HomeTeamStrength(coordinate) - AwayTeamStrength(coordinate) :
+				AwayTeamStrength(coordinate) - HomeTeamStrength(coordinate);
 
 			HomeTeamPositionalBalance = () => PositionalBalance(HomeTeamPlayers);
 			AwayTeamPositionalBalance = () => PositionalBalance(AwayTeamPlayers);
@@ -77,6 +78,9 @@ namespace Cm93.GameEngine.Basic
 			HomeTeamAttackingShape = () => AttackingShape(HomeTeamPlayers, false);
 			AwayTeamAttackingShape = () => AttackingShape(AwayTeamPlayers, true);
 
+			HomeTeamPossessionGraph = () => PossessionGraph(true, false);
+			AwayTeamPossessionGraph = () => PossessionGraph(false, true);
+
 			Console.WriteLine("Home team positional balance:\t" + HomeTeamPositionalBalance());
 			Console.WriteLine("Away team positional balance:\t" + AwayTeamPositionalBalance());
 
@@ -88,6 +92,8 @@ namespace Cm93.GameEngine.Basic
 
 			Console.WriteLine("Home team attacking shape:\t" + HomeTeamAttackingShape());
 			Console.WriteLine("Away team attacking shape:\t" + AwayTeamAttackingShape());
+
+			Console.WriteLine(HomeTeamPossessionGraph() + " + " + AwayTeamPossessionGraph());
 		}
 
 		public void SecondHalf()
@@ -100,9 +106,12 @@ namespace Cm93.GameEngine.Basic
 
 			HomeTeamAttackingShape = () => AttackingShape(HomeTeamPlayers, true);
 			AwayTeamAttackingShape = () => AttackingShape(AwayTeamPlayers, false);
+			
+			HomeTeamPossessionGraph = () => PossessionGraph(true, true);
+			AwayTeamPossessionGraph = () => PossessionGraph(false, false);
 		}
 
-		public static double PositionalBalance(IList<Player> players)
+		private static double PositionalBalance(IList<Player> players)
 		{
 			var tree = new KdTree<double, Player>(2, new DoubleMath(), AddDuplicateBehavior.Error);
 
@@ -118,7 +127,7 @@ namespace Cm93.GameEngine.Basic
 		 * Tuple.Item1 - the level of the offside line i.e. how deep or high it is
 		 * Tuple.Item2 - the strength of the offside line i.e. how good are the players, are they all in a line
 		 */
-		public static Tuple<double, double> OffsideLine(IList<Player> players, bool isDefendingZero)
+		private static Tuple<double, double> OffsideLine(IList<Player> players, bool isDefendingZero)
 		{
 			var ve = isDefendingZero ? 1 : -1;
 			var line = players.
@@ -168,13 +177,11 @@ namespace Cm93.GameEngine.Basic
 			return (Math.Sqrt(medianDistance) * 10d) / distanceFromAttackingGoalLine;
 		}
 
-		private static PossessionGraph<Player> PossessionGraph(IList<Player> players, IList<Player> opposition, bool isDefendingZero)
+		private PossessionGraph<Player> PossessionGraph(bool isHome, bool isDefendingZero)
 		{
-			var graph = new PossessionGraph<Player>(players, opposition, isDefendingZero);
-
-			throw new NotImplementedException();
-
-			return graph;
+			return isHome ?
+				new PossessionGraph<Player>(HomeTeamPlayers, new Func<Coordinate, double>(coordinate => MatchFunction(coordinate, isHome)), isDefendingZero) :
+				new PossessionGraph<Player>(AwayTeamPlayers, new Func<Coordinate, double>(coordinate => MatchFunction(coordinate, isHome)), isDefendingZero);
 		}
 	}
 }

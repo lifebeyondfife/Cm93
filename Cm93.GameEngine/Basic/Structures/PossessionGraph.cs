@@ -27,6 +27,10 @@ namespace Cm93.GameEngine.Basic.Structures
 {
 	public class PossessionGraph<T> where T : Player
 	{
+		private IList<Player> AwayTeamPlayers;
+		private Func<Coordinate, double> HomeTeamStrength;
+		private bool isDefendingZero;
+
 		public struct Edge<T>
 		{
 			public Edge(T vertex, double cost)
@@ -48,7 +52,7 @@ namespace Cm93.GameEngine.Basic.Structures
 		//	choose random path and ending player i.e. it goes to the striker, or the defender loses it etc.
 		//	(the match simulator will decide on a shot, hoof or tackle etc. and draw path on heatmap)
 
-		public PossessionGraph(IList<T> players, IList<T> opposition, bool isDefendingZero)
+		public PossessionGraph(IList<T> players, Func<Coordinate, double> matchFunction, bool isDefendingZero)
 		{
 			EdgeIndices = new Dictionary<T, IList<Edge<T>>>();
 
@@ -61,16 +65,63 @@ namespace Cm93.GameEngine.Basic.Structures
 				Execute(a => EdgeIndices[a.Player] = orderedPlayers.
 					Skip(a.Index + 1).
 					Where(op => isDefendingZero ? op.Location.Y > a.Player.Location.Y : op.Location.Y < a.Player.Location.Y).
-					Select(p => new Edge<T>(p, Cost(a.Player, p))).
+					Select(p => new Edge<T>(p, Cost(a.Player, p, matchFunction))).
 					ToList()
 				);
 		}
 
-		private double Cost(T from, T to)
+		private double Cost(T from, T to, Func<Coordinate, double> matchFunction)
 		{
-			return from.Location.X;
+			// cost for distance
+			var distance = Math.Sqrt(
+				(from.Location.X - to.Location.X) * (from.Location.X - to.Location.X) +
+				(from.Location.Y - to.Location.Y) * (from.Location.Y - to.Location.Y)
+			);
 
+			// penalty for opposing players in the way (near either player)
+			var theta = Math.Atan(
+				(from.Location.X - to.Location.X) /
+				(from.Location.Y - to.Location.Y)
+			);
+
+			var xPrime = Math.Abs(0.1d * Math.Sin(theta));
+			var yPrime = Math.Abs(0.1d * Math.Cos(theta));
+
+			var sendX = 0d;
+			var sendY = 0d;
+			var receiveX = 0d;
+			var receiveY = 0d;
+			if (from.Location.X > to.Location.X)
+			{
+				sendX = from.Location.X - xPrime;
+				receiveX = to.Location.X + xPrime;
+			}
+			else
+			{
+				sendX = from.Location.X + xPrime;
+				receiveX = to.Location.X - xPrime;
+			}
+
+			if (from.Location.Y > to.Location.Y)
+			{
+				sendY = from.Location.Y - yPrime;
+				receiveY = to.Location.Y + yPrime;
+			}
+			else
+			{
+				sendY = from.Location.Y + yPrime;
+				receiveY = to.Location.Y - yPrime;
+			}
+
+			var receive = new Coordinate { X = receiveX, Y = receiveY };
+			var send = new Coordinate { X = sendX, Y = sendY };
+
+			var successfulPass = (matchFunction(receive) + matchFunction(send)) / 2;
+
+			// skill of both passing and receiving player
+			var playerSkills = (from.Rating + to.Rating) / 2;
+
+			return (playerSkills * successfulPass) / distance;
 		}
-
 	}
 }
