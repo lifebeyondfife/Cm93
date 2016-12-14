@@ -27,10 +27,6 @@ namespace Cm93.GameEngine.Basic.Structures
 {
 	public class PossessionGraph<T> where T : Player
 	{
-		private IList<Player> AwayTeamPlayers;
-		private Func<Coordinate, double> HomeTeamStrength;
-		private bool isDefendingZero;
-
 		public struct Edge<T>
 		{
 			public Edge(T vertex, double cost)
@@ -43,34 +39,44 @@ namespace Cm93.GameEngine.Basic.Structures
 			public double Cost;
 		}
 
-		//	underlying graph structures
-		private Dictionary<T, IList<Edge<T>>> EdgeIndices { get; set; }
+		private IList<T> Team { get; set; }
+		private IList<T> Opposition { get; set; }
 
+		private bool IsHome { get; set; }
+		private bool IsDefendingZero { get; set; }
+
+		private TeamFormationAttributes TeamFormationAttributes { get; set; }
+		private Dictionary<T, IList<Edge<T>>> EdgeIndices { get; set; }
+		private Random Random { get; set; }
 
 		//	create weighted, directed, acyclic graph
-
-		//	choose random path and ending player i.e. it goes to the striker, or the defender loses it etc.
-		//	(the match simulator will decide on a shot, hoof or tackle etc. and draw path on heatmap)
-
-		public PossessionGraph(IList<T> players, Func<Coordinate, double> matchFunction, bool isDefendingZero)
+		public PossessionGraph(TeamFormationAttributes teamFormationAttributes, bool isHome, bool isDefendingZero)
 		{
+			TeamFormationAttributes = teamFormationAttributes;
 			EdgeIndices = new Dictionary<T, IList<Edge<T>>>();
+			Random = new Random((int) DateTime.Now.Ticks);
 
-			var orderedPlayers = isDefendingZero ?
-				players.OrderBy(p => p.Location.Y).ToList() :
-				players.OrderByDescending(p => p.Location.Y).ToList();
+			IsHome = isHome;
+			IsDefendingZero = isDefendingZero;
 
-			players.
+			Team = IsHome ? TeamFormationAttributes.HomeTeamPlayers.Cast<T>().ToList() : TeamFormationAttributes.AwayTeamPlayers.Cast<T>().ToList();
+			Opposition = IsHome ? TeamFormationAttributes.AwayTeamPlayers.Cast<T>().ToList() : TeamFormationAttributes.HomeTeamPlayers.Cast<T>().ToList();
+
+			var orderedPlayers = IsDefendingZero ?
+				Team.OrderBy(p => p.Location.Y).ToList() :
+				Team.OrderByDescending(p => p.Location.Y).ToList();
+
+			Team.
 				Select((p, i) => new { Index = i, Player = p }).
 				Execute(a => EdgeIndices[a.Player] = orderedPlayers.
 					Skip(a.Index + 1).
-					Where(op => isDefendingZero ? op.Location.Y > a.Player.Location.Y : op.Location.Y < a.Player.Location.Y).
-					Select(p => new Edge<T>(p, Cost(a.Player, p, matchFunction))).
+					Where(op => IsDefendingZero ? op.Location.Y > a.Player.Location.Y : op.Location.Y < a.Player.Location.Y).
+					Select(p => new Edge<T>(p, Cost(a.Player, p, TeamFormationAttributes.TeamStrength))).
 					ToList()
 				);
 		}
 
-		private double Cost(T from, T to, Func<Coordinate, double> matchFunction)
+		private double Cost(T from, T to, Func<bool, Coordinate, double> teamStrength)
 		{
 			// cost for distance
 			var distance = Math.Sqrt(
@@ -116,12 +122,94 @@ namespace Cm93.GameEngine.Basic.Structures
 			var receive = new Coordinate { X = receiveX, Y = receiveY };
 			var send = new Coordinate { X = sendX, Y = sendY };
 
-			var successfulPass = (matchFunction(receive) + matchFunction(send)) / 2;
+			var successfulPass = (teamStrength(IsHome, receive) + teamStrength(IsHome, send)) / 2;
 
 			// skill of both passing and receiving player
 			var playerSkills = (from.Rating + to.Rating) / 2;
 
 			return (playerSkills * successfulPass) / distance;
+		}
+
+		//	choose random path and ending player i.e. it goes to the striker, or the defender loses it etc.
+		//	(the match simulator will decide on a shot, hoof or tackle etc. and draw path on heatmap)
+
+		/*
+		 *	* Given player who takes possession (index into EdgeIndices)
+		 *
+		 *	* Random modifier on all the potential paths, pick best option
+		 *	* modifiers based on AttackingShape, DefensiveShape, PositionalBalance (very harsh if bad)
+		 *
+		 *	- Shot is a potential path for all players ( Rating / (distance * matchFunction * defensiveShape) )
+		 *
+		 *	- if option <     0, lose possession to opponents attack
+		 *	- if option <   500, lose possession to opponents defence
+		 *	- if option <  1000, start again from one of back three / four
+		 *	- if option >= 1000, select option
+		 *
+		 *	- if option > 2000 (?), and is a shot, and passes offside line: goal
+		 *
+		 *	- shot - +1 chance, +1 goal if successful, +1 to possessor if successful shot
+		 *
+		 */
+
+		public void PhaseOfPlay(T possessor, ref int chances, ref int goals, ref IList<Coordinate> route, ref T goalScorer)
+		{
+			var option = Int32.MaxValue;
+			var iterations = 0;
+
+			while (option >= 500 && iterations++ < 15)
+			{
+				if (option < 1000)
+				{
+					// reset possessor to one of back four
+				}
+
+				option = Int32.MinValue;
+				var receiver = default(T);
+
+				if (EdgeIndices[possessor].Any())
+				{
+					var phaseEdge = EdgeIndices[possessor].
+						Select(e => new Edge<T>(e.Vertex, e.Cost + Random.Next(-500, 500))).
+						Aggregate((a, b) => a.Cost > b.Cost ? a : b);
+
+					option = (int) (
+						(
+							phaseEdge.Cost *
+							Math.Pow(TeamFormationAttributes.TeamPositionalBalance(IsHome) / TeamFormationAttributes.TeamPositionalBalance(!IsHome), 2) *
+							TeamFormationAttributes.TeamAttackingShape(IsHome)
+						) /
+						TeamFormationAttributes.TeamDefendingShape(!IsHome)
+					);
+
+					receiver = phaseEdge.Vertex;
+				}
+
+				var shootOption = possessor.Rating /
+					(
+						Math.Pow(possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }), 2) *
+						TeamFormationAttributes.TeamStrength(IsHome, possessor.Location) *
+						TeamFormationAttributes.TeamDefendingShape(!IsHome)
+					);
+
+				if (shootOption > option)
+				{
+					// shoot
+
+					// update counters and exit
+					possessor = receiver;
+				}
+				else
+				{
+					// pass
+					// update possessor and continue
+				}
+
+			}
+
+			//	lose possession. depending on how bad etc.
+
+			//	Need a way to pass back result of this phase of possession i.e start again same team, or lose to opposition attackers etc.
 		}
 	}
 }

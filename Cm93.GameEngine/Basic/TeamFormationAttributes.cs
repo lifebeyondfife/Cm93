@@ -32,28 +32,32 @@ namespace Cm93.GameEngine.Basic
 	{
 		private const double Flatten = 100d;
 
-		private IList<Player> HomeTeamPlayers { get; set; }
-		private IList<Player> AwayTeamPlayers { get; set; }
+		public IList<Player> HomeTeamPlayers { get; private set; }
+		public IList<Player> AwayTeamPlayers { get; private set; }
 
 		private static readonly Func<Coordinate, Coordinate, double, double> Distribution = (position, player, rating) =>
 			rating * (Math.Exp(-((player.X - position.X) * (player.X - position.X) + (player.Y - position.Y) * (player.Y - position.Y)) * Flatten));
 
-		public Func<Coordinate, bool, double> MatchFunction { get; private set; }
+		private Func<Coordinate, double> HomeTeamStrength { get; set; }
+		private Func<double> HomeTeamPositionalBalance { get; set; }
+		private Func<Tuple<double, double>> HomeTeamOffsideLine { get; set; }
+		private Func<double> HomeTeamDefendingShape { get; set; }
+		private Func<double> HomeTeamAttackingShape { get; set; }
 
-		public Func<Coordinate, double> HomeTeamStrength { get; private set; }
-		public Func<double> HomeTeamPositionalBalance { get; private set; }
-		public Func<Tuple<double, double>> HomeTeamOffsideLine { get; private set; }
-		public Func<double> HomeTeamDefendingShape { get; private set; }
-		public Func<double> HomeTeamAttackingShape { get; private set; }
+		private Func<Coordinate, double> AwayTeamStrength { get; set; }
+		private Func<double> AwayTeamPositionalBalance { get; set; }
+		private Func<Tuple<double, double>> AwayTeamOffsideLine { get; set; }
+		private Func<double> AwayTeamDefendingShape { get; set; }
+		private Func<double> AwayTeamAttackingShape { get; set; }
+
+		public Func<bool, Coordinate, double> TeamStrength { get; private set; }
+		public Func<bool, double> TeamPositionalBalance { get; private set; }
+		public Func<bool, Tuple<double, double>> TeamOffsideLine { get; private set; }
+		public Func<bool, double> TeamDefendingShape { get; private set; }
+		public Func<bool, double> TeamAttackingShape { get; private set; }
+
 		public Func<PossessionGraph<Player>> HomeTeamPossessionGraph { get; private set; }
-
-		public Func<Coordinate, double> AwayTeamStrength { get; private set; }
-		public Func<double> AwayTeamPositionalBalance { get; private set; }
-		public Func<Tuple<double, double>> AwayTeamOffsideLine { get; private set; }
-		public Func<double> AwayTeamDefendingShape { get; private set; }
-		public Func<double> AwayTeamAttackingShape { get; private set; }
 		public Func<PossessionGraph<Player>> AwayTeamPossessionGraph { get; private set; }
-
 
 		public TeamFormationAttributes(IList<Player> homeTeamPlayers, IList<Player> awayTeamPlayers)
 		{
@@ -62,7 +66,7 @@ namespace Cm93.GameEngine.Basic
 
 			HomeTeamStrength = coordinate => HomeTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
 			AwayTeamStrength = coordinate => AwayTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
-			MatchFunction = (coordinate, isHome) => isHome ?
+			TeamStrength = (isHome, coordinate) => isHome ?
 				HomeTeamStrength(coordinate) - AwayTeamStrength(coordinate) :
 				AwayTeamStrength(coordinate) - HomeTeamStrength(coordinate);
 
@@ -80,6 +84,12 @@ namespace Cm93.GameEngine.Basic
 
 			HomeTeamPossessionGraph = () => PossessionGraph(true, false);
 			AwayTeamPossessionGraph = () => PossessionGraph(false, true);
+
+			TeamStrength = (isHome, coordinate) => isHome ? HomeTeamStrength(coordinate) : AwayTeamStrength(coordinate);
+			TeamPositionalBalance = isHome => isHome ? HomeTeamPositionalBalance() : AwayTeamPositionalBalance();
+			TeamOffsideLine = isHome => isHome ? HomeTeamOffsideLine() : AwayTeamOffsideLine();
+			TeamDefendingShape = isHome => isHome ? HomeTeamDefendingShape() : AwayTeamDefendingShape();
+			TeamAttackingShape = isHome => isHome ? HomeTeamAttackingShape() : AwayTeamAttackingShape();
 
 			Console.WriteLine("Home team positional balance:\t" + HomeTeamPositionalBalance());
 			Console.WriteLine("Away team positional balance:\t" + AwayTeamPositionalBalance());
@@ -106,7 +116,7 @@ namespace Cm93.GameEngine.Basic
 
 			HomeTeamAttackingShape = () => AttackingShape(HomeTeamPlayers, true);
 			AwayTeamAttackingShape = () => AttackingShape(AwayTeamPlayers, false);
-			
+
 			HomeTeamPossessionGraph = () => PossessionGraph(true, true);
 			AwayTeamPossessionGraph = () => PossessionGraph(false, false);
 		}
@@ -179,9 +189,7 @@ namespace Cm93.GameEngine.Basic
 
 		private PossessionGraph<Player> PossessionGraph(bool isHome, bool isDefendingZero)
 		{
-			return isHome ?
-				new PossessionGraph<Player>(HomeTeamPlayers, new Func<Coordinate, double>(coordinate => MatchFunction(coordinate, isHome)), isDefendingZero) :
-				new PossessionGraph<Player>(AwayTeamPlayers, new Func<Coordinate, double>(coordinate => MatchFunction(coordinate, isHome)), isDefendingZero);
+			return new PossessionGraph<Player>(this, isHome, isDefendingZero);
 		}
 	}
 }
