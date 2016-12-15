@@ -20,6 +20,7 @@ using Cm93.Model.Enumerations;
 using Cm93.Model.Helpers;
 using Cm93.Model.Interfaces;
 using Cm93.Model.Structures;
+using Cm93.GameEngine.Basic.Structures;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -131,12 +132,49 @@ namespace Cm93.GameEngine.Basic
 		{
 			var minutes = fixture.PlayingPeriod == PlayingPeriod.FirstHalf ? 1 : 46;
 
-			if (updateUi != null)
-				updateUi(HomeTouches / (HomeTouches + AwayTouches), HeatMap);
+			while (PhasesOfPlay++ < 50)
+			{
+				if (updateUi != null)
+					updateUi(HomeTouches / (HomeTouches + AwayTouches), HeatMap);
 
-			fixture.Minutes = (int) (90 * (PhasesOfPlay / 3000)) + minutes;
+				fixture.Minutes = (int) (90 * (PhasesOfPlay / 100)) + minutes;
 
-			UpdateFixtureStats(fixture, ballPosition, side, default(Player), default(PossessionResult));
+				UpdateFixtureStats(fixture, ballPosition, side, default(Player), default(PossessionResult));
+
+				var startLocation = Coordinate.Random();
+				var homeTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(HomeTeamPlayers, startLocation);
+				var awayTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(AwayTeamPlayers, startLocation);
+
+				var possessionIterations = 0;
+				var possessionTeam = homeTeamStartPlayer.Rating > awayTeamStartPlayer.Rating ? Side.Home : Side.Away;
+
+				var possessionGraph = possessionTeam == Side.Home ?
+					TeamFormationAttributes.HomeTeamPossessionGraph() :
+					TeamFormationAttributes.AwayTeamPossessionGraph();
+
+				var possessor = possessionTeam == Side.Home ? homeTeamStartPlayer : awayTeamStartPlayer;
+
+				var option = Int32.MaxValue;
+				while (possessionIterations++ < 15 && option >= 500)
+				{
+					var isShooting = default(bool);
+					option = possessionGraph.PhaseOfPlay(ref possessor, out isShooting);
+
+					/*
+					 * choose random path and ending player i.e. it goes to the striker, or the defender loses it etc.
+					 * (the match simulator will decide on a shot, hoof or tackle etc. and draw path on heatmap)
+					 * 
+					 *	- if option <     0, lose possession to opponents attack
+					 *	- if option <   500, lose possession to opponents defence
+					 *	- if option <  1000, start again from one of back three / four
+					 *	- if option >= 1000, select option
+					 *
+					 *	- if option > 2000 (?), and is a shot, and passes offside line: goal
+					 *
+					 *	- shot - +1 chance, +1 goal if successful, +1 to possessor if successful shot
+					 */
+				}
+			}
 		}
 
 		private static void UpdateFixtureStats(IFixture fixture, Coordinate ballPosition, Side side, Player ballPossessor, PossessionResult possessionResult)

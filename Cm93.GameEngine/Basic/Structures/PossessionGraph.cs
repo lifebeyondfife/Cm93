@@ -49,7 +49,6 @@ namespace Cm93.GameEngine.Basic.Structures
 		private Dictionary<T, IList<Edge<T>>> EdgeIndices { get; set; }
 		private Random Random { get; set; }
 
-		//	create weighted, directed, acyclic graph
 		public PossessionGraph(TeamFormationAttributes teamFormationAttributes, bool isHome, bool isDefendingZero)
 		{
 			TeamFormationAttributes = teamFormationAttributes;
@@ -130,86 +129,49 @@ namespace Cm93.GameEngine.Basic.Structures
 			return (playerSkills * successfulPass) / distance;
 		}
 
-		//	choose random path and ending player i.e. it goes to the striker, or the defender loses it etc.
-		//	(the match simulator will decide on a shot, hoof or tackle etc. and draw path on heatmap)
-
-		/*
-		 *	* Given player who takes possession (index into EdgeIndices)
-		 *
-		 *	* Random modifier on all the potential paths, pick best option
-		 *	* modifiers based on AttackingShape, DefensiveShape, PositionalBalance (very harsh if bad)
-		 *
-		 *	- Shot is a potential path for all players ( Rating / (distance * matchFunction * defensiveShape) )
-		 *
-		 *	- if option <     0, lose possession to opponents attack
-		 *	- if option <   500, lose possession to opponents defence
-		 *	- if option <  1000, start again from one of back three / four
-		 *	- if option >= 1000, select option
-		 *
-		 *	- if option > 2000 (?), and is a shot, and passes offside line: goal
-		 *
-		 *	- shot - +1 chance, +1 goal if successful, +1 to possessor if successful shot
-		 *
-		 */
-
-		public void PhaseOfPlay(T possessor, ref int chances, ref int goals, ref IList<Coordinate> route, ref T goalScorer)
+		public int PhaseOfPlay(ref T possessor, out bool isShooting)
 		{
-			var option = Int32.MaxValue;
-			var iterations = 0;
+			var option = Int32.MinValue;
+			var receiver = default(T);
 
-			while (option >= 500 && iterations++ < 15)
+			if (EdgeIndices[possessor].Any())
 			{
-				if (option < 1000)
-				{
-					// reset possessor to one of back four
-				}
+				var phaseEdge = EdgeIndices[possessor].
+					Select(e => new Edge<T>(e.Vertex, e.Cost + Random.Next(-500, 500))).
+					Aggregate((a, b) => a.Cost > b.Cost ? a : b);
 
-				option = Int32.MinValue;
-				var receiver = default(T);
-
-				if (EdgeIndices[possessor].Any())
-				{
-					var phaseEdge = EdgeIndices[possessor].
-						Select(e => new Edge<T>(e.Vertex, e.Cost + Random.Next(-500, 500))).
-						Aggregate((a, b) => a.Cost > b.Cost ? a : b);
-
-					option = (int) (
-						(
-							phaseEdge.Cost *
-							Math.Pow(TeamFormationAttributes.TeamPositionalBalance(IsHome) / TeamFormationAttributes.TeamPositionalBalance(!IsHome), 2) *
-							TeamFormationAttributes.TeamAttackingShape(IsHome)
-						) /
-						TeamFormationAttributes.TeamDefendingShape(!IsHome)
-					);
-
-					receiver = phaseEdge.Vertex;
-				}
-
-				var shootOption = possessor.Rating /
+				option = (int) (
 					(
-						Math.Pow(possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }), 2) *
-						TeamFormationAttributes.TeamStrength(IsHome, possessor.Location) *
-						TeamFormationAttributes.TeamDefendingShape(!IsHome)
-					);
+						phaseEdge.Cost *
+						Math.Pow(TeamFormationAttributes.TeamPositionalBalance(IsHome) / TeamFormationAttributes.TeamPositionalBalance(!IsHome), 2) *
+						TeamFormationAttributes.TeamAttackingShape(IsHome)
+					) /
+					TeamFormationAttributes.TeamDefendingShape(!IsHome)
+				);
 
-				if (shootOption > option)
-				{
-					// shoot
-
-					// update counters and exit
-					possessor = receiver;
-				}
-				else
-				{
-					// pass
-					// update possessor and continue
-				}
-
+				receiver = phaseEdge.Vertex;
 			}
 
-			//	lose possession. depending on how bad etc.
+			var shootOption = (int) (possessor.Rating /
+				(
+					Math.Pow(possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }), 2) *
+					TeamFormationAttributes.TeamStrength(IsHome, possessor.Location) *
+					TeamFormationAttributes.TeamDefendingShape(!IsHome)
+				)
+			);
 
-			//	Need a way to pass back result of this phase of possession i.e start again same team, or lose to opposition attackers etc.
+			if (shootOption > option)
+			{
+				isShooting = true;
+				option = shootOption;
+			}
+			else
+			{
+				isShooting = false;
+				possessor = receiver;
+			}
+
+			return option;
 		}
 	}
 }
