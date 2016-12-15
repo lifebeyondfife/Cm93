@@ -120,6 +120,8 @@ namespace Cm93.GameEngine.Basic
 
 			PhasesOfPlay = 0;
 			fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
+			TeamFormationAttributes.SecondHalf();
+
 			PlayHalf(fixture, updateUi, ref ballPosition, ref side);
 
 			fixture.PlayingPeriod = PlayingPeriod.FullTime;
