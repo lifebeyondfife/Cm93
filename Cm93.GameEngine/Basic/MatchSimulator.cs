@@ -90,7 +90,6 @@ namespace Cm93.GameEngine.Basic
 
 			var ballPosition = new Coordinate { X = 0.5d, Y = 0.5d };
 			var kickoff = DateTime.Now;
-			var side = default(Side);
 
 			PlayerMatch = updateUi != null;
 			PhasesOfPlay = 0;
@@ -108,7 +107,7 @@ namespace Cm93.GameEngine.Basic
 			LogRatingBattle();
 
 			fixture.PlayingPeriod = PlayingPeriod.FirstHalf;
-			PlayHalf(fixture, updateUi, ref ballPosition, ref side);
+			PlayHalf(fixture, updateUi);
 
 			fixture.PlayingPeriod = PlayingPeriod.HalfTime;
 			HeatMap = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
@@ -123,80 +122,101 @@ namespace Cm93.GameEngine.Basic
 			fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
 			TeamFormationAttributes.SecondHalf();
 
-			PlayHalf(fixture, updateUi, ref ballPosition, ref side);
+			PlayHalf(fixture, updateUi);
 
 			fixture.PlayingPeriod = PlayingPeriod.FullTime;
 		}
 
-		private void PlayHalf(IFixture fixture, Action<double, double[,]> updateUi, ref Coordinate ballPosition, ref Side side)
+		private void PlayHalf(IFixture fixture, Action<double, double[,]> updateUi)
 		{
 			var minutes = fixture.PlayingPeriod == PlayingPeriod.FirstHalf ? 1 : 46;
+			var possessor = default(Player);
+			var possessionTeam = default(Side);
+			var possessionGraph = default(PossessionGraph<Player>);
 
 			while (PhasesOfPlay++ < 50)
 			{
-				if (updateUi != null)
+				if (PlayerMatch)
 					updateUi(HomeTouches / (HomeTouches + AwayTouches), HeatMap);
 
 				fixture.Minutes = (int) (90 * (PhasesOfPlay / 100)) + minutes;
 
-				UpdateFixtureStats(fixture, ballPosition, side, default(Player), default(PossessionResult));
-
-				var startLocation = Coordinate.Random();
-				var homeTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(HomeTeamPlayers, startLocation);
-				var awayTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(AwayTeamPlayers, startLocation);
-
-				var possessionIterations = 0;
-				var possessionTeam = homeTeamStartPlayer.Rating > awayTeamStartPlayer.Rating ? Side.Home : Side.Away;
-
-				var possessionGraph = possessionTeam == Side.Home ?
-					TeamFormationAttributes.HomeTeamPossessionGraph() :
-					TeamFormationAttributes.AwayTeamPossessionGraph();
-
-				var possessor = possessionTeam == Side.Home ? homeTeamStartPlayer : awayTeamStartPlayer;
-
-				var option = Int32.MaxValue;
-				while (possessionIterations++ < 15 && option >= 500)
-				{
-					var isShooting = default(bool);
-					option = possessionGraph.PhaseOfPlay(ref possessor, out isShooting);
-
-					/*
-					 * choose random path and ending player i.e. it goes to the striker, or the defender loses it etc.
-					 * (the match simulator will decide on a shot, hoof or tackle etc. and draw path on heatmap)
-					 * 
-					 *	- if option <     0, lose possession to opponents attack
-					 *	- if option <   500, lose possession to opponents defence
-					 *	- if option <  1000, start again from one of back three / four
-					 *	- if option >= 1000, select option
-					 *
-					 *	- if option > 2000 (?), and is a shot, and passes offside line: goal
-					 *
-					 *	- shot - +1 chance, +1 goal if successful, +1 to possessor if successful shot
-					 */
-				}
+				PlayPhase(fixture, ref possessor, ref possessionTeam, ref possessionGraph);
 			}
 		}
 
-		private static void UpdateFixtureStats(IFixture fixture, Coordinate ballPosition, Side side, Player ballPossessor, PossessionResult possessionResult)
+		private void PlayPhase(IFixture fixture, ref Player possessor, ref Side possessionTeam, ref PossessionGraph<Player> possessionGraph)
 		{
-			if (possessionResult == PossessionResult.Attack || possessionResult == PossessionResult.Goal)
+			if (possessor == null)
 			{
-				if (side == Side.Home)
-					++fixture.ChancesHome;
-				else
-					++fixture.ChancesAway;
+				var startLocation = Coordinate.Random();
+				var homeTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(true, startLocation);
+				var awayTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(false, startLocation);
+
+				possessionTeam = homeTeamStartPlayer.Rating > awayTeamStartPlayer.Rating ? Side.Home : Side.Away;
+
+				possessor = possessionTeam == Side.Home ? homeTeamStartPlayer : awayTeamStartPlayer;
 			}
 
-			if (possessionResult == PossessionResult.Goal)
-			{
-				ballPosition.X = ballPosition.Y = 0.5d;
-				if (side == Side.Home)
-					++fixture.GoalsHome;
-				else
-					++fixture.GoalsAway;
+			possessionGraph = possessionTeam == Side.Home ?
+				TeamFormationAttributes.HomeTeamPossessionGraph() :
+				TeamFormationAttributes.AwayTeamPossessionGraph();
 
-				//++ballPossessor.Goals;
+			var possessionIterations = 0;
+			var option = default(int);
+			while (possessionIterations++ < 15)
+			{
+				ColourHeatMap(possessor.Location.RandomNear());
+
+				var isShooting = default(bool);
+				option = possessionGraph.PhaseOfPlay(ref possessor, out isShooting);
+
+				if (possessionTeam == Side.Home)
+					++HomeTouches;
+				else
+					++AwayTouches;
+
+				if (option < 500)
+					break;
+
+				if (option < 1000)
+				{
+					possessor = TeamFormationAttributes.GetNearestPlayer(possessionTeam == Side.Home, RestartedBallPosition(possessionTeam, (option - 500d) / 1000));
+					continue;
+				}
+
+				if (isShooting)
+				{
+					if (possessionTeam == Side.Home)
+						++fixture.ChancesHome;
+					else
+						++fixture.ChancesAway;
+
+					if (option > 2000)
+					{
+						if (possessionTeam == Side.Home)
+							++fixture.GoalsHome;
+						else
+							++fixture.GoalsAway;
+
+						++possessor.Goals;
+						option = 500;	// to allow the restarted position (see GetNearestPlayer invocation below) to be at the halfway line
+					}
+
+					break;
+				}
 			}
+
+			possessionTeam = possessionTeam == Side.Home ? Side.Away : Side.Home;
+			possessor = TeamFormationAttributes.GetNearestPlayer(possessionTeam == Side.Home, RestartedBallPosition(possessionTeam, Math.Ceiling((1000d - option) / 1000)));
+		}
+
+		private Coordinate RestartedBallPosition(Side side, double y)
+		{
+			if ((HomeGoal.Y > 0d && side == Side.Home) || (AwayGoal.Y > 0d && side == Side.Away))
+				y = 1 - y;
+
+			return new Coordinate { X = Random.NextDouble(), Y = y };
 		}
 
 		private void ColourHeatMap(Coordinate ballPosition)
@@ -363,8 +383,8 @@ namespace Cm93.GameEngine.Basic
 					}
 
 					var rating = side == Side.Home ?
-						(int) (TeamFormationAttributes.HomeTeamStrength(new Coordinate { X = (double) i / width, Y = (double) j / height })) :
-						(int) (TeamFormationAttributes.AwayTeamStrength(new Coordinate { X = (double) i / width, Y = (double) j / height }));
+						(int) (TeamFormationAttributes.TeamStrength(true, new Coordinate { X = (double) i / width, Y = (double) j / height })) :
+						(int) (TeamFormationAttributes.TeamStrength(false, new Coordinate { X = (double) i / width, Y = (double) j / height }));
 
 					stringBuilder.Append(rating);
 
@@ -416,8 +436,8 @@ namespace Cm93.GameEngine.Basic
 						continue;
 					}
 
-					var rating = (int) (TeamFormationAttributes.HomeTeamStrength(new Coordinate { X = (double) i / width, Y = (double) j / height }) -
-						TeamFormationAttributes.AwayTeamStrength(new Coordinate { X = (double) i / width, Y = (double) j / height }));
+					var rating = (int) (TeamFormationAttributes.TeamStrength(true, new Coordinate { X = (double) i / width, Y = (double) j / height }) -
+						TeamFormationAttributes.TeamStrength(false, new Coordinate { X = (double) i / width, Y = (double) j / height }));
 
 					stringBuilder.Append(rating);
 

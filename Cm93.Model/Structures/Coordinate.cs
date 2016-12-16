@@ -51,6 +51,11 @@ namespace Cm93.Model.Structures
 			return new Coordinate { X = _Random.NextDouble(), Y = _Random.NextDouble() };
 		}
 
+		public Coordinate RandomNear()
+		{
+			return new Coordinate { X = this.X + (_Random.NextDouble() / 10), Y = this.Y + (_Random.NextDouble() / 10) };
+		}
+
 		public override string ToString()
 		{
 			return string.Format("({0}, {1})", X, Y);

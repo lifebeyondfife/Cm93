@@ -151,6 +151,13 @@ namespace Cm93.GameEngine.Basic
 			return Tuple.Create(line, strength);
 		}
 
+		public Player GetNearestPlayer(bool isHome, Coordinate location)
+		{
+			return isHome ?
+				GetNearestPlayer(HomeTeamPlayers, location) :
+				GetNearestPlayer(AwayTeamPlayers, location);
+		}
+
 		private static Player GetNearestPlayer(IEnumerable<Player> players, Coordinate location)
 		{
 			return players.
