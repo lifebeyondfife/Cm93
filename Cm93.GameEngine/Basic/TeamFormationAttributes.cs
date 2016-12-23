@@ -38,6 +38,8 @@ namespace Cm93.GameEngine.Basic
 		private static readonly Func<Coordinate, Coordinate, double, double> Distribution = (position, player, rating) =>
 			rating * (Math.Exp(-((player.X - position.X) * (player.X - position.X) + (player.Y - position.Y) * (player.Y - position.Y)) * Flatten));
 
+		internal Action<string> Log { get; private set; }
+
 		private Func<Coordinate, double> HomeTeamStrength { get; set; }
 		private Func<double> HomeTeamPositionalBalance { get; set; }
 		private Func<Tuple<double, double>> HomeTeamOffsideLine { get; set; }
@@ -59,10 +61,11 @@ namespace Cm93.GameEngine.Basic
 		public Func<PossessionGraph<Player>> HomeTeamPossessionGraph { get; private set; }
 		public Func<PossessionGraph<Player>> AwayTeamPossessionGraph { get; private set; }
 
-		public TeamFormationAttributes(IList<Player> homeTeamPlayers, IList<Player> awayTeamPlayers)
+		public TeamFormationAttributes(IList<Player> homeTeamPlayers, IList<Player> awayTeamPlayers, Action<string> log = null)
 		{
 			HomeTeamPlayers = homeTeamPlayers;
 			AwayTeamPlayers = awayTeamPlayers;
+			Log = log;
 
 			HomeTeamStrength = coordinate => HomeTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
 			AwayTeamStrength = coordinate => AwayTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();

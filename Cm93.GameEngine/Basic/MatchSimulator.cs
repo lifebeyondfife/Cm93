@@ -78,7 +78,7 @@ namespace Cm93.GameEngine.Basic
 			Random = new Random();
 			HomeTeamPlayers = homeTeamFormation.Values.ToList();
 			AwayTeamPlayers = awayTeamFormation.Values.ToList();
-			TeamFormationAttributes = new TeamFormationAttributes(HomeTeamPlayers, AwayTeamPlayers);
+			TeamFormationAttributes = new TeamFormationAttributes(HomeTeamPlayers, AwayTeamPlayers, Log);
 
 			HomeGoal = new Coordinate { X = 0.5d, Y = 0d };
 			AwayGoal = new Coordinate { X = 0.5d, Y = 1d };
@@ -141,11 +141,11 @@ namespace Cm93.GameEngine.Basic
 
 				fixture.Minutes = (int) (90 * (PhasesOfPlay / 100)) + minutes;
 
-				PlayPhase(fixture, ref possessor, ref possessionTeam, ref possessionGraph);
+				PlayPhase(fixture, updateUi, ref possessor, ref possessionTeam, ref possessionGraph);
 			}
 		}
 
-		private void PlayPhase(IFixture fixture, ref Player possessor, ref Side possessionTeam, ref PossessionGraph<Player> possessionGraph)
+		private void PlayPhase(IFixture fixture, Action<double, double[,]> updateUi, ref Player possessor, ref Side possessionTeam, ref PossessionGraph<Player> possessionGraph)
 		{
 			if (possessor == null)
 			{
@@ -153,9 +153,13 @@ namespace Cm93.GameEngine.Basic
 				var homeTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(true, startLocation);
 				var awayTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(false, startLocation);
 
+				Log(string.Format("Battle for possession between {0} and {1} at {2}", homeTeamStartPlayer.LastName, awayTeamStartPlayer.LastName, startLocation));
+
 				possessionTeam = homeTeamStartPlayer.Rating > awayTeamStartPlayer.Rating ? Side.Home : Side.Away;
 
 				possessor = possessionTeam == Side.Home ? homeTeamStartPlayer : awayTeamStartPlayer;
+
+				Log(string.Format("{0} wins it for {1}", possessor.LastName, possessor.TeamName));
 			}
 
 			possessionGraph = possessionTeam == Side.Home ?
@@ -166,7 +170,11 @@ namespace Cm93.GameEngine.Basic
 			var option = default(int);
 			while (possessionIterations++ < 15)
 			{
-				ColourHeatMap(possessor.Location.RandomNear());
+				if (PlayerMatch)
+				{
+					updateUi(HomeTouches / (HomeTouches + AwayTouches), ColourHeatMap(possessor.Location.RandomNear()));
+					Thread.Sleep(500);
+				}
 
 				var isShooting = default(bool);
 				option = possessionGraph.PhaseOfPlay(ref possessor, out isShooting);
@@ -182,6 +190,7 @@ namespace Cm93.GameEngine.Basic
 				if (option < 1000)
 				{
 					possessor = TeamFormationAttributes.GetNearestPlayer(possessionTeam == Side.Home, RestartedBallPosition(possessionTeam, (option - 500d) / 1000));
+					Log(string.Format("Working from the back with {0}", possessor.LastName));
 					continue;
 				}
 
@@ -194,6 +203,7 @@ namespace Cm93.GameEngine.Basic
 
 					if (option > 2000)
 					{
+						Log(string.Format("He shoots, he scores! Goal for {0}", possessor.LastName));
 						if (possessionTeam == Side.Home)
 							++fixture.GoalsHome;
 						else
@@ -202,13 +212,16 @@ namespace Cm93.GameEngine.Basic
 						++possessor.Goals;
 						option = 500;	// to allow the restarted position (see GetNearestPlayer invocation below) to be at the halfway line
 					}
+					else
+						Log(string.Format("Shot from {0} but no goal", possessor.LastName));
 
 					break;
 				}
 			}
 
 			possessionTeam = possessionTeam == Side.Home ? Side.Away : Side.Home;
-			possessor = TeamFormationAttributes.GetNearestPlayer(possessionTeam == Side.Home, RestartedBallPosition(possessionTeam, Math.Ceiling((1000d - option) / 1000)));
+			possessor = TeamFormationAttributes.GetNearestPlayer(possessionTeam == Side.Home, RestartedBallPosition(possessionTeam, (1000d - option) / 1000));
+			Log(string.Format("Restart for {0} with {1} at {2}", possessor.TeamName, possessor.LastName, possessor.Location));
 		}
 
 		private Coordinate RestartedBallPosition(Side side, double y)
@@ -219,7 +232,7 @@ namespace Cm93.GameEngine.Basic
 			return new Coordinate { X = Random.NextDouble(), Y = y };
 		}
 
-		private void ColourHeatMap(Coordinate ballPosition)
+		private double[,] ColourHeatMap(Coordinate ballPosition)
 		{
 			var x = (int) (ballPosition.X * Configuration.HeatMapDimensions.Item1);
 			var y = (int) (ballPosition.Y * Configuration.HeatMapDimensions.Item2);
@@ -241,6 +254,8 @@ namespace Cm93.GameEngine.Basic
 			new[] { Tuple.Create(x, y) }.
 				Where(withinBounds).
 				Execute(p => HeatMap[p.Item1, p.Item2] += 0.5d);
+
+			return HeatMap;
 		}
 
 		private void UpdateNpcTeams(IDictionary<int, Player> teamFormation)

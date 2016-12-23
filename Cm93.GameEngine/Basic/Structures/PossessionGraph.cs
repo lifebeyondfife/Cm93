@@ -73,6 +73,20 @@ namespace Cm93.GameEngine.Basic.Structures
 					Select(p => new Edge<T>(p, Cost(a.Player, p, TeamFormationAttributes.TeamStrength))).
 					ToList()
 				);
+
+			if (TeamFormationAttributes.Log != null)
+				LogPossessionGraph(TeamFormationAttributes.Log);
+		}
+
+		private void LogPossessionGraph(Action<string> log)
+		{
+			EdgeIndices.Execute(kvp =>
+				{
+					log(string.Format("{0} can pass to: ", kvp.Key.LastName));
+					kvp.Value.Execute(n =>
+						log(string.Format("\t{0} at cost {1}", n.Vertex.LastName, n.Cost))
+					);
+				});
 		}
 
 		private double Cost(T from, T to, Func<bool, Coordinate, double> teamStrength)
@@ -150,6 +164,9 @@ namespace Cm93.GameEngine.Basic.Structures
 				);
 
 				receiver = phaseEdge.Vertex;
+
+				if (TeamFormationAttributes.Log != null)
+					TeamFormationAttributes.Log(string.Format("{0} has option to pass to {1} with success {2}", possessor.LastName, receiver.LastName, phaseEdge.Cost));
 			}
 
 			var shootOption = (int) (possessor.Rating /
@@ -159,6 +176,9 @@ namespace Cm93.GameEngine.Basic.Structures
 					TeamFormationAttributes.TeamDefendingShape(!IsHome)
 				)
 			);
+
+			if (TeamFormationAttributes.Log != null)
+				TeamFormationAttributes.Log(string.Format("{0} has option to shoot with success {1}", possessor.LastName, shootOption));
 
 			if (shootOption > option)
 			{
