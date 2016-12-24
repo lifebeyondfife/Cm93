@@ -57,12 +57,7 @@ namespace Cm93.GameEngine.Basic.Structures
 		static PossessionGraph()
 		{
 			Data = new StreamWriter(File.Create(@"C:\Users\iain\Desktop\data.csv"));
-			Data.WriteLine("distance,sendPass,receivePass,successfulPass,sendRating,passRating,playerRating,calculation");
-		}
-
-		static ~PossessionGraph()
-		{
-			Data.Dispose();
+			//Data.WriteLine("distance,successfulPass,playerRating,calculation");
 		}
 
 		public PossessionGraph(TeamFormationAttributes teamFormationAttributes, bool isHome, bool isDefendingZero)
@@ -108,9 +103,10 @@ namespace Cm93.GameEngine.Basic.Structures
 		private double Cost(T from, T to, Func<bool, Coordinate, double> teamStrength)
 		{
 			// cost for distance
-			var distance = Math.Sqrt(
+			var distance = Math.Pow(
 				(from.Location.X - to.Location.X) * (from.Location.X - to.Location.X) +
-				(from.Location.Y - to.Location.Y) * (from.Location.Y - to.Location.Y)
+				(from.Location.Y - to.Location.Y) * (from.Location.Y - to.Location.Y),
+				0.25d
 			);
 
 			// penalty for opposing players in the way (near either player)
@@ -155,16 +151,18 @@ namespace Cm93.GameEngine.Basic.Structures
 
 			// skill of both passing and receiving player
 			var playerSkills = (from.Rating + to.Rating) / 2;
+			playerSkills = (playerSkills * playerSkills) / 100d;
 
 			if (TeamFormationAttributes.DelmeFlag)
-				OutputRow(distance, teamStrength(IsHome, send), teamStrength(IsHome, receive), successfulPass, from.Rating, to.Rating, playerSkills, (playerSkills * successfulPass) / distance);
+				OutputRow(distance, successfulPass, playerSkills, ((playerSkills * successfulPass) / distance) - 1000d);
 
-			return (playerSkills * successfulPass) / distance;
+			return ((playerSkills * successfulPass) / distance) - 1000d;
 		}
 
-		private void OutputRow(double distance, double sendPass, double receivePass, double successfulPass, double sendRating, double passRating, double playerRating, double calculation)
+		private void OutputRow(double distance, double successfulPass, double playerRating, double calculation)
 		{
-			Data.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}", distance, sendPass, receivePass, successfulPass, sendRating, passRating, playerRating, calculation);
+			Data.WriteLine("{0},{1},{2},{3}", distance, successfulPass, playerRating, calculation);
+			Data.Flush();
 		}
 
 		public int PhaseOfPlay(ref T possessor, out bool isShooting)

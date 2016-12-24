@@ -137,7 +137,7 @@ namespace Cm93.GameEngine.Basic
 				if (PlayerMatch)
 					updateUi(HomeTouches / (HomeTouches + AwayTouches), HeatMap);
 
-				fixture.Minutes = (int) (90 * (PhasesOfPlay / 100)) + minutes;
+				fixture.Minutes = (int) (90 * (PhasesOfPlay / 300)) + minutes;
 
 				PlayPhase(fixture, updateUi, ref possessor, ref possessionTeam, ref possessionGraph);
 			}
@@ -181,7 +181,7 @@ namespace Cm93.GameEngine.Basic
 				if (PlayerMatch)
 				{
 					updateUi(HomeTouches / (HomeTouches + AwayTouches), ColourHeatMap(possessor.Location.RandomNear()));
-					Thread.Sleep(500);
+					Thread.Sleep(100);	//	TODO: put back to 500 to make it a reasonable pace
 				}
 
 				var isShooting = default(bool);
@@ -210,6 +210,7 @@ namespace Cm93.GameEngine.Basic
 						++fixture.ChancesAway;
 
 					//	TODO: Need to do a check here against the offside trap
+					//	TODO: This also has to check against how isolated or marked the shooter is - make the onus be on the attacker to score
 					if (option > 2000)
 					{
 						Log(string.Format("He shoots, he scores! Goal for {0}", possessor.LastName));
