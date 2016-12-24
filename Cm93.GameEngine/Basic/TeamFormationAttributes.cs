@@ -61,8 +61,15 @@ namespace Cm93.GameEngine.Basic
 		public Func<PossessionGraph<Player>> HomeTeamPossessionGraph { get; private set; }
 		public Func<PossessionGraph<Player>> AwayTeamPossessionGraph { get; private set; }
 
+
+		internal bool DelmeFlag { get; set; }
+
+
 		public TeamFormationAttributes(IList<Player> homeTeamPlayers, IList<Player> awayTeamPlayers, Action<string> log = null)
 		{
+
+			DelmeFlag = true;
+
 			HomeTeamPlayers = homeTeamPlayers;
 			AwayTeamPlayers = awayTeamPlayers;
 			Log = log;

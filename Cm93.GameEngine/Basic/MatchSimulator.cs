@@ -38,14 +38,6 @@ namespace Cm93.GameEngine.Basic
 			Away
 		}
 
-		private enum PossessionResult
-		{
-			Goal,
-			Attack,
-			OutOfPlay,
-			Player
-		}
-
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MatchSimulator));
 
 		private Random Random { get; set; }
@@ -120,6 +112,12 @@ namespace Cm93.GameEngine.Basic
 
 			PhasesOfPlay = 0;
 			fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
+
+			//	TODO: Is this needed?
+			var temp = HomeGoal;
+			HomeGoal = AwayGoal;
+			AwayGoal = temp;
+
 			TeamFormationAttributes.SecondHalf();
 
 			PlayHalf(fixture, updateUi);
@@ -129,12 +127,12 @@ namespace Cm93.GameEngine.Basic
 
 		private void PlayHalf(IFixture fixture, Action<double, double[,]> updateUi)
 		{
-			var minutes = fixture.PlayingPeriod == PlayingPeriod.FirstHalf ? 1 : 46;
+			var minutes = fixture.PlayingPeriod == PlayingPeriod.FirstHalf ? 0 : 45;
 			var possessor = default(Player);
 			var possessionTeam = default(Side);
 			var possessionGraph = default(PossessionGraph<Player>);
 
-			while (PhasesOfPlay++ < 50)
+			while (PhasesOfPlay < 150)
 			{
 				if (PlayerMatch)
 					updateUi(HomeTouches / (HomeTouches + AwayTouches), HeatMap);
@@ -166,10 +164,20 @@ namespace Cm93.GameEngine.Basic
 				TeamFormationAttributes.HomeTeamPossessionGraph() :
 				TeamFormationAttributes.AwayTeamPossessionGraph();
 
+			if (TeamFormationAttributes.DelmeFlag)
+			{
+				var ignore = possessionTeam == Side.Away ?
+					TeamFormationAttributes.HomeTeamPossessionGraph() :
+					TeamFormationAttributes.AwayTeamPossessionGraph();
+				TeamFormationAttributes.DelmeFlag = false;
+			}
+
 			var possessionIterations = 0;
 			var option = default(int);
+			//	TODO: Modifier for +ve Team Balance, -ve Defensive shape?
 			while (possessionIterations++ < 15)
 			{
+				++PhasesOfPlay;
 				if (PlayerMatch)
 				{
 					updateUi(HomeTouches / (HomeTouches + AwayTouches), ColourHeatMap(possessor.Location.RandomNear()));
@@ -201,6 +209,7 @@ namespace Cm93.GameEngine.Basic
 					else
 						++fixture.ChancesAway;
 
+					//	TODO: Need to do a check here against the offside trap
 					if (option > 2000)
 					{
 						Log(string.Format("He shoots, he scores! Goal for {0}", possessor.LastName));

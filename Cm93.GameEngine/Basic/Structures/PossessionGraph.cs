@@ -23,19 +23,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+using System.IO;
+
 namespace Cm93.GameEngine.Basic.Structures
 {
 	public class PossessionGraph<T> where T : Player
 	{
-		public struct Edge<T>
+		public struct Edge<E>
 		{
-			public Edge(T vertex, double cost)
+			public Edge(E vertex, double cost)
 			{
 				Vertex = vertex;
 				Cost = cost;
 			}
 
-			public T Vertex;
+			public E Vertex;
 			public double Cost;
 		}
 
@@ -48,6 +51,19 @@ namespace Cm93.GameEngine.Basic.Structures
 		private TeamFormationAttributes TeamFormationAttributes { get; set; }
 		private Dictionary<T, IList<Edge<T>>> EdgeIndices { get; set; }
 		private Random Random { get; set; }
+
+		private static TextWriter Data;
+
+		static PossessionGraph()
+		{
+			Data = new StreamWriter(File.Create(@"C:\Users\iain\Desktop\data.csv"));
+			Data.WriteLine("distance,sendPass,receivePass,successfulPass,sendRating,passRating,playerRating,calculation");
+		}
+
+		static ~PossessionGraph()
+		{
+			Data.Dispose();
+		}
 
 		public PossessionGraph(TeamFormationAttributes teamFormationAttributes, bool isHome, bool isDefendingZero)
 		{
@@ -140,7 +156,15 @@ namespace Cm93.GameEngine.Basic.Structures
 			// skill of both passing and receiving player
 			var playerSkills = (from.Rating + to.Rating) / 2;
 
+			if (TeamFormationAttributes.DelmeFlag)
+				OutputRow(distance, teamStrength(IsHome, send), teamStrength(IsHome, receive), successfulPass, from.Rating, to.Rating, playerSkills, (playerSkills * successfulPass) / distance);
+
 			return (playerSkills * successfulPass) / distance;
+		}
+
+		private void OutputRow(double distance, double sendPass, double receivePass, double successfulPass, double sendRating, double passRating, double playerRating, double calculation)
+		{
+			Data.WriteLine("{0}{1}{2}{3}{4}{5}{6}{7}", distance, sendPass, receivePass, successfulPass, sendRating, passRating, playerRating, calculation);
 		}
 
 		public int PhaseOfPlay(ref T possessor, out bool isShooting)
