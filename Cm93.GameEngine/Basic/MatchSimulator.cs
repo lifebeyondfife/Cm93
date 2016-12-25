@@ -132,7 +132,7 @@ namespace Cm93.GameEngine.Basic
 			var possessionTeam = default(Side);
 			var possessionGraph = default(PossessionGraph<Player>);
 
-			while (PhasesOfPlay < 150)
+			while (PhasesOfPlay <= 150)
 			{
 				if (PlayerMatch)
 					updateUi(HomeTouches / (HomeTouches + AwayTouches), HeatMap);
@@ -193,10 +193,16 @@ namespace Cm93.GameEngine.Basic
 					++AwayTouches;
 
 				if (option < 500)
+				{
+					PossessionGraph<Player>.Chain.WriteLine("{0},{1},lost", possessionIterations, isShooting);
+					PossessionGraph<Player>.Chain.Flush();
 					break;
+				}
 
 				if (option < 1000)
 				{
+					PossessionGraph<Player>.Chain.WriteLine("{0},{1},restart", possessionIterations, isShooting);
+					PossessionGraph<Player>.Chain.Flush();
 					possessor = TeamFormationAttributes.GetNearestPlayer(possessionTeam == Side.Home, RestartedBallPosition(possessionTeam, (option - 500d) / 1000));
 					Log(string.Format("Working from the back with {0}", possessor.LastName));
 					continue;
@@ -204,6 +210,9 @@ namespace Cm93.GameEngine.Basic
 
 				if (isShooting)
 				{
+					PossessionGraph<Player>.Chain.WriteLine("{0},true,shoot", possessionIterations);
+					PossessionGraph<Player>.Chain.Flush();
+
 					if (possessionTeam == Side.Home)
 						++fixture.ChancesHome;
 					else

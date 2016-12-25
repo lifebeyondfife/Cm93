@@ -53,11 +53,21 @@ namespace Cm93.GameEngine.Basic.Structures
 		private Random Random { get; set; }
 
 		private static TextWriter Data;
+		private static TextWriter Passes;
+		private static TextWriter Shots;
+
+		public static TextWriter Chain;
 
 		static PossessionGraph()
 		{
 			Data = new StreamWriter(File.Create(@"C:\Users\iain\Desktop\data.csv"));
-			//Data.WriteLine("distance,successfulPass,playerRating,calculation");
+			Passes = new StreamWriter(File.Create(@"C:\Users\iain\Desktop\passes.csv"));
+			Shots = new StreamWriter(File.Create(@"C:\Users\iain\Desktop\shots.csv"));
+			Chain = new StreamWriter(File.Create(@"C:\Users\iain\Desktop\chain.csv"));
+			//distance,successfulPass,playerRating,calculation
+			//randomCost,playerPositionalBalance,oppositionPositionalBalance,positionBalanceRatioSquared,playerAttackingShape,oppositionDefendingShape,passScore
+			//playerRating,distanceFromGoalSquared,teamStrengthAtShootingPosition,oppositionDefendingStrength
+			//chainLength,isShooting,result
 		}
 
 		public PossessionGraph(TeamFormationAttributes teamFormationAttributes, bool isHome, bool isDefendingZero)
@@ -184,11 +194,18 @@ namespace Cm93.GameEngine.Basic.Structures
 					) /
 					TeamFormationAttributes.TeamDefendingShape(!IsHome)
 				);
+				Passes.WriteLine("{0},{1},{2},{3},{4},{5},{6}", phaseEdge.Cost, TeamFormationAttributes.TeamPositionalBalance(IsHome),
+					TeamFormationAttributes.TeamPositionalBalance(!IsHome),
+					Math.Pow(TeamFormationAttributes.TeamPositionalBalance(IsHome) / TeamFormationAttributes.TeamPositionalBalance(!IsHome), 2),
+					TeamFormationAttributes.TeamAttackingShape(IsHome),
+					TeamFormationAttributes.TeamDefendingShape(!IsHome),
+					option);
+				Passes.Flush();
 
 				receiver = phaseEdge.Vertex;
 
 				if (TeamFormationAttributes.Log != null)
-					TeamFormationAttributes.Log(string.Format("{0} has option to pass to {1} with success {2}", possessor.LastName, receiver.LastName, phaseEdge.Cost));
+					TeamFormationAttributes.Log(string.Format("{0} has option to pass to {1} with success {2}", possessor.LastName, receiver.LastName, option));
 			}
 
 			var shootOption = (int) (possessor.Rating /
@@ -198,6 +215,10 @@ namespace Cm93.GameEngine.Basic.Structures
 					TeamFormationAttributes.TeamDefendingShape(!IsHome)
 				)
 			);
+			Shots.WriteLine("{0},{1},{2},{3},{4}", possessor.Rating,
+				Math.Pow(possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }), 2),
+				TeamFormationAttributes.TeamStrength(IsHome, possessor.Location), TeamFormationAttributes.TeamDefendingShape(!IsHome), shootOption);
+			Shots.Flush();
 
 			if (TeamFormationAttributes.Log != null)
 				TeamFormationAttributes.Log(string.Format("{0} has option to shoot with success {1}", possessor.LastName, shootOption));
