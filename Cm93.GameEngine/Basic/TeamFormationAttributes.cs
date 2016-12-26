@@ -140,6 +140,7 @@ namespace Cm93.GameEngine.Basic
 			return players.
 				Select(p => tree.GetNearestNeighbours(new double[] { p.Location.X, p.Location.Y }, 2)).
 				Select(ps => ps.First().Value.Location.Distance(ps.Last().Value.Location)).
+				Where((p, i) => i % 2 == 0).	// leave gaps to distort (make bigger) the StdDev
 				StandardDeviation();
 		}
 

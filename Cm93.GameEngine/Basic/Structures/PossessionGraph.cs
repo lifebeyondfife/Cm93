@@ -66,7 +66,7 @@ namespace Cm93.GameEngine.Basic.Structures
 			Chain = new StreamWriter(File.Create(@"C:\Users\iain\Desktop\chain.csv"));
 			//distance,successfulPass,playerRating,calculation
 			//randomCost,playerPositionalBalance,oppositionPositionalBalance,positionBalanceRatioSquared,playerAttackingShape,oppositionDefendingShape,passScore
-			//playerRating,distanceFromGoalSquared,teamStrengthAtShootingPosition,oppositionDefendingStrength
+			//playerRating,distanceFromGoalSquared,oppositionStrengthAtShootingPosition,oppositionDefendingStrength,shotScore
 			//chainLength,isShooting,result
 		}
 
@@ -82,11 +82,14 @@ namespace Cm93.GameEngine.Basic.Structures
 			Team = IsHome ? TeamFormationAttributes.HomeTeamPlayers.Cast<T>().ToList() : TeamFormationAttributes.AwayTeamPlayers.Cast<T>().ToList();
 			Opposition = IsHome ? TeamFormationAttributes.AwayTeamPlayers.Cast<T>().ToList() : TeamFormationAttributes.HomeTeamPlayers.Cast<T>().ToList();
 
+			if (Team[0].TeamName == "St. Johnstone")
+				isHome = isHome || false;
+
 			var orderedPlayers = IsDefendingZero ?
 				Team.OrderBy(p => p.Location.Y).ToList() :
 				Team.OrderByDescending(p => p.Location.Y).ToList();
 
-			Team.
+			orderedPlayers.
 				Select((p, i) => new { Index = i, Player = p }).
 				Execute(a => EdgeIndices[a.Player] = orderedPlayers.
 					Skip(a.Index + 1).
@@ -211,20 +214,24 @@ namespace Cm93.GameEngine.Basic.Structures
 			var shootOption = (int) (possessor.Rating /
 				(
 					Math.Pow(possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }), 2) *
-					TeamFormationAttributes.TeamStrength(IsHome, possessor.Location) *
+					TeamFormationAttributes.TeamStrength(!IsHome, possessor.Location) *
 					TeamFormationAttributes.TeamDefendingShape(!IsHome)
 				)
 			);
-			Shots.WriteLine("{0},{1},{2},{3},{4}", possessor.Rating,
-				Math.Pow(possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }), 2),
-				TeamFormationAttributes.TeamStrength(IsHome, possessor.Location), TeamFormationAttributes.TeamDefendingShape(!IsHome), shootOption);
-			Shots.Flush();
 
 			if (TeamFormationAttributes.Log != null)
 				TeamFormationAttributes.Log(string.Format("{0} has option to shoot with success {1}", possessor.LastName, shootOption));
 
 			if (shootOption > option)
 			{
+				if (possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }) > 0.5d)
+					Console.WriteLine("WTF!?");
+
+				Shots.WriteLine("{0},{1},{2},{3},{4}", possessor.Rating,
+					Math.Pow(possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }), 2),
+					TeamFormationAttributes.TeamStrength(!IsHome, possessor.Location), TeamFormationAttributes.TeamDefendingShape(!IsHome), shootOption);
+				Shots.Flush();
+
 				isShooting = true;
 				option = shootOption;
 			}

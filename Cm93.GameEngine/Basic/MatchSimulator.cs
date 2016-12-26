@@ -113,10 +113,14 @@ namespace Cm93.GameEngine.Basic
 			PhasesOfPlay = 0;
 			fixture.PlayingPeriod = PlayingPeriod.SecondHalf;
 
-			//	TODO: Is this needed?
 			var temp = HomeGoal;
 			HomeGoal = AwayGoal;
 			AwayGoal = temp;
+
+			//	Switching sides at halftime is covered by the ViewModel bound animation.
+			//	Non-player matches have to do this here.
+			if (!PlayerMatch)
+				HomeTeamPlayers.Concat(AwayTeamPlayers).Execute(p => p.Location.Invert());
 
 			TeamFormationAttributes.SecondHalf();
 
