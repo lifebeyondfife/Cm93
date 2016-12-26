@@ -24,7 +24,6 @@ using System.Collections.Generic;
 using System.Linq;
 using KdTree;
 using KdTree.Math;
-using MathNet.Numerics.Statistics;
 
 namespace Cm93.GameEngine.Basic
 {
@@ -137,11 +136,13 @@ namespace Cm93.GameEngine.Basic
 
 			players.Execute(p => tree.Add(new double[] { p.Location.X, p.Location.Y }, p));
 
-			return players.
+			var orderedDistances = players.
 				Select(p => tree.GetNearestNeighbours(new double[] { p.Location.X, p.Location.Y }, 2)).
 				Select(ps => ps.First().Value.Location.Distance(ps.Last().Value.Location)).
-				Where((p, i) => i % 2 == 0).	// leave gaps to distort (make bigger) the StdDev
-				StandardDeviation();
+				OrderBy(d => d).
+				ToList();
+
+			return Math.Exp(-Math.Sqrt(orderedDistances.Last() - orderedDistances.First()));
 		}
 
 		/*
@@ -183,7 +184,7 @@ namespace Cm93.GameEngine.Basic
 		{
 			var medianDistance = players.
 				Select(p => GetNearestPlayer(players.Except(Enumerable.Repeat(p, 1)), p.Location).Location.Distance(p.Location)).
-				Median();
+				Average(); // was Median
 
 			var distanceFromDefendingGoalLine = players.
 				Select(p => isDefendingZero ? p.Location.Y : 1 - p.Location.Y).
@@ -196,7 +197,7 @@ namespace Cm93.GameEngine.Basic
 		{
 			var medianDistance = players.
 				Select(p => GetNearestPlayer(players.Except(Enumerable.Repeat(p, 1)), p.Location).Location.Distance(p.Location)).
-				Median();
+				Average(); // was Median
 
 			var distanceFromAttackingGoalLine = players.
 				Select(p => isDefendingZero ? 1 - p.Location.Y : p.Location.Y).
