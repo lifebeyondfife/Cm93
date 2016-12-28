@@ -24,7 +24,6 @@ using System.Collections.Generic;
 using System.Linq;
 using KdTree;
 using KdTree.Math;
-using MathNet.Numerics.Statistics;
 
 namespace Cm93.GameEngine.Basic
 {
@@ -37,6 +36,8 @@ namespace Cm93.GameEngine.Basic
 
 		private static readonly Func<Coordinate, Coordinate, double, double> Distribution = (position, player, rating) =>
 			rating * (Math.Exp(-((player.X - position.X) * (player.X - position.X) + (player.Y - position.Y) * (player.Y - position.Y)) * Flatten));
+
+		internal Action<string> Log { get; private set; }
 
 		private Func<Coordinate, double> HomeTeamStrength { get; set; }
 		private Func<double> HomeTeamPositionalBalance { get; set; }
@@ -59,10 +60,18 @@ namespace Cm93.GameEngine.Basic
 		public Func<PossessionGraph<Player>> HomeTeamPossessionGraph { get; private set; }
 		public Func<PossessionGraph<Player>> AwayTeamPossessionGraph { get; private set; }
 
-		public TeamFormationAttributes(IList<Player> homeTeamPlayers, IList<Player> awayTeamPlayers)
+
+		internal bool DelmeFlag { get; set; }
+
+
+		public TeamFormationAttributes(IList<Player> homeTeamPlayers, IList<Player> awayTeamPlayers, Action<string> log = null)
 		{
+
+			DelmeFlag = true;
+
 			HomeTeamPlayers = homeTeamPlayers;
 			AwayTeamPlayers = awayTeamPlayers;
+			Log = log;
 
 			HomeTeamStrength = coordinate => HomeTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
 			AwayTeamStrength = coordinate => AwayTeamPlayers.Select(p => Distribution(coordinate, p.Location, p.Rating)).Sum();
@@ -91,8 +100,8 @@ namespace Cm93.GameEngine.Basic
 			TeamDefendingShape = isHome => isHome ? HomeTeamDefendingShape() : AwayTeamDefendingShape();
 			TeamAttackingShape = isHome => isHome ? HomeTeamAttackingShape() : AwayTeamAttackingShape();
 
-			Console.WriteLine("Home team positional balance:\t" + HomeTeamPositionalBalance());
-			Console.WriteLine("Away team positional balance:\t" + AwayTeamPositionalBalance());
+			Console.WriteLine("Home team positional balance (" + HomeTeamPlayers[0].TeamName + "):\t" + HomeTeamPositionalBalance());
+			Console.WriteLine("Away team positional balance (" + AwayTeamPlayers[0].TeamName + "):\t" + AwayTeamPositionalBalance());
 
 			Console.WriteLine("Home team offside line:\t" + HomeTeamOffsideLine());
 			Console.WriteLine("Away team offside line:\t" + AwayTeamOffsideLine());
@@ -127,10 +136,13 @@ namespace Cm93.GameEngine.Basic
 
 			players.Execute(p => tree.Add(new double[] { p.Location.X, p.Location.Y }, p));
 
-			return players.
+			var orderedDistances = players.
 				Select(p => tree.GetNearestNeighbours(new double[] { p.Location.X, p.Location.Y }, 2)).
 				Select(ps => ps.First().Value.Location.Distance(ps.Last().Value.Location)).
-				StandardDeviation();
+				OrderBy(d => d).
+				ToList();
+
+			return Math.Exp(-Math.Sqrt(orderedDistances.Last() - orderedDistances.First()));
 		}
 
 		/*
@@ -170,28 +182,20 @@ namespace Cm93.GameEngine.Basic
 
 		private static double DefendingShape(IList<Player> players, bool isDefendingZero)
 		{
-			var medianDistance = players.
-				Select(p => GetNearestPlayer(players.Except(Enumerable.Repeat(p, 1)), p.Location).Location.Distance(p.Location)).
-				Median();
-
 			var distanceFromDefendingGoalLine = players.
 				Select(p => isDefendingZero ? p.Location.Y : 1 - p.Location.Y).
-				Average();
+				Sum();
 
-			return 1d / (Math.Sqrt(medianDistance) * distanceFromDefendingGoalLine);
+			return Math.Exp(-Math.Pow(distanceFromDefendingGoalLine / 10d, 2));
 		}
 
 		private static double AttackingShape(IList<Player> players, bool isDefendingZero)
 		{
-			var medianDistance = players.
-				Select(p => GetNearestPlayer(players.Except(Enumerable.Repeat(p, 1)), p.Location).Location.Distance(p.Location)).
-				Median();
-
 			var distanceFromAttackingGoalLine = players.
 				Select(p => isDefendingZero ? 1 - p.Location.Y : p.Location.Y).
-				Average();
+				Sum();
 
-			return (Math.Sqrt(medianDistance) * 10d) / distanceFromAttackingGoalLine;
+			return Math.Exp(-Math.Pow(distanceFromAttackingGoalLine / 10d, 2) * 0.5d);
 		}
 
 		private PossessionGraph<Player> PossessionGraph(bool isHome, bool isDefendingZero)
