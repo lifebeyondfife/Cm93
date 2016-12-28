@@ -64,10 +64,10 @@ namespace Cm93.GameEngine.Basic.Structures
 			Passes = new StreamWriter(File.Create(@"C:\Users\iain\Desktop\passes.csv"));
 			Shots = new StreamWriter(File.Create(@"C:\Users\iain\Desktop\shots.csv"));
 			Chain = new StreamWriter(File.Create(@"C:\Users\iain\Desktop\chain.csv"));
-			//distance,successfulPass,playerRating,calculation
-			//randomCost,playerPositionalBalance,oppositionPositionalBalance,positionBalanceRatioSquared,playerAttackingShape,oppositionDefendingShape,passScore
-			//playerRating,distanceFromGoalSquared,oppositionStrengthAtShootingPosition,oppositionDefendingStrength,shotScore
-			//chainLength,isShooting,result
+			Data.WriteLine("team,distance,successfulPass,playerRating,calculation");
+			Passes.WriteLine("team,randomCost,playerPositionalBalance,oppositionPositionalBalance,positionBalanceRatioSquared,playerAttackingShape,oppositionDefendingShape,passScore");
+			Shots.WriteLine("team,playerRating,distanceFromGoalSquared,oppositionStrengthAtShootingPosition,oppositionDefendingStrength,shotScore");
+			Chain.WriteLine("team,chainLength,isShooting,result");
 		}
 
 		public PossessionGraph(TeamFormationAttributes teamFormationAttributes, bool isHome, bool isDefendingZero)
@@ -81,9 +81,6 @@ namespace Cm93.GameEngine.Basic.Structures
 
 			Team = IsHome ? TeamFormationAttributes.HomeTeamPlayers.Cast<T>().ToList() : TeamFormationAttributes.AwayTeamPlayers.Cast<T>().ToList();
 			Opposition = IsHome ? TeamFormationAttributes.AwayTeamPlayers.Cast<T>().ToList() : TeamFormationAttributes.HomeTeamPlayers.Cast<T>().ToList();
-
-			if (Team[0].TeamName == "St. Johnstone")
-				isHome = isHome || false;
 
 			var orderedPlayers = IsDefendingZero ?
 				Team.OrderBy(p => p.Location.Y).ToList() :
@@ -167,14 +164,14 @@ namespace Cm93.GameEngine.Basic.Structures
 			playerSkills = (playerSkills * playerSkills) / 100d;
 
 			if (TeamFormationAttributes.DelmeFlag)
-				OutputRow(distance, successfulPass, playerSkills, ((playerSkills * successfulPass) / distance) - 1000d);
+				OutputRow(from.TeamName, distance, successfulPass, playerSkills, ((playerSkills * successfulPass) / distance) - 1000d);
 
 			return ((playerSkills * successfulPass) / distance) - 1000d;
 		}
 
-		private void OutputRow(double distance, double successfulPass, double playerRating, double calculation)
+		private void OutputRow(string teamName, double distance, double successfulPass, double playerRating, double calculation)
 		{
-			Data.WriteLine("{0},{1},{2},{3}", distance, successfulPass, playerRating, calculation);
+			Data.WriteLine("\"{0}\",{1},{2},{3},{4}", teamName, distance, successfulPass, playerRating, calculation);
 			Data.Flush();
 		}
 
@@ -189,29 +186,31 @@ namespace Cm93.GameEngine.Basic.Structures
 					Select(e => new Edge<T>(e.Vertex, e.Cost + Random.Next(-500, 500))).
 					Aggregate((a, b) => a.Cost > b.Cost ? a : b);
 
-				option = (int) (
+				receiver = phaseEdge.Vertex;
+
+				option = receiver == null ? 0 : (int) (
 					(
+						Math.Exp(-Math.Pow(IsDefendingZero ? 1 - receiver.Location.Y : receiver.Location.Y, 2)) *
 						phaseEdge.Cost *
-						Math.Pow(TeamFormationAttributes.TeamPositionalBalance(IsHome) / TeamFormationAttributes.TeamPositionalBalance(!IsHome), 2) *
+						(TeamFormationAttributes.TeamPositionalBalance(IsHome) / TeamFormationAttributes.TeamPositionalBalance(!IsHome)) *
 						TeamFormationAttributes.TeamAttackingShape(IsHome)
 					) /
 					TeamFormationAttributes.TeamDefendingShape(!IsHome)
 				);
-				Passes.WriteLine("{0},{1},{2},{3},{4},{5},{6}", phaseEdge.Cost, TeamFormationAttributes.TeamPositionalBalance(IsHome),
+				Passes.WriteLine("\"{0}\",{1},{2},{3},{4},{5},{6},{7}", phaseEdge.Vertex.TeamName, phaseEdge.Cost,
+					TeamFormationAttributes.TeamPositionalBalance(IsHome),
 					TeamFormationAttributes.TeamPositionalBalance(!IsHome),
-					Math.Pow(TeamFormationAttributes.TeamPositionalBalance(IsHome) / TeamFormationAttributes.TeamPositionalBalance(!IsHome), 2),
+					(TeamFormationAttributes.TeamPositionalBalance(IsHome) / TeamFormationAttributes.TeamPositionalBalance(!IsHome)),
 					TeamFormationAttributes.TeamAttackingShape(IsHome),
 					TeamFormationAttributes.TeamDefendingShape(!IsHome),
 					option);
 				Passes.Flush();
 
-				receiver = phaseEdge.Vertex;
-
 				if (TeamFormationAttributes.Log != null)
 					TeamFormationAttributes.Log(string.Format("{0} has option to pass to {1} with success {2}", possessor.LastName, receiver.LastName, option));
 			}
 
-			var shootOption = (int) (possessor.Rating /
+			var shootOption = (int) ((1 + Random.NextDouble()) * possessor.Rating /
 				(
 					Math.Pow(possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }), 2) *
 					TeamFormationAttributes.TeamStrength(!IsHome, possessor.Location) *
@@ -219,15 +218,16 @@ namespace Cm93.GameEngine.Basic.Structures
 				)
 			);
 
+			shootOption = (int) ((shootOption * 5d + 1500d) * Random.NextDouble());
+
+			shootOption -= CheckOffside(possessor.Location.Y, TeamFormationAttributes.TeamOffsideLine(!IsHome));
+
 			if (TeamFormationAttributes.Log != null)
 				TeamFormationAttributes.Log(string.Format("{0} has option to shoot with success {1}", possessor.LastName, shootOption));
 
 			if (shootOption > option)
 			{
-				if (possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }) > 0.5d)
-					Console.WriteLine("WTF!?");
-
-				Shots.WriteLine("{0},{1},{2},{3},{4}", possessor.Rating,
+				Shots.WriteLine("\"{0}\",{1},{2},{3},{4},{5}", possessor.TeamName, possessor.Rating,
 					Math.Pow(possessor.Location.Distance(new Coordinate { X = 0.5, Y = IsDefendingZero ? 1 : 0 }), 2),
 					TeamFormationAttributes.TeamStrength(!IsHome, possessor.Location), TeamFormationAttributes.TeamDefendingShape(!IsHome), shootOption);
 				Shots.Flush();
@@ -242,6 +242,14 @@ namespace Cm93.GameEngine.Basic.Structures
 			}
 
 			return option;
+		}
+
+		private int CheckOffside(double shooterPosition, Tuple<double, double> levelAndStrength)
+		{
+			if ((IsDefendingZero && shooterPosition < levelAndStrength.Item1) || (!IsDefendingZero && shooterPosition > levelAndStrength.Item1))
+				return 0;
+
+			return (int) Math.Abs((shooterPosition - levelAndStrength.Item1) * levelAndStrength.Item2 * 50d);
 		}
 	}
 }

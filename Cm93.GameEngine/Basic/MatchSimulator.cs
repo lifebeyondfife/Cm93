@@ -131,12 +131,12 @@ namespace Cm93.GameEngine.Basic
 
 		private void PlayHalf(IFixture fixture, Action<double, double[,]> updateUi)
 		{
-			var minutes = fixture.PlayingPeriod == PlayingPeriod.FirstHalf ? 0 : 45;
+			var minutes = fixture.PlayingPeriod == PlayingPeriod.FirstHalf ? 1 : 46;
 			var possessor = default(Player);
 			var possessionTeam = default(Side);
 			var possessionGraph = default(PossessionGraph<Player>);
 
-			while (PhasesOfPlay <= 150)
+			while (PhasesOfPlay < 150)
 			{
 				if (PlayerMatch)
 					updateUi(HomeTouches / (HomeTouches + AwayTouches), HeatMap);
@@ -198,14 +198,14 @@ namespace Cm93.GameEngine.Basic
 
 				if (option < 500)
 				{
-					PossessionGraph<Player>.Chain.WriteLine("{0},{1},lost", possessionIterations, isShooting);
+					PossessionGraph<Player>.Chain.WriteLine("\"{0}\",{1},{2},lost", possessor.TeamName, possessionIterations, isShooting);
 					PossessionGraph<Player>.Chain.Flush();
 					break;
 				}
 
 				if (option < 1000)
 				{
-					PossessionGraph<Player>.Chain.WriteLine("{0},{1},restart", possessionIterations, isShooting);
+					PossessionGraph<Player>.Chain.WriteLine("\"{0}\",{1},{2},restart", possessor.TeamName, possessionIterations, isShooting);
 					PossessionGraph<Player>.Chain.Flush();
 					possessor = TeamFormationAttributes.GetNearestPlayer(possessionTeam == Side.Home, RestartedBallPosition(possessionTeam, (option - 500d) / 1000));
 					Log(string.Format("Working from the back with {0}", possessor.LastName));
@@ -214,7 +214,7 @@ namespace Cm93.GameEngine.Basic
 
 				if (isShooting)
 				{
-					PossessionGraph<Player>.Chain.WriteLine("{0},true,shoot", possessionIterations);
+					PossessionGraph<Player>.Chain.WriteLine("\"{0}\",{1},true,shoot", possessor.TeamName, possessionIterations);
 					PossessionGraph<Player>.Chain.Flush();
 
 					if (possessionTeam == Side.Home)
