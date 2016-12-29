@@ -222,8 +222,6 @@ namespace Cm93.GameEngine.Basic
 					else
 						++fixture.ChancesAway;
 
-					//	TODO: Need to do a check here against the offside trap
-					//	TODO: This also has to check against how isolated or marked the shooter is - make the onus be on the attacker to score
 					if (option > 2000)
 					{
 						Log(string.Format("He shoots, he scores! Goal for {0}", possessor.LastName));
