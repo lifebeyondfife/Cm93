@@ -185,7 +185,7 @@ namespace Cm93.GameEngine.Basic
 				if (PlayerMatch)
 				{
 					updateUi(HomeTouches / (HomeTouches + AwayTouches), ColourHeatMap(possessor.Location.RandomNear()));
-					Thread.Sleep(100);	//	TODO: put back to 500 to make it a reasonable pace
+					Thread.Sleep(500);	//	TODO: put back to 100 to speed it up again // make it a reasonable pace
 				}
 
 				var isShooting = default(bool);
