@@ -80,6 +80,9 @@ namespace Cm93.GameEngine.Basic
 		{
 			HeatMap = new double[Configuration.HeatMapDimensions.Item1, Configuration.HeatMapDimensions.Item2];
 
+			if (PlayerMatch)
+				updateUi(0.5d, null);
+
 			var ballPosition = new Coordinate { X = 0.5d, Y = 0.5d };
 			var kickoff = DateTime.Now;
 
@@ -196,14 +199,14 @@ namespace Cm93.GameEngine.Basic
 				else
 					++AwayTouches;
 
-				if (option < 500)
+				if (option < 750)
 				{
 					PossessionGraph<Player>.Chain.WriteLine("\"{0}\",{1},{2},lost", possessor.TeamName, possessionIterations, isShooting);
 					PossessionGraph<Player>.Chain.Flush();
 					break;
 				}
 
-				if (option < 1000)
+				if (option < 1250)
 				{
 					PossessionGraph<Player>.Chain.WriteLine("\"{0}\",{1},{2},restart", possessor.TeamName, possessionIterations, isShooting);
 					PossessionGraph<Player>.Chain.Flush();
