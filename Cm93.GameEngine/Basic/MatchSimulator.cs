@@ -154,15 +154,7 @@ namespace Cm93.GameEngine.Basic
 		{
 			if (possessor == null)
 			{
-				var startLocation = Coordinate.Random();
-				var homeTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(true, startLocation);
-				var awayTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(false, startLocation);
-
-				Log(string.Format("Battle for possession between {0} and {1} at {2}", homeTeamStartPlayer.LastName, awayTeamStartPlayer.LastName, startLocation));
-
-				possessionTeam = homeTeamStartPlayer.Rating > awayTeamStartPlayer.Rating ? Side.Home : Side.Away;
-
-				possessor = possessionTeam == Side.Home ? homeTeamStartPlayer : awayTeamStartPlayer;
+				FindPossessor(ref possessor, ref possessionTeam);
 
 				Log(string.Format("{0} wins it for {1}", possessor.LastName, possessor.TeamName));
 			}
@@ -243,9 +235,24 @@ namespace Cm93.GameEngine.Basic
 				}
 			}
 
-			possessionTeam = possessionTeam == Side.Home ? Side.Away : Side.Home;
-			possessor = TeamFormationAttributes.GetNearestPlayer(possessionTeam == Side.Home, RestartedBallPosition(possessionTeam, (1000d - option) / 1000));
+			FindPossessor(ref possessor, ref possessionTeam, possessor.Location.RandomNear());
+
 			Log(string.Format("Restart for {0} with {1} at {2}", possessor.TeamName, possessor.LastName, possessor.Location));
+		}
+
+		private void FindPossessor(ref Player possessor, ref Side possessionTeam, Coordinate startLocation = default(Coordinate))
+		{
+			if (startLocation == default(Coordinate))
+				startLocation = Coordinate.Random();
+
+			var homeTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(true, startLocation);
+			var awayTeamStartPlayer = TeamFormationAttributes.GetNearestPlayer(false, startLocation);
+
+			Log(string.Format("Battle for possession between {0} and {1} at {2}", homeTeamStartPlayer.LastName, awayTeamStartPlayer.LastName, startLocation));
+
+			possessionTeam = homeTeamStartPlayer.Rating > awayTeamStartPlayer.Rating ? Side.Home : Side.Away;
+
+			possessor = possessionTeam == Side.Home ? homeTeamStartPlayer : awayTeamStartPlayer;
 		}
 
 		private Coordinate RestartedBallPosition(Side side, double y)

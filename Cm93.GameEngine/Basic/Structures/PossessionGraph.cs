@@ -190,7 +190,7 @@ namespace Cm93.GameEngine.Basic.Structures
 
 				option = receiver == null ? 0 : (int) (
 					(
-						Math.Exp(-(IsDefendingZero ? receiver.Location.Y : 1 - receiver.Location.Y)) *
+						Math.Exp(-Math.Sqrt(IsDefendingZero ? receiver.Location.Y : 1 - receiver.Location.Y)) *
 						phaseEdge.Cost *
 						(TeamFormationAttributes.TeamPositionalBalance(IsHome) / TeamFormationAttributes.TeamPositionalBalance(!IsHome)) *
 						TeamFormationAttributes.TeamAttackingShape(IsHome)
