@@ -45,71 +45,49 @@ namespace Cm93.UI.Modules.Players
 		private IPlayersModule PlayersModel { get; set; }
 		private IDictionary<string, Cm93.Model.Structures.Team> Teams { get; set; }
 		private IDictionary<PlayerIndex, Player> Players { get; set; }
-		private IDictionary<string, Player> PlayerAb { get; set; }
+		private Player ShownPlayer { get; set; }
 
-		private ObservableCollection<PlayerMetric> playerAbItems = new ObservableCollection<PlayerMetric>();
-		public ObservableCollection<PlayerMetric> PlayerAbItems
+		private ObservableCollection<PlayerMetric> playerItems = new ObservableCollection<PlayerMetric>();
+		public ObservableCollection<PlayerMetric> PlayerItems
 		{
-			get { return this.playerAbItems; }
+			get { return this.playerItems; }
 			set
 			{
-				this.playerAbItems = value;
-				NotifyOfPropertyChange(() => PlayerAbItems);
+				this.playerItems = value;
+				NotifyOfPropertyChange(() => PlayerItems);
 			}
 		}
 
-		private string playerAbString = PlayerA;
-		public string PlayerAbString
+		private Color playerPrimaryColour = default(Color);
+		public Color PlayerPrimaryColour
 		{
-			get { return this.playerAbString; }
+			get { return this.playerPrimaryColour; }
 			set
 			{
-				this.playerAbString = value;
-				NotifyOfPropertyChange(() => PlayerAbString);
+				this.playerPrimaryColour = value;
+				NotifyOfPropertyChange(() => PlayerPrimaryColour);
 			}
 		}
 
-		private Color playerAColour = default(Color);
-		public Color PlayerAColour
+		private Color playerSecondaryColour = default(Color);
+		public Color PlayerSecondaryColour
 		{
-			get { return this.playerAColour; }
+			get { return this.playerSecondaryColour; }
 			set
 			{
-				this.playerAColour = value;
-				NotifyOfPropertyChange(() => PlayerAColour);
+				this.playerSecondaryColour = value;
+				NotifyOfPropertyChange(() => PlayerSecondaryColour);
 			}
 		}
 
-		private Color playerBColour = default(Color);
-		public Color PlayerBColour
+		private string playerTitle = string.Empty;
+		public string PlayerTitle
 		{
-			get { return this.playerBColour; }
+			get { return this.playerTitle; }
 			set
 			{
-				this.playerBColour = value;
-				NotifyOfPropertyChange(() => PlayerBColour);
-			}
-		}
-
-		private string aTitle = string.Empty;
-		public string ATitle
-		{
-			get { return this.aTitle; }
-			set
-			{
-				this.aTitle = value;
-				NotifyOfPropertyChange(() => ATitle);
-			}
-		}
-
-		private string bTitle = string.Empty;
-		public string BTitle
-		{
-			get { return this.bTitle; }
-			set
-			{
-				this.bTitle = value;
-				NotifyOfPropertyChange(() => BTitle);
+				this.playerTitle = value;
+				NotifyOfPropertyChange(() => PlayerTitle);
 			}
 		}
 
@@ -322,7 +300,6 @@ namespace Cm93.UI.Modules.Players
 		{
 			this.eventAggregator = eventAggregator;
 			this.ModuleType = ModuleType.Players;
-			this.PlayerAb = new Dictionary<string, Player>();
 
 			foreach (var filter in Enum.GetValues(typeof(PlayerFilter)).Cast<PlayerFilter>())
 				this.PlayerFilters.Add(filter);
@@ -395,70 +372,29 @@ namespace Cm93.UI.Modules.Players
 
 		private void UpdateChart(Player player)
 		{
-			this.playerAbItems.Clear();
+			PlayerTitle = player.LastName;
 
-			PlayerAb[PlayerAbString] = player;
-
-			if (PlayerAb.Count != 2)
-			{
-				InitialiseChart(player);
-				return;
-			}
-
-			ATitle = PlayerAb[PlayerA].LastName;
-			BTitle = PlayerAb[PlayerB].LastName;
-
-			PlayerAColour = Teams[PlayerAb[PlayerA].TeamName].PrimaryColour;
-			PlayerBColour = Teams[PlayerAb[PlayerB].TeamName].PrimaryColour;
-
-			var playerAMetrics = PlayerAb[PlayerA].GetGridRows();
-			var playerBMetrics = PlayerAb[PlayerB].GetGridRows();
-
-			PlayerAbItems = new ObservableCollection<PlayerMetric>();
-
-			foreach (var metrics in playerAMetrics.Zip(playerBMetrics, (a, b) => new { A = a, B = b }))
-			{
-				if (metrics.A.Attribute == "Number")
-					continue;
-
-				double aVal, bVal;
-
-				if (!Double.TryParse(metrics.A.Value, out aVal) || !Double.TryParse(metrics.B.Value, out bVal))
-					continue;
-
-				this.playerAbItems.Add(new PlayerMetric { Label = metrics.A.Attribute, PlayerA = aVal, PlayerB = bVal });
-			}
-
-			NotifyOfPropertyChange(() => PlayerAbItems);
-		}
-
-		//	The OxyPlot library doesn't render the chart correctly first time. By populating the Attribute
-		//	names before there are two proper data points, the error is bypassed.
-		private void InitialiseChart(Player player)
-		{
-			if (PlayerAbString == PlayerA)
-				ATitle = player.LastName;
-			else
-				BTitle = player.LastName;
+			PlayerPrimaryColour = Teams[player.TeamName].PrimaryColour;
+			PlayerSecondaryColour = Teams[player.TeamName].SecondaryColour;
 
 			var playerMetrics = player.GetGridRows();
 
-			PlayerAbItems = new ObservableCollection<PlayerMetric>();
+			PlayerItems = new ObservableCollection<PlayerMetric>();
 
-			foreach (var metrics in playerMetrics)
+			foreach (var playerMetric in playerMetrics)
 			{
-				if (metrics.Attribute == "Number")
+				if (playerMetric.Attribute == "Number")
 					continue;
 
-				double val;
+				double value;
 
-				if (!Double.TryParse(metrics.Value, out val))
+				if (!Double.TryParse(playerMetric.Value, out value))
 					continue;
 
-				this.playerAbItems.Add(new PlayerMetric { Label = metrics.Attribute });
+				this.playerItems.Add(new PlayerMetric { Label = playerMetric.Attribute, Value = value });
 			}
 
-			NotifyOfPropertyChange(() => PlayerAbItems);
+			NotifyOfPropertyChange(() => PlayerItems);
 		}
 
 		private void UpdateBidRelease(Player player, ICollection<MetricRow> playerMetricRows)
@@ -598,16 +534,6 @@ namespace Cm93.UI.Modules.Players
 
 			if (loweredPlayerNumber > 0)
 				PlayerNumber = loweredPlayerNumber;
-		}
-
-		public bool CanFlipAb
-		{
-			get { return true; }
-		}
-
-		public void FlipAb()
-		{
-			PlayerAbString = PlayerAbString == PlayerA ? PlayerB : PlayerA;
 		}
 	}
 }

@@ -3,7 +3,6 @@
 	public class PlayerMetric
 	{
 		public string Label { get; set; }
-		public double PlayerA { get; set; }
-		public double PlayerB { get; set; }
+		public double Value { get; set; }
 	}
 }
