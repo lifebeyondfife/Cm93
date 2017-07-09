@@ -75,7 +75,7 @@
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition/>
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Content="{Binding PlayerItems[0].Label}" />
+						<Label Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Content="Goals" />
 						<Label Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Content="{Binding PlayerItems[0].Value}" />
 					</Grid>
 
@@ -84,7 +84,7 @@
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition/>
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Content="{Binding PlayerItems[1].Label}" />
+						<Label Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Content="Rating" />
 						<Label Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Content="{Binding PlayerItems[1].Value}" />
 					</Grid>
 
@@ -93,7 +93,7 @@
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition/>
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Content="{Binding PlayerItems[2].Label}" />
+						<Label Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Content="Age" />
 						<Label Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Content="{Binding PlayerItems[2].Value}" />
 					</Grid>
 				</Grid>
